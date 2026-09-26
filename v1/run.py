@@ -83,7 +83,7 @@ def run_loop_a_smoke(limit: int, run_id: str) -> dict:
     }
     output_dir = ROOT / "results"
     output_dir.mkdir(exist_ok=True)
-    (output_dir / "loop_a_smoke.json").write_text(json.dumps(result, indent=2) + "\n")
+    (output_dir / f"{run_id}.json").write_text(json.dumps(result, indent=2) + "\n")
     return result
 
 
@@ -156,7 +156,7 @@ def run_loop_b_smoke(limit: int, run_id: str) -> dict:
     }
     output_dir = ROOT / "results"
     output_dir.mkdir(exist_ok=True)
-    (output_dir / "loop_b_smoke.json").write_text(json.dumps(result, indent=2) + "\n")
+    (output_dir / f"{run_id}.json").write_text(json.dumps(result, indent=2) + "\n")
     return result
 
 

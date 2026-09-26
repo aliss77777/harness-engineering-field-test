@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+import argparse
+import json
 from collections import defaultdict
+from pathlib import Path
 from typing import Any, Iterable
 
 
@@ -33,3 +36,22 @@ def build_evidence_table(records: Iterable[dict[str, Any]]) -> list[dict[str, An
         )
     return table
 
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Build a Loop B evidence table.")
+    parser.add_argument("input", type=Path)
+    parser.add_argument("output", type=Path)
+    args = parser.parse_args()
+    run = json.loads(args.input.read_text())
+    table = build_evidence_table(run["decisions"])
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(table, indent=2) + "\n")
+    for row in table:
+        print(
+            f"{row['question_id']}: splits={row['splits']}, "
+            f"yes_win_rate={row['yes_win_rate']:.1%}"
+        )
+
+
+if __name__ == "__main__":
+    main()

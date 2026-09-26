@@ -1,0 +1,38 @@
+[
+  {
+    "question_id": "features_list_number",
+    "splits": 29,
+    "yes_won": 20,
+    "yes_win_rate": 0.6896551724137931
+  },
+  {
+    "question_id": "promises_extreme_emotion",
+    "splits": 47,
+    "yes_won": 29,
+    "yes_win_rate": 0.6170212765957447
+  },
+  {
+    "question_id": "spoils_factual_resolution",
+    "splits": 7,
+    "yes_won": 3,
+    "yes_win_rate": 0.42857142857142855
+  },
+  {
+    "question_id": "uses_formal_bureaucratic_language",
+    "splits": 2,
+    "yes_won": 1,
+    "yes_win_rate": 0.5
+  },
+  {
+    "question_id": "uses_second_person",
+    "splits": 93,
+    "yes_won": 47,
+    "yes_win_rate": 0.5053763440860215
+  },
+  {
+    "question_id": "withholds_key_payoff",
+    "splits": 68,
+    "yes_won": 56,
+    "yes_win_rate": 0.8235294117647058
+  }
+]

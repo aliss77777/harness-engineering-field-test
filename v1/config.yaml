@@ -18,8 +18,8 @@ learning:
   max_instructions_words: 300
   max_rubric_questions: 10
 api:
-  retries: 3
-  backoff_seconds: 1.0
+  retries: 5
+  backoff_seconds: 5.0
   batch_size: 20
   temperature: 0.0
 models:
@@ -28,7 +28,8 @@ models:
   llm_provider: google_ai_studio
   jev_provider: openrouter
 prices_per_million_tokens:
-  llm_input: null
-  llm_output: null
+  # Paid reference rate for Gemini 3.8 Flash through 2026-12-31.
+  llm_input: 0.75
+  llm_output: 3.75
   jev_input: 0.042
   jev_output: 0.0
