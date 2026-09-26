@@ -33,7 +33,7 @@ Updated as work progresses. The experiment rules in `MVP-BRIEF-jev-learning-loop
 - [x] Add decider, editor, gate, evidence, cache, logger, and runner interfaces.
 - [x] Add append-only JSONL logging and token/cost accounting.
 - [x] Add retries and full-input disk caching for API calls.
-- [x] Test pairing, scoring, ties, evidence, gate, and cost calculations. (24 tests pass.)
+- [x] Test pairing, scoring, ties, evidence, gate, and cost calculations. (26 tests pass.)
 
 ## 4. Learning loops
 
@@ -67,3 +67,5 @@ Updated as work progresses. The experiment rules in `MVP-BRIEF-jev-learning-loop
 - 2026-09-26: Evidence table written. Strongest split signals: `withholds_key_payoff` 82.4% yes-win rate across 68 splits; `features_list_number` 69.0% across 29; `promises_extreme_emotion` 61.7% across 47.
 - 2026-09-26: Formal Loop A practice pass is waiting on Gemini provider capacity after bounded 3.8 and 3.7 retries. Failures are logged; cached work is preserved.
 - 2026-09-26: Private GitHub repo created at `aliss77777/jev-test-poc`; local checkpoints pushed to `main`.
+- 2026-09-26: Switched the formal LLM route to paid OpenRouter `google/gemini-3.8-flash`, retaining strict structured output, caching, retries, token/cost logs, and automatic Google-provider failover.
+- 2026-09-26: Paid OpenRouter readiness checks passed: structured-output access check plus a 10-pair Loop A batch at 70.0% accuracy. The batch cost $0.00816 ($0.816 per 1,000 decisions at this sample size). Full testing intentionally paused pending Alexander's go-ahead.

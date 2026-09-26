@@ -23,9 +23,10 @@ api:
   batch_size: 20
   temperature: 0.0
 models:
-  llm: gemini-3.8-flash
+  llm: google/gemini-3.8-flash
+  direct_llm: gemini-3.8-flash
   jev: typesafe/jev-1.13
-  llm_provider: google_ai_studio
+  llm_provider: openrouter
   jev_provider: openrouter
 prices_per_million_tokens:
   # Paid reference rate for Gemini 3.8 Flash through 2026-12-31.

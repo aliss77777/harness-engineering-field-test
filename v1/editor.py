@@ -2,15 +2,12 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 from pathlib import Path
 from typing import Any
 
 import yaml
 
-from cache import DiskCache
-from gemini import GeminiJsonClient, load_env
-from log import JsonlLogger
+from llm_factory import build_llm_client
 
 
 ROOT = Path(__file__).resolve().parent
@@ -75,21 +72,9 @@ def main() -> None:
     if not args.start:
         parser.error("choose an editor action")
 
-    load_env(ROOT / ".env")
-    api_key = os.environ.get("GEMINI_API_KEY")
-    if not api_key:
-        raise RuntimeError("GEMINI_API_KEY is missing")
     config = yaml.safe_load((ROOT / "config.yaml").read_text())
     task = yaml.safe_load((ROOT / "task.yaml").read_text())
-    client = GeminiJsonClient(
-        model=config["models"]["llm"],
-        api_key=api_key,
-        cache=DiskCache(ROOT / "cache" / "gemini"),
-        logger=JsonlLogger(ROOT / "logs" / f"{args.run_id}.jsonl"),
-        retries=config["api"]["retries"],
-        backoff_seconds=config["api"]["backoff_seconds"],
-        temperature=config["api"]["temperature"],
-    )
+    client = build_llm_client(config, ROOT, args.run_id)
     data = client.generate_json(
         prompt=starting_prompt(task["starting_prompt"]),
         schema=START_SCHEMA,
@@ -112,4 +97,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

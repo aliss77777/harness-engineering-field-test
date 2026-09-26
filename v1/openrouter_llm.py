@@ -1,0 +1,138 @@
+from __future__ import annotations
+
+import json
+import time
+from typing import Any
+
+import httpx
+
+from cache import DiskCache
+from log import JsonlLogger
+
+
+CHAT_COMPLETIONS_URL = "https://openrouter.ai/api/v1/chat/completions"
+
+
+class OpenRouterJsonClient:
+    def __init__(
+        self,
+        *,
+        model: str,
+        api_key: str,
+        cache: DiskCache,
+        logger: JsonlLogger,
+        retries: int,
+        backoff_seconds: float,
+        temperature: float,
+        http_client: httpx.Client | None = None,
+    ):
+        self.model = model
+        self.api_key = api_key
+        self.cache = cache
+        self.logger = logger
+        self.retries = retries
+        self.backoff_seconds = backoff_seconds
+        self.temperature = temperature
+        self.http = http_client or httpx.Client(timeout=120.0)
+
+    def generate_json(
+        self,
+        *,
+        prompt: str,
+        schema: dict[str, Any],
+        event: dict[str, Any],
+    ) -> dict[str, Any]:
+        request_body = {
+            "model": self.model,
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": self.temperature,
+            "reasoning_effort": "medium",
+            "response_format": {
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "structured_response",
+                    "strict": True,
+                    "schema": schema,
+                },
+            },
+            "provider": {
+                "require_parameters": True,
+                "allow_fallbacks": True,
+            },
+        }
+        cache_payload = {"provider": "openrouter", **request_body}
+        cached = self.cache.get(cache_payload)
+        if cached is not None:
+            self.logger.write(
+                {
+                    **event,
+                    "model": cached.get("model", self.model),
+                    "provider": cached.get("provider"),
+                    "cached": True,
+                    **cached["usage"],
+                }
+            )
+            return cached["data"]
+
+        for attempt in range(1, self.retries + 1):
+            started = time.perf_counter()
+            try:
+                response = self.http.post(
+                    CHAT_COMPLETIONS_URL,
+                    headers={
+                        "Authorization": f"Bearer {self.api_key}",
+                        "Content-Type": "application/json",
+                        "X-Title": "Jev Learning Loop MVP",
+                    },
+                    json=request_body,
+                )
+                response.raise_for_status()
+                body = response.json()
+                content = body["choices"][0]["message"]["content"]
+                if not isinstance(content, str):
+                    raise ValueError("OpenRouter returned non-text structured content")
+                data = json.loads(content)
+                usage_body = body.get("usage", {})
+                details = usage_body.get("completion_tokens_details") or {}
+                usage = {
+                    "input_tokens": int(usage_body.get("prompt_tokens", 0) or 0),
+                    "output_tokens": int(usage_body.get("completion_tokens", 0) or 0),
+                    "reasoning_tokens": int(details.get("reasoning_tokens", 0) or 0),
+                    "cost": float(usage_body.get("cost", 0) or 0),
+                    "latency_ms": round((time.perf_counter() - started) * 1000),
+                }
+                cached_value = {
+                    "data": data,
+                    "usage": usage,
+                    "model": body.get("model", self.model),
+                    "provider": body.get("provider"),
+                }
+                self.cache.put(cache_payload, cached_value)
+                self.logger.write(
+                    {
+                        **event,
+                        "model": cached_value["model"],
+                        "provider": cached_value["provider"],
+                        "cached": False,
+                        "attempt": attempt,
+                        **usage,
+                    }
+                )
+                return data
+            except Exception as error:
+                self.logger.write(
+                    {
+                        **event,
+                        "model": self.model,
+                        "cached": False,
+                        "attempt": attempt,
+                        "latency_ms": round((time.perf_counter() - started) * 1000),
+                        "error_type": type(error).__name__,
+                        "error": str(error),
+                    }
+                )
+                if attempt == self.retries:
+                    raise
+                time.sleep(self.backoff_seconds * (2 ** (attempt - 1)))
+        raise RuntimeError("unreachable")
+

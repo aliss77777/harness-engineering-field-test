@@ -1,0 +1,80 @@
+{
+  "run_id": "openrouter-loop-a-smoke",
+  "loop": "A",
+  "set": "practice",
+  "version_id": "v0",
+  "pairs": 10,
+  "accuracy": 0.7,
+  "decisions": [
+    {
+      "pair_id": "51436073220cb8000200079c",
+      "prediction": "Y",
+      "winner": "Y",
+      "correct": true,
+      "reason": "Quantified listicle structure combined with high-status appeal outperforms a vague, generic title."
+    },
+    {
+      "pair_id": "51436087220cb800020009a9",
+      "prediction": "X",
+      "winner": "X",
+      "correct": true,
+      "reason": "Pairs a powerful emotional trigger with superlative awe framing in classic viral style."
+    },
+    {
+      "pair_id": "51436089220cb800020009bb",
+      "prediction": "Y",
+      "winner": "Y",
+      "correct": true,
+      "reason": "Asks an intriguing, conversational question that creates a clear curiosity gap about contemporary relevance."
+    },
+    {
+      "pair_id": "51436093220cb80002000a29",
+      "prediction": "Y",
+      "winner": "Y",
+      "correct": true,
+      "reason": "Promises forbidden, unvarnished truth with high emotional appeal and urgent packaging."
+    },
+    {
+      "pair_id": "5148c60378ec5400020020d9",
+      "prediction": "X",
+      "winner": "Y",
+      "correct": false,
+      "reason": "Taps directly into visceral moral outrage and patriotic defense of veterans."
+    },
+    {
+      "pair_id": "5151ee591e19e80002001d8e",
+      "prediction": "X",
+      "winner": "Y",
+      "correct": false,
+      "reason": "Delivers righteous moral validation and aggressive identity framing that drives clicks."
+    },
+    {
+      "pair_id": "515db1c9683d3f000200112c",
+      "prediction": "X",
+      "winner": "X",
+      "correct": true,
+      "reason": "Superlative disbelief framing paired with an outrage-inducing pop culture clash drives intense curiosity."
+    },
+    {
+      "pair_id": "5163a3256891a60002002fca",
+      "prediction": "Y",
+      "winner": "Y",
+      "correct": true,
+      "reason": "Offers an overwhelming emotional catharsis and curiosity gap that promises tearful inspiration."
+    },
+    {
+      "pair_id": "516880d2a056a1000200f058",
+      "prediction": "X",
+      "winner": "Y",
+      "correct": false,
+      "reason": "Leverages major pop culture references and leaves an explicit mystery to solve."
+    },
+    {
+      "pair_id": "516f2cc68d86850002016cc6",
+      "prediction": "Y",
+      "winner": "Y",
+      "correct": true,
+      "reason": "Directly addresses the reader with an emotionally provocative question and actionable call to curiosity."
+    }
+  ]
+}

@@ -10,6 +10,7 @@ from google import genai
 from cache import DiskCache
 from deciders import RubricQuestion
 from jev import OpenRouterJevClient
+from llm_factory import build_llm_client
 from log import JsonlLogger
 
 
@@ -51,12 +52,34 @@ def check_gemini(model: str) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Verify model access without exposing keys.")
     parser.add_argument("--gemini", action="store_true")
+    parser.add_argument("--openrouter-llm", action="store_true")
     parser.add_argument("--jev", action="store_true")
     args = parser.parse_args()
     load_local_env()
     config = yaml.safe_load((ROOT / "config.yaml").read_text())
     if args.gemini:
-        check_gemini(config["models"]["llm"])
+        check_gemini(config["models"]["direct_llm"])
+    elif args.openrouter_llm:
+        client = build_llm_client(config, ROOT, "access-check-openrouter-llm")
+        result = client.generate_json(
+            prompt="Return status OK.",
+            schema={
+                "type": "object",
+                "properties": {"status": {"type": "string", "enum": ["OK"]}},
+                "required": ["status"],
+                "additionalProperties": False,
+            },
+            event={
+                "run_id": "access-check",
+                "loop": "editor",
+                "round": 0,
+                "set": "none",
+                "pair_id": None,
+                "version_id": "v0",
+                "call_type": "openrouter_llm_access",
+            },
+        )
+        print(f"OpenRouter LLM: {result['status']}")
     elif args.jev:
         api_key = os.environ.get("OPENROUTER_API_KEY") or os.environ.get("OPENROUTER_KEY")
         if not api_key:

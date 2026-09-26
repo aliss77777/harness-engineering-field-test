@@ -11,8 +11,9 @@ import yaml
 
 from cache import DiskCache
 from deciders import LLMDecider, RubricQuestion, rubric_score
-from gemini import GeminiJsonClient, load_env
+from gemini import load_env
 from jev import OpenRouterJevClient
+from llm_factory import build_llm_client
 from log import JsonlLogger
 
 
@@ -25,23 +26,11 @@ def batched(items: list[dict[str, str]], size: int):
 
 
 def run_loop_a_smoke(limit: int, run_id: str) -> dict:
-    load_env(ROOT / ".env")
-    api_key = os.environ.get("GEMINI_API_KEY")
-    if not api_key:
-        raise RuntimeError("GEMINI_API_KEY is missing")
     config = yaml.safe_load((ROOT / "config.yaml").read_text())
     version0 = json.loads((ROOT / "results" / "version0.json").read_text())
     frame = pd.read_csv(ROOT / "data" / "pairs" / "practice.csv", dtype={"pair_id": str}).head(limit)
     pairs = frame[["pair_id", "headline_x", "headline_y"]].to_dict("records")
-    client = GeminiJsonClient(
-        model=config["models"]["llm"],
-        api_key=api_key,
-        cache=DiskCache(ROOT / "cache" / "gemini"),
-        logger=JsonlLogger(ROOT / "logs" / f"{run_id}.jsonl"),
-        retries=config["api"]["retries"],
-        backoff_seconds=config["api"]["backoff_seconds"],
-        temperature=config["api"]["temperature"],
-    )
+    client = build_llm_client(config, ROOT, run_id)
     decider = LLMDecider(client)
     decisions = {}
     for batch_number, batch in enumerate(batched(pairs, config["api"]["batch_size"])):

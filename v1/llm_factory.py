@@ -1,0 +1,42 @@
+from __future__ import annotations
+
+import os
+from pathlib import Path
+from typing import Any
+
+from cache import DiskCache
+from gemini import GeminiJsonClient, load_env
+from log import JsonlLogger
+from openrouter_llm import OpenRouterJsonClient
+
+
+def build_llm_client(config: dict[str, Any], root: Path, run_id: str):
+    load_env(root / ".env")
+    provider = config["models"]["llm_provider"]
+    common = {
+        "model": config["models"]["llm"],
+        "logger": JsonlLogger(root / "logs" / f"{run_id}.jsonl"),
+        "retries": config["api"]["retries"],
+        "backoff_seconds": config["api"]["backoff_seconds"],
+        "temperature": config["api"]["temperature"],
+    }
+    if provider == "openrouter":
+        api_key = os.environ.get("OPENROUTER_API_KEY") or os.environ.get("OPENROUTER_KEY")
+        if not api_key:
+            raise RuntimeError("OPENROUTER_API_KEY or OPENROUTER_KEY is missing")
+        return OpenRouterJsonClient(
+            api_key=api_key,
+            cache=DiskCache(root / "cache" / "openrouter_llm"),
+            **common,
+        )
+    if provider == "google_ai_studio":
+        api_key = os.environ.get("GEMINI_API_KEY")
+        if not api_key:
+            raise RuntimeError("GEMINI_API_KEY is missing")
+        return GeminiJsonClient(
+            api_key=api_key,
+            cache=DiskCache(root / "cache" / "gemini"),
+            **common,
+        )
+    raise ValueError(f"unsupported LLM provider: {provider}")
+
