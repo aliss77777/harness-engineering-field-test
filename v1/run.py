@@ -92,6 +92,8 @@ def run_loop_b_smoke(limit: int, run_id: str) -> dict:
         logger=JsonlLogger(ROOT / "logs" / f"{run_id}.jsonl"),
         retries=config["api"]["retries"],
         backoff_seconds=config["api"]["backoff_seconds"],
+        expected_model=config["models"]["jev_expected_served"],
+        expected_provider=config["models"]["jev_expected_provider"],
     )
     rng = random.Random(config["seed"] + 200_000)
     records = []

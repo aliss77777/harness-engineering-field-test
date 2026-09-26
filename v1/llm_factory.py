@@ -27,6 +27,10 @@ def build_llm_client(config: dict[str, Any], root: Path, run_id: str):
         return OpenRouterJsonClient(
             api_key=api_key,
             cache=DiskCache(root / "cache" / "openrouter_llm"),
+            reasoning_effort=config["api"]["reasoning_effort"],
+            expected_model=config["models"]["llm_expected_served"],
+            expected_provider=config["models"]["llm_expected_provider"],
+            allow_fallbacks=config["models"]["llm_allow_fallbacks"],
             **common,
         )
     if provider == "google_ai_studio":
@@ -39,4 +43,3 @@ def build_llm_client(config: dict[str, Any], root: Path, run_id: str):
             **common,
         )
     raise ValueError(f"unsupported LLM provider: {provider}")
-

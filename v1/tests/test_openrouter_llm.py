@@ -44,6 +44,10 @@ def test_openrouter_json_client_uses_structured_output_and_parses_usage(tmp_path
         retries=1,
         backoff_seconds=0,
         temperature=0,
+        reasoning_effort="medium",
+        expected_model="google/gemini-3.8-flash",
+        expected_provider="Google AI Studio",
+        allow_fallbacks=False,
         http_client=httpx.Client(transport=httpx.MockTransport(handler)),
     )
     assert client.generate_json(prompt="test", schema=SCHEMA, event={"run_id": "test"}) == {
@@ -63,6 +67,8 @@ def test_openrouter_json_client_uses_cache(tmp_path):
         return httpx.Response(
             200,
             json={
+                "model": "google/gemini-3.8-flash",
+                "provider": "Google AI Studio",
                 "choices": [{"message": {"content": '{"status":"OK"}'}}],
                 "usage": {},
             },
@@ -76,6 +82,10 @@ def test_openrouter_json_client_uses_cache(tmp_path):
         retries=1,
         backoff_seconds=0,
         temperature=0,
+        reasoning_effort="medium",
+        expected_model="google/gemini-3.8-flash",
+        expected_provider="Google AI Studio",
+        allow_fallbacks=False,
         http_client=httpx.Client(transport=httpx.MockTransport(handler)),
     )
     client.generate_json(prompt="test", schema=SCHEMA, event={"run_id": "one"})

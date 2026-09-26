@@ -17,6 +17,9 @@ learning:
   max_changes: 3
   max_instructions_words: 300
   max_rubric_questions: 10
+  starting_rubric_min_questions: 5
+  starting_rubric_max_questions: 8
+  question_check_mode: pending_consistency_test
 verdict:
   alpha: 0.05
   equivalence_margin: 0.03
@@ -28,10 +31,16 @@ api:
   backoff_seconds: 5.0
   batch_size: 20
   temperature: 0.0
+  reasoning_effort: medium
 models:
   llm: google/gemini-3.8-flash
+  llm_expected_served: google/gemini-3.8-flash
+  llm_expected_provider: Google AI Studio
+  llm_allow_fallbacks: false
   direct_llm: gemini-3.8-flash
   jev: typesafe/jev-1.13
+  jev_expected_served: typesafe/jev-1.13-20260917
+  jev_expected_provider: TypeSafe
   llm_provider: openrouter
   jev_provider: openrouter
 prices_per_million_tokens:

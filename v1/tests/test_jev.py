@@ -26,6 +26,8 @@ def test_jev_client_parses_noul_probabilities(tmp_path):
         logger=JsonlLogger(tmp_path / "events.jsonl"),
         retries=1,
         backoff_seconds=0,
+        expected_model="typesafe/jev-1.13-test",
+        expected_provider="TypeSafe",
         http_client=httpx.Client(transport=httpx.MockTransport(handler)),
     )
     result = client.evaluate(
@@ -45,6 +47,8 @@ def test_jev_client_uses_cache(tmp_path):
         return httpx.Response(
             200,
             json={
+                "model": "typesafe/jev-1.13-test",
+                "provider": "TypeSafe",
                 "answers": {"q": {"type": "noul", "noul": 0.5}},
                 "usage": {},
             },
@@ -57,9 +61,44 @@ def test_jev_client_uses_cache(tmp_path):
         logger=JsonlLogger(tmp_path / "events.jsonl"),
         retries=1,
         backoff_seconds=0,
+        expected_model="typesafe/jev-1.13-test",
+        expected_provider="TypeSafe",
         http_client=httpx.Client(transport=httpx.MockTransport(handler)),
     )
     question = [RubricQuestion("q", "Question?", "helps")]
     client.evaluate("state", question, {"run_id": "one"})
     client.evaluate("state", question, {"run_id": "two"})
     assert calls == 1
+
+
+def test_jev_client_can_bypass_cache(tmp_path):
+    calls = 0
+
+    def handler(_request: httpx.Request):
+        nonlocal calls
+        calls += 1
+        return httpx.Response(
+            200,
+            json={
+                "model": "typesafe/jev-1.13-test",
+                "provider": "TypeSafe",
+                "answers": {"q": {"type": "noul", "noul": 0.5}},
+                "usage": {},
+            },
+        )
+
+    client = OpenRouterJevClient(
+        model="typesafe/jev-1.13",
+        api_key="test-key",
+        cache=DiskCache(tmp_path / "cache"),
+        logger=JsonlLogger(tmp_path / "events.jsonl"),
+        retries=1,
+        backoff_seconds=0,
+        expected_model="typesafe/jev-1.13-test",
+        expected_provider="TypeSafe",
+        http_client=httpx.Client(transport=httpx.MockTransport(handler)),
+    )
+    question = [RubricQuestion("q", "Question?", "helps")]
+    client.evaluate("state", question, {"run_id": "one"}, use_cache=False)
+    client.evaluate("state", question, {"run_id": "two"}, use_cache=False)
+    assert calls == 2

@@ -24,6 +24,10 @@ class OpenRouterJsonClient:
         retries: int,
         backoff_seconds: float,
         temperature: float,
+        reasoning_effort: str,
+        expected_model: str,
+        expected_provider: str,
+        allow_fallbacks: bool,
         http_client: httpx.Client | None = None,
     ):
         self.model = model
@@ -33,6 +37,11 @@ class OpenRouterJsonClient:
         self.retries = retries
         self.backoff_seconds = backoff_seconds
         self.temperature = temperature
+        self.reasoning_effort = reasoning_effort
+        self.expected_model = expected_model
+        self.expected_provider = expected_provider
+        self.allow_fallbacks = allow_fallbacks
+        self.last_call: dict[str, Any] = {}
         self.http = http_client or httpx.Client(timeout=120.0)
 
     def generate_json(
@@ -46,7 +55,7 @@ class OpenRouterJsonClient:
             "model": self.model,
             "messages": [{"role": "user", "content": prompt}],
             "temperature": self.temperature,
-            "reasoning_effort": "medium",
+            "reasoning_effort": self.reasoning_effort,
             "response_format": {
                 "type": "json_schema",
                 "json_schema": {
@@ -57,12 +66,14 @@ class OpenRouterJsonClient:
             },
             "provider": {
                 "require_parameters": True,
-                "allow_fallbacks": True,
+                "allow_fallbacks": self.allow_fallbacks,
             },
         }
         cache_payload = {"provider": "openrouter", **request_body}
         cached = self.cache.get(cache_payload)
         if cached is not None:
+            self._validate_route(cached.get("model"), cached.get("provider"))
+            self.last_call = {**cached["usage"], "model": cached["model"], "provider": cached["provider"], "cached": True}
             self.logger.write(
                 {
                     **event,
@@ -88,6 +99,7 @@ class OpenRouterJsonClient:
                 )
                 response.raise_for_status()
                 body = response.json()
+                self._validate_route(body.get("model"), body.get("provider"))
                 content = body["choices"][0]["message"]["content"]
                 if not isinstance(content, str):
                     raise ValueError("OpenRouter returned non-text structured content")
@@ -108,6 +120,7 @@ class OpenRouterJsonClient:
                     "provider": body.get("provider"),
                 }
                 self.cache.put(cache_payload, cached_value)
+                self.last_call = {**usage, "model": cached_value["model"], "provider": cached_value["provider"], "cached": False}
                 self.logger.write(
                     {
                         **event,
@@ -136,3 +149,12 @@ class OpenRouterJsonClient:
                 time.sleep(self.backoff_seconds * (2 ** (attempt - 1)))
         raise RuntimeError("unreachable")
 
+    def _validate_route(self, model: str | None, provider: str | None) -> None:
+        if model != self.expected_model:
+            raise RuntimeError(
+                f"served model changed: expected {self.expected_model}, got {model}"
+            )
+        if provider != self.expected_provider:
+            raise RuntimeError(
+                f"served provider changed: expected {self.expected_provider}, got {provider}"
+            )

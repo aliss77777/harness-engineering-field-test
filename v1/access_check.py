@@ -91,6 +91,8 @@ def main() -> None:
             logger=JsonlLogger(ROOT / "logs" / "access-check-jev.jsonl"),
             retries=config["api"]["retries"],
             backoff_seconds=config["api"]["backoff_seconds"],
+            expected_model=config["models"]["jev_expected_served"],
+            expected_provider=config["models"]["jev_expected_provider"],
         )
         result = client.evaluate(
             "This is excellent news.",

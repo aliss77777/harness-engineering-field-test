@@ -23,6 +23,8 @@ class OpenRouterJevClient:
         logger: JsonlLogger,
         retries: int,
         backoff_seconds: float,
+        expected_model: str,
+        expected_provider: str,
         http_client: httpx.Client | None = None,
     ):
         self.model = model
@@ -31,6 +33,9 @@ class OpenRouterJevClient:
         self.logger = logger
         self.retries = retries
         self.backoff_seconds = backoff_seconds
+        self.expected_model = expected_model
+        self.expected_provider = expected_provider
+        self.last_call: dict[str, Any] = {}
         self.http = http_client or httpx.Client(timeout=60.0)
 
     def evaluate(
@@ -38,6 +43,8 @@ class OpenRouterJevClient:
         headline: str,
         questions: list[RubricQuestion],
         event: dict[str, Any],
+        *,
+        use_cache: bool = True,
     ) -> dict[str, float]:
         payload = {
             "model": self.model,
@@ -50,8 +57,10 @@ class OpenRouterJevClient:
                 for question in questions
             },
         }
-        cached = self.cache.get(payload)
+        cached = self.cache.get(payload) if use_cache else None
         if cached is not None:
+            self._validate_route(cached.get("model"), cached.get("provider"))
+            self.last_call = {**cached["usage"], "model": cached["model"], "provider": cached["provider"], "cached": True}
             self.logger.write(
                 {
                     **event,
@@ -76,6 +85,7 @@ class OpenRouterJevClient:
                 )
                 response.raise_for_status()
                 body = response.json()
+                self._validate_route(body.get("model"), body.get("provider"))
                 probabilities = {
                     question.question_id: float(body["answers"][question.question_id]["noul"])
                     for question in questions
@@ -93,7 +103,9 @@ class OpenRouterJevClient:
                     "model": body.get("model", self.model),
                     "provider": body.get("provider"),
                 }
-                self.cache.put(payload, cached_value)
+                if use_cache:
+                    self.cache.put(payload, cached_value)
+                self.last_call = {**usage, "model": cached_value["model"], "provider": cached_value["provider"], "cached": False}
                 self.logger.write(
                     {
                         **event,
@@ -122,3 +134,12 @@ class OpenRouterJevClient:
                 time.sleep(self.backoff_seconds * (2 ** (attempt - 1)))
         raise RuntimeError("unreachable")
 
+    def _validate_route(self, model: str | None, provider: str | None) -> None:
+        if model != self.expected_model:
+            raise RuntimeError(
+                f"served model changed: expected {self.expected_model}, got {model}"
+            )
+        if provider != self.expected_provider:
+            raise RuntimeError(
+                f"served provider changed: expected {self.expected_provider}, got {provider}"
+            )
