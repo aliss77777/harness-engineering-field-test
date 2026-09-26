@@ -168,6 +168,16 @@ Since receiving the review instructions, **no paid calls were made**. The explic
 - Loop A triggered the >70% memorization warning.
 - Learning plus sealed paid cost: $1.9196. Three transient Jev errors retried successfully; no served-model/provider mismatch occurred.
 
+### Archived results location — 2026-09-26
+
+Experiment 1 is archived under `experiments/2026-09-26-upworthy-v1/`:
+
+- `README.md` — full human-readable results and conclusions.
+- `artifacts/sealed_complete.json` — final machine-readable sealed results and verdict.
+- `artifacts/final_versions.json` — frozen versions and complete gate history.
+- `config/` and `splits/` — exact reproducibility snapshot.
+- `telemetry/` — compressed JSONL logs for every stage of the run.
+
 ### Git history at handoff
 
 - `fae0cd5` — Pin served models and enable uncached Jev checks
