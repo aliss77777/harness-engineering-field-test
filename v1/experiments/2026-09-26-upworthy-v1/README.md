@@ -38,4 +38,4 @@ The gate required one-sided p < 0.10 and more improvements than regressions.
 - Served model/provider checks passed throughout. Three transient Jev transport/server failures retried successfully.
 - Learning-run paid cost: $1.5443. Sealed-run paid cost: $0.3754. Total for these two stages: **$1.9196**.
 
-Full machine-readable results are in `results/sealed_complete.json`; live and historical events are in `logs/`.
+Full machine-readable results are in `artifacts/sealed_complete.json`; historical events are in compressed JSONL files under `telemetry/`. The exact run configuration and registered split IDs are included alongside them.

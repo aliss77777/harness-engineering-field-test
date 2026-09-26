@@ -10,4 +10,5 @@ data/jd64p-osfstorage-archive/
 data/jd64p-osfstorage-archive.zip
 data/pairs/
 cache/
-logs/
+/logs/
+/results/
