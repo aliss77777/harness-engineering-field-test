@@ -1,0 +1,25 @@
+{
+  "feature_names": [
+    "exclamation_mark",
+    "i_or_me",
+    "length",
+    "number",
+    "question_mark",
+    "you"
+  ],
+  "practice": {
+    "pairs": 300,
+    "fake_accuracy": 0.5066666666666667,
+    "code_baseline_accuracy": 0.6466666666666666
+  },
+  "gate": {
+    "pairs": 300,
+    "fake_accuracy": 0.52,
+    "code_baseline_accuracy": 0.5566666666666666
+  },
+  "sealed": {
+    "pairs": 500,
+    "fake_accuracy": 0.512,
+    "code_baseline_accuracy": 0.58
+  }
+}

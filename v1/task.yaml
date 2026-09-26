@@ -1,0 +1,18 @@
+name: upworthy_headline_choice
+starting_prompt: >-
+  You're an editor at a viral news site in 2014. What makes a headline get more clicks?
+item_text_field: headline
+pair_group_field: clickability_test_id
+outcome:
+  clicks_field: clicks
+  impressions_field: impressions
+pairing:
+  fixed_fields:
+    - eyecatcher_id
+    - excerpt
+  strategy: highest_vs_lowest_click_rate
+data:
+  practice: data/jd64p-osfstorage-archive/upworthy-archive-datasets/upworthy-archive-exploratory-packages-03.12.2020.csv
+  gate: data/jd64p-osfstorage-archive/upworthy-archive-datasets/upworthy-archive-confirmatory-packages-03.12.2020.csv
+  sealed: data/jd64p-osfstorage-archive/upworthy-archive-datasets/upworthy-archive-holdout-packages-03.12.2020.csv
+

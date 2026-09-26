@@ -1,0 +1,61 @@
+# MVP Project Plan
+
+Updated as work progresses. The experiment rules in `MVP-BRIEF-jev-learning-loop-v2_5.md` stay fixed.
+
+## Two-hour target
+
+- [x] Create a reproducible local project and private Git history.
+- [x] Prepare fixed Upworthy practice, gate, and sealed pairs.
+- [x] Run the code-feature baseline and fake-decider sanity check.
+- [ ] Complete one end-to-end learning round for Loops A and B.
+- [ ] Save results, costs, logs, and a clear next-run command.
+
+## 1. Preflight
+
+- [x] Initialize Git; ignore `.env`, raw data, caches, and logs.
+- [x] Add pinned Python dependencies and example environment variables.
+- [x] Confirm Gemini access.
+- [ ] Confirm Jev/OpenRouter access when its key is available.
+- [x] Add `config.yaml` and `task.yaml`; keep experiment constants out of code.
+
+## 2. Data and controls
+
+- [x] Load CSVs safely with pandas and strip HTML from text.
+- [x] Apply date, same-image/excerpt, impressions, and z-score filters in order.
+- [x] Print counts after every filter.
+- [x] Save deterministic pair IDs; never resample them.
+- [x] Create practice (300), gate (300), and sealed (up to 500) sets.
+- [x] Run six-feature logistic-regression baseline.
+- [x] Run seeded fake decider; verify accuracy is near 50%.
+
+## 3. Experiment harness
+
+- [ ] Add decider, editor, gate, evidence, cache, logger, and runner interfaces.
+- [ ] Add append-only JSONL logging and token/cost accounting.
+- [ ] Add retries and full-input disk caching for API calls.
+- [ ] Test pairing, scoring, ties, evidence, gate, and cost calculations. (6 foundational tests pass.)
+
+## 4. Learning loops
+
+- [ ] Generate fair version-0 instructions and rubric from the same Gemini prompt.
+- [ ] Loop A: predict X/Y and record one-line reasons.
+- [ ] Loop B: sum Jev yes-probabilities using question direction.
+- [ ] Build Loop B evidence table.
+- [ ] Edit each loop within the stated change limits.
+- [ ] Gate proposed edits with the one-sided sign test.
+- [ ] Complete one round locally; expand to four rounds after the tracer bullet passes.
+
+## 5. Evaluation and handoff
+
+- [ ] Evaluate version 0 and final versions once on the sealed set.
+- [ ] Apply the pre-registered verdict rules without modification.
+- [ ] Write `results.json`, final rubric, history, costs, and concise verdict.
+- [ ] Document setup and one-command rerun in `README.md`.
+- [ ] Commit clean checkpoints and push to private `aliss77777/jev-test-poc`.
+
+## Progress log
+
+- 2026-09-26: Brief reviewed; dataset downloaded; CSV schema confirmed; `GEMINI_API_KEY` detected without exposing its value.
+- 2026-09-26: Repo and environment created; six tests pass; fixed 300/300/500 splits saved.
+- 2026-09-26: Fake control scored 50.7%/52.0%/51.2%. Code baseline scored 64.7% practice, 55.7% gate, and 58.0% sealed.
+- 2026-09-26: Gemini access confirmed. Google retired `gemini-2.5-flash` for new users, so config now uses `gemini-3.8-flash`.

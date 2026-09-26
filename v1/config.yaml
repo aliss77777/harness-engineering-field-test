@@ -1,0 +1,29 @@
+seed: 20260926
+sets:
+  practice: 300
+  gate: 300
+  sealed: 500
+filters:
+  excluded_start: 2013-06-25
+  excluded_end: 2014-01-10
+  min_impressions: 1000
+  min_z_score: 2.0
+  fallback_z_score: 1.5
+learning:
+  rounds: 4
+  smoke_rounds: 1
+  feedback_mistakes: 20
+  gate_p_threshold: 0.10
+  max_changes: 3
+  max_instructions_words: 300
+  max_rubric_questions: 10
+models:
+  llm: gemini-3.8-flash
+  jev: typesafe/jev-1.13
+  llm_provider: google_ai_studio
+  jev_provider: openrouter
+prices_per_million_tokens:
+  llm_input: null
+  llm_output: null
+  jev_input: null
+  jev_output: null
