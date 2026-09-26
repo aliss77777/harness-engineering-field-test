@@ -13,6 +13,10 @@ from log import JsonlLogger
 DECISIONS_URL = "https://openrouter.ai/api/alpha/decisions"
 
 
+class RouteMismatchError(RuntimeError):
+    """The provider served a different model or route than preregistered."""
+
+
 class OpenRouterJevClient:
     def __init__(
         self,
@@ -129,17 +133,17 @@ class OpenRouterJevClient:
                         "error": str(error),
                     }
                 )
-                if attempt == self.retries:
+                if isinstance(error, RouteMismatchError) or attempt == self.retries:
                     raise
                 time.sleep(self.backoff_seconds * (2 ** (attempt - 1)))
         raise RuntimeError("unreachable")
 
     def _validate_route(self, model: str | None, provider: str | None) -> None:
         if model != self.expected_model:
-            raise RuntimeError(
+            raise RouteMismatchError(
                 f"served model changed: expected {self.expected_model}, got {model}"
             )
         if provider != self.expected_provider:
-            raise RuntimeError(
+            raise RouteMismatchError(
                 f"served provider changed: expected {self.expected_provider}, got {provider}"
             )

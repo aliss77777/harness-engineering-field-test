@@ -71,3 +71,100 @@ Updated as work progresses. The experiment rules in `MVP-BRIEF-jev-learning-loop
 - 2026-09-26: Private GitHub repo created at `aliss77777/jev-test-poc`; local checkpoints pushed to `main`.
 - 2026-09-26: Switched the formal LLM route to paid OpenRouter `google/gemini-3.8-flash`, retaining strict structured output, caching, retries, token/cost logs, and automatic Google-provider failover.
 - 2026-09-26: Paid OpenRouter readiness checks passed: structured-output access check plus a 10-pair Loop A batch at 70.0% accuracy. The batch cost $0.00816 ($0.816 per 1,000 decisions at this sample size). Full testing intentionally paused pending Alexander's go-ahead.
+
+---
+
+## Handoff report — 2026-09-26 16:18:58 MDT
+
+Repository: `https://github.com/aliss77777/jev-test-poc`
+Branch: `main`
+Working tree at report time: clean
+Tests at report time: **35 passed**
+
+### Completed before the review
+
+- Created standalone Python project and private GitHub repo.
+- Added fixed configuration, caching, retries, JSONL logging, and cost tracking.
+- Prepared Upworthy practice/gate/sealed sets: 300/300/500.
+- Fake control scored approximately 50%.
+- Registered code baseline sealed score: **58.0%**. Do not rerun it.
+- Implemented Gemini Loop A and Jev Loop B adapters.
+- Routed paid Gemini 3.8 Flash through OpenRouter.
+- OpenRouter Loop A smoke test: 10 pairs, 70%, $0.00816.
+- Jev practice pass: 300 pairs, 63%, zero ties, $0.01134. This was pre-fix practice evidence, not a formal result.
+- Full testing remained paused.
+
+### Review fixes completed
+
+#### Verdict rules locked
+
+Commit: `0d6b7f6`
+
+Added `verdict.py` with:
+
+- Chance/signal check.
+- Learning comparisons.
+- A-versus-B comparison.
+- 95% accuracy and paired-difference intervals.
+- Exact McNemar tests for few disagreements.
+- Corrected approximate McNemar tests for larger samples.
+- Cost ratio and 5×-cheaper rule.
+- 70% memorization warning.
+- Verdict rows applied in the brief's fixed order.
+
+All thresholds are in `config.yaml`. Eight verdict tests cover every verdict row. This was committed before any gate or formal sealed loop execution.
+
+#### Jev cache bypass and model protection
+
+Commit: `fae0cd5`
+
+- Added `use_cache=False` support for the Jev consistency check.
+- Added tests proving repeated uncached requests really make separate calls.
+- Pinned the expected Jev response to model `typesafe/jev-1.13-20260917`, provider `TypeSafe`.
+- Pinned OpenRouter Gemini to model ID `google/gemini-3.8-flash`, provider `Google AI Studio`.
+- Disabled LLM provider fallback.
+- The run stops if the served model or provider changes.
+- Made `reasoning_effort: medium` explicit in config.
+- Added config placeholders for the consistency-check result and starting-rubric limits.
+
+The Gemini ID is the exact ID OpenRouter returned; OpenRouter did not expose a dated Gemini snapshot.
+
+### Paid-call status at handoff
+
+Since receiving the review instructions, **no paid calls were made**. The explicitly approved Jev consistency test had not run yet.
+
+### Remaining review fixes at handoff
+
+1. Run the approved uncached Jev consistency test and select repeated or reworded question checking.
+2. Add fake mode to `run.py` through the real logging/scoring/gate pipeline.
+3. Freeze pair IDs and repair practice/gate headline overlaps without changing sealed.
+4. Add the single guarded sealed-evaluation entry point.
+5. Write one JSONL record per decision, including allocated batch tokens/cost, reasons, probabilities, correctness, and ties.
+6. Log editor changes/reasons and gate `b`, `c`, and `p`.
+7. Route Loop B through `RubricDecider` instead of duplicated scoring in `run.py`.
+8. Enforce editor limits from config.
+9. Finish data and evidence cleanup.
+10. Run all tests and commit before requesting approval for full paid testing.
+
+### Pre-run completion — 2026-09-26 16:42:19 MDT
+
+- Repaired cross-set headline overlap: removed/refilled 13 practice pairs and 5 gate pairs using the fixed seed. The sealed IDs remained byte-for-byte unchanged.
+- Split IDs now load and validate instead of being rewritten. Filter reporting separates impressions, z-score, and unparseable dates.
+- Fake control passed through the real runner: 51.0% practice, 48.3% gate, 47.8% sealed.
+- Jev consistency check passed with zero binary disagreements across 10 headlines and six questions. New/reworded questions will use the two-rewording check.
+- Model/provider mismatches now stop immediately without retrying.
+- Loop B now uses the tested `RubricDecider` scoring path. Evidence includes zero-split questions as “rarely applies.”
+- Editor limits are enforced from config. Per-pair, editor, and gate events are written to JSONL.
+- Added four-round learning runner, guarded one-time sealed runner, and live telemetry at `results/run_status.json`.
+- Final free preflight: **39 tests passed**.
+
+### Git history at handoff
+
+- `fae0cd5` — Pin served models and enable uncached Jev checks
+- `0d6b7f6` — Lock preregistered verdict rules
+- `d0b4300` — Route Gemini through paid OpenRouter
+- `9ca0ba9` — Record GitHub project setup
+- `b14d497` — Run full Jev practice baseline
+- `4732fd3` — Add Gemini and Jev tracer bullets
+- `4d6f8c9` — Add experiment harness foundations
+- `a89095c` — Build data prep and control baseline

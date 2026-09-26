@@ -14,6 +14,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parent
 TAG_RE = re.compile(r"<[^>]+>")
+SET_NAMES = ("practice", "gate", "sealed")
 
 
 def clean_text(value: object) -> str:
@@ -58,10 +59,15 @@ def build_pairs(
     df = pd.read_csv(source, low_memory=False)
     counts = {"rows_loaded": len(df), "tests_loaded": df["clickability_test_id"].nunique()}
 
-    df["created_at_parsed"] = pd.to_datetime(df["created_at"], errors="coerce", utc=True)
+    df["created_at_parsed"] = pd.to_datetime(
+        df["created_at"], errors="coerce", utc=True, format="mixed"
+    )
+    counts["rows_dropped_unparseable_dates"] = int(df["created_at_parsed"].isna().sum())
+    df = df[df["created_at_parsed"].notna()].copy()
     start = pd.Timestamp(excluded_start, tz="UTC")
     end = pd.Timestamp(excluded_end, tz="UTC")
     df = df[~df["created_at_parsed"].between(start, end, inclusive="both")].copy()
+    counts["rows_after_date_filter"] = len(df)
     counts["tests_after_date_filter"] = df["clickability_test_id"].nunique()
 
     df["headline_clean"] = df["headline"].map(clean_text)
@@ -83,17 +89,19 @@ def build_pairs(
             comparable.append(group)
     counts["tests_after_same_content_filter"] = len(comparable)
 
-    rows: list[dict[str, object]] = []
-    rng = random.Random(seed)
+    impression_rows: list[tuple[pd.Series, pd.Series]] = []
     for group in comparable:
         variants = group.drop_duplicates("headline_clean").copy()
         variants["click_rate"] = variants["clicks"] / variants["impressions"]
-        variants = variants.sort_values(
-            ["click_rate", "headline_clean"], ascending=[True, True]
-        )
+        variants = variants.sort_values(["click_rate", "headline_clean"], ascending=[True, True])
         low, high = variants.iloc[0], variants.iloc[-1]
-        if min(low["impressions"], high["impressions"]) < min_impressions:
-            continue
+        if min(low["impressions"], high["impressions"]) >= min_impressions:
+            impression_rows.append((low, high))
+    counts["pairs_after_impressions_filter"] = len(impression_rows)
+
+    rows: list[dict[str, object]] = []
+    rng = random.Random(seed)
+    for low, high in impression_rows:
         z_score = two_proportion_z(
             int(high["clicks"]), int(high["impressions"]),
             int(low["clicks"]), int(low["impressions"]),
@@ -118,8 +126,37 @@ def build_pairs(
                 "y_impressions": int(shown[1]["impressions"]),
             }
         )
-    counts["pairs_after_impressions_and_z"] = len(rows)
+    counts["pairs_after_z_filter"] = len(rows)
     return pd.DataFrame(rows).sort_values("pair_id").reset_index(drop=True), counts
+
+
+def load_locked_ids(path: Path) -> list[str]:
+    ids = [line.strip() for line in path.read_text().splitlines() if line.strip()]
+    if len(ids) != len(set(ids)):
+        raise ValueError(f"duplicate pair IDs in {path}")
+    return ids
+
+
+def select_locked_pairs(candidates: pd.DataFrame, ids: list[str], set_name: str) -> pd.DataFrame:
+    indexed = candidates.assign(pair_id=candidates["pair_id"].astype(str)).set_index("pair_id")
+    missing = sorted(set(ids) - set(indexed.index))
+    if missing:
+        raise ValueError(f"{set_name} locked split contains missing pairs: {missing[:5]}")
+    return indexed.loc[ids].reset_index().sort_values("pair_id").reset_index(drop=True)
+
+
+def headline_keys(frame: pd.DataFrame) -> set[str]:
+    keys: set[str] = set()
+    for column in ("headline_x", "headline_y"):
+        keys.update(frame[column].map(lambda value: clean_text(value).casefold()))
+    return keys
+
+
+def assert_no_cross_set_overlap(frames: dict[str, pd.DataFrame]) -> None:
+    for left, right in (("practice", "gate"), ("practice", "sealed"), ("gate", "sealed")):
+        overlap = headline_keys(frames[left]) & headline_keys(frames[right])
+        if overlap:
+            raise ValueError(f"headline overlap between {left} and {right}: {len(overlap)}")
 
 
 def main() -> None:
@@ -136,7 +173,8 @@ def main() -> None:
     split_dir.mkdir(parents=True, exist_ok=True)
 
     report: dict[str, object] = {}
-    for index, set_name in enumerate(("practice", "gate", "sealed")):
+    selected_frames: dict[str, pd.DataFrame] = {}
+    for index, set_name in enumerate(SET_NAMES):
         pairs, counts = build_pairs(
             ROOT / task["data"][set_name],
             seed=config["seed"] + index,
@@ -156,17 +194,26 @@ def main() -> None:
                 min_z_score=config["filters"]["fallback_z_score"],
             )
             counts["used_fallback_z_score"] = 1
-        selected = pairs.sample(
-            n=min(requested, len(pairs)), random_state=config["seed"] + index
-        ).sort_values("pair_id").reset_index(drop=True)
+        ids_path = split_dir / f"{set_name}_pair_ids.txt"
+        if ids_path.exists():
+            locked_ids = load_locked_ids(ids_path)
+            if len(locked_ids) != requested:
+                raise ValueError(f"{set_name} split has {len(locked_ids)} IDs; expected {requested}")
+            selected = select_locked_pairs(pairs, locked_ids, set_name)
+            counts["loaded_locked_pair_ids"] = 1
+        else:
+            if len(pairs) < requested:
+                raise ValueError(f"{set_name} has only {len(pairs)} eligible pairs; expected {requested}")
+            selected = pairs.sample(n=requested, random_state=config["seed"] + index).sort_values("pair_id").reset_index(drop=True)
+            ids_path.write_text("\n".join(selected["pair_id"].astype(str)) + "\n")
+            counts["created_locked_pair_ids"] = 1
         selected.to_csv(output_dir / f"{set_name}.csv", index=False)
-        (split_dir / f"{set_name}_pair_ids.txt").write_text(
-            "\n".join(selected["pair_id"].astype(str)) + "\n"
-        )
+        selected_frames[set_name] = selected
         counts["pairs_saved"] = len(selected)
         report[set_name] = counts
         print(f"{set_name}: {json.dumps(counts, sort_keys=True)}")
 
+    assert_no_cross_set_overlap(selected_frames)
     (output_dir / "prep_report.json").write_text(json.dumps(report, indent=2) + "\n")
 
 

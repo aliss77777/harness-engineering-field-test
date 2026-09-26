@@ -8,6 +8,7 @@ from cache import DiskCache
 from gemini import GeminiJsonClient, load_env
 from log import JsonlLogger
 from openrouter_llm import OpenRouterJsonClient
+from jev import OpenRouterJevClient
 
 
 def build_llm_client(config: dict[str, Any], root: Path, run_id: str):
@@ -43,3 +44,18 @@ def build_llm_client(config: dict[str, Any], root: Path, run_id: str):
             **common,
         )
     raise ValueError(f"unsupported LLM provider: {provider}")
+
+
+def build_jev_client(config: dict[str, Any], root: Path, run_id: str):
+    load_env(root / ".env")
+    api_key = os.environ.get("OPENROUTER_API_KEY") or os.environ.get("OPENROUTER_KEY")
+    if not api_key:
+        raise RuntimeError("OPENROUTER_API_KEY or OPENROUTER_KEY is missing")
+    return OpenRouterJevClient(
+        model=config["models"]["jev"], api_key=api_key,
+        cache=DiskCache(root / "cache" / "jev"),
+        logger=JsonlLogger(root / "logs" / f"{run_id}.jsonl"),
+        retries=config["api"]["retries"], backoff_seconds=config["api"]["backoff_seconds"],
+        expected_model=config["models"]["jev_expected_served"],
+        expected_provider=config["models"]["jev_expected_provider"],
+    )

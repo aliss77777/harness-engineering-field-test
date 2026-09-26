@@ -57,6 +57,11 @@ class RubricDecider:
     def decide(self, headline_x: str, headline_y: str) -> Decision:
         x = self.evaluator(headline_x, self.questions)
         y = self.evaluator(headline_y, self.questions)
+        return self.decide_from_probabilities(x, y)
+
+    def decide_from_probabilities(
+        self, x: dict[str, float], y: dict[str, float]
+    ) -> Decision:
         x_score = rubric_score(self.questions, x)
         y_score = rubric_score(self.questions, y)
         tied = x_score == y_score

@@ -19,7 +19,7 @@ learning:
   max_rubric_questions: 10
   starting_rubric_min_questions: 5
   starting_rubric_max_questions: 8
-  question_check_mode: pending_consistency_test
+  question_check_mode: reworded_questions
 verdict:
   alpha: 0.05
   equivalence_margin: 0.03

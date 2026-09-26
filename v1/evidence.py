@@ -7,10 +7,14 @@ from pathlib import Path
 from typing import Any, Iterable
 
 
-def build_evidence_table(records: Iterable[dict[str, Any]]) -> list[dict[str, Any]]:
+def build_evidence_table(
+    records: Iterable[dict[str, Any]], question_ids: Iterable[str] | None = None
+) -> list[dict[str, Any]]:
     counts: dict[str, dict[str, float]] = defaultdict(
         lambda: {"splits": 0, "yes_won": 0}
     )
+    for question_id in question_ids or []:
+        counts[question_id]
     for record in records:
         winner = record["winner"]
         for question_id, answers in record["questions"].items():
@@ -32,6 +36,7 @@ def build_evidence_table(records: Iterable[dict[str, Any]]) -> list[dict[str, An
                 "splits": splits,
                 "yes_won": yes_won,
                 "yes_win_rate": yes_won / splits if splits else None,
+                "reading": "rarely applies" if splits == 0 else None,
             }
         )
     return table
@@ -43,14 +48,13 @@ def main() -> None:
     parser.add_argument("output", type=Path)
     args = parser.parse_args()
     run = json.loads(args.input.read_text())
-    table = build_evidence_table(run["decisions"])
+    question_ids = run.get("question_ids")
+    table = build_evidence_table(run["decisions"], question_ids)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(table, indent=2) + "\n")
     for row in table:
-        print(
-            f"{row['question_id']}: splits={row['splits']}, "
-            f"yes_win_rate={row['yes_win_rate']:.1%}"
-        )
+        rate = "n/a" if row["yes_win_rate"] is None else f"{row['yes_win_rate']:.1%}"
+        print(f"{row['question_id']}: splits={row['splits']}, yes_win_rate={rate}")
 
 
 if __name__ == "__main__":

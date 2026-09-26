@@ -1,4 +1,5 @@
 import httpx
+import pytest
 
 from cache import DiskCache
 from deciders import RubricQuestion
@@ -102,3 +103,20 @@ def test_jev_client_can_bypass_cache(tmp_path):
     client.evaluate("state", question, {"run_id": "one"}, use_cache=False)
     client.evaluate("state", question, {"run_id": "two"}, use_cache=False)
     assert calls == 2
+
+
+def test_jev_route_mismatch_stops_without_retry(tmp_path):
+    calls = 0
+    def handler(_request: httpx.Request):
+        nonlocal calls
+        calls += 1
+        return httpx.Response(200, json={"model": "wrong", "provider": "Wrong"})
+    client = OpenRouterJevClient(
+        model="typesafe/jev-1.13", api_key="test", cache=DiskCache(tmp_path / "cache"),
+        logger=JsonlLogger(tmp_path / "events.jsonl"), retries=3, backoff_seconds=0,
+        expected_model="typesafe/jev-1.13-test", expected_provider="TypeSafe",
+        http_client=httpx.Client(transport=httpx.MockTransport(handler)),
+    )
+    with pytest.raises(RuntimeError, match="served model changed"):
+        client.evaluate("state", [RubricQuestion("q", "Question?", "helps")], {"run_id": "test"})
+    assert calls == 1

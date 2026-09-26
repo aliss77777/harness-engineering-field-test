@@ -1,0 +1,15 @@
+{
+  "sealed": {
+    "changed": false,
+    "pairs": 500
+  },
+  "gate": {
+    "removed_for_overlap": 5,
+    "refilled_from_unused": 5
+  },
+  "practice": {
+    "removed_for_overlap": 13,
+    "refilled_from_unused": 13
+  },
+  "seed": 20260926
+}
