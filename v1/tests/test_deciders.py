@@ -1,6 +1,6 @@
 import pytest
 
-from deciders import RubricDecider, RubricQuestion, rubric_score
+from deciders import LLMDecider, RubricDecider, RubricQuestion, rubric_score
 
 
 QUESTIONS = [
@@ -34,3 +34,38 @@ def test_rubric_decider_marks_seeded_exact_tie():
     second = RubricDecider(QUESTIONS, evaluate, seed=7).decide("same", "same")
     assert first.prediction == second.prediction
     assert first.coin_flip_tie
+
+
+def test_llm_decider_parses_complete_batch():
+    class Generator:
+        def generate_json(self, *, prompt, schema, event):
+            assert event["pair_id"] == ["one", "two"]
+            return {
+                "decisions": [
+                    {"pair_id": "one", "prediction": "X", "reason": "More curiosity."},
+                    {"pair_id": "two", "prediction": "Y", "reason": "Stronger emotion."},
+                ]
+            }
+
+    pairs = [
+        {"pair_id": "one", "headline_x": "A", "headline_y": "B"},
+        {"pair_id": "two", "headline_x": "C", "headline_y": "D"},
+    ]
+    decisions = LLMDecider(Generator()).decide_batch(
+        instructions="Choose well.", pairs=pairs, event={"run_id": "test"}
+    )
+    assert decisions["one"].prediction == "X"
+    assert decisions["two"].reason == "Stronger emotion."
+
+
+def test_llm_decider_rejects_missing_pair():
+    class Generator:
+        def generate_json(self, **_kwargs):
+            return {"decisions": []}
+
+    with pytest.raises(ValueError, match="missing"):
+        LLMDecider(Generator()).decide_batch(
+            instructions="Choose.",
+            pairs=[{"pair_id": "one", "headline_x": "A", "headline_y": "B"}],
+            event={},
+        )

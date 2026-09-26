@@ -17,6 +17,11 @@ learning:
   max_changes: 3
   max_instructions_words: 300
   max_rubric_questions: 10
+api:
+  retries: 3
+  backoff_seconds: 1.0
+  batch_size: 20
+  temperature: 0.0
 models:
   llm: gemini-3.8-flash
   jev: typesafe/jev-1.13
@@ -25,5 +30,5 @@ models:
 prices_per_million_tokens:
   llm_input: null
   llm_output: null
-  jev_input: null
-  jev_output: null
+  jev_input: 0.042
+  jev_output: 0.0

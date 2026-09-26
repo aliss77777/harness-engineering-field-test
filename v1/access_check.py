@@ -7,6 +7,11 @@ from pathlib import Path
 import yaml
 from google import genai
 
+from cache import DiskCache
+from deciders import RubricQuestion
+from jev import OpenRouterJevClient
+from log import JsonlLogger
+
 
 ROOT = Path(__file__).resolve().parent
 
@@ -46,15 +51,40 @@ def check_gemini(model: str) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Verify model access without exposing keys.")
     parser.add_argument("--gemini", action="store_true")
+    parser.add_argument("--jev", action="store_true")
     args = parser.parse_args()
     load_local_env()
     config = yaml.safe_load((ROOT / "config.yaml").read_text())
     if args.gemini:
         check_gemini(config["models"]["llm"])
+    elif args.jev:
+        api_key = os.environ.get("OPENROUTER_API_KEY") or os.environ.get("OPENROUTER_KEY")
+        if not api_key:
+            raise RuntimeError("OPENROUTER_API_KEY is missing")
+        client = OpenRouterJevClient(
+            model=config["models"]["jev"],
+            api_key=api_key,
+            cache=DiskCache(ROOT / "cache" / "jev"),
+            logger=JsonlLogger(ROOT / "logs" / "access-check-jev.jsonl"),
+            retries=config["api"]["retries"],
+            backoff_seconds=config["api"]["backoff_seconds"],
+        )
+        result = client.evaluate(
+            "This is excellent news.",
+            [RubricQuestion("positive", "Is the text positive?", "helps")],
+            {
+                "run_id": "access-check",
+                "loop": "B",
+                "round": 0,
+                "set": "none",
+                "pair_id": None,
+                "version_id": "v0",
+            },
+        )
+        print(f"Jev: OK (yes_probability={result['positive']:.3f})")
     else:
         parser.error("choose an access check")
 
 
 if __name__ == "__main__":
     main()
-

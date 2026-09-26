@@ -1,0 +1,35 @@
+{
+  "instructions": "When deciding which headline will drive higher click-through rates, apply the viral editorial playbook of 2014: prioritize the curiosity gap, emotional intensity, identity validation, and clear packaging. First, reward headlines that leverage the curiosity gap by withholding the core resolution or punchline; readers must feel an unresolved tension that can only be satisfied by opening the article. Second, favor strong emotional triggers over detached facts. A headline promising awe, tearful catharsis, moral outrage, or sheer disbelief will outperform a dry, standard journalistic summary. Third, prioritize direct address and relatable identity hooks. Framing a story around the reader ('you', 'your') or a recognizable tribe ('millennials', 'dog owners') drives personal investment and social sharing. Fourth, favor quantified, easily digestible structures like listicles with specific numbers, which promise effortless scanning. Conversely, eliminate headlines that spoil their own ending, rely on passive voice, or read like academic press releases. Choose the headline that creates the most urgent emotional and informational void.",
+  "rubric_questions": [
+    {
+      "question_id": "withholds_key_payoff",
+      "text": "Does the headline deliberately withhold the final outcome or core punchline to create an information gap?",
+      "direction": "helps"
+    },
+    {
+      "question_id": "uses_second_person",
+      "text": "Does the headline address the reader directly using second-person pronouns such as 'you' or 'your'?",
+      "direction": "helps"
+    },
+    {
+      "question_id": "features_list_number",
+      "text": "Does the headline include a specific number indicating a curated list of items or examples?",
+      "direction": "helps"
+    },
+    {
+      "question_id": "promises_extreme_emotion",
+      "text": "Does the headline contain hyperbolic emotional reaction phrases (e.g., 'will blow your mind', 'leave you in tears', 'restore your faith')?",
+      "direction": "helps"
+    },
+    {
+      "question_id": "spoils_factual_resolution",
+      "text": "Does the headline provide a complete, self-contained summary of the outcome that eliminates the need to read further?",
+      "direction": "hurts"
+    },
+    {
+      "question_id": "uses_formal_bureaucratic_language",
+      "text": "Does the headline rely on passive voice, academic terminology, or dry institutional jargon?",
+      "direction": "hurts"
+    }
+  ]
+}

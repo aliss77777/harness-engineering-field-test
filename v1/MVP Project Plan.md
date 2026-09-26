@@ -15,7 +15,7 @@ Updated as work progresses. The experiment rules in `MVP-BRIEF-jev-learning-loop
 - [x] Initialize Git; ignore `.env`, raw data, caches, and logs.
 - [x] Add pinned Python dependencies and example environment variables.
 - [x] Confirm Gemini access.
-- [ ] Confirm Jev/OpenRouter access when its key is available.
+- [x] Confirm Jev/OpenRouter access when its key is available.
 - [x] Add `config.yaml` and `task.yaml`; keep experiment constants out of code.
 
 ## 2. Data and controls
@@ -30,17 +30,17 @@ Updated as work progresses. The experiment rules in `MVP-BRIEF-jev-learning-loop
 
 ## 3. Experiment harness
 
-- [ ] Add decider, editor, gate, evidence, cache, logger, and runner interfaces.
+- [x] Add decider, editor, gate, evidence, cache, logger, and runner interfaces.
 - [x] Add append-only JSONL logging and token/cost accounting.
-- [ ] Add retries and full-input disk caching for API calls. (Disk cache complete; API wrapper pending.)
-- [x] Test pairing, scoring, ties, evidence, gate, and cost calculations. (16 tests pass.)
+- [x] Add retries and full-input disk caching for API calls.
+- [x] Test pairing, scoring, ties, evidence, gate, and cost calculations. (24 tests pass.)
 
 ## 4. Learning loops
 
-- [ ] Generate fair version-0 instructions and rubric from the same Gemini prompt.
-- [ ] Loop A: predict X/Y and record one-line reasons.
-- [ ] Loop B: sum Jev yes-probabilities using question direction.
-- [ ] Build Loop B evidence table.
+- [x] Generate fair version-0 instructions and rubric from the same Gemini prompt.
+- [x] Loop A: predict X/Y and record one-line reasons.
+- [x] Loop B: sum Jev yes-probabilities using question direction.
+- [x] Build Loop B evidence table.
 - [ ] Edit each loop within the stated change limits.
 - [ ] Gate proposed edits with the one-sided sign test.
 - [ ] Complete one round locally; expand to four rounds after the tracer bullet passes.
@@ -60,3 +60,6 @@ Updated as work progresses. The experiment rules in `MVP-BRIEF-jev-learning-loop
 - 2026-09-26: Fake control scored 50.7%/52.0%/51.2%. Code baseline scored 64.7% practice, 55.7% gate, and 58.0% sealed.
 - 2026-09-26: Gemini access confirmed. Google retired `gemini-2.5-flash` for new users, so config now uses `gemini-3.8-flash`.
 - 2026-09-26: Cache, append-only logger, cost math, rubric scorer/tie rule, evidence table, and sign-test gate implemented; 16 tests pass.
+- 2026-09-26: Fair version 0 generated: prose instructions plus six yes/no rubric questions.
+- 2026-09-26: OpenRouter Jev 1.13 access confirmed; pinned served snapshot is `typesafe/jev-1.13-20260917`.
+- 2026-09-26: Ten-pair smoke tests passed end to end: Loop A 70%; Loop B 90% with 0% ties. These tiny samples are plumbing checks, not findings. Jev cost $0.000374 total ($0.0374 per 1,000 decisions at this sample size).

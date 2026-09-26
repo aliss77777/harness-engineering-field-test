@@ -1,0 +1,80 @@
+{
+  "run_id": "loop-a-smoke-v0",
+  "loop": "A",
+  "set": "practice",
+  "version_id": "v0",
+  "pairs": 10,
+  "accuracy": 0.7,
+  "decisions": [
+    {
+      "pair_id": "51436073220cb8000200079c",
+      "prediction": "Y",
+      "winner": "Y",
+      "correct": true,
+      "reason": "It packages the content into a quantified listicle format promising high-value wisdom from authoritative figures."
+    },
+    {
+      "pair_id": "51436087220cb800020009a9",
+      "prediction": "X",
+      "winner": "X",
+      "correct": true,
+      "reason": "It highlights an inspiring emotional payoff using classic viral framing ('One Of The Most Unique... Is Also Totally Beautiful')."
+    },
+    {
+      "pair_id": "51436089220cb800020009bb",
+      "prediction": "Y",
+      "winner": "Y",
+      "correct": true,
+      "reason": "It opens a strong curiosity gap around modern social relevance rather than reading like a retro comic quote."
+    },
+    {
+      "pair_id": "51436093220cb80002000a29",
+      "prediction": "Y",
+      "winner": "Y",
+      "correct": true,
+      "reason": "The forbidden-fruit appeal of content 'you'll never see on air' paired with 'brutally honest' is much more enticing than a plain hypothetical."
+    },
+    {
+      "pair_id": "5148c60378ec5400020020d9",
+      "prediction": "X",
+      "winner": "Y",
+      "correct": false,
+      "reason": "It leverages powerful moral outrage and patriotic identity validation, compelling readers to click and share."
+    },
+    {
+      "pair_id": "5151ee591e19e80002001d8e",
+      "prediction": "X",
+      "winner": "Y",
+      "correct": false,
+      "reason": "It poses a provocative moral question and provides immediate righteous justification, fueling emotional investment."
+    },
+    {
+      "pair_id": "515db1c9683d3f000200112c",
+      "prediction": "X",
+      "winner": "X",
+      "correct": true,
+      "reason": "It combines pop culture familiarity with sheer disbelief and moral outrage at a controversial sign."
+    },
+    {
+      "pair_id": "5163a3256891a60002002fca",
+      "prediction": "Y",
+      "winner": "Y",
+      "correct": true,
+      "reason": "It delivers high emotional catharsis with a powerful curiosity gap about how an act of love will keep someone alive forever."
+    },
+    {
+      "pair_id": "516880d2a056a1000200f058",
+      "prediction": "X",
+      "winner": "Y",
+      "correct": false,
+      "reason": "It sparks celebrity intrigue with recognizable pop culture references and a personal, enthusiastic hook."
+    },
+    {
+      "pair_id": "516f2cc68d86850002016cc6",
+      "prediction": "Y",
+      "winner": "Y",
+      "correct": true,
+      "reason": "It uses direct reader address and channels political frustration into actionable curiosity."
+    }
+  ]
+}

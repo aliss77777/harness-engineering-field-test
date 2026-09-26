@@ -1,0 +1,361 @@
+{
+  "run_id": "loop-b-smoke-v0",
+  "loop": "B",
+  "set": "practice",
+  "version_id": "v0",
+  "pairs": 10,
+  "accuracy": 0.9,
+  "tie_rate": 0.0,
+  "decisions": [
+    {
+      "pair_id": "51436073220cb8000200079c",
+      "prediction": "Y",
+      "winner": "Y",
+      "correct": true,
+      "coin_flip_tie": false,
+      "x_score": 0.19,
+      "y_score": 1.53,
+      "questions": {
+        "withholds_key_payoff": {
+          "x_yes_probability": 0.2,
+          "y_yes_probability": 0.61
+        },
+        "uses_second_person": {
+          "x_yes_probability": 0.04,
+          "y_yes_probability": 0.03
+        },
+        "features_list_number": {
+          "x_yes_probability": 0.03,
+          "y_yes_probability": 0.98
+        },
+        "promises_extreme_emotion": {
+          "x_yes_probability": 0.04,
+          "y_yes_probability": 0.08
+        },
+        "spoils_factual_resolution": {
+          "x_yes_probability": 0.07,
+          "y_yes_probability": 0.1
+        },
+        "uses_formal_bureaucratic_language": {
+          "x_yes_probability": 0.05,
+          "y_yes_probability": 0.07
+        }
+      }
+    },
+    {
+      "pair_id": "51436087220cb800020009a9",
+      "prediction": "X",
+      "winner": "X",
+      "correct": true,
+      "coin_flip_tie": false,
+      "x_score": 1.3399999999999999,
+      "y_score": 0.6300000000000001,
+      "questions": {
+        "withholds_key_payoff": {
+          "x_yes_probability": 0.86,
+          "y_yes_probability": 0.77
+        },
+        "uses_second_person": {
+          "x_yes_probability": 0.01,
+          "y_yes_probability": 0.03
+        },
+        "features_list_number": {
+          "x_yes_probability": 0.4,
+          "y_yes_probability": 0.06
+        },
+        "promises_extreme_emotion": {
+          "x_yes_probability": 0.26,
+          "y_yes_probability": 0.31
+        },
+        "spoils_factual_resolution": {
+          "x_yes_probability": 0.11,
+          "y_yes_probability": 0.35
+        },
+        "uses_formal_bureaucratic_language": {
+          "x_yes_probability": 0.08,
+          "y_yes_probability": 0.19
+        }
+      }
+    },
+    {
+      "pair_id": "51436089220cb800020009bb",
+      "prediction": "X",
+      "winner": "Y",
+      "correct": false,
+      "coin_flip_tie": false,
+      "x_score": 0.98,
+      "y_score": 0.6699999999999999,
+      "questions": {
+        "withholds_key_payoff": {
+          "x_yes_probability": 0.96,
+          "y_yes_probability": 0.82
+        },
+        "uses_second_person": {
+          "x_yes_probability": 0.06,
+          "y_yes_probability": 0.03
+        },
+        "features_list_number": {
+          "x_yes_probability": 0.02,
+          "y_yes_probability": 0.03
+        },
+        "promises_extreme_emotion": {
+          "x_yes_probability": 0.03,
+          "y_yes_probability": 0.07
+        },
+        "spoils_factual_resolution": {
+          "x_yes_probability": 0.02,
+          "y_yes_probability": 0.15
+        },
+        "uses_formal_bureaucratic_language": {
+          "x_yes_probability": 0.07,
+          "y_yes_probability": 0.13
+        }
+      }
+    },
+    {
+      "pair_id": "51436093220cb80002000a29",
+      "prediction": "Y",
+      "winner": "Y",
+      "correct": true,
+      "coin_flip_tie": false,
+      "x_score": 0.76,
+      "y_score": 1.9500000000000002,
+      "questions": {
+        "withholds_key_payoff": {
+          "x_yes_probability": 0.82,
+          "y_yes_probability": 0.8
+        },
+        "uses_second_person": {
+          "x_yes_probability": 0.03,
+          "y_yes_probability": 0.98
+        },
+        "features_list_number": {
+          "x_yes_probability": 0.04,
+          "y_yes_probability": 0.05
+        },
+        "promises_extreme_emotion": {
+          "x_yes_probability": 0.02,
+          "y_yes_probability": 0.31
+        },
+        "spoils_factual_resolution": {
+          "x_yes_probability": 0.09,
+          "y_yes_probability": 0.13
+        },
+        "uses_formal_bureaucratic_language": {
+          "x_yes_probability": 0.06,
+          "y_yes_probability": 0.06
+        }
+      }
+    },
+    {
+      "pair_id": "5148c60378ec5400020020d9",
+      "prediction": "Y",
+      "winner": "Y",
+      "correct": true,
+      "coin_flip_tie": false,
+      "x_score": 0.6300000000000001,
+      "y_score": 1.2800000000000002,
+      "questions": {
+        "withholds_key_payoff": {
+          "x_yes_probability": 0.26,
+          "y_yes_probability": 0.95
+        },
+        "uses_second_person": {
+          "x_yes_probability": 0.05,
+          "y_yes_probability": 0.09
+        },
+        "features_list_number": {
+          "x_yes_probability": 0.02,
+          "y_yes_probability": 0.07
+        },
+        "promises_extreme_emotion": {
+          "x_yes_probability": 0.56,
+          "y_yes_probability": 0.33
+        },
+        "spoils_factual_resolution": {
+          "x_yes_probability": 0.15,
+          "y_yes_probability": 0.04
+        },
+        "uses_formal_bureaucratic_language": {
+          "x_yes_probability": 0.11,
+          "y_yes_probability": 0.12
+        }
+      }
+    },
+    {
+      "pair_id": "5151ee591e19e80002001d8e",
+      "prediction": "Y",
+      "winner": "Y",
+      "correct": true,
+      "coin_flip_tie": false,
+      "x_score": -0.10999999999999996,
+      "y_score": 1.22,
+      "questions": {
+        "withholds_key_payoff": {
+          "x_yes_probability": 0.35,
+          "y_yes_probability": 0.86
+        },
+        "uses_second_person": {
+          "x_yes_probability": 0.08,
+          "y_yes_probability": 0.01
+        },
+        "features_list_number": {
+          "x_yes_probability": 0.02,
+          "y_yes_probability": 0.06
+        },
+        "promises_extreme_emotion": {
+          "x_yes_probability": 0.05,
+          "y_yes_probability": 0.54
+        },
+        "spoils_factual_resolution": {
+          "x_yes_probability": 0.57,
+          "y_yes_probability": 0.2
+        },
+        "uses_formal_bureaucratic_language": {
+          "x_yes_probability": 0.04,
+          "y_yes_probability": 0.05
+        }
+      }
+    },
+    {
+      "pair_id": "515db1c9683d3f000200112c",
+      "prediction": "X",
+      "winner": "X",
+      "correct": true,
+      "coin_flip_tie": false,
+      "x_score": 2.4999999999999996,
+      "y_score": 0.6300000000000001,
+      "questions": {
+        "withholds_key_payoff": {
+          "x_yes_probability": 0.83,
+          "y_yes_probability": 0.8
+        },
+        "uses_second_person": {
+          "x_yes_probability": 0.9,
+          "y_yes_probability": 0.02
+        },
+        "features_list_number": {
+          "x_yes_probability": 0.49,
+          "y_yes_probability": 0.03
+        },
+        "promises_extreme_emotion": {
+          "x_yes_probability": 0.47,
+          "y_yes_probability": 0.04
+        },
+        "spoils_factual_resolution": {
+          "x_yes_probability": 0.14,
+          "y_yes_probability": 0.19
+        },
+        "uses_formal_bureaucratic_language": {
+          "x_yes_probability": 0.05,
+          "y_yes_probability": 0.07
+        }
+      }
+    },
+    {
+      "pair_id": "5163a3256891a60002002fca",
+      "prediction": "Y",
+      "winner": "Y",
+      "correct": true,
+      "coin_flip_tie": false,
+      "x_score": 1.01,
+      "y_score": 1.3800000000000001,
+      "questions": {
+        "withholds_key_payoff": {
+          "x_yes_probability": 0.89,
+          "y_yes_probability": 0.93
+        },
+        "uses_second_person": {
+          "x_yes_probability": 0.05,
+          "y_yes_probability": 0.02
+        },
+        "features_list_number": {
+          "x_yes_probability": 0.04,
+          "y_yes_probability": 0.03
+        },
+        "promises_extreme_emotion": {
+          "x_yes_probability": 0.17,
+          "y_yes_probability": 0.62
+        },
+        "spoils_factual_resolution": {
+          "x_yes_probability": 0.08,
+          "y_yes_probability": 0.16
+        },
+        "uses_formal_bureaucratic_language": {
+          "x_yes_probability": 0.06,
+          "y_yes_probability": 0.06
+        }
+      }
+    },
+    {
+      "pair_id": "516880d2a056a1000200f058",
+      "prediction": "Y",
+      "winner": "Y",
+      "correct": true,
+      "coin_flip_tie": false,
+      "x_score": 1.5899999999999999,
+      "y_score": 1.7899999999999998,
+      "questions": {
+        "withholds_key_payoff": {
+          "x_yes_probability": 0.92,
+          "y_yes_probability": 0.89
+        },
+        "uses_second_person": {
+          "x_yes_probability": 0.29,
+          "y_yes_probability": 0.99
+        },
+        "features_list_number": {
+          "x_yes_probability": 0.1,
+          "y_yes_probability": 0.06
+        },
+        "promises_extreme_emotion": {
+          "x_yes_probability": 0.41,
+          "y_yes_probability": 0.03
+        },
+        "spoils_factual_resolution": {
+          "x_yes_probability": 0.07,
+          "y_yes_probability": 0.09
+        },
+        "uses_formal_bureaucratic_language": {
+          "x_yes_probability": 0.06,
+          "y_yes_probability": 0.09
+        }
+      }
+    },
+    {
+      "pair_id": "516f2cc68d86850002016cc6",
+      "prediction": "Y",
+      "winner": "Y",
+      "correct": true,
+      "coin_flip_tie": false,
+      "x_score": 1.68,
+      "y_score": 1.92,
+      "questions": {
+        "withholds_key_payoff": {
+          "x_yes_probability": 0.83,
+          "y_yes_probability": 0.82
+        },
+        "uses_second_person": {
+          "x_yes_probability": 0.96,
+          "y_yes_probability": 0.99
+        },
+        "features_list_number": {
+          "x_yes_probability": 0.04,
+          "y_yes_probability": 0.03
+        },
+        "promises_extreme_emotion": {
+          "x_yes_probability": 0.02,
+          "y_yes_probability": 0.22
+        },
+        "spoils_factual_resolution": {
+          "x_yes_probability": 0.08,
+          "y_yes_probability": 0.08
+        },
+        "uses_formal_bureaucratic_language": {
+          "x_yes_probability": 0.09,
+          "y_yes_probability": 0.06
+        }
+      }
+    }
+  ]
+}
