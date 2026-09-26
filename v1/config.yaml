@@ -17,6 +17,12 @@ learning:
   max_changes: 3
   max_instructions_words: 300
   max_rubric_questions: 10
+verdict:
+  alpha: 0.05
+  equivalence_margin: 0.03
+  max_cost_ratio: 0.20
+  memorization_accuracy: 0.70
+  mcnemar_exact_max_discordant: 25
 api:
   retries: 5
   backoff_seconds: 5.0

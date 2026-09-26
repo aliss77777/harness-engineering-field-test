@@ -55,6 +55,7 @@ Updated as work progresses. The experiment rules in `MVP-BRIEF-jev-learning-loop
 
 ## Progress log
 
+- 2026-09-26: Verdict rules locked before gate/sealed loop runs: Wilson accuracy intervals, paired B−A interval, exact/corrected McNemar selection, ordered verdict rows, cost ratio, and memorization flag. Eight verdict tests pass; thresholds are in `config.yaml`.
 - 2026-09-26: Brief reviewed; dataset downloaded; CSV schema confirmed; `GEMINI_API_KEY` detected without exposing its value.
 - 2026-09-26: Repo and environment created; six tests pass; fixed 300/300/500 splits saved.
 - 2026-09-26: Fake control scored 50.7%/52.0%/51.2%. Code baseline scored 64.7% practice, 55.7% gate, and 58.0% sealed.
