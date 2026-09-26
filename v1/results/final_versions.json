@@ -1,0 +1,294 @@
+{
+  "frozen": true,
+  "run_id": "full-run-20260926",
+  "rounds": 4,
+  "version0": {
+    "instructions": "When deciding which headline will drive higher click-through rates, apply the viral editorial playbook of 2014: prioritize the curiosity gap, emotional intensity, identity validation, and clear packaging. First, reward headlines that leverage the curiosity gap by withholding the core resolution or punchline; readers must feel an unresolved tension that can only be satisfied by opening the article. Second, favor strong emotional triggers over detached facts. A headline promising awe, tearful catharsis, moral outrage, or sheer disbelief will outperform a dry, standard journalistic summary. Third, prioritize direct address and relatable identity hooks. Framing a story around the reader ('you', 'your') or a recognizable tribe ('millennials', 'dog owners') drives personal investment and social sharing. Fourth, favor quantified, easily digestible structures like listicles with specific numbers, which promise effortless scanning. Conversely, eliminate headlines that spoil their own ending, rely on passive voice, or read like academic press releases. Choose the headline that creates the most urgent emotional and informational void.",
+    "rubric_questions": [
+      {
+        "question_id": "withholds_key_payoff",
+        "text": "Does the headline deliberately withhold the final outcome or core punchline to create an information gap?",
+        "direction": "helps"
+      },
+      {
+        "question_id": "uses_second_person",
+        "text": "Does the headline address the reader directly using second-person pronouns such as 'you' or 'your'?",
+        "direction": "helps"
+      },
+      {
+        "question_id": "features_list_number",
+        "text": "Does the headline include a specific number indicating a curated list of items or examples?",
+        "direction": "helps"
+      },
+      {
+        "question_id": "promises_extreme_emotion",
+        "text": "Does the headline contain hyperbolic emotional reaction phrases (e.g., 'will blow your mind', 'leave you in tears', 'restore your faith')?",
+        "direction": "helps"
+      },
+      {
+        "question_id": "spoils_factual_resolution",
+        "text": "Does the headline provide a complete, self-contained summary of the outcome that eliminates the need to read further?",
+        "direction": "hurts"
+      },
+      {
+        "question_id": "uses_formal_bureaucratic_language",
+        "text": "Does the headline rely on passive voice, academic terminology, or dry institutional jargon?",
+        "direction": "hurts"
+      }
+    ]
+  },
+  "final": {
+    "A": {
+      "version_id": "A-v0",
+      "instructions": "When deciding which headline will drive higher click-through rates, apply the viral editorial playbook of 2014: prioritize the curiosity gap, emotional intensity, identity validation, and clear packaging. First, reward headlines that leverage the curiosity gap by withholding the core resolution or punchline; readers must feel an unresolved tension that can only be satisfied by opening the article. Second, favor strong emotional triggers over detached facts. A headline promising awe, tearful catharsis, moral outrage, or sheer disbelief will outperform a dry, standard journalistic summary. Third, prioritize direct address and relatable identity hooks. Framing a story around the reader ('you', 'your') or a recognizable tribe ('millennials', 'dog owners') drives personal investment and social sharing. Fourth, favor quantified, easily digestible structures like listicles with specific numbers, which promise effortless scanning. Conversely, eliminate headlines that spoil their own ending, rely on passive voice, or read like academic press releases. Choose the headline that creates the most urgent emotional and informational void."
+    },
+    "B": {
+      "version_id": "B-v0",
+      "rubric_questions": [
+        {
+          "question_id": "withholds_key_payoff",
+          "text": "Does the headline deliberately withhold the final outcome or core punchline to create an information gap?",
+          "direction": "helps"
+        },
+        {
+          "question_id": "uses_second_person",
+          "text": "Does the headline address the reader directly using second-person pronouns such as 'you' or 'your'?",
+          "direction": "helps"
+        },
+        {
+          "question_id": "features_list_number",
+          "text": "Does the headline include a specific number indicating a curated list of items or examples?",
+          "direction": "helps"
+        },
+        {
+          "question_id": "promises_extreme_emotion",
+          "text": "Does the headline contain hyperbolic emotional reaction phrases (e.g., 'will blow your mind', 'leave you in tears', 'restore your faith')?",
+          "direction": "helps"
+        },
+        {
+          "question_id": "spoils_factual_resolution",
+          "text": "Does the headline provide a complete, self-contained summary of the outcome that eliminates the need to read further?",
+          "direction": "hurts"
+        },
+        {
+          "question_id": "uses_formal_bureaucratic_language",
+          "text": "Does the headline rely on passive voice, academic terminology, or dry institutional jargon?",
+          "direction": "hurts"
+        }
+      ]
+    }
+  },
+  "history": {
+    "A": [
+      {
+        "run_id": "full-run-20260926",
+        "loop": "A",
+        "round": 1,
+        "set": "gate",
+        "call_type": "gate",
+        "version_id": "A-r1-proposed",
+        "keep": false,
+        "b": 28,
+        "c": 19,
+        "p": 0.12148010864166278,
+        "changes": [
+          {
+            "change": "Prioritize character-driven narrative storytelling and human vignettes over heavy-handed moral indignation or preachy editorializing.",
+            "reason": "Readers favored personal human framing and story actions over abstract moral outrage and opinion essays."
+          },
+          {
+            "change": "Enforce withholding the key subject, punchline, or named villain rather than revealing them in the headline.",
+            "reason": "Headlines revealing the explicit answer or antagonist lose to ones preserving the curiosity gap."
+          },
+          {
+            "change": "Favor natural narrative setups and conversational payoff over forced interactive questions or self-referential commentary.",
+            "reason": "Conversational story hooks consistently outperform aggressive rhetorical questioning and first-person meta reactions."
+          }
+        ]
+      },
+      {
+        "run_id": "full-run-20260926",
+        "loop": "A",
+        "round": 2,
+        "set": "gate",
+        "call_type": "gate",
+        "version_id": "A-r2-proposed",
+        "keep": false,
+        "b": 26,
+        "c": 26,
+        "p": 0.5550580173617314,
+        "changes": [
+          {
+            "change": "Prioritize human-centered story arcs and personal vignettes over preachy moral outrage or abstract editorializing.",
+            "reason": "Personal messengers and narrative actions consistently beat heavy-handed moral indignation and op-ed claims."
+          },
+          {
+            "change": "Enforce strict curiosity gaps that withhold the antagonist, punchline, or resolution using classic viral story formulas.",
+            "reason": "Formulas like 'Then THIS Happened' and withholding the explicit culprit outperform headlines that reveal the answer."
+          },
+          {
+            "change": "Favor vivid third-person story events and notable subjects over forced second-person direct address or meta commentary.",
+            "reason": "Concrete third-person narratives regularly outperform rhetorical questions, aggressive direct commands, and first-person reactions."
+          }
+        ]
+      },
+      {
+        "run_id": "full-run-20260926",
+        "loop": "A",
+        "round": 3,
+        "set": "gate",
+        "call_type": "gate",
+        "version_id": "A-r3-proposed",
+        "keep": false,
+        "b": 15,
+        "c": 14,
+        "p": 0.5,
+        "changes": [
+          {
+            "change": "Ground emotional appeals in personal human messengers or specific narrative events rather than sweeping op-ed moralizing or abstract polemics.",
+            "reason": "Tangible human experiences and narrative events consistently outperform abstract ideological declarations."
+          },
+          {
+            "change": "Strictly withhold the explicit antagonist, answer, or turning point instead of revealing the culprit or takeaway upfront.",
+            "reason": "Teasing the resolution preserves an authentic curiosity gap, whereas naming the target or outcome spoils engagement."
+          },
+          {
+            "change": "Balance direct address by favoring concrete actors and recognizable figures over vague pronouns or generic second-person framing.",
+            "reason": "Specific descriptive subjects generate clearer intrigue than generic pronouns like 'This Guy' or broad direct address."
+          }
+        ]
+      },
+      {
+        "run_id": "full-run-20260926",
+        "loop": "A",
+        "round": 4,
+        "set": "gate",
+        "call_type": "gate",
+        "version_id": "A-r4-proposed",
+        "keep": false,
+        "b": 12,
+        "c": 13,
+        "p": 0.6549810171127319,
+        "changes": [
+          {
+            "change": "Refine the emotional triggers guideline to favor personal human messengers and narrative payoffs over preachy moral outrage or heavy-handed lecturing.",
+            "reason": "Overt outrage and lecturing consistently lose to personal human stories and narrative payoffs."
+          },
+          {
+            "change": "Explicitly require withholding the specific antagonist, culprit, or answer to maintain the curiosity gap.",
+            "reason": "Revealing the villain or answer upfront eliminates curiosity, whereas teasing the reason drives clicks."
+          },
+          {
+            "change": "Specify that direct address ('you') should not supersede concrete story subjects, specific figures, or descriptive narrative scenarios.",
+            "reason": "Specific human anchors and clear narrative events consistently beat generic second-person rhetorical framing."
+          }
+        ]
+      }
+    ],
+    "B": [
+      {
+        "run_id": "full-run-20260926",
+        "loop": "B",
+        "round": 1,
+        "set": "gate",
+        "call_type": "gate",
+        "version_id": "B-r1-proposed",
+        "keep": false,
+        "b": 33,
+        "c": 24,
+        "p": 0.14462187355451026,
+        "changes": [
+          {
+            "change": "Drop question uses_second_person.",
+            "reason": "In the evidence table, uses_second_person recorded 97 splits with only a 48.5% win rate, demonstrating that classifying it as 'helps' misguides predictions."
+          },
+          {
+            "change": "Drop question uses_formal_bureaucratic_language.",
+            "reason": "In the evidence table, uses_formal_bureaucratic_language had only 2 splits and a flat 50.0% win rate, providing virtually no diagnostic value."
+          },
+          {
+            "change": "Drop question spoils_factual_resolution.",
+            "reason": "In the evidence table, spoils_factual_resolution occurred in only 8 splits with a neutral 50.0% win rate, failing to substantiate a 'hurts' direction."
+          }
+        ]
+      },
+      {
+        "run_id": "full-run-20260926",
+        "loop": "B",
+        "round": 2,
+        "set": "gate",
+        "call_type": "gate",
+        "version_id": "B-r2-proposed",
+        "keep": false,
+        "b": 46,
+        "c": 35,
+        "p": 0.13320615483566015,
+        "changes": [
+          {
+            "change": "Drop question uses_second_person.",
+            "reason": "In the evidence table, uses_second_person recorded 97 splits with only a 48.5% win rate, showing that treating direct address as beneficial misleads predictions."
+          },
+          {
+            "change": "Drop question uses_formal_bureaucratic_language.",
+            "reason": "In the evidence table, uses_formal_bureaucratic_language appeared in only 2 splits with a neutral 50.0% win rate, offering virtually no diagnostic utility."
+          },
+          {
+            "change": "Add question introduces_narrative_conflict.",
+            "reason": "In the evidence table, withholds_key_payoff achieved the highest win rate at 81.4% across 70 splits, indicating that framing headlines around narrative tension strongly predicts success."
+          }
+        ]
+      },
+      {
+        "run_id": "full-run-20260926",
+        "loop": "B",
+        "round": 3,
+        "set": "gate",
+        "call_type": "gate",
+        "version_id": "B-r3-proposed",
+        "keep": false,
+        "b": 41,
+        "c": 37,
+        "p": 0.3671710165149233,
+        "changes": [
+          {
+            "change": "Drop question uses_second_person.",
+            "reason": "In the evidence table, uses_second_person recorded 97 splits with only a 48.5% win rate, showing that direct reader address performs worse than chance."
+          },
+          {
+            "change": "Drop question uses_formal_bureaucratic_language.",
+            "reason": "In the evidence table, uses_formal_bureaucratic_language appeared in only 2 splits with a 50.0% win rate, offering virtually no discriminative power."
+          },
+          {
+            "change": "Add question features_human_interest_story.",
+            "reason": "In the evidence table, withholds_key_payoff reached an 81.4% win rate across 70 splits while uses_second_person fell to 48.5%, indicating that focusing on third-person human experiences and relatable personal journeys drives engagement."
+          }
+        ]
+      },
+      {
+        "run_id": "full-run-20260926",
+        "loop": "B",
+        "round": 4,
+        "set": "gate",
+        "call_type": "gate",
+        "version_id": "B-r4-proposed",
+        "keep": false,
+        "b": 10,
+        "c": 17,
+        "p": 0.9389609396457672,
+        "changes": [
+          {
+            "change": "Add question features_human_interest_story.",
+            "reason": "In the evidence table, withholds_key_payoff achieved an 81.4% win rate across 70 splits and promises_extreme_emotion won 63.3% across 49 splits, demonstrating that emotionally compelling human journeys strongly drive engagement."
+          }
+        ]
+      }
+    ]
+  },
+  "notes": {
+    "loop_a_batch_size": 20,
+    "loop_a_reasoning_effort": "medium",
+    "version0_route": "Gemini 3.8 Flash via Google directly",
+    "later_route": "OpenRouter",
+    "question_check_mode": "reworded_questions"
+  }
+}

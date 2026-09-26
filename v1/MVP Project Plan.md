@@ -41,15 +41,15 @@ Updated as work progresses. The experiment rules in `MVP-BRIEF-jev-learning-loop
 - [x] Loop A: predict X/Y and record one-line reasons.
 - [x] Loop B: sum Jev yes-probabilities using question direction.
 - [x] Build Loop B evidence table.
-- [ ] Edit each loop within the stated change limits.
-- [ ] Gate proposed edits with the one-sided sign test.
-- [ ] Complete one round locally; expand to four rounds after the tracer bullet passes.
+- [x] Edit each loop within the stated change limits.
+- [x] Gate proposed edits with the one-sided sign test.
+- [x] Complete four rounds for both loops.
 
 ## 5. Evaluation and handoff
 
-- [ ] Evaluate version 0 and final versions once on the sealed set.
-- [ ] Apply the pre-registered verdict rules without modification.
-- [ ] Write `results.json`, final rubric, history, costs, and concise verdict.
+- [x] Evaluate version 0 and final versions once on the sealed set.
+- [x] Apply the pre-registered verdict rules without modification.
+- [x] Write final versions, history, costs, machine-readable results, and concise verdict.
 - [ ] Document setup and one-command rerun in `README.md`.
 - [ ] Commit clean checkpoints and push to private `aliss77777/jev-test-poc`.
 
@@ -157,6 +157,16 @@ Since receiving the review instructions, **no paid calls were made**. The explic
 - Editor limits are enforced from config. Per-pair, editor, and gate events are written to JSONL.
 - Added four-round learning runner, guarded one-time sealed runner, and live telemetry at `results/run_status.json`.
 - Final free preflight: **39 tests passed**.
+
+### Full experiment — 2026-09-26 17:37:09 MDT
+
+- Completed four rounds for Loop A and four rounds for Loop B.
+- All eight proposed versions failed the statistical gate; final versions therefore equal version 0.
+- One-time sealed results: Loop A 73.8%, Loop B 61.2%, registered code baseline 58.0%.
+- Loop B cost $0.0378 per 1,000 decisions versus Loop A's $0.7134 (about 18.9× cheaper).
+- Preregistered verdict: **hypothesis weakened**. Loop A was statistically better; neither loop learned.
+- Loop A triggered the >70% memorization warning.
+- Learning plus sealed paid cost: $1.9196. Three transient Jev errors retried successfully; no served-model/provider mismatch occurred.
 
 ### Git history at handoff
 

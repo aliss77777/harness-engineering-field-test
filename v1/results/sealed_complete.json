@@ -1,0 +1,106 @@
+{
+  "run_id": "sealed-20260926",
+  "registered_code_baseline_accuracy": 0.58,
+  "summaries": {
+    "a_version0": {
+      "pairs": 500,
+      "accuracy": 0.738,
+      "tie_rate": 0.0,
+      "cost": 0.35667674999999927
+    },
+    "a_final": {
+      "pairs": 500,
+      "accuracy": 0.738,
+      "tie_rate": 0.0,
+      "cost": 0.35667674999999927
+    },
+    "b_version0": {
+      "pairs": 500,
+      "accuracy": 0.612,
+      "tie_rate": 0.002,
+      "cost": 0.01890344399999999
+    },
+    "b_final": {
+      "pairs": 500,
+      "accuracy": 0.612,
+      "tie_rate": 0.002,
+      "cost": 0.01890344399999999
+    }
+  },
+  "verdict": {
+    "verdict": "hypothesis_weakened",
+    "accuracy": {
+      "a_version0": 0.738,
+      "a_final": 0.738,
+      "b_version0": 0.612,
+      "b_final": 0.612
+    },
+    "intervals_95": {
+      "a_final": [
+        0.6977470833575387,
+        0.7746237305827625
+      ],
+      "b_final": [
+        0.5685881770866659,
+        0.6537039706499463
+      ],
+      "b_minus_a": [
+        -0.1773203475366729,
+        -0.07467965246332711
+      ]
+    },
+    "tests": {
+      "a_learning": {
+        "b": 0,
+        "c": 0,
+        "discordant": 0,
+        "p_value": 1.0,
+        "method": "exact"
+      },
+      "b_learning": {
+        "b": 0,
+        "c": 0,
+        "discordant": 0,
+        "p_value": 1.0,
+        "method": "exact"
+      },
+      "b_vs_a": {
+        "b": 58,
+        "c": 121,
+        "discordant": 179,
+        "p_value": 3.584978824234147e-06,
+        "method": "chi_square_continuity_corrected"
+      }
+    },
+    "checks": {
+      "signal_a": true,
+      "signal_b": true,
+      "a_learned": false,
+      "b_learned": false,
+      "b_better": false,
+      "a_better": true,
+      "same_quality": false,
+      "cheaper": true,
+      "memorization_flag": true
+    },
+    "cost": {
+      "a_per_1000": 0.7133534999999985,
+      "b_per_1000": 0.03780688799999998,
+      "b_over_a_ratio": 0.052998811949475345
+    },
+    "thresholds": {
+      "alpha": 0.05,
+      "equivalence_margin": 0.03,
+      "max_cost_ratio": 0.2,
+      "memorization_accuracy": 0.7,
+      "mcnemar_exact_max_discordant": 25
+    }
+  },
+  "notes": {
+    "loop_a_batch_size": 20,
+    "loop_a_reasoning_effort": "medium",
+    "version0_route": "Gemini 3.8 Flash via Google directly",
+    "later_route": "OpenRouter",
+    "question_check_mode": "reworded_questions"
+  }
+}
