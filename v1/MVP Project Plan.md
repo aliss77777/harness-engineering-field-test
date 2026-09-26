@@ -31,9 +31,9 @@ Updated as work progresses. The experiment rules in `MVP-BRIEF-jev-learning-loop
 ## 3. Experiment harness
 
 - [ ] Add decider, editor, gate, evidence, cache, logger, and runner interfaces.
-- [ ] Add append-only JSONL logging and token/cost accounting.
-- [ ] Add retries and full-input disk caching for API calls.
-- [ ] Test pairing, scoring, ties, evidence, gate, and cost calculations. (6 foundational tests pass.)
+- [x] Add append-only JSONL logging and token/cost accounting.
+- [ ] Add retries and full-input disk caching for API calls. (Disk cache complete; API wrapper pending.)
+- [x] Test pairing, scoring, ties, evidence, gate, and cost calculations. (16 tests pass.)
 
 ## 4. Learning loops
 
@@ -59,3 +59,4 @@ Updated as work progresses. The experiment rules in `MVP-BRIEF-jev-learning-loop
 - 2026-09-26: Repo and environment created; six tests pass; fixed 300/300/500 splits saved.
 - 2026-09-26: Fake control scored 50.7%/52.0%/51.2%. Code baseline scored 64.7% practice, 55.7% gate, and 58.0% sealed.
 - 2026-09-26: Gemini access confirmed. Google retired `gemini-2.5-flash` for new users, so config now uses `gemini-3.8-flash`.
+- 2026-09-26: Cache, append-only logger, cost math, rubric scorer/tie rule, evidence table, and sign-test gate implemented; 16 tests pass.

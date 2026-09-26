@@ -8,6 +8,6 @@ __pycache__/
 # Raw archive and generated run artifacts
 data/jd64p-osfstorage-archive/
 data/jd64p-osfstorage-archive.zip
-data/pairs/*.csv
+data/pairs/
 cache/
 logs/
