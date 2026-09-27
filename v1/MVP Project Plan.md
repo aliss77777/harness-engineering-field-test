@@ -260,7 +260,7 @@ Experiment 1's exact code is preserved at git tag `exp1-upworthy-v1` (commit `c2
 
 **Why:** in experiment 2, Loop B kept one edit (round 1) and then stalled: 9 of 12 candidates were "add a question", and every later one lowered gate accuracy. The editor never saw *why* a pair was missed: Jev's per-question answers, which are the whole point of the hypothesis ("Jev tells the learner which criterion was wrong and by how much"). **Question:** does decision-trace feedback make the Jev loop learn more? And separately: do fitted question weights help on top of it?
 
-**Decisions (Alexander, 2026-09-26):** run on Arena; include the weighted B-plus arm; build on branch `exp3-decision-trace` in a git worktree (`../jev-test-poc-exp3`) so experiment 2's run and sealed stage keep using `main`'s code; launch only after experiment 2's sealed verdict is written.
+**Decisions (Alexander, 2026-09-26):** run on Arena; include the weighted B-plus arm; build on branch `exp3-decision-trace` in a git worktree (`../jev-test-poc-exp3`) so experiment 2's run and sealed stage keep using `main`'s code; launch only after experiment 2's sealed verdict is written. **Updated 19:20: Alexander asked to run experiment 3's learning in parallel with experiment 2; only experiment 3's sealed stage waits for experiment 2's verdict (enforced in `sealed_trace.py`).**
 
 ## Design (fixed before any experiment-3 paid call)
 
@@ -283,8 +283,9 @@ Experiment 1's exact code is preserved at git tag `exp1-upworthy-v1` (commit `c2
 - [x] Fresh sealed set (`prep_arena3.py`).
 - [x] Trace, aggregate trace, rich evidence, fitted weights (`trace.py`), with tests.
 - [x] `learn_trace.py` (two arms in parallel), `sealed_trace.py` (guarded; refuses until experiment 2's verdict exists), `verdict_trace.py` (Holm), with tests; end-to-end dry run with fake clients. 66 tests pass.
-- [ ] Commit before any paid call.
-- [ ] Launch after experiment 2's sealed verdict; monitor; sealed; verdict.
+- [x] Commit before any paid call (`cd8f701`).
+- [x] Launch learning (in parallel with experiment 2, per Alexander).
+- [ ] Monitor; sealed (after experiment 2's verdict); verdict.
 - [ ] Merge to `main`; archive; compare experiments 1–3.
 
 ## Progress log
@@ -292,3 +293,5 @@ Experiment 1's exact code is preserved at git tag `exp1-upworthy-v1` (commit `c2
 - 2026-09-26 19:14: Worktree `../jev-test-poc-exp3` on branch `exp3-decision-trace` created from `main` (`fdb7755`).
 - 2026-09-26 19:15: Fresh sealed set: 13,789 pairs in the sealed buckets → 12,289 after excluding experiment 2's sealed pairs → 1,500 sampled. Overlap checks all zero.
 - 2026-09-26 19:18: Build complete; dry run with fake editor and fake Jev passed (both arms, 2 rounds, trace present in the editor prompt, pre-screen and gate exercised, weights only in B-plus). 66 tests pass.
+- 2026-09-26 19:20: **Learning launched in parallel with experiment 2** (`learn_trace.py --run-id arena3-learn-20260926`). Live: `results/arena3/run_status.json`, `results/arena3/wip_summary.json`.
+- 2026-09-26 19:21: Version 0 on gate: `Bp` 67.6% (identical to experiment 2's B v0, replayed from cache as expected); `Bw` 69.3% (same rubric, weights fitted on practice, no edits yet).
