@@ -59,6 +59,39 @@ A Jev rubric that learns its criteria from real outcomes decides at about **1/23
 
 Style baseline across Arena sets: 59.9–62.2%. Every LLM and Jev system beat it.
 
+## Learning: start → final, LLM vs Jev
+
+All numbers are on unseen (sealed) data. ✅ = passed the preregistered learning test (final beats its own start, p < 0.05). Experiments 4 and 5 had no training rounds; they combined components already learned in experiments 2 and 3.
+
+| Exp | Setting (metric) | LLM: start → final | LLM change | Jev: start → final | Jev change |
+|---|---|---|---|---|---|
+| **1** | Upworthy headlines (accuracy) | 73.8% → 73.8% | 0 (no edits kept) | 61.2% → 61.2% | 0 (no edits kept) |
+| **2** | Arena responses (accuracy) | 72.9% → 73.3% | +0.4 (p 0.50) | 66.7% → **70.1%** | **+3.4 ✅** (p 0.00002) |
+| **3** | Arena, fresh set (accuracy) | 73.6% → 75.3%, re-scoring exp. 2's versions | +1.7 (p 0.009; replication, not preregistered) | Plain B, exp. 2's versions re-scored: 66.5% → 69.0% · B′ (decision trace): 66.5% → 67.9% · **B+ (fitted weights): 67.5% → 69.8%** | B: +2.5 (replication) · B′: +1.4 (p 0.11) · **B+: +2.3 ✅** (p 0.002) |
+| **4** | Arena (accuracy), stacked vote | 75.7% (fixed) | — | 71.8% (B+, fixed) | — |
+| **5** | Arena (accuracy), router | 76.3% (fixed) | — | 72.7% (B+, fixed) | — |
+| **6** | Upworthy, no answer key (click lift over a random pick) | +13.0 → +13.0 | 0 (no edits kept) | Jev only: +5.6 → **+7.7** · router's Jev: +10.2 → +10.9 | **Jev only: +2.1 ✅** (p 0.02) · router: +0.7 (p 0.21) |
+
+**Combined systems (no learning of their own):**
+
+| Exp | System | Accuracy vs LLM alone | Cost vs LLM |
+|---|---|---|---|
+| 4 | Stacked vote | 75.6% vs 75.7% | 104% |
+| **5** | **Router** | **76.2% vs 76.3%** | **43%** (32% faster) |
+| 6 | Router, no answer key | +10.9 vs +13.0 lift points | 46% |
+
+**Reading it:** Jev passed a preregistered learning test three times (experiments 2, 3, 6). The LLM never did; its only significant gain (+1.7) was a replication on a second set. B+ started 1 point above plain B because of the fitted weights alone.
+
+## What went into the experiment 5 chef's kiss
+
+Experiment 5 had no training of its own. It routed between two pieces learned earlier:
+
+| Piece | Where it was learned | What it was |
+|---|---|---|
+| **LLM (A\*)** | Experiment 2, 4 rounds | Gemini 3.8 Flash with its learned instructions (one kept edit: "don't disqualify a response for minor truncation; users appreciate elaboration") |
+| **Jev (J\* = B+ final)** | Experiment 3, 4 rounds | Six yes/no questions answered by Jev, with **code-fitted weights**, including one kept edit (a reworded "fulfils the user's request" question). This is the B+ result above (+2.3 ✅) |
+| **Routing rule** | Set once on the gate set in experiment 5 | Jev decides when its weighted score is decisive; the 40% least-decisive cases go to the LLM |
+
 ## What the harness taught us
 
 1. **Test one edit at a time.** Bundled edits kept 0 of 8; single edits started learning.
