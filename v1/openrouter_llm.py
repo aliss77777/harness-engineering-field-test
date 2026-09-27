@@ -18,6 +18,10 @@ class RouteMismatchError(RuntimeError):
     """The provider served a different model or route than preregistered."""
 
 
+class OutOfCreditsError(RuntimeError):
+    """HTTP 402 from OpenRouter: the account has no credit. Fatal; never retried."""
+
+
 class IncompleteResponseError(RuntimeError):
     """A 200 response without a model name (usually an error body); retried."""
 
@@ -126,6 +130,8 @@ class OpenRouterJsonClient:
                     },
                     json=request_body,
                 )
+                if response.status_code == 402:
+                    raise OutOfCreditsError("OpenRouter returned 402 Payment Required: add credit, then rerun (finished calls are cached)")
                 response.raise_for_status()
                 body = response.json()
                 if is_content_block(body):
@@ -184,7 +190,7 @@ class OpenRouterJsonClient:
                         "error": str(error),
                     }
                 )
-                if isinstance(error, (RouteMismatchError, ContentBlockedError)) or attempt == self.retries:
+                if isinstance(error, (RouteMismatchError, ContentBlockedError, OutOfCreditsError)) or attempt == self.retries:
                     raise
                 time.sleep(self.backoff_seconds * (2 ** (attempt - 1)))
         raise RuntimeError("unreachable")

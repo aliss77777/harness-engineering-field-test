@@ -135,3 +135,27 @@ def test_error_body_without_model_is_retried_not_a_route_change(tmp_path):
     )
     assert client.generate_json(prompt="p", schema={}, event={}) == {"status": "OK"}
     assert "IncompleteResponseError" in (tmp_path / "l.jsonl").read_text()
+
+
+def test_out_of_credit_is_fatal_and_not_retried(tmp_path):
+    import httpx
+    import pytest
+    from cache import DiskCache
+    from log import JsonlLogger
+    from openrouter_llm import OpenRouterJsonClient, OutOfCreditsError
+
+    calls = []
+
+    def handler(request):
+        calls.append(1)
+        return httpx.Response(402, json={"error": {"code": 402, "message": "Insufficient credits"}})
+
+    client = OpenRouterJsonClient(
+        model="m", api_key="k", cache=DiskCache(tmp_path / "c"), logger=JsonlLogger(tmp_path / "l.jsonl"),
+        retries=5, backoff_seconds=0, temperature=0, reasoning_effort="medium", expected_model="m",
+        expected_provider="p", allow_fallbacks=False,
+        http_client=httpx.Client(transport=httpx.MockTransport(handler)),
+    )
+    with pytest.raises(OutOfCreditsError):
+        client.generate_json(prompt="p", schema={}, event={})
+    assert len(calls) == 1
