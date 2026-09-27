@@ -7,6 +7,7 @@ Completed experiments are immutable snapshots. Start a new folder instead of ove
 | [`2026-09-26-upworthy-v1`](2026-09-26-upworthy-v1/README.md) | Upworthy headline choice | Complete | Hypothesis weakened |
 | [`2026-09-26-arena-v1`](2026-09-26-arena-v1/README.md) | Chatbot Arena, long responses | Complete | Only the Jev loop learned |
 | [`2026-09-26-arena-trace-v1`](2026-09-26-arena-trace-v1/README.md) | Arena, decision-trace Jev loop | Complete | Trace: no detectable difference · weights: help |
+| [`2026-09-27-arena-hybrid-v1`](2026-09-27-arena-hybrid-v1/README.md) | Arena, LLM + Jev stacked-vote hybrid | Complete | No meaningful gain (cascade: ≈ same accuracy at half the cost, exploratory) |
 
 Cross-experiment summary: [`COMPARISON.md`](COMPARISON.md).
 

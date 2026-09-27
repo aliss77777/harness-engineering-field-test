@@ -1,0 +1,42 @@
+{
+  "run_id": "arena4-sealed-20260927-s1",
+  "started_at": "2026-09-27T14:40:47.057141+00:00",
+  "loops": {
+    "llm": {
+      "stage": "evaluate",
+      "set": "sealed",
+      "version_id": "A-r1-c2",
+      "completed": 1000,
+      "total": 1000,
+      "accuracy": 0.757,
+      "cost": 1.5101129999999985,
+      "updated_at": "2026-09-27T14:53:20.655015+00:00",
+      "stage_elapsed_seconds": 748,
+      "eta_seconds_for_stage": 0
+    },
+    "jev": {
+      "stage": "evaluate",
+      "set": "sealed",
+      "version_id": "Bw-r4-c1",
+      "completed": 1000,
+      "total": 1000,
+      "accuracy": 0.718,
+      "cost": 0.064778196,
+      "updated_at": "2026-09-27T14:54:13.374845+00:00",
+      "stage_elapsed_seconds": 50,
+      "eta_seconds_for_stage": 0
+    },
+    "sealed": {
+      "stage": "done",
+      "verdict": "no_meaningful_gain",
+      "updated_at": "2026-09-27T14:54:13.604622+00:00",
+      "stage_elapsed_seconds": 0,
+      "eta_seconds_for_stage": null
+    }
+  },
+  "updated_at": "2026-09-27T14:54:13.604626+00:00",
+  "elapsed_seconds": 807,
+  "spend_usd": 1.5748,
+  "spend_cap_usd": 10.0,
+  "paid_calls": 2250
+}

@@ -1,4 +1,4 @@
-# Experiments 1–3 compared
+# Experiments 1–4 compared
 
 **Written:** 2026-09-27 · Each experiment's own report is the source of truth; this page lines them up. All accuracies are on sealed sets that no loop, editor or baseline saw during learning, evaluated once.
 
@@ -9,6 +9,7 @@
 | 1 | Upworthy headlines: does a Jev rubric loop learn better or cheaper than an LLM loop? | **Hypothesis weakened.** Neither loop learned (no edit passed the gate); the LLM was more accurate. |
 | 2 | Arena responses, with a rebuilt harness: same question | **Only the Jev loop learned.** Jev: 66.7% → 70.1% (p 0.00002). LLM: 72.9% → 73.3% (p 0.50). LLM still more accurate; Jev ≈23× cheaper. |
 | 3 | Arena: does a decision trace help the Jev loop? Do fitted weights? | **Trace: no detectable difference. Weights: help** (+1.9 over the trace arm, p 0.011); the weighted loop learned (p 0.002). |
+| 4 | Arena: does a fitted vote of the best LLM and best Jev harness beat the LLM alone? | **No meaningful gain** (75.6% vs 75.7%, interval −0.9 to +0.7). Exploratory cascade: Jev decides half the pairs → 75.2% at about half the cost. |
 
 ## The numbers side by side
 
@@ -53,8 +54,13 @@ Experiment 2's LLM edit ("don't disqualify for minor truncation; users appreciat
 
 One decision step, two datasets, one LLM (Gemini 3.8 Flash) as decider and editor; the LLM's version 0 exceeded the memorization threshold every time; Arena labels are single user votes; experiments 2 and 3 share practice and gate sets, and experiment 3 was designed after seeing experiment 2's gate (not sealed) results. The wording rules from the MVP brief apply: say "a yes/no rubric" rather than "Jev" until Loop C (the same rubric answered by an LLM) is run.
 
+## Experiment 4: LLM + Jev together
+
+On 1,000 fresh pairs, a fitted vote of the best LLM harness (75.7% alone) and the best Jev harness (71.8% alone) scored 75.6%: **no meaningful gain**. The two agreed on 79% of pairs; where they disagreed, the vote followed the LLM 92% of the time. The promising direction is routing instead of voting: in an exploratory cascade, Jev decided the 51% of pairs where it was most confident and the LLM the rest, for **75.2% at $0.80 per 1,000 decisions vs $1.51** — within half a point of the LLM at about half the cost. That was not preregistered, so it is a lead, not a result.
+
 ## Next
 
-- **Experiment 4 (designed, not run):** one stacked-vote hybrid of the best LLM harness and the best Jev harness. By its preregistered selection rule, the Jev side is **B-plus final** (highest on experiment 3's fresh sealed set: 69.8% vs B 69.0% and B-prime 67.9%). Brief: `Task Brief 4_Hybrids.md`.
+- **Preregistered cascade test:** Jev decides confident pairs, the LLM the rest; verdict row "within ±3 points at ≤ ½ cost". The exploratory curve suggests 30–40% LLM share is the sweet spot.
+- **Rerun experiment 1 (Upworthy) with the experiment 2 harness**, to separate "better harness" from "easier task".
 - **Loop C** (rubric answered by an LLM) to earn the word "Jev" in the headline.
 - A second task where the LLM cannot have memorized the answers.

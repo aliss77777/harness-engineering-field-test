@@ -1,0 +1,57 @@
+{
+  "frozen": true,
+  "run_id": "arena4-fit-20260927",
+  "components": {
+    "llm": "A-r1-c2",
+    "jev": "Bw-r4-c1"
+  },
+  "feature_names": [
+    "llm_pick",
+    "jev:satisfies_explicit_instructions",
+    "jev:contains_factual_or_logical_errors",
+    "jev:directly_answers_without_filler",
+    "jev:uses_clean_scannable_formatting",
+    "jev:unnecessary_refusal_or_excessive_hedging",
+    "jev:leaves_task_incomplete",
+    "jev_total"
+  ],
+  "c": 10.0,
+  "cv_accuracy": {
+    "0.01": 0.7608746867167919,
+    "0.03": 0.7618771929824562,
+    "0.1": 0.7628759398496241,
+    "0.3": 0.7618746867167919,
+    "1.0": 0.762374686716792,
+    "3.0": 0.762375939849624,
+    "10.0": 0.7628771929824562
+  },
+  "coef": {
+    "llm_pick": 0.8875604974787268,
+    "jev:satisfies_explicit_instructions": 1.0794103269981825,
+    "jev:contains_factual_or_logical_errors": -3.544954250439639,
+    "jev:directly_answers_without_filler": -1.1019360146036374,
+    "jev:uses_clean_scannable_formatting": 0.8346960793007208,
+    "jev:unnecessary_refusal_or_excessive_hedging": 3.1486675692604122,
+    "jev:leaves_task_incomplete": -0.44027377492853187,
+    "jev_total": -0.024390064412489823
+  },
+  "fit_pairs": 1999,
+  "excluded_blocked_pairs": 1,
+  "in_sample_accuracy": 0.767,
+  "fit_set_accuracy": {
+    "practice": {
+      "llm": 0.76,
+      "jev": 0.686
+    },
+    "gate": {
+      "llm": 0.7706666666666667,
+      "jev": 0.7093333333333334
+    }
+  },
+  "cascade_exploratory": {
+    "threshold": 0.6077219999999999,
+    "llm_share": 0.49133333333333334,
+    "accuracy": 0.7593333333333333
+  },
+  "paid_spend_usd": 0.0
+}

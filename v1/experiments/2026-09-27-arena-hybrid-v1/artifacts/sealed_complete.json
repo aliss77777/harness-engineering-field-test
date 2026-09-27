@@ -1,0 +1,190 @@
+{
+  "run_id": "arena4-sealed-20260927-s1",
+  "task": "arena_hybrid",
+  "components": {
+    "llm": "A-r1-c2",
+    "jev": "Bw-r4-c1"
+  },
+  "verdict": {
+    "verdict": "no_meaningful_gain",
+    "accuracy": {
+      "llm": 0.757,
+      "jev": 0.718,
+      "hybrid": 0.756,
+      "baseline": 0.622
+    },
+    "intervals_95": {
+      "hybrid": [
+        0.7284335318206567,
+        0.7816071678347392
+      ],
+      "llm": [
+        0.7294665084355112,
+        0.7825665377029134
+      ],
+      "hybrid_minus_llm": [
+        -0.009084944329913264,
+        0.0070849443299132635
+      ]
+    },
+    "tests": {
+      "hybrid_vs_llm": {
+        "b": 8,
+        "c": 9,
+        "discordant": 17,
+        "p_value": 1.0,
+        "method": "exact"
+      },
+      "hybrid_vs_jev": {
+        "b": 114,
+        "c": 76,
+        "discordant": 190,
+        "p_value": 0.007269008997169541,
+        "method": "chi_square_continuity_corrected"
+      },
+      "llm_vs_jev": {
+        "b": 123,
+        "c": 84,
+        "discordant": 207,
+        "p_value": 0.008261718371514067,
+        "method": "chi_square_continuity_corrected"
+      },
+      "llm_vs_baseline": {
+        "b": 271,
+        "c": 136,
+        "discordant": 407,
+        "p_value": 3.0917493542359576e-11,
+        "method": "chi_square_continuity_corrected"
+      },
+      "jev_vs_baseline": {
+        "b": 229,
+        "c": 133,
+        "discordant": 362,
+        "p_value": 5.942111295761457e-07,
+        "method": "chi_square_continuity_corrected"
+      },
+      "hybrid_vs_baseline": {
+        "b": 263,
+        "c": 129,
+        "discordant": 392,
+        "p_value": 1.8485047721485334e-11,
+        "method": "chi_square_continuity_corrected"
+      }
+    },
+    "checks": {
+      "hybrid_better": false,
+      "hybrid_worse": false,
+      "within_margin": true,
+      "memorization_flag_llm": true,
+      "memorization_flag_hybrid": true
+    },
+    "costs_per_1000": {
+      "llm": 1.5101129999999987,
+      "jev": 0.064778196,
+      "hybrid": 1.5748911959999987
+    },
+    "rules_version": "hybrid_v1",
+    "thresholds": {
+      "alpha": 0.05,
+      "equivalence_margin": 0.03
+    }
+  },
+  "agreement": {
+    "llm_and_jev_agree": 0.793,
+    "hybrid_sides_with_jev_when_they_disagree": 0.0821256038647343
+  },
+  "blocked": {
+    "pairs": 1,
+    "hybrid_correct": 1,
+    "llm_correct_coin_flip": 1
+  },
+  "cascade_exploratory": {
+    "threshold_from_gate": 0.6077219999999999,
+    "llm_share": 0.49,
+    "accuracy": 0.752,
+    "cost_per_1000": 0.8047335659999993,
+    "curve": [
+      {
+        "target_llm_share": 0.0,
+        "llm_share": 0.0,
+        "accuracy": 0.718
+      },
+      {
+        "target_llm_share": 0.1,
+        "llm_share": 0.1,
+        "accuracy": 0.73
+      },
+      {
+        "target_llm_share": 0.2,
+        "llm_share": 0.2,
+        "accuracy": 0.746
+      },
+      {
+        "target_llm_share": 0.3,
+        "llm_share": 0.3,
+        "accuracy": 0.755
+      },
+      {
+        "target_llm_share": 0.4,
+        "llm_share": 0.4,
+        "accuracy": 0.76
+      },
+      {
+        "target_llm_share": 0.5,
+        "llm_share": 0.5,
+        "accuracy": 0.752
+      },
+      {
+        "target_llm_share": 0.6,
+        "llm_share": 0.6,
+        "accuracy": 0.752
+      },
+      {
+        "target_llm_share": 0.7,
+        "llm_share": 0.7,
+        "accuracy": 0.753
+      },
+      {
+        "target_llm_share": 0.8,
+        "llm_share": 0.8,
+        "accuracy": 0.758
+      },
+      {
+        "target_llm_share": 0.9,
+        "llm_share": 0.9,
+        "accuracy": 0.757
+      },
+      {
+        "target_llm_share": 1.0,
+        "llm_share": 1.0,
+        "accuracy": 0.757
+      }
+    ],
+    "note": "Exploratory; not part of the verdict."
+  },
+  "hybrid_model": {
+    "c": 10.0,
+    "coef": {
+      "llm_pick": 0.8875604974787268,
+      "jev:satisfies_explicit_instructions": 1.0794103269981825,
+      "jev:contains_factual_or_logical_errors": -3.544954250439639,
+      "jev:directly_answers_without_filler": -1.1019360146036374,
+      "jev:uses_clean_scannable_formatting": 0.8346960793007208,
+      "jev:unnecessary_refusal_or_excessive_hedging": 3.1486675692604122,
+      "jev:leaves_task_incomplete": -0.44027377492853187,
+      "jev_total": -0.024390064412489823
+    },
+    "fit_pairs": 1999,
+    "fit_set_accuracy": {
+      "practice": {
+        "llm": 0.76,
+        "jev": 0.686
+      },
+      "gate": {
+        "llm": 0.7706666666666667,
+        "jev": 0.7093333333333334
+      }
+    }
+  },
+  "paid_spend_usd_total_experiment4": 1.5748
+}

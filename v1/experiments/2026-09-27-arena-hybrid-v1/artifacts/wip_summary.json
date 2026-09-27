@@ -1,0 +1,39 @@
+{
+  "run_id": "arena4-sealed-20260927-s1",
+  "evaluations": [
+    {
+      "loop": "llm",
+      "round": "hybrid",
+      "set": "sealed",
+      "version_id": "A-r1-c2",
+      "pairs": 1000,
+      "accuracy": 0.757,
+      "tie_rate": 0.0,
+      "blocked": 1,
+      "picks_x": 0.521,
+      "cost": 1.5101,
+      "finished_at": "2026-09-27T14:54:13.431209+00:00"
+    },
+    {
+      "loop": "jev",
+      "round": "hybrid",
+      "set": "sealed",
+      "version_id": "Bw-r4-c1",
+      "pairs": 1000,
+      "accuracy": 0.718,
+      "tie_rate": 0.0,
+      "blocked": 0,
+      "picks_x": 0.502,
+      "cost": 0.0648,
+      "finished_at": "2026-09-27T14:54:13.432067+00:00"
+    }
+  ],
+  "candidates": [],
+  "gates": [],
+  "current_versions": {},
+  "notes": [],
+  "updated_at": "2026-09-27T14:54:13.432071+00:00",
+  "spend_usd": 1.5748,
+  "spend_cap_usd": 10.0,
+  "paid_calls": 2250
+}
