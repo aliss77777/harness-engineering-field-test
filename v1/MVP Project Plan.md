@@ -356,3 +356,4 @@ Experiment 1's exact code is preserved at git tag `exp1-upworthy-v1` (commit `c2
 ## Progress log
 
 - 2026-09-27 (build): sealed-4 drawn and checked; hybrid, fit, sealed and verdict code written; 75 tests pass (6 new); end-to-end dry run with fake clients passed. Committed before any paid call.
+- 2026-09-27: **Hybrid fitted and frozen** (`arena4-fit-20260927`, $0.00 — every practice/gate decision replayed from cache). CV chose C = 10 (least regularized). Coefficients: LLM pick +0.89; Jev questions (on B-plus-weighted parts) instructions +1.08, factual errors −3.54, filler −1.10, formatting +0.83, refusal +3.15, incomplete −0.44, total −0.02. Fit accuracy on practice ∪ gate: hybrid 76.7% in-sample vs LLM alone 76.8% and Jev alone ≈ 70.3% — an early sign that stacking adds little. Exploratory cascade threshold from gate: 0.608 (49% of pairs to the LLM; 75.9% on gate vs 77.1% for the LLM alone). Proceeding to the sealed stage unchanged.
