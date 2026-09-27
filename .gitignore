@@ -12,3 +12,5 @@ data/pairs/
 cache/
 /logs/
 /results/
+data/arena/raw/
+data/arena/pairs/

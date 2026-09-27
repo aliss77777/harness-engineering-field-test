@@ -8,6 +8,8 @@ from typing import Any
 import yaml
 
 from llm_factory import build_llm_client
+from spend import SpendTracker
+from workspace import Workspace
 
 
 ROOT = Path(__file__).resolve().parent
@@ -89,13 +91,15 @@ def validate_edit(data: dict[str, Any], loop: str, config: dict[str, Any]) -> No
         raise ValueError("loop must be A or B")
 
 
-def starting_prompt(task_prompt: str, config: dict[str, Any]) -> str:
+def starting_prompt(task_prompt: str, config: dict[str, Any], wording: dict[str, str] | None = None) -> str:
     learning = config["learning"]
+    wording = {"items": "headlines", "item_scope": "one headline alone",
+               "helps_meaning": "yes predicts more clicks", **(wording or {})}
     return f"""{task_prompt}
 
 Create two equivalent starting files from that same knowledge:
-1. Loop A: concise prose instructions for choosing between two headlines, at most {learning['max_instructions_words']} words.
-2. Loop B: {learning['starting_rubric_min_questions']} to {learning['starting_rubric_max_questions']} atomic yes/no questions. Each must be answerable from one headline alone and marked `helps` when yes predicts more clicks or `hurts` when yes predicts fewer clicks.
+1. Loop A: concise prose instructions for choosing between two {wording['items']}, at most {learning['max_instructions_words']} words.
+2. Loop B: {learning['starting_rubric_min_questions']} to {learning['starting_rubric_max_questions']} atomic yes/no questions. Each must be answerable from {wording['item_scope']} and marked `helps` when {wording['helps_meaning']} or `hurts` when yes predicts the opposite.
 
 Do not use outcome data. Use stable snake_case question IDs. Return only the requested JSON."""
 
@@ -153,13 +157,13 @@ CHANGE HISTORY:
     return proposal
 
 
-def make_rewordings(*, question: dict[str, str], client, event: dict[str, Any]) -> list[str]:
+def make_rewordings(*, question: dict[str, str], client, event: dict[str, Any], item_scope: str = "one headline alone") -> list[str]:
     schema = {"type": "object", "properties": {"rewordings": {
         "type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "string"},
     }}, "required": ["rewordings"], "additionalProperties": False}
     result = client.generate_json(
         prompt=("Write two semantically equivalent, atomic yes/no rewordings of this question. "
-                "Each must be answerable from one headline alone and end with a question mark.\n\n" + question["text"]),
+                f"Each must be answerable from {item_scope} and end with a question mark.\n\n" + question["text"]),
         schema=schema, event=event,
     )
     rewordings = [" ".join(str(text).splitlines()).strip() for text in result["rewordings"]]
@@ -172,15 +176,21 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Create or revise experiment files.")
     parser.add_argument("--start", action="store_true", help="Create fair version-0 files")
     parser.add_argument("--run-id", default="preflight")
+    parser.add_argument("--config", default="config.yaml")
+    parser.add_argument("--task", default="task.yaml")
     args = parser.parse_args()
     if not args.start:
         parser.error("choose an editor action")
 
-    config = yaml.safe_load((ROOT / "config.yaml").read_text())
-    task = yaml.safe_load((ROOT / "task.yaml").read_text())
-    client = build_llm_client(config, ROOT, args.run_id)
+    ws = Workspace.load(args.config, args.task)
+    config, task = ws.config, ws.task
+    output_dir = ws.path("results")
+    if (output_dir / "version0.json").exists():
+        raise RuntimeError("version 0 already exists for this task; refusing to regenerate it")
+    spend = SpendTracker(output_dir / "spend.json", config.get("budget", {}).get("spend_cap_usd", float("inf")))
+    client = build_llm_client(config, ROOT, args.run_id, logs_dir=ws.path("logs"), spend=spend)
     data = client.generate_json(
-        prompt=starting_prompt(task["starting_prompt"], config),
+        prompt=starting_prompt(task["starting_prompt"], config, task.get("wording")),
         schema=start_schema(config),
         event={
             "run_id": args.run_id,
@@ -193,8 +203,7 @@ def main() -> None:
         },
     )
     validate_starting_versions(data, config)
-    output_dir = ROOT / "results"
-    output_dir.mkdir(exist_ok=True)
+    spend.flush()
     (output_dir / "version0.json").write_text(json.dumps(data, indent=2) + "\n")
     print(f"Created Loop A instructions and {len(data['rubric_questions'])} Loop B questions.")
 

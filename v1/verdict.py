@@ -106,8 +106,18 @@ def compute_verdict(
     a_cost_per_1000: float,
     b_cost_per_1000: float,
     config: dict,
+    baseline: Sequence[bool] | None = None,
 ) -> dict:
+    """Apply the preregistered rows in order; the first match wins.
+
+    rules_version "mvp_v1" is experiment 1 (MVP brief section 8). "arena_v2" adds
+    "neither loop learned" (row 2) and "only the Jev loop learned" (row 5) from
+    Task Brief 2 section 6.
+    """
     _validate_same_length(a_version0, a_final, b_version0, b_final)
+    rules = config.get("rules_version", "mvp_v1")
+    if rules not in ("mvp_v1", "arena_v2"):
+        raise ValueError(f"unknown verdict rules_version {rules}")
     alpha = float(config["alpha"])
     margin = float(config["equivalence_margin"])
     exact_max = int(config["mcnemar_exact_max_discordant"])
@@ -157,12 +167,21 @@ def compute_verdict(
     ratio = cost_ratio(b_cost_per_1000, a_cost_per_1000)
     cheaper = ratio <= float(config["max_cost_ratio"])
 
+    if baseline is not None:
+        _validate_same_length(b_final, baseline)
+        accuracies["code_baseline"] = accuracy(baseline)
+        tests["b_vs_baseline"] = paired_test(baseline, b_final, exact_max_discordant=exact_max)
+
     if not signal_a and not signal_b:
         verdict = "no_signal"
+    elif rules == "arena_v2" and not a_learned and not b_learned:
+        verdict = "neither_loop_learned"
     elif b_learned and b_better:
         verdict = "jev_loop_learns_better"
     elif b_learned and same_quality and cheaper:
         verdict = "learns_as_well_far_cheaper"
+    elif rules == "arena_v2" and b_learned and not a_learned:
+        verdict = "only_jev_loop_learned"
     elif a_better:
         verdict = "hypothesis_weakened"
     else:
@@ -182,6 +201,11 @@ def compute_verdict(
             "a_better": a_better,
             "same_quality": same_quality,
             "cheaper": cheaper,
+            "b_beats_baseline": (
+                baseline is not None
+                and accuracies["b_final"] > accuracies["code_baseline"]
+                and tests["b_vs_baseline"].p_value < alpha
+            ),
             "memorization_flag": accuracies["a_version0"]
             > float(config["memorization_accuracy"]),
         },
@@ -190,6 +214,7 @@ def compute_verdict(
             "b_per_1000": b_cost_per_1000,
             "b_over_a_ratio": ratio,
         },
+        "rules_version": rules,
         "thresholds": dict(config),
     }
 

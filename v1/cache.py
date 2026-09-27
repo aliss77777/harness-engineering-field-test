@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import uuid
 from pathlib import Path
 from typing import Any
 
@@ -26,7 +27,7 @@ class DiskCache:
 
     def put(self, payload: Any, response: dict[str, Any]) -> None:
         path = self.directory / f"{self.key(payload)}.json"
-        temporary = path.with_suffix(".tmp")
+        temporary = path.with_name(f"{path.stem}.{uuid.uuid4().hex}.tmp")
         temporary.write_text(json.dumps(response, ensure_ascii=False, sort_keys=True))
         temporary.replace(path)
 

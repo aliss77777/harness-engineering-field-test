@@ -16,3 +16,20 @@ data:
   gate: data/jd64p-osfstorage-archive/upworthy-archive-datasets/upworthy-archive-confirmatory-packages-03.12.2020.csv
   sealed: data/jd64p-osfstorage-archive/upworthy-archive-datasets/upworthy-archive-holdout-packages-03.12.2020.csv
 
+columns:
+  context: null
+  x: headline_x
+  y: headline_y
+labels:
+  x: X
+  y: Y
+wording:
+  item: headline
+  items: headlines
+  context: story
+  decider_question: Which headline received more clicks?
+  outcome: which headline received more clicks
+  item_scope: one headline alone
+  helps_meaning: yes predicts more clicks
+baseline: upworthy_surface
+jev_state_template: "{item}"

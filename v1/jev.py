@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import threading
 import time
 from typing import Any
 
@@ -30,6 +31,7 @@ class OpenRouterJevClient:
         expected_model: str,
         expected_provider: str,
         http_client: httpx.Client | None = None,
+        spend=None,
     ):
         self.model = model
         self.api_key = api_key
@@ -39,12 +41,13 @@ class OpenRouterJevClient:
         self.backoff_seconds = backoff_seconds
         self.expected_model = expected_model
         self.expected_provider = expected_provider
-        self.last_call: dict[str, Any] = {}
+        self._local = threading.local()
+        self.spend = spend
         self.http = http_client or httpx.Client(timeout=60.0)
 
     def evaluate(
         self,
-        headline: str,
+        state: str,
         questions: list[RubricQuestion],
         event: dict[str, Any],
         *,
@@ -52,7 +55,7 @@ class OpenRouterJevClient:
     ) -> dict[str, float]:
         payload = {
             "model": self.model,
-            "state": headline,
+            "state": state,
             "questions": {
                 question.question_id: {
                     "type": "noul",
@@ -75,6 +78,8 @@ class OpenRouterJevClient:
             )
             return cached["probabilities"]
 
+        if self.spend is not None:
+            self.spend.check()
         for attempt in range(1, self.retries + 1):
             started = time.perf_counter()
             try:
@@ -107,6 +112,8 @@ class OpenRouterJevClient:
                     "model": body.get("model", self.model),
                     "provider": body.get("provider"),
                 }
+                if self.spend is not None:
+                    self.spend.record(usage["cost"])
                 if use_cache:
                     self.cache.put(payload, cached_value)
                 self.last_call = {**usage, "model": cached_value["model"], "provider": cached_value["provider"], "cached": False}
@@ -137,6 +144,15 @@ class OpenRouterJevClient:
                     raise
                 time.sleep(self.backoff_seconds * (2 ** (attempt - 1)))
         raise RuntimeError("unreachable")
+
+    @property
+    def last_call(self) -> dict[str, Any]:
+        """Usage of the most recent call made by the current thread."""
+        return getattr(self._local, "last_call", {})
+
+    @last_call.setter
+    def last_call(self, value: dict[str, Any]) -> None:
+        self._local.last_call = value
 
     def _validate_route(self, model: str | None, provider: str | None) -> None:
         if model != self.expected_model:

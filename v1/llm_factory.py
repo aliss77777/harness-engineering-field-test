@@ -11,12 +11,12 @@ from openrouter_llm import OpenRouterJsonClient
 from jev import OpenRouterJevClient
 
 
-def build_llm_client(config: dict[str, Any], root: Path, run_id: str):
+def build_llm_client(config: dict[str, Any], root: Path, run_id: str, *, logs_dir: Path | None = None, spend=None):
     load_env(root / ".env")
     provider = config["models"]["llm_provider"]
     common = {
         "model": config["models"]["llm"],
-        "logger": JsonlLogger(root / "logs" / f"{run_id}.jsonl"),
+        "logger": JsonlLogger((logs_dir or root / "logs") / f"{run_id}.jsonl"),
         "retries": config["api"]["retries"],
         "backoff_seconds": config["api"]["backoff_seconds"],
         "temperature": config["api"]["temperature"],
@@ -32,6 +32,7 @@ def build_llm_client(config: dict[str, Any], root: Path, run_id: str):
             expected_model=config["models"]["llm_expected_served"],
             expected_provider=config["models"]["llm_expected_provider"],
             allow_fallbacks=config["models"]["llm_allow_fallbacks"],
+            spend=spend,
             **common,
         )
     if provider == "google_ai_studio":
@@ -46,7 +47,7 @@ def build_llm_client(config: dict[str, Any], root: Path, run_id: str):
     raise ValueError(f"unsupported LLM provider: {provider}")
 
 
-def build_jev_client(config: dict[str, Any], root: Path, run_id: str):
+def build_jev_client(config: dict[str, Any], root: Path, run_id: str, *, logs_dir: Path | None = None, spend=None):
     load_env(root / ".env")
     api_key = os.environ.get("OPENROUTER_API_KEY") or os.environ.get("OPENROUTER_KEY")
     if not api_key:
@@ -54,8 +55,9 @@ def build_jev_client(config: dict[str, Any], root: Path, run_id: str):
     return OpenRouterJevClient(
         model=config["models"]["jev"], api_key=api_key,
         cache=DiskCache(root / "cache" / "jev"),
-        logger=JsonlLogger(root / "logs" / f"{run_id}.jsonl"),
+        logger=JsonlLogger((logs_dir or root / "logs") / f"{run_id}.jsonl"),
         retries=config["api"]["retries"], backoff_seconds=config["api"]["backoff_seconds"],
         expected_model=config["models"]["jev_expected_served"],
         expected_provider=config["models"]["jev_expected_provider"],
+        spend=spend,
     )

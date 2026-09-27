@@ -188,3 +188,52 @@ Experiment 1 is archived under `experiments/2026-09-26-upworthy-v1/`:
 - `4732fd3` — Add Gemini and Jev tracer bullets
 - `4d6f8c9` — Add experiment harness foundations
 - `a89095c` — Build data prep and control baseline
+
+---
+
+# Experiment 2: Chatbot Arena (long responses)
+
+**Brief:** `Task Brief 2_Arena.md` (builds on `MVP-BRIEF-jev-learning-loop-v2_5.md`). **Started:** 2026-09-26 18:00 MDT. **Config:** `config_arena.yaml` + `task_arena.yaml`. **Outputs:** `data/arena/`, `results/arena/`, `logs/arena/`; archived at the end under `experiments/`.
+
+Experiment 1's exact code is preserved at git tag `exp1-upworthy-v1` (commit `c2170c5`); its archive in `experiments/2026-09-26-upworthy-v1/` is untouched.
+
+## Decisions (Alexander, 2026-09-26)
+
+- Dataset download approved: `lmarena-ai/arena-human-preference-55k` `train.csv` (Apache 2.0, 184 MB, SHA-256 `0692154a…5be2`), kept out of git.
+- Spend cap: **$75**, enforced in code.
+- Adopt all eight harness suggestions made after experiment 1:
+  1. Editor sees its rejected edits and is told not to resubmit; near-copies (similarity ≥ 0.9) are refused without gating.
+  2. Mistakes shown to the editor are a fresh seeded sample of 20 each round.
+  3. Edits are structured single operations applied by code (A: replace/append text; B: drop/flip/reword/add one question), so "one change" is enforced, not self-reported.
+  4. Spend cap enforced in code across all stages.
+  5. Concurrent API calls (thread pools) with deterministic, order-independent results.
+  6. Loop A batch size 5 (was 20), and the rate at which each decider picks the first response is logged.
+  7. Code baseline per-pair predictions kept, for a paired B-vs-baseline McNemar.
+  8. Jev tested on the longest responses in the smoke test before the full run.
+
+## Checklist
+
+- [x] Download dataset, record hash and licence.
+- [x] `prep_arena.py`: filters in order with counts, prompt-hash split, saved IDs (load and never resample), winner position check.
+- [x] Code baseline (six style features, practice-trained, no intercept) on gate.
+- [x] Decider prompts parameterized from `task.yaml` (no task wording in code).
+- [x] Single-edit gate (p < 0.05 per edit, keep the best passing edit, at most one per round).
+- [x] "Neither loop learned" and "Only the Jev loop learned" verdict rows (`rules_version: arena_v2`), with tests.
+- [x] Live telemetry: `results/arena/run_status.json` and `results/arena/wip_summary.json`.
+- [x] Fake decider through the real pipeline on all sets.
+- [ ] Commit before any paid run.
+- [ ] Version 0 (same LLM, same prompt for both loops).
+- [ ] Paid smoke test (includes the longest responses) and cost estimate vs cap.
+- [ ] Four learning rounds for both loops.
+- [ ] One guarded sealed evaluation; verdict.
+- [ ] Archive, write up, and compare with experiment 1.
+
+## Progress log
+
+- 2026-09-26 18:05: Dataset downloaded (57,477 rows).
+- 2026-09-26 18:10: Filters: 57,477 loaded → 39,716 after dropping ties → 34,297 single-turn → 34,269 after dropping empty/unparseable → 34,267 after the 1,500-word cap (removed 2) → 34,267 after hiding model names (removes columns, not rows).
+- 2026-09-26 18:10: Prompt-hash split (20/40/40% of buckets) → pools of 6,933 / 13,545 / 13,789 pairs; sampled 500 / 1,500 / 1,500. Zero prompts shared between sets. Median response ≈ 155–170 words.
+- 2026-09-26 18:12: **Deviation (position balance):** per-pair coin flips put the winner first in only 44.2% of practice pairs (p ≈ 0.01). Replaced with seeded balanced ordering: exactly 50.0% winner-first in every set. Done before any decider saw the pairs.
+- 2026-09-26 18:15: Style code baseline (length, list items, headers, code block, refusal phrases, log length ratio; no intercept) trained on practice: **60.4% practice, 62.5% gate**. Longer responses, code blocks and non-refusals win. As the brief warned, style alone carries real signal, so Loop B must beat this baseline to claim more than style detection.
+- 2026-09-26 18:40: Harness changes built (see Decisions). Verdict rules `arena_v2` added with tests; experiment 1 rules unchanged under `mvp_v1`. 56 tests pass.
+- 2026-09-26 18:42: Fake decider through the real pipeline: Loop A 51.2 / 49.3 / 49.7% and Loop B 48.6 / 50.7 / 49.7% (practice / gate / sealed), tie rate ≤ 0.4%. Fake gate check correctly rejected (b 365, c 367, p 0.54).

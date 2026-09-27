@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import threading
 import time
 from typing import Any
 
@@ -33,6 +34,7 @@ class OpenRouterJsonClient:
         expected_provider: str,
         allow_fallbacks: bool,
         http_client: httpx.Client | None = None,
+        spend=None,
     ):
         self.model = model
         self.api_key = api_key
@@ -45,7 +47,8 @@ class OpenRouterJsonClient:
         self.expected_model = expected_model
         self.expected_provider = expected_provider
         self.allow_fallbacks = allow_fallbacks
-        self.last_call: dict[str, Any] = {}
+        self._local = threading.local()
+        self.spend = spend
         self.http = http_client or httpx.Client(timeout=120.0)
 
     def generate_json(
@@ -89,6 +92,8 @@ class OpenRouterJsonClient:
             )
             return cached["data"]
 
+        if self.spend is not None:
+            self.spend.check()
         for attempt in range(1, self.retries + 1):
             started = time.perf_counter()
             try:
@@ -123,6 +128,8 @@ class OpenRouterJsonClient:
                     "model": body.get("model", self.model),
                     "provider": body.get("provider"),
                 }
+                if self.spend is not None:
+                    self.spend.record(usage["cost"])
                 self.cache.put(cache_payload, cached_value)
                 self.last_call = {**usage, "model": cached_value["model"], "provider": cached_value["provider"], "cached": False}
                 self.logger.write(
@@ -152,6 +159,15 @@ class OpenRouterJsonClient:
                     raise
                 time.sleep(self.backoff_seconds * (2 ** (attempt - 1)))
         raise RuntimeError("unreachable")
+
+    @property
+    def last_call(self) -> dict[str, Any]:
+        """Usage of the most recent call made by the current thread."""
+        return getattr(self._local, "last_call", {})
+
+    @last_call.setter
+    def last_call(self, value: dict[str, Any]) -> None:
+        self._local.last_call = value
 
     def _validate_route(self, model: str | None, provider: str | None) -> None:
         if model != self.expected_model:

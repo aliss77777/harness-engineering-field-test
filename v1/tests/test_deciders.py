@@ -48,8 +48,8 @@ def test_llm_decider_parses_complete_batch():
             }
 
     pairs = [
-        {"pair_id": "one", "headline_x": "A", "headline_y": "B"},
-        {"pair_id": "two", "headline_x": "C", "headline_y": "D"},
+        {"pair_id": "one", "context": "", "x": "A", "y": "B"},
+        {"pair_id": "two", "context": "", "x": "C", "y": "D"},
     ]
     decisions = LLMDecider(Generator()).decide_batch(
         instructions="Choose well.", pairs=pairs, event={"run_id": "test"}
@@ -66,6 +66,33 @@ def test_llm_decider_rejects_missing_pair():
     with pytest.raises(ValueError, match="missing"):
         LLMDecider(Generator()).decide_batch(
             instructions="Choose.",
-            pairs=[{"pair_id": "one", "headline_x": "A", "headline_y": "B"}],
+            pairs=[{"pair_id": "one", "context": "", "x": "A", "y": "B"}],
             event={},
         )
+
+
+def test_llm_decider_maps_task_labels_and_shows_context():
+    seen = {}
+
+    class Generator:
+        def generate_json(self, *, prompt, schema, event):
+            seen["prompt"] = prompt
+            seen["enum"] = schema["properties"]["decisions"]["items"]["properties"]["prediction"]["enum"]
+            return {"decisions": [{"pair_id": "p", "prediction": "2", "reason": "Answers directly."}]}
+
+    decider = LLMDecider(
+        Generator(),
+        wording={"item": "response", "context": "user request",
+                 "decider_question": "Which response did the user prefer?",
+                 "outcome": "which response the user preferred"},
+        labels={"x": "1", "y": "2"},
+    )
+    decisions = decider.decide_batch(
+        instructions="Prefer direct answers.",
+        pairs=[{"pair_id": "p", "context": "What is 2+2?", "x": "Maybe 5.", "y": "4."}],
+        event={},
+    )
+    assert decisions["p"].prediction == "Y"
+    assert seen["enum"] == ["1", "2"]
+    assert "USER REQUEST:\nWhat is 2+2?" in seen["prompt"]
+    assert "Response 1:\nMaybe 5." in seen["prompt"]

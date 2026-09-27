@@ -32,3 +32,11 @@ def gate_version(
     )
     return GateResult(keep=b > c and p_value < p_threshold, b=b, c=c, p_value=p_value)
 
+
+
+def best_passing(results: list[tuple[str, GateResult]]) -> str | None:
+    """Single-edit mode: the passing candidate with the largest net gain (b - c), then lowest p."""
+    passing = [(key, result) for key, result in results if result.keep]
+    if not passing:
+        return None
+    return min(passing, key=lambda item: (-(item[1].b - item[1].c), item[1].p_value, item[0]))[0]

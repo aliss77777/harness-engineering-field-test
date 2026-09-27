@@ -60,12 +60,17 @@ class RubricDecider:
         return self.decide_from_probabilities(x, y)
 
     def decide_from_probabilities(
-        self, x: dict[str, float], y: dict[str, float]
+        self,
+        x: dict[str, float],
+        y: dict[str, float],
+        tie_breaker: random.Random | None = None,
     ) -> Decision:
+        """Pass tie_breaker (seeded per pair) when pairs are scored concurrently."""
         x_score = rubric_score(self.questions, x)
         y_score = rubric_score(self.questions, y)
         tied = x_score == y_score
-        prediction: Choice = self.rng.choice(("X", "Y")) if tied else ("X" if x_score > y_score else "Y")
+        rng = tie_breaker or self.rng
+        prediction: Choice = rng.choice(("X", "Y")) if tied else ("X" if x_score > y_score else "Y")
         probabilities = {
             question.question_id: {
                 "x_yes_probability": x[question.question_id],
@@ -86,9 +91,40 @@ class JsonGenerator(Protocol):
     ) -> dict[str, Any]: ...
 
 
+DEFAULT_WORDING = {
+    "item": "headline",
+    "context": "story",
+    "decider_question": "Which headline received more clicks?",
+    "outcome": "which headline received more clicks",
+}
+
+
 class LLMDecider:
-    def __init__(self, generator: JsonGenerator):
+    """Loop A: the LLM reads both items and picks one, with a one-line reason.
+
+    Pairs are dicts with pair_id, context, x and y. Wording and the labels shown
+    for X and Y come from task.yaml, so no task text lives in code.
+    """
+
+    def __init__(
+        self,
+        generator: JsonGenerator,
+        *,
+        wording: dict[str, str] | None = None,
+        labels: dict[str, str] | None = None,
+    ):
         self.generator = generator
+        self.wording = {**DEFAULT_WORDING, **(wording or {})}
+        self.labels = {"x": "X", "y": "Y", **(labels or {})}
+
+    def render_pair(self, pair: dict[str, str]) -> str:
+        item = self.wording["item"].capitalize()
+        lines = [f"=== Pair {pair['pair_id']} ==="]
+        if pair.get("context"):
+            lines.append(f"{self.wording['context'].upper()}:\n{pair['context']}")
+        lines.append(f"{item} {self.labels['x']}:\n{pair['x']}")
+        lines.append(f"{item} {self.labels['y']}:\n{pair['y']}")
+        return "\n\n".join(lines)
 
     def decide_batch(
         self,
@@ -97,11 +133,9 @@ class LLMDecider:
         pairs: list[dict[str, str]],
         event: dict[str, Any],
     ) -> dict[str, Decision]:
-        rendered = "\n\n".join(
-            f"Pair {pair['pair_id']}\nX: {pair['headline_x']}\nY: {pair['headline_y']}"
-            for pair in pairs
-        )
-        prompt = f"""Use these instructions to predict which headline in each pair received more clicks.
+        label_x, label_y = self.labels["x"], self.labels["y"]
+        rendered = "\n\n".join(self.render_pair(pair) for pair in pairs)
+        prompt = f"""Use these instructions to predict {self.wording['outcome']} in each pair.
 
 INSTRUCTIONS:
 {instructions}
@@ -109,7 +143,7 @@ INSTRUCTIONS:
 PAIRS:
 {rendered}
 
-For every pair, choose X or Y and give one short, single-line reason. Do not omit pairs."""
+For every pair: {self.wording['decider_question']} Answer {label_x} or {label_y}, then give one short, single-line reason. Do not omit pairs."""
         schema = {
             "type": "object",
             "properties": {
@@ -119,7 +153,7 @@ For every pair, choose X or Y and give one short, single-line reason. Do not omi
                         "type": "object",
                         "properties": {
                             "pair_id": {"type": "string"},
-                            "prediction": {"type": "string", "enum": ["X", "Y"]},
+                            "prediction": {"type": "string", "enum": [label_x, label_y]},
                             "reason": {"type": "string"},
                         },
                         "required": ["pair_id", "prediction", "reason"],
@@ -135,6 +169,7 @@ For every pair, choose X or Y and give one short, single-line reason. Do not omi
             schema=schema,
             event={**event, "pair_id": [pair["pair_id"] for pair in pairs]},
         )
+        to_choice = {label_x: "X", label_y: "Y"}
         decisions: dict[str, Decision] = {}
         for item in result.get("decisions", []):
             pair_id = str(item["pair_id"])
@@ -142,7 +177,7 @@ For every pair, choose X or Y and give one short, single-line reason. Do not omi
                 raise ValueError(f"duplicate decision for pair {pair_id}")
             reason = " ".join(str(item["reason"]).splitlines()).strip()
             decisions[pair_id] = Decision(
-                prediction=item["prediction"], reason=reason
+                prediction=to_choice[str(item["prediction"])], reason=reason
             )
         expected = {pair["pair_id"] for pair in pairs}
         if set(decisions) != expected:
