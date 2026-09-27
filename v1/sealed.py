@@ -11,7 +11,7 @@ from log import JsonlLogger
 from spend import SpendTracker
 from telemetry import Telemetry
 from verdict import compute_verdict
-from workspace import Workspace
+from workspace import Workspace, read_pairs
 
 
 def baseline_predictions(ws: Workspace, sealed: pd.DataFrame) -> list[bool] | None:
@@ -20,7 +20,7 @@ def baseline_predictions(ws: Workspace, sealed: pd.DataFrame) -> list[bool] | No
         return None
     import baseline_arena
 
-    practice = pd.read_csv(ws.path("pairs") / "practice.csv", dtype={"pair_id": str})
+    practice = read_pairs(ws.path("pairs") / "practice.csv")
     model = baseline_arena.fit(practice, ws.config["seed"])
     return [p == w for p, w in zip(baseline_arena.predict(model, sealed), sealed["winner"])]
 
@@ -40,7 +40,7 @@ def main() -> None:
         raise RuntimeError("final versions are not frozen")
     frozen = json.loads(final_path.read_text())
 
-    sealed = pd.read_csv(ws.path("pairs") / "sealed.csv", dtype={"pair_id": str})
+    sealed = read_pairs(ws.path("pairs") / "sealed.csv")
     logs = ws.path("logs")
     logger = JsonlLogger(logs / f"{args.run_id}.jsonl")
     spend = SpendTracker(results / "spend.json", config["budget"]["spend_cap_usd"])

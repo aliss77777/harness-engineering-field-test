@@ -19,14 +19,14 @@ from gate import gate_version
 from llm_factory import build_jev_client, build_llm_client
 from log import JsonlLogger
 from spend import SpendTracker
-from workspace import Workspace
+from workspace import Workspace, read_pairs
 
 
 SETS = ("practice", "gate", "sealed")
 
 
 def load(ws: Workspace, set_name: str) -> pd.DataFrame:
-    return pd.read_csv(ws.path("pairs") / f"{set_name}.csv", dtype={"pair_id": str})
+    return read_pairs(ws.path("pairs") / f"{set_name}.csv")
 
 
 def run_fake(ws: Workspace, run_id: str) -> dict:

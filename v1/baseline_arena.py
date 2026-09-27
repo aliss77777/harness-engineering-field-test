@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 
-from workspace import Workspace
+from workspace import Workspace, read_pairs
 
 
 REFUSAL_RE = re.compile(
@@ -61,7 +61,7 @@ def main() -> None:
     args = parser.parse_args()
     ws = Workspace.load(args.config, args.task)
     frames = {
-        name: pd.read_csv(ws.path("pairs") / f"{name}.csv", dtype={"pair_id": str})
+        name: read_pairs(ws.path("pairs") / f"{name}.csv")
         for name in ("practice", "gate")
     }
     model = fit(frames["practice"], ws.config["seed"])

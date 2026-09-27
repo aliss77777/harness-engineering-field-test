@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+import pandas as pd
 import yaml
 
 
@@ -57,3 +58,9 @@ class Workspace:
     def jev_state(self, context: str, item: str) -> str:
         template = self.task.get("jev_state_template", "{item}")
         return template.format(context=context, item=item)
+
+
+def read_pairs(path: Path) -> pd.DataFrame:
+    """Read a pair file with text kept as text: a response that is literally "N/A" or
+    "null" must not become a missing value (pandas' default)."""
+    return pd.read_csv(path, dtype={"pair_id": str}, keep_default_na=False, na_values=[])
