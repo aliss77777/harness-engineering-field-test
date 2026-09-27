@@ -57,5 +57,5 @@ run_stage "exp2 learning" $MAIN $MAIN/results/arena/final_versions.json \
 run_stage "exp2 sealed" $MAIN $MAIN/results/arena/sealed_complete.json \
   ".venv/bin/python -u sealed.py" "arena-sealed-20260926" $MAIN/logs/arena
 run_stage "exp3 sealed" $EXP3 $EXP3/results/arena3/sealed_complete.json \
-  ".venv/bin/python -u sealed_trace.py" "arena3-sealed-20260926" $EXP3/logs/arena3
+  ".venv/bin/python -u sealed_trace.py" "arena3-sealed-20260926b" $EXP3/logs/arena3
 say "ALL DONE: experiment 2 and 3 verdicts written"

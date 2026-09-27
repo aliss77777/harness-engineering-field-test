@@ -159,3 +159,32 @@ def test_out_of_credit_is_fatal_and_not_retried(tmp_path):
     with pytest.raises(OutOfCreditsError):
         client.generate_json(prompt="p", schema={}, event={})
     assert len(calls) == 1
+
+
+def test_repeated_response_block_becomes_a_cached_content_block(tmp_path):
+    import httpx
+    import pytest
+    from cache import DiskCache
+    from log import JsonlLogger
+    from openrouter_llm import ContentBlockedError, OpenRouterJsonClient
+
+    calls = []
+
+    def handler(request):
+        calls.append(1)
+        return httpx.Response(200, json={"error": {"message": "Gemini blocked the response: OTHER", "code": 502}})
+
+    def client():
+        return OpenRouterJsonClient(
+            model="m", api_key="k", cache=DiskCache(tmp_path / "c"), logger=JsonlLogger(tmp_path / "l.jsonl"),
+            retries=12, backoff_seconds=0, temperature=0, reasoning_effort="medium", expected_model="m",
+            expected_provider="p", allow_fallbacks=False,
+            http_client=httpx.Client(transport=httpx.MockTransport(handler)),
+        )
+
+    with pytest.raises(ContentBlockedError):
+        client().generate_json(prompt="p", schema={}, event={})
+    assert len(calls) == 3  # retried twice, then treated as a refusal
+    with pytest.raises(ContentBlockedError):
+        client().generate_json(prompt="p", schema={}, event={})
+    assert len(calls) == 3  # replayed from cache, no new call
