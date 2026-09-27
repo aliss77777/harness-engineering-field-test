@@ -48,7 +48,7 @@ api:
   batch_size: 5
   temperature: 0.0
   reasoning_effort: medium
-  llm_workers: 3
+  llm_workers: 5
   jev_workers: 8
 models:
   llm: google/gemini-3.8-flash
