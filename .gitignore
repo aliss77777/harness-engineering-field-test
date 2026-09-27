@@ -24,3 +24,4 @@ data/arena/pairs
 results/arena
 data/arena3/pairs/
 *.stdout
+data/arena4/pairs/

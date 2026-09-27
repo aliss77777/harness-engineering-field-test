@@ -7,7 +7,7 @@ Experiments testing whether a decision model (Jev) helps an AI agent learn its o
 | 1 | Upworthy headline A/B tests | Complete: *hypothesis weakened* | [`experiments/2026-09-26-upworthy-v1`](experiments/2026-09-26-upworthy-v1/README.md); code at tag `exp1-upworthy-v1` |
 | 2 | Chatbot Arena long responses | Complete: *only the Jev loop learned* | [`experiments/2026-09-26-arena-v1`](experiments/2026-09-26-arena-v1/README.md) |
 | 3 | Arena, decision-trace Jev loop (B-prime, B-plus) | Complete: *trace no detectable difference; weights help* | [`experiments/2026-09-26-arena-trace-v1`](experiments/2026-09-26-arena-trace-v1/README.md) |
-| 4 | Arena, one LLM + Jev hybrid (stacked vote) | Designed, not scheduled | brief: `Task Brief 4_Hybrids.md` |
+| 4 | Arena, one LLM + Jev hybrid (stacked vote) | Running | brief: `Task Brief 4_Hybrids.md` · `config_arena4.yaml` + `task_arena4.yaml` |
 
 Side-by-side results and lessons: [`experiments/COMPARISON.md`](experiments/COMPARISON.md). The full, dated record of every decision, deviation and result is in [`MVP Project Plan.md`](MVP%20Project%20Plan.md).
 
@@ -58,6 +58,14 @@ Live while running: `results/arena/run_status.json` (current stage per loop, ETA
 .venv/bin/python prep_arena3.py                      # fresh sealed set; practice/gate copied from experiment 2
 .venv/bin/python learn_trace.py --run-id RUN_ID      # B-prime and B-plus in parallel
 .venv/bin/python sealed_trace.py --run-id RUN_ID-sealed   # refuses until experiment 2's verdict exists
+```
+
+## Experiment 4 (hybrid)
+
+```sh
+.venv/bin/python prep_arena4.py                      # sealed-4 (1,000 fresh pairs); practice/gate copied
+.venv/bin/python fit_hybrid.py --run-id RUN_ID       # fit + freeze the stacked vote on practice + gate
+.venv/bin/python sealed_hybrid.py --run-id RUN_ID-sealed  # once, guarded
 ```
 
 Experiment 1's commands (`prep.py`, `controls.py`, the old `run.py` smoke modes) are at tag `exp1-upworthy-v1`.

@@ -337,3 +337,22 @@ Experiment 1's exact code is preserved at git tag `exp1-upworthy-v1` (commit `c2
 - 2026-09-27 00:25: Sealed rerun after the "N/A" text fix (see experiment 2 log, 00:15-00:25): `arena3-sealed-20260926c-s*`.
 - 2026-09-27 00:17: **Experiment 3 sealed evaluation complete** (`arena3-sealed-20260926c-s1`, fresh 1,500-pair set, once). **Preregistered answers: trace → no detectable difference** (B-prime final 67.9% vs B final 69.0%, b 57 / c 74, p 0.16); **weights → help** (B-plus final 69.8% vs B-prime 67.9%, b 75 / c 46, p 0.011, significant after Holm). Learning: B-prime did not learn (p 0.11); **B-plus learned** (67.5% → 69.8%, p 0.002). Loop A on this set: 73.6% → 75.3% (p 0.009). Headline rows vs Loop A: hypothesis weakened for both arms. Cost ≈ 4% of Loop A per decision. Experiment 3 paid spend: $9.10.
 - 2026-09-27 00:30: Archived `experiments/2026-09-26-arena-trace-v1/`; merged branch `exp3-decision-trace` into `main` (fast-forward); wrote `experiments/COMPARISON.md`. Experiment 4's Jev component resolved by its preregistered rule: **B-plus final**.
+
+---
+
+# Experiment 4: one LLM + Jev hybrid (stacked vote)
+
+**Brief:** `Task Brief 4_Hybrids.md`. **Go-ahead:** Alexander, 2026-09-27. **Config:** `config_arena4.yaml` + `task_arena4.yaml`. **Outputs:** `data/arena4/`, `results/arena4/`, `logs/arena4/`.
+
+## Design (fixed before any paid call)
+
+- **A\*** = experiment 2's final Loop A (`A-r1-c2`); **J\*** = experiment 3's B-plus final (`Bw-r4-c1`, with its fitted weights), selected by the brief's rule (best Jev arm on experiment 3's fresh sealed set). Both read from the committed archives.
+- **Hybrid:** logistic regression, no intercept, on [A\*'s pick (±1), J\*'s six weighted signed per-question differences, J\*'s total]; L2 strength by 5-fold CV accuracy over C ∈ {0.01 … 10}; fitted on practice ∪ gate (2,000 pairs; Gemini-refused pairs excluded from the fit). Refused sealed pairs use J\*'s pick. Model frozen to `results/arena4/hybrid_model.json` before sealed.
+- **Sealed-4:** 1,000 fresh pairs from the sealed buckets, excluding all 3,000 pairs of experiments 2 and 3's sealed sets (10,789 left in the pool). No pair or prompt overlap with any earlier set; winner first in exactly 50%; no "N/A"-style texts.
+- **Verdict (`verdict_hybrid.py`, rows in order):** hybrid significantly better than A\* (two-sided McNemar, p < 0.05) → *hybrid beats the LLM*; significantly worse → *combination hurts*; 95% interval of (hybrid − A\*) within ±3 points → *no meaningful gain*; else *inconclusive*. Also reported: hybrid vs J\*, each vs the style baseline, costs, agreement, blocked-pair accuracy, memorization flag.
+- **Exploratory (not in the verdict):** cascade — J\* decides when |score| ≥ τ, A\* the rest; τ chosen on gate (best accuracy with ≤ 50% sent to the LLM), frozen with the model.
+- **Budget:** separate tracker, cap $10; estimate ≈ $2–3 (practice/gate decisions replay from cache).
+
+## Progress log
+
+- 2026-09-27 (build): sealed-4 drawn and checked; hybrid, fit, sealed and verdict code written; 75 tests pass (6 new); end-to-end dry run with fake clients passed. Committed before any paid call.

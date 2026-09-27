@@ -1,6 +1,6 @@
 # Task #4 brief: one LLM + Jev hybrid
 
-**Written:** 2026-09-26 · **Revised:** 2026-09-26 (single hybrid: the stacked vote; cascade kept only as a free, exploratory add-on; 1,000-pair sets) · **Owner:** Alexander · **Status:** design only, not scheduled · **Builds on:** experiments 2 (Arena) and 3 (decision trace). The harness, logging, spend cap, content-block rule and telemetry are unchanged unless stated here. · **Repo:** same repo, new config/task pair (`config_arena4.yaml`, `task_arena4.yaml`).
+**Written:** 2026-09-26 · **Revised:** 2026-09-26 (single hybrid: the stacked vote; cascade kept only as a free, exploratory add-on; 1,000-pair sets) · **Owner:** Alexander · **Status:** built and preregistered 2026-09-27 (code: `prep_arena4.py`, `hybrid.py`, `fit_hybrid.py`, `sealed_hybrid.py`, `verdict_hybrid.py`) · **Builds on:** experiments 2 (Arena) and 3 (decision trace). The harness, logging, spend cap, content-block rule and telemetry are unchanged unless stated here. · **Repo:** same repo, new config/task pair (`config_arena4.yaml`, `task_arena4.yaml`).
 
 ## 1. Why this experiment
 
@@ -26,7 +26,7 @@ A small logistic regression decides each pair from both components' outputs:
 
 - **Features:** A\*'s pick (+1 for X, −1 for Y), J\*'s signed per-question differences (direction × (P_X(yes) − P_Y(yes)), times J\*'s weights if it is B-plus), and J\*'s total score.
 - **Model:** no intercept (X/Y order is arbitrary); L2 regularization strength chosen by 5-fold cross-validation.
-- **Fitted on:** practice ∪ gate (1,500 pairs in experiments 2 and 3). The final weights are reported, so the write-up can say how much the hybrid trusts the LLM vs each Jev question.
+- **Fitted on:** practice ∪ gate (500 + 1,500 = 2,000 pairs, the same files as experiments 2 and 3; pairs Gemini refused are left out of the fit). The final weights are reported, so the write-up can say how much the hybrid trusts the LLM vs each Jev question.
 - **Content blocks:** when Gemini refuses a pair, A\*'s pick is unknown; the hybrid then uses J\*'s pick alone (the LLM-only system still uses its coin flip). This is a genuine advantage of combining them and is reported as its own line: accuracy on blocked pairs.
 
 **Why this hybrid:** it is the one most likely to beat the LLM, because it uses both signals on every pair and learns how much to trust each. Its cost is Jev + LLM on every pair, so it can only win on accuracy, not cost.
