@@ -20,6 +20,7 @@ def build_llm_client(config: dict[str, Any], root: Path, run_id: str, *, logs_di
         "retries": config["api"]["retries"],
         "backoff_seconds": config["api"]["backoff_seconds"],
         "temperature": config["api"]["temperature"],
+        "max_backoff_seconds": config["api"].get("max_backoff_seconds", 120.0),
     }
     if provider == "openrouter":
         api_key = os.environ.get("OPENROUTER_API_KEY") or os.environ.get("OPENROUTER_KEY")
@@ -42,7 +43,7 @@ def build_llm_client(config: dict[str, Any], root: Path, run_id: str, *, logs_di
         return GeminiJsonClient(
             api_key=api_key,
             cache=DiskCache(root / "cache" / "gemini"),
-            **common,
+            **{k: v for k, v in common.items() if k != "max_backoff_seconds"},
         )
     raise ValueError(f"unsupported LLM provider: {provider}")
 
@@ -59,5 +60,5 @@ def build_jev_client(config: dict[str, Any], root: Path, run_id: str, *, logs_di
         retries=config["api"]["retries"], backoff_seconds=config["api"]["backoff_seconds"],
         expected_model=config["models"]["jev_expected_served"],
         expected_provider=config["models"]["jev_expected_provider"],
-        spend=spend,
+        spend=spend, max_backoff_seconds=config["api"].get("max_backoff_seconds", 120.0),
     )

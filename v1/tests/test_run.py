@@ -101,3 +101,26 @@ def test_content_blocked_pair_gets_seeded_coin_flip_and_flag(tmp_path):
         assert summarize(records)["blocked"] == 1
         assert len(records) == 12
     assert runs[0] == runs[1]
+
+
+def test_failfast_pool_cancels_queued_work():
+    import threading
+    import time
+    from evaluation import failfast_pool
+
+    started = []
+    lock = threading.Lock()
+
+    def job(i):
+        with lock:
+            started.append(i)
+        if i == 0:
+            raise RuntimeError("boom")
+        time.sleep(0.05)
+
+    with pytest.raises(RuntimeError, match="boom"):
+        with failfast_pool(1) as pool:
+            futures = [pool.submit(job, i) for i in range(50)]
+            for future in futures:
+                future.result()
+    assert len(started) < 5

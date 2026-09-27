@@ -56,6 +56,7 @@ class OpenRouterJsonClient:
         allow_fallbacks: bool,
         http_client: httpx.Client | None = None,
         spend=None,
+        max_backoff_seconds: float = 120.0,
     ):
         self.model = model
         self.api_key = api_key
@@ -70,6 +71,7 @@ class OpenRouterJsonClient:
         self.allow_fallbacks = allow_fallbacks
         self._local = threading.local()
         self.spend = spend
+        self.max_backoff_seconds = max_backoff_seconds
         self.http = http_client or httpx.Client(timeout=120.0)
 
     def generate_json(
@@ -192,7 +194,7 @@ class OpenRouterJsonClient:
                 )
                 if isinstance(error, (RouteMismatchError, ContentBlockedError, OutOfCreditsError)) or attempt == self.retries:
                     raise
-                time.sleep(self.backoff_seconds * (2 ** (attempt - 1)))
+                time.sleep(min(self.backoff_seconds * (2 ** (attempt - 1)), self.max_backoff_seconds))
         raise RuntimeError("unreachable")
 
     @property

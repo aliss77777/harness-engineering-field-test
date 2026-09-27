@@ -40,6 +40,7 @@ class OpenRouterJevClient:
         expected_provider: str,
         http_client: httpx.Client | None = None,
         spend=None,
+        max_backoff_seconds: float = 120.0,
     ):
         self.model = model
         self.api_key = api_key
@@ -51,6 +52,7 @@ class OpenRouterJevClient:
         self.expected_provider = expected_provider
         self._local = threading.local()
         self.spend = spend
+        self.max_backoff_seconds = max_backoff_seconds
         self.http = http_client or httpx.Client(timeout=60.0)
 
     def evaluate(
@@ -154,7 +156,7 @@ class OpenRouterJevClient:
                 )
                 if isinstance(error, (RouteMismatchError, OutOfCreditsError)) or attempt == self.retries:
                     raise
-                time.sleep(self.backoff_seconds * (2 ** (attempt - 1)))
+                time.sleep(min(self.backoff_seconds * (2 ** (attempt - 1)), self.max_backoff_seconds))
         raise RuntimeError("unreachable")
 
     @property
