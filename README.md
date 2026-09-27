@@ -1,6 +1,14 @@
 # Jev Learning Loop MVP
 
-Local experiment comparing an LLM prompt-learning loop with a Jev rubric-learning loop on real Upworthy A/B tests.
+Experiments testing whether a decision model (Jev) helps an AI agent learn its own decision criteria from real outcomes, compared with an LLM that learns from its own reasoning.
+
+| # | Task | Status | Where |
+|---|---|---|---|
+| 1 | Upworthy headline A/B tests | Complete: *hypothesis weakened* | [`experiments/2026-09-26-upworthy-v1`](experiments/2026-09-26-upworthy-v1/README.md); code at tag `exp1-upworthy-v1` |
+| 2 | Chatbot Arena long responses | Running | `main` · `config_arena.yaml` + `task_arena.yaml` · brief: `Task Brief 2_Arena.md` |
+| 3 | Arena, decision-trace Jev loop (B-prime, B-plus) | Running | branch `exp3-decision-trace` · `config_arena3.yaml` + `task_arena3.yaml` |
+
+The full, dated record of every decision, deviation and result is in [`MVP Project Plan.md`](MVP%20Project%20Plan.md).
 
 ## Repository layout
 
@@ -19,29 +27,38 @@ See [`experiments/README.md`](experiments/README.md) for the experiment index.
 2. Create the environment: `python3 -m venv .venv`
 3. Install dependencies: `.venv/bin/python -m pip install -r requirements.txt`
 
-Raw Upworthy files belong under `data/jd64p-osfstorage-archive/` and are never committed.
+Raw data is never committed: Upworthy under `data/jd64p-osfstorage-archive/`; Arena `train.csv` (Hugging Face `lmarena-ai/arena-human-preference-55k`, Apache 2.0) under `data/arena/raw/`. Registered pair IDs are committed under `data/*/splits/`.
 
-## Current local checks
+## Checks
 
 ```sh
 .venv/bin/python -m pytest -q
-.venv/bin/python prep.py
-.venv/bin/python controls.py
-.venv/bin/python access_check.py --gemini
 .venv/bin/python access_check.py --openrouter-llm
 .venv/bin/python access_check.py --jev
-.venv/bin/python run.py --loop-a-smoke 10 --run-id loop-a-smoke-v0
-.venv/bin/python run.py --loop-b-smoke 10 --run-id loop-b-smoke-v0
 ```
 
-Use `controls.py --include-sealed` only for the registered final evaluation.
-
-## Full-run sequence
+## Experiment 2 (Arena) sequence
 
 ```sh
-.venv/bin/python editor.py --start --run-id EXPERIMENT_ID
-.venv/bin/python learn.py --run-id EXPERIMENT_ID
-.venv/bin/python sealed.py --run-id EXPERIMENT_ID-sealed
+.venv/bin/python prep_arena.py                       # filters, prompt-hash split, saved IDs
+.venv/bin/python baseline_arena.py                   # style code baseline (practice-trained)
+.venv/bin/python run.py --fake                       # seeded random clients through the real pipeline
+.venv/bin/python editor.py --start --run-id arena-v0 --config config_arena.yaml --task task_arena.yaml
+.venv/bin/python run.py --smoke 20 && .venv/bin/python run.py --estimate
+.venv/bin/python learn.py --run-id RUN_ID            # both loops in parallel; no sealed data
+.venv/bin/python sealed.py --run-id RUN_ID-sealed    # once, guarded
 ```
+
+Live while running: `results/arena/run_status.json` (current stage per loop, ETA, spend), `results/arena/wip_summary.json` (every finished evaluation, candidate edit and gate decision), and `.venv/bin/python monitor.py --run-id RUN_ID` (read-only health check). Spend is capped in code (`budget.spend_cap_usd`).
+
+## Experiment 3 (branch `exp3-decision-trace`)
+
+```sh
+.venv/bin/python prep_arena3.py                      # fresh sealed set; practice/gate copied from experiment 2
+.venv/bin/python learn_trace.py --run-id RUN_ID      # B-prime and B-plus in parallel
+.venv/bin/python sealed_trace.py --run-id RUN_ID-sealed   # refuses until experiment 2's verdict exists
+```
+
+Experiment 1's commands (`prep.py`, `controls.py`, the old `run.py` smoke modes) are at tag `exp1-upworthy-v1`.
 
 Afterward, package `results/` and `logs/` under a new immutable `experiments/YYYY-MM-DD-task-version/` folder before starting another experiment.

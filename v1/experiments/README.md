@@ -5,6 +5,8 @@ Completed experiments are immutable snapshots. Start a new folder instead of ove
 | Experiment | Task | Status | Verdict |
 |---|---|---|---|
 | [`2026-09-26-upworthy-v1`](2026-09-26-upworthy-v1/README.md) | Upworthy headline choice | Complete | Hypothesis weakened |
+| `2026-09-26-arena-v1` (to be archived) | Chatbot Arena, long responses | Running on `main` | — |
+| `2026-09-26-arena-trace-v1` (to be archived) | Arena, decision-trace Jev loop | Running on branch `exp3-decision-trace` | — |
 
 ## Package convention
 
