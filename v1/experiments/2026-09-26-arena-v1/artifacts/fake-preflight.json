@@ -1,0 +1,56 @@
+{
+  "practice": {
+    "loop_a": {
+      "pairs": 500,
+      "accuracy": 0.512,
+      "tie_rate": 0.0,
+      "picks_x": 0.52,
+      "cost": 0.0
+    },
+    "loop_b": {
+      "pairs": 500,
+      "accuracy": 0.486,
+      "tie_rate": 0.004,
+      "picks_x": 0.494,
+      "cost": 0.0
+    }
+  },
+  "gate": {
+    "loop_a": {
+      "pairs": 1500,
+      "accuracy": 0.49266666666666664,
+      "tie_rate": 0.0,
+      "picks_x": 0.48733333333333334,
+      "cost": 0.0
+    },
+    "loop_b": {
+      "pairs": 1500,
+      "accuracy": 0.5073333333333333,
+      "tie_rate": 0.0026666666666666666,
+      "picks_x": 0.49666666666666665,
+      "cost": 0.0
+    }
+  },
+  "sealed": {
+    "loop_a": {
+      "pairs": 1500,
+      "accuracy": 0.49733333333333335,
+      "tie_rate": 0.0,
+      "picks_x": 0.52,
+      "cost": 0.0
+    },
+    "loop_b": {
+      "pairs": 1500,
+      "accuracy": 0.49733333333333335,
+      "tie_rate": 0.0006666666666666666,
+      "picks_x": 0.48933333333333334,
+      "cost": 0.0
+    }
+  },
+  "gate_check": {
+    "keep": false,
+    "b": 365,
+    "c": 367,
+    "p": 0.544140559008781
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "run_id": "arena-sealed-20260926-s1",
+  "started_at": "2026-09-27T04:45:48.523390+00:00",
+  "loops": {
+    "sealed": {
+      "stage": "done",
+      "verdict": "only_jev_loop_learned",
+      "updated_at": "2026-09-27T05:22:23.889808+00:00",
+      "stage_elapsed_seconds": 0,
+      "eta_seconds_for_stage": null
+    }
+  },
+  "updated_at": "2026-09-27T05:22:23.889819+00:00",
+  "elapsed_seconds": 2195,
+  "spend_usd": 37.0888,
+  "spend_cap_usd": 75.0,
+  "paid_calls": 50556
+}

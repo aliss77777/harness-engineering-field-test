@@ -1,0 +1,44 @@
+{
+  "filters": {
+    "1_rows_loaded": 57477,
+    "2_after_drop_ties": 39716,
+    "3_after_single_turn": 34297,
+    "4_after_drop_empty_or_unparseable": 34269,
+    "5_after_length_cap": 34267,
+    "6_after_hiding_model_names": 34267
+  },
+  "sets": {
+    "practice": {
+      "pool_pairs": 6933,
+      "pool_prompts": 6309,
+      "pairs_saved": 500,
+      "ids": "loaded_saved_ids",
+      "winner_is_x": 0.5,
+      "median_words_x": 172.0,
+      "median_words_y": 170.0
+    },
+    "gate": {
+      "pool_pairs": 13545,
+      "pool_prompts": 12445,
+      "pairs_saved": 1500,
+      "ids": "loaded_saved_ids",
+      "winner_is_x": 0.5,
+      "median_words_x": 156.5,
+      "median_words_y": 153.0
+    },
+    "sealed": {
+      "pool_pairs": 13789,
+      "pool_prompts": 12737,
+      "pairs_saved": 1500,
+      "ids": "loaded_saved_ids",
+      "winner_is_x": 0.5,
+      "median_words_x": 167.0,
+      "median_words_y": 157.5
+    }
+  },
+  "prompt_overlap_between_sets": {
+    "practice_gate": 0,
+    "practice_sealed": 0,
+    "gate_sealed": 0
+  }
+}

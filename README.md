@@ -5,7 +5,7 @@ Experiments testing whether a decision model (Jev) helps an AI agent learn its o
 | # | Task | Status | Where |
 |---|---|---|---|
 | 1 | Upworthy headline A/B tests | Complete: *hypothesis weakened* | [`experiments/2026-09-26-upworthy-v1`](experiments/2026-09-26-upworthy-v1/README.md); code at tag `exp1-upworthy-v1` |
-| 2 | Chatbot Arena long responses | Running | `main` · `config_arena.yaml` + `task_arena.yaml` · brief: `Task Brief 2_Arena.md` |
+| 2 | Chatbot Arena long responses | Complete: *only the Jev loop learned* | [`experiments/2026-09-26-arena-v1`](experiments/2026-09-26-arena-v1/README.md) |
 | 3 | Arena, decision-trace Jev loop (B-prime, B-plus) | Learning done; sealed queued | branch `exp3-decision-trace` · `config_arena3.yaml` + `task_arena3.yaml` |
 | 4 | Arena, one LLM + Jev hybrid (stacked vote) | Designed, not scheduled | brief: `Task Brief 4_Hybrids.md` |
 

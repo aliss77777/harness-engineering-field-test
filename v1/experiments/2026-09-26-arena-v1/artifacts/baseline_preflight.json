@@ -1,0 +1,29 @@
+{
+  "features": [
+    "words_100",
+    "list_items",
+    "headers",
+    "code_block",
+    "refusal",
+    "log_length_ratio"
+  ],
+  "coefficients": {
+    "words_100": 0.43874870920323267,
+    "list_items": 0.07326964262118578,
+    "headers": -0.030462276681644012,
+    "code_block": 0.6114235385446347,
+    "refusal": -0.8922718178511018,
+    "log_length_ratio": -0.1759520509464675
+  },
+  "note": "Trained on practice only. Sealed is scored once, in sealed_arena.py.",
+  "practice": {
+    "pairs": 500,
+    "accuracy": 0.604,
+    "picks_x": 0.516
+  },
+  "gate": {
+    "pairs": 1500,
+    "accuracy": 0.6246666666666667,
+    "picks_x": 0.518
+  }
+}
