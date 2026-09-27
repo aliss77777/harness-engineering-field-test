@@ -60,7 +60,7 @@ On 1,000 fresh pairs, a fitted vote of the best LLM harness (75.7% alone) and th
 
 ## Next
 
-- **Preregistered cascade test:** Jev decides confident pairs, the LLM the rest; verdict row "within ±3 points at ≤ ½ cost". The exploratory curve suggests 30–40% LLM share is the sweet spot.
+- **Preregistered cascade test (designed: `Task Brief 5_Routing.md`):** Jev decides confident pairs, the LLM the rest (40% LLM share, threshold set on gate); chef's kiss = within ±3 points of the LLM at ≤ ½ its cost, on a fresh 1,000-pair sealed set.
 - **Rerun experiment 1 (Upworthy) with the experiment 2 harness**, to separate "better harness" from "easier task".
 - **Loop C** (rubric answered by an LLM) to earn the word "Jev" in the headline.
 - A second task where the LLM cannot have memorized the answers.
