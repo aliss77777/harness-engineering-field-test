@@ -9,7 +9,7 @@ Experiments testing whether a decision model (Jev) helps an AI agent learn its o
 | 3 | Arena, decision-trace Jev loop (B-prime, B-plus) | Complete: *trace no detectable difference; weights help* | [`experiments/2026-09-26-arena-trace-v1`](experiments/2026-09-26-arena-trace-v1/README.md) |
 | 4 | Arena, one LLM + Jev hybrid (stacked vote) | Complete: *no meaningful gain* | [`experiments/2026-09-27-arena-hybrid-v1`](experiments/2026-09-27-arena-hybrid-v1/README.md) |
 | 5 | Arena, route between Jev and the LLM (cascade) | Complete: ***same quality, half the cost*** | [`experiments/2026-09-27-arena-router-v1`](experiments/2026-09-27-arena-router-v1/README.md) |
-| 6 | Upworthy, Jev + LLM router learning from partial feedback (contextual bandit) | Running | brief: `Task Brief 6_Bandit.md` · `config_upworthy6.yaml` + `task_upworthy6.yaml` |
+| 6 | Upworthy, Jev + LLM router learning from partial feedback (contextual bandit) | Complete: *same quality, half the cost*; Jev learned without an answer key | [`experiments/2026-09-27-upworthy-bandit-v1`](experiments/2026-09-27-upworthy-bandit-v1/README.md) |
 
 **One-page summary: [`RESULTS.md`](RESULTS.md).** Side-by-side detail and lessons: [`experiments/COMPARISON.md`](experiments/COMPARISON.md). The full, dated record of every decision, deviation and result is in [`MVP Project Plan.md`](MVP%20Project%20Plan.md).
 

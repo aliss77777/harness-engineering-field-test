@@ -1,0 +1,40 @@
+{
+  "run_id": "upworthy6-sealed-20260927-s1",
+  "started_at": "2026-09-27T19:01:36.222174+00:00",
+  "loops": {
+    "R": {
+      "stage": "jev",
+      "set": "sealed",
+      "version_id": "R-r1-c3",
+      "round": "final",
+      "completed": 1000,
+      "total": 1000,
+      "updated_at": "2026-09-27T19:16:05.535712+00:00",
+      "stage_elapsed_seconds": 190,
+      "eta_seconds_for_stage": 0
+    },
+    "J": {
+      "stage": "jev",
+      "set": "sealed",
+      "version_id": "J-r3-c2",
+      "round": "final",
+      "completed": 1000,
+      "total": 1000,
+      "updated_at": "2026-09-27T19:16:05.103612+00:00",
+      "stage_elapsed_seconds": 89,
+      "eta_seconds_for_stage": 0
+    },
+    "sealed": {
+      "stage": "done",
+      "verdict": "same_quality_half_cost",
+      "updated_at": "2026-09-27T19:16:06.079627+00:00",
+      "stage_elapsed_seconds": 0,
+      "eta_seconds_for_stage": null
+    }
+  },
+  "updated_at": "2026-09-27T19:16:06.079632+00:00",
+  "elapsed_seconds": 870,
+  "spend_usd": 25.8595,
+  "spend_cap_usd": 40.0,
+  "paid_calls": 100930
+}

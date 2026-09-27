@@ -1,0 +1,35 @@
+{
+  "practice": {
+    "rows_loaded": 22666,
+    "tests_loaded": 4873,
+    "tests_after_date_filter": 3831,
+    "tests_with_variants_over_impression_floor": 3823,
+    "tests_with_3plus_arms": 1708,
+    "tests_saved": 1200,
+    "ids": "sampled_and_saved",
+    "median_arms": 4,
+    "max_arms": 8
+  },
+  "gate": {
+    "rows_loaded": 105551,
+    "tests_loaded": 22743,
+    "tests_after_date_filter": 17891,
+    "tests_with_variants_over_impression_floor": 17821,
+    "tests_with_3plus_arms": 8382,
+    "tests_saved": 1000,
+    "ids": "sampled_and_saved",
+    "median_arms": 4,
+    "max_arms": 8
+  },
+  "sealed": {
+    "rows_loaded": 22600,
+    "tests_loaded": 4871,
+    "tests_after_date_filter": 3825,
+    "tests_with_variants_over_impression_floor": 3808,
+    "tests_with_3plus_arms": 1824,
+    "tests_saved": 1000,
+    "ids": "sampled_and_saved",
+    "median_arms": 4,
+    "max_arms": 8
+  }
+}

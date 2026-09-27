@@ -1,4 +1,4 @@
-# Experiments 1–5 compared
+# Experiments 1–6 compared
 
 **Written:** 2026-09-27 · Each experiment's own report is the source of truth; this page lines them up. All accuracies are on sealed sets that no loop, editor or baseline saw during learning, evaluated once.
 
@@ -9,6 +9,7 @@
 | 1 | Upworthy headlines: does a Jev rubric loop learn better or cheaper than an LLM loop? | **Hypothesis weakened.** Neither loop learned (no edit passed the gate); the LLM was more accurate. |
 | 2 | Arena responses, with a rebuilt harness: same question | **Only the Jev loop learned.** Jev: 66.7% → 70.1% (p 0.00002). LLM: 72.9% → 73.3% (p 0.50). LLM still more accurate; Jev ≈23× cheaper. |
 | 3 | Arena: does a decision trace help the Jev loop? Do fitted weights? | **Trace: no detectable difference. Weights: help** (+1.9 over the trace arm, p 0.011); the weighted loop learned (p 0.002). |
+| 6 | Upworthy with partial feedback only: can the router learn with no answer key and stay at LLM quality for less? | **Same quality, half the cost** (preregistered ±5 lift points): router +10.9 vs LLM +13.0 lift over random, at 46% of the cost; the difference (−2.1, interval −4.0 to −0.1) is inside the margin but excludes zero. **The Jev-only policy learned from partial feedback** (+2.1, p 0.02); the LLM kept no edit. |
 | 5 | Arena: can Jev decide the confident cases and the LLM the rest, at the LLM's quality for half the cost? | **Same quality, half the cost.** Router 76.2% vs LLM 76.3% (interval −1.8 to +1.6) at 43% of the cost; Jev decided 62% of pairs. |
 | 4 | Arena: does a fitted vote of the best LLM and best Jev harness beat the LLM alone? | **No meaningful gain** (75.6% vs 75.7%, interval −0.9 to +0.7). Exploratory cascade: Jev decides half the pairs → 75.2% at about half the cost. |
 
@@ -62,6 +63,10 @@ On 1,000 fresh pairs, a fitted vote of the best LLM harness (75.7% alone) and th
 ## Experiment 5: routing, preregistered
 
 The cascade idea from experiment 4, preregistered with the threshold frozen on gate (40% of pairs to the LLM) and tested on a fifth, fresh sealed set: **router 76.2% vs LLM 76.3%** (95% interval of the difference −1.8 to +1.6 points), at **$0.63 vs $1.48 per 1,000 decisions** (43%) and about a third less latency. The reason is clean: on the 62% of pairs where the rubric was confident, it was as accurate as the LLM (81.6% vs 81.7% on the same pairs); the LLM only earned its cost on the close calls. This is the strongest result of the series and the one that fits how Jev is meant to be used: a cheap, readable decider for most decisions, the LLM for the hard ones.
+
+## Experiment 6: learning without an answer key
+
+Upworthy as a contextual bandit: each policy picked one of 3–8 headlines and saw only that headline's click rate. The Jev-only policy learned (dropping "uses second person", then adding a third-person-protagonist question; +2.1 lift points on unseen tests, p 0.02) — the same first lesson experiment 1's editor drew from full labels. The LLM-only policy kept no edit. The router kept about 84% of the LLM's lift at 46% of its cost: within the preregistered margin, so the verdict is *same quality, half the cost*, but the small loss is real enough to mention (interval −4.0 to −0.1). The textbook Thompson bandit on surface features learned little (+2.2).
 
 ## Next
 

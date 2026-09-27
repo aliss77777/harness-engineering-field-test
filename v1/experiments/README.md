@@ -9,6 +9,7 @@ Completed experiments are immutable snapshots. Start a new folder instead of ove
 | [`2026-09-26-arena-trace-v1`](2026-09-26-arena-trace-v1/README.md) | Arena, decision-trace Jev loop | Complete | Trace: no detectable difference · weights: help |
 | [`2026-09-27-arena-hybrid-v1`](2026-09-27-arena-hybrid-v1/README.md) | Arena, LLM + Jev stacked-vote hybrid | Complete | No meaningful gain (cascade: ≈ same accuracy at half the cost, exploratory) |
 | [`2026-09-27-arena-router-v1`](2026-09-27-arena-router-v1/README.md) | Arena, route between Jev and the LLM | Complete | **Same quality, half the cost** |
+| [`2026-09-27-upworthy-bandit-v1`](2026-09-27-upworthy-bandit-v1/README.md) | Upworthy, Jev + LLM router learning from partial feedback | Complete | Same quality, half the cost (router −2 lift pts, within ±5); Jev-only learned from partial feedback |
 
 Cross-experiment summary: [`COMPARISON.md`](COMPARISON.md).
 

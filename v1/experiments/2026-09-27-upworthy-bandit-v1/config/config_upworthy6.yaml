@@ -1,0 +1,77 @@
+# Experiment 6: the Jev + LLM router learning from partial feedback (contextual bandit).
+# Task Brief 6_Bandit.md. Fixed before any paid run.
+seed: 20260926
+sets:
+  # Practice is a stream: a new batch of `batch` tests each round.
+  practice: 1200
+  gate: 1000
+  sealed: 1000
+filters:
+  excluded_start: 2013-06-25
+  excluded_end: 2014-01-10
+  min_impressions: 1000
+  min_arms: 3
+  max_arms: 8
+components:
+  # Version 0 for every policy: experiment 1's (generated before any Upworthy outcome was seen).
+  version0: experiments/2026-09-26-upworthy-v1/artifacts/version0.json
+learning:
+  rounds: 4
+  batch: 300
+  exploration_rate: 0.15
+  feedback_tests: 20
+  gate_p_threshold: 0.05
+  max_changes: 3
+  max_kept_per_round: 1
+  max_instructions_words: 300
+  max_rubric_questions: 10
+  starting_rubric_min_questions: 5
+  starting_rubric_max_questions: 8
+  question_check_items: 10
+  question_check_max_disagreements: 1
+  duplicate_similarity: 0.9
+  editor_item_word_limit: 400
+router:
+  # Jev decides when (top score - second score) >= tau; tau is the quantile of the margins on
+  # the tests being decided that sends this share to the LLM. Needs no outcomes (label-free).
+  llm_share: 0.40
+  max_cost_ratio: 0.5
+thompson:
+  # Policy C: Bayesian linear regression on six surface features, click-rate lift target.
+  prior_variance: 1.0
+  noise_variance: 0.25
+verdict:
+  rules_version: bandit_v1
+  alpha: 0.05
+  # Lift over a random pick, in points (random = 0, perfect picks ~ +40 on this archive).
+  equivalence_margin_lift: 5.0
+  bootstrap_resamples: 10000
+  memorization_hit_rate: 0.70
+budget:
+  # Worst case ≈ $31 (every round gates 3 candidates in every arm); smoke: $0.0014 per LLM decision.
+  spend_cap_usd: 40.0
+api:
+  retries: 12
+  backoff_seconds: 5.0
+  max_backoff_seconds: 120.0
+  batch_size: 5
+  temperature: 0.0
+  reasoning_effort: medium
+  llm_workers: 3
+  jev_workers: 8
+models:
+  llm: google/gemini-3.8-flash
+  llm_expected_served: google/gemini-3.8-flash
+  llm_expected_provider: Google AI Studio
+  llm_allow_fallbacks: false
+  direct_llm: gemini-3.8-flash
+  jev: typesafe/jev-1.13
+  jev_expected_served: typesafe/jev-1.13-20260917
+  jev_expected_provider: TypeSafe
+  llm_provider: openrouter
+  jev_provider: openrouter
+prices_per_million_tokens:
+  llm_input: 0.75
+  llm_output: 3.75
+  jev_input: 0.042
+  jev_output: 0.0

@@ -1,0 +1,1004 @@
+{
+  "run_id": "upworthy6-learn-20260927-s1",
+  "evaluations": [
+    {
+      "loop": "J",
+      "round": 1,
+      "set": "practice",
+      "version_id": "J-v0",
+      "tests": 300,
+      "observed_mean_click_rate_pct_own": 1.354,
+      "observed_mean_click_rate_pct_exploration": 1.036,
+      "finished_at": "2026-09-27T16:30:28.312454+00:00"
+    },
+    {
+      "loop": "J",
+      "round": 2,
+      "set": "practice",
+      "version_id": "J-r1-c2",
+      "tests": 300,
+      "observed_mean_click_rate_pct_own": 1.233,
+      "observed_mean_click_rate_pct_exploration": 1.127,
+      "finished_at": "2026-09-27T16:34:20.663778+00:00"
+    },
+    {
+      "loop": "J",
+      "round": 3,
+      "set": "practice",
+      "version_id": "J-r1-c2",
+      "tests": 300,
+      "observed_mean_click_rate_pct_own": 1.181,
+      "observed_mean_click_rate_pct_exploration": 1.249,
+      "finished_at": "2026-09-27T16:39:19.760402+00:00"
+    },
+    {
+      "loop": "J",
+      "round": 4,
+      "set": "practice",
+      "version_id": "J-r3-c2",
+      "tests": 300,
+      "observed_mean_click_rate_pct_own": 1.226,
+      "observed_mean_click_rate_pct_exploration": 1.0,
+      "finished_at": "2026-09-27T16:46:00.935337+00:00"
+    },
+    {
+      "loop": "L",
+      "round": 1,
+      "set": "practice",
+      "version_id": "L-v0",
+      "tests": 300,
+      "observed_mean_click_rate_pct_own": 1.442,
+      "observed_mean_click_rate_pct_exploration": 1.008,
+      "finished_at": "2026-09-27T16:50:21.609483+00:00"
+    },
+    {
+      "loop": "R",
+      "round": 1,
+      "set": "practice",
+      "version_id": "R-v0",
+      "tests": 300,
+      "observed_mean_click_rate_pct_own": 1.411,
+      "observed_mean_click_rate_pct_exploration": 1.044,
+      "finished_at": "2026-09-27T16:51:53.847029+00:00"
+    },
+    {
+      "loop": "R",
+      "round": 2,
+      "set": "practice",
+      "version_id": "R-r1-c3",
+      "tests": 300,
+      "observed_mean_click_rate_pct_own": 1.257,
+      "observed_mean_click_rate_pct_exploration": 1.163,
+      "finished_at": "2026-09-27T16:58:28.198186+00:00"
+    },
+    {
+      "loop": "R",
+      "round": 3,
+      "set": "practice",
+      "version_id": "R-r1-c3",
+      "tests": 300,
+      "observed_mean_click_rate_pct_own": 1.197,
+      "observed_mean_click_rate_pct_exploration": 1.268,
+      "finished_at": "2026-09-27T17:15:20.081882+00:00"
+    },
+    {
+      "loop": "R",
+      "round": 4,
+      "set": "practice",
+      "version_id": "R-r1-c3",
+      "tests": 300,
+      "observed_mean_click_rate_pct_own": 1.231,
+      "observed_mean_click_rate_pct_exploration": 0.99,
+      "finished_at": "2026-09-27T17:24:34.333026+00:00"
+    },
+    {
+      "loop": "L",
+      "round": 2,
+      "set": "practice",
+      "version_id": "L-v0",
+      "tests": 300,
+      "observed_mean_click_rate_pct_own": 1.3,
+      "observed_mean_click_rate_pct_exploration": 1.13,
+      "finished_at": "2026-09-27T17:30:10.126436+00:00"
+    },
+    {
+      "loop": "L",
+      "round": 3,
+      "set": "practice",
+      "version_id": "L-v0",
+      "tests": 300,
+      "observed_mean_click_rate_pct_own": 1.26,
+      "observed_mean_click_rate_pct_exploration": 1.291,
+      "finished_at": "2026-09-27T18:01:01.821621+00:00"
+    },
+    {
+      "loop": "L",
+      "round": 4,
+      "set": "practice",
+      "version_id": "L-v0",
+      "tests": 300,
+      "observed_mean_click_rate_pct_own": 1.261,
+      "observed_mean_click_rate_pct_exploration": 0.914,
+      "finished_at": "2026-09-27T18:31:49.069785+00:00"
+    }
+  ],
+  "candidates": [
+    {
+      "arm": "J",
+      "round": 1,
+      "candidate_id": "J-r1-c1",
+      "based_on": "J-v0",
+      "reason": "The evidence table shows features_list_number achieved only 1.069% CTR when present (n=42) versus 1.343% when absent (n=258), indicating list numbers hurt performance.",
+      "change": "flip direction of features_list_number",
+      "b": 103,
+      "c": 142,
+      "p": 0.994772,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T16:33:31.136708+00:00"
+    },
+    {
+      "arm": "J",
+      "round": 1,
+      "candidate_id": "J-r1-c2",
+      "based_on": "J-v0",
+      "reason": "The evidence table shows uses_second_person averaged 1.225% CTR (n=133) compared to 1.368% CTR when absent (n=167), making it a counterproductive positive signal.",
+      "change": "drop uses_second_person",
+      "b": 204,
+      "c": 127,
+      "p": 1.4e-05,
+      "passed": true,
+      "status": "kept",
+      "kept": true,
+      "at": "2026-09-27T16:33:31.138288+00:00"
+    },
+    {
+      "arm": "J",
+      "round": 1,
+      "candidate_id": "J-r1-c3",
+      "based_on": "J-v0",
+      "reason": "The evidence table shows headlines with features_list_number had 1.069% CTR (n=42) versus 1.343% CTR without it (n=258), so dropping it removes a drag on selection quality.",
+      "change": "drop features_list_number",
+      "b": 85,
+      "c": 88,
+      "p": 0.619429,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T16:33:31.138913+00:00"
+    },
+    {
+      "arm": "J",
+      "round": 2,
+      "candidate_id": "J-r2-c2",
+      "based_on": "J-r1-c2",
+      "reason": "Top-performing sampled tests feature dramatic twists and narrative contrast (e.g. test 53a2f78cb5839f3413000037 at 2.287% CTR and test 548af72f3839362260070000 at 1.437% CTR).",
+      "change": "add features_narrative_twist (helps): Does the headline describe an unexpected turn of events, dramatic contrast, or surprising twist?",
+      "status": "failed_question_check",
+      "at": "2026-09-27T16:36:21.811776+00:00"
+    },
+    {
+      "arm": "J",
+      "round": 2,
+      "candidate_id": "J-r2-c1",
+      "based_on": "J-r1-c2",
+      "reason": "In the sampled tests, headlines framed as questions performed poorly (e.g. test 54357d2aa2643227d300005e at 0.190% CTR and test 53f74ea515ec7de635000001 at 0.000% CTR).",
+      "change": "add is_phrased_as_question (hurts): Does the headline ask a question or end with a question mark?",
+      "b": 128,
+      "c": 128,
+      "p": 0.52491,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T16:38:33.676326+00:00"
+    },
+    {
+      "arm": "J",
+      "round": 2,
+      "candidate_id": "J-r2-c3",
+      "based_on": "J-r1-c2",
+      "reason": "The evidence table shows headlines with promises_extreme_emotion achieved a lower CTR of 1.203% (n=67) compared to 1.225% when absent (n=233).",
+      "change": "drop promises_extreme_emotion",
+      "b": 151,
+      "c": 152,
+      "p": 0.545724,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T16:38:33.677583+00:00"
+    },
+    {
+      "arm": "J",
+      "round": 3,
+      "candidate_id": "J-r3-c1",
+      "based_on": "J-r1-c2",
+      "reason": "The evidence table shows uses_formal_bureaucratic_language was never chosen (n=0 across 300 tests), giving it zero discriminatory value.",
+      "change": "drop uses_formal_bureaucratic_language",
+      "b": 63,
+      "c": 51,
+      "p": 0.151439,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T16:44:19.452630+00:00"
+    },
+    {
+      "arm": "J",
+      "round": 3,
+      "candidate_id": "J-r3-c2",
+      "based_on": "J-r1-c2",
+      "reason": "Top-performing sampled tests (e.g. test 53c4072172263ea881000048 at 2.598% CTR and test 5398737573acb62fca000031 at 1.808% CTR) center on individual protagonists using third-person pronouns.",
+      "change": "add references_third_person_protagonist (helps): Does the headline refer to an individual person using third-person pronouns such as 'he', 'she', 'him', or 'her'?",
+      "b": 138,
+      "c": 111,
+      "p": 0.049612,
+      "passed": true,
+      "status": "kept",
+      "kept": true,
+      "at": "2026-09-27T16:44:19.454372+00:00"
+    },
+    {
+      "arm": "J",
+      "round": 3,
+      "candidate_id": "J-r3-c3",
+      "based_on": "J-r1-c2",
+      "reason": "The evidence table shows spoils_factual_resolution was selected only 2 times out of 300 tests, making it virtually inactive in ranking decisions.",
+      "change": "drop spoils_factual_resolution",
+      "b": 83,
+      "c": 65,
+      "p": 0.081036,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T16:44:19.455197+00:00"
+    },
+    {
+      "arm": "J",
+      "round": 4,
+      "candidate_id": "J-r4-c1",
+      "based_on": "J-r3-c2",
+      "reason": "The evidence table shows uses_formal_bureaucratic_language triggered 0 times across 300 tests; rewording it to identify abstract institutional debates targets low-performing dry stories like test 53b1893846dab066c9000018 (0.124% CTR) and test 55084a5b353831001c160000 (0.092% CTR).",
+      "change": "reword uses_formal_bureaucratic_language: Does the headline focus on abstract policy, statistics, or institutional debates rather than an individual human experience?",
+      "b": 85,
+      "c": 84,
+      "p": 0.5,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T16:51:54.055213+00:00"
+    },
+    {
+      "arm": "J",
+      "round": 4,
+      "candidate_id": "J-r4-c2",
+      "based_on": "J-r3-c2",
+      "reason": "Sampled tests with chosen headlines featuring quotation marks suffered low CTRs (e.g. test 54f751533266380018f00000 at 0.040% CTR, test 53b1893846dab066c9000018 at 0.124% CTR, and test 55258da3313437002c400100 at 0.188% CTR) by appearing like detached excerpts.",
+      "change": "add uses_quotation_marks (hurts): Does the headline contain words or phrases enclosed in single or double quotation marks?",
+      "b": 59,
+      "c": 87,
+      "p": 0.991951,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T16:51:54.055717+00:00"
+    },
+    {
+      "arm": "J",
+      "round": 4,
+      "candidate_id": "J-r4-c3",
+      "based_on": "J-r3-c2",
+      "reason": "Headlines explicitly referencing video viewing had among the lowest observed CTRs in sampled tests (e.g. test 54f751533266380018f00000 at 0.040% CTR and test 54066a1cb650ed1828000073 at 0.181% CTR).",
+      "change": "add explicitly_references_video_format (hurts): Does the headline explicitly mention video media using words such as 'video', 'watch', 'clip', or 'trailer'?",
+      "b": 54,
+      "c": 62,
+      "p": 0.798265,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T16:51:54.056197+00:00"
+    },
+    {
+      "arm": "R",
+      "round": 1,
+      "candidate_id": "R-r1-c1",
+      "based_on": "R-v0",
+      "reason": "The evidence table shows features_list_number averaged 1.089% CTR when yes versus 1.393% when no, indicating list numbers depress clicks.",
+      "change": "flip direction of features_list_number",
+      "b": 113,
+      "c": 124,
+      "p": 0.78212,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T16:51:55.089053+00:00"
+    },
+    {
+      "arm": "R",
+      "round": 1,
+      "candidate_id": "R-r1-c2",
+      "based_on": "R-v0",
+      "reason": "The evidence table shows uses_second_person averaged 1.238% CTR compared to 1.429% when absent across 300 tests, indicating direct address hurts.",
+      "change": "flip direction of uses_second_person",
+      "b": 261,
+      "c": 230,
+      "p": 0.087857,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T16:51:55.089472+00:00"
+    },
+    {
+      "arm": "R",
+      "round": 1,
+      "candidate_id": "R-r1-c3",
+      "based_on": "R-v0",
+      "reason": "The evidence table shows uses_second_person underperformed (1.238% vs 1.429%), so dropping it stops falsely rewarding second-person phrasing without over-penalizing it.",
+      "change": "drop uses_second_person",
+      "b": 208,
+      "c": 134,
+      "p": 3.7e-05,
+      "passed": true,
+      "status": "kept",
+      "kept": true,
+      "at": "2026-09-27T16:51:55.089794+00:00"
+    },
+    {
+      "arm": "R",
+      "round": 2,
+      "candidate_id": "R-r2-c1",
+      "based_on": "R-r1-c3",
+      "reason": "The bandit evidence table shows features_list_number averaged 1.105% CTR when present versus 1.278% when absent, indicating list numbers depress performance.",
+      "change": "drop features_list_number",
+      "b": 116,
+      "c": 114,
+      "p": 0.473723,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T17:01:54.833197+00:00"
+    },
+    {
+      "arm": "R",
+      "round": 2,
+      "candidate_id": "R-r2-c2",
+      "based_on": "R-r1-c3",
+      "reason": "The bandit evidence table shows uses_formal_bureaucratic_language was chosen 0 times across 300 tests, providing no discriminating value.",
+      "change": "drop uses_formal_bureaucratic_language",
+      "b": 43,
+      "c": 45,
+      "p": 0.625335,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T17:01:54.835105+00:00"
+    },
+    {
+      "arm": "R",
+      "round": 2,
+      "candidate_id": "R-r2-c3",
+      "based_on": "R-r1-c3",
+      "reason": "Sampled tests 53f74ea515ec7de635000001 (0.000% CTR) and 54357d2aa2643227d300005e (0.190% CTR) show question-based headlines underperform declarative framings.",
+      "change": "add framed_as_question (hurts): Is the headline framed as a direct question rather than a statement?",
+      "b": 89,
+      "c": 92,
+      "p": 0.61684,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T17:01:54.835888+00:00"
+    },
+    {
+      "arm": "R",
+      "round": 3,
+      "candidate_id": "R-r3-c2",
+      "based_on": "R-r1-c3",
+      "reason": "High-performing exploration picks in tests 544691fb (1.821% CTR) and 530e8b53 (2.275% CTR) clearly name specific subjects, whereas vague teasing picks in tests 5409f762 and 5416796a earned under 0.20% CTR.",
+      "change": "add names_specific_entity_or_topic (helps): Does the headline explicitly name a specific person, recognizable organization, or concrete real-world topic?",
+      "status": "failed_question_check",
+      "at": "2026-09-27T17:15:31.383602+00:00"
+    },
+    {
+      "arm": "R",
+      "round": 3,
+      "candidate_id": "R-r3-c1",
+      "based_on": "R-r1-c3",
+      "reason": "The bandit evidence table shows spoils_factual_resolution achieved 1.580% CTR when present versus 1.201% when absent, indicating resolving the premise does not harm click rates.",
+      "change": "drop spoils_factual_resolution",
+      "b": 54,
+      "c": 69,
+      "p": 0.925592,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T17:17:31.937658+00:00"
+    },
+    {
+      "arm": "R",
+      "round": 3,
+      "candidate_id": "R-r3-c3",
+      "based_on": "R-r1-c3",
+      "reason": "The evidence table shows withholds_key_payoff drove 277 of 300 selections, but sampled tests 53fe455c (0.022% CTR) and 547545d6 (0.095% CTR) reveal pure withholding fails without an established narrative premise.",
+      "change": "reword withholds_key_payoff: Does the headline establish an intriguing narrative premise while withholding the specific resolution or punchline?",
+      "b": 60,
+      "c": 77,
+      "p": 0.938113,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T17:17:31.939796+00:00"
+    },
+    {
+      "arm": "R",
+      "round": 4,
+      "candidate_id": "R-r4-c2",
+      "based_on": "R-r1-c3",
+      "reason": "Sampled tests 54f6392e (1.497% CTR), 54b3f5f5 (1.438% CTR), and 53ad7944 (1.410% CTR) show headlines setting up an explicit narrative twist or contrast clearly outperform the 1.231% mean CTR.",
+      "change": "add contains_contrast_or_twist (helps): Does the headline feature an explicit contrast, unexpected twist, or reversal (e.g., using 'but', 'even if', 'yet', or conflicting situations)?",
+      "status": "failed_question_check",
+      "at": "2026-09-27T17:26:35.887485+00:00"
+    },
+    {
+      "arm": "R",
+      "round": 4,
+      "candidate_id": "R-r4-c1",
+      "based_on": "R-r1-c3",
+      "reason": "Sampled tests 54f75153 (0.038% CTR), 54ee1b01 (0.082% CTR), 55258da3 (0.154% CTR), and 5525b067 (0.190% CTR) show moralizing and lecturing framings severely depress click rates.",
+      "change": "add uses_preachy_or_moralizing_tone (hurts): Does the headline adopt a preachy or lecturing tone by telling the reader what they should feel, care about, or learn?",
+      "b": 113,
+      "c": 113,
+      "p": 0.526508,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T17:28:24.647948+00:00"
+    },
+    {
+      "arm": "R",
+      "round": 4,
+      "candidate_id": "R-r4-c3",
+      "based_on": "R-r1-c3",
+      "reason": "The bandit evidence table shows uses_formal_bureaucratic_language was chosen 0 times across 300 tests; rewording it to penalize dry matter-of-fact news reporting makes it an active discriminator.",
+      "change": "reword uses_formal_bureaucratic_language: Does the headline read like a dry, matter-of-fact news report rather than an engaging, conversational hook?",
+      "b": 42,
+      "c": 44,
+      "p": 0.626733,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T17:28:24.649555+00:00"
+    },
+    {
+      "arm": "L",
+      "round": 1,
+      "candidate_id": "L-r1-c1",
+      "based_on": "L-v0",
+      "reason": "Cryptic, vague headlines had very low CTRs; curiosity gaps only succeed when anchored to concrete topics.",
+      "change": "replace 'First, reward headlines that leverage the curiosity gap by withholding the core resolution or punchline; readers must feel an unresolved tension that can only be satisfied by opening the article.' with 'First, reward headlines that ground curiosity in a specific, tangible subject or situation while withholding the outcome. Penalize cryptic or overly abstract teasers that leave the reader guessing what the topic even is.'",
+      "b": 82,
+      "c": 91,
+      "p": 0.776411,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T17:29:53.925776+00:00"
+    },
+    {
+      "arm": "L",
+      "round": 1,
+      "candidate_id": "L-r1-c2",
+      "based_on": "L-v0",
+      "reason": "Weed out low-performing rhetorical questions and preachy philosophizing in favor of clear situational conflicts.",
+      "change": "replace 'Conversely, eliminate headlines that spoil their own ending, rely on passive voice, or read like academic press releases.' with 'Conversely, eliminate headlines that are preachy, rely on rhetorical questions or abstract philosophical musings, or are too cryptic. High-performing headlines clearly state the concrete situation or conflict.'",
+      "b": 115,
+      "c": 94,
+      "p": 0.08319,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T17:29:53.928435+00:00"
+    },
+    {
+      "arm": "L",
+      "round": 1,
+      "candidate_id": "L-r1-c3",
+      "based_on": "L-v0",
+      "reason": "Hypothetical and lecture-style openings underperformed compared to concrete, real-world narrative hooks.",
+      "change": "append:  Ensure the headline clearly identifies the specific topic, person, or social conflict involved. Avoid abstract teasers, preachy moralizing, and hypothetical questions ('Do You Know...', 'Think of the ways...'), which consistently underperform compared to direct, concrete situational hooks.",
+      "b": 102,
+      "c": 117,
+      "p": 0.860206,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T17:29:53.930028+00:00"
+    },
+    {
+      "arm": "L",
+      "round": 2,
+      "candidate_id": "L-r2-c1",
+      "based_on": "L-v0",
+      "reason": "Direct reader commands and interactive homework repeatedly yielded near-zero click rates compared to bold narrative setups and editorial endorsements.",
+      "change": "replace 'Third, prioritize direct address and relatable identity hooks. Framing a story around the reader ('you', 'your') or a recognizable tribe ('millennials', 'dog owners') drives personal investment and social sharing.' with 'Third, favor narrative escalation and strong editorial endorsement (a setup followed by an unexpected pivot or guaranteed payoff) over giving the reader interactive homework, instructions, or direct challenges.'",
+      "b": 98,
+      "c": 86,
+      "p": 0.20874,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T18:00:40.141163+00:00"
+    },
+    {
+      "arm": "L",
+      "round": 2,
+      "candidate_id": "L-r2-c2",
+      "based_on": "L-v0",
+      "reason": "Penalizes headlines framing the story as homework or self-reflection for the viewer, which failed across multiple observed tests.",
+      "change": "replace 'Conversely, eliminate headlines that spoil their own ending, rely on passive voice, or read like academic press releases.' with 'Conversely, eliminate headlines that issue reader chores ('Watch this with a kid', 'How did you...'), spoil their own punchline, or rely on passive voice.'",
+      "b": 92,
+      "c": 81,
+      "p": 0.223589,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T18:00:40.145439+00:00"
+    },
+    {
+      "arm": "L",
+      "round": 2,
+      "candidate_id": "L-r2-c3",
+      "based_on": "L-v0",
+      "reason": "Top-performing exploration picks demonstrated that explicit, high-conviction guarantees of satisfaction drive the highest engagement.",
+      "change": "append:  Reward headlines that offer an audacious, high-confidence promise of unforgettable emotional payoff or perspective-shifting value ('I Guarantee Will Stay With You', 'Pure Delight').",
+      "b": 83,
+      "c": 74,
+      "p": 0.26165,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T18:00:40.146024+00:00"
+    },
+    {
+      "arm": "L",
+      "round": 3,
+      "candidate_id": "L-r3-c1",
+      "based_on": "L-v0",
+      "reason": "Prioritizing an informational void led the decider to pick contrived, withholding teasers with terrible CTRs.",
+      "change": "replace 'Choose the headline that creates the most urgent emotional and informational void.' with 'Choose the headline that pairs an intriguing premise with an authentic, infectious emotional reaction rather than gimmicky teasing.'",
+      "b": 81,
+      "c": 76,
+      "p": 0.374833,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T18:31:24.178605+00:00"
+    },
+    {
+      "arm": "L",
+      "round": 3,
+      "candidate_id": "L-r3-c2",
+      "based_on": "L-v0",
+      "reason": "Warm, infectious positive reactions drove the highest observed click rates while outrage and cynicism underperformed.",
+      "change": "replace 'A headline promising awe, tearful catharsis, moral outrage, or sheer disbelief will outperform a dry, standard journalistic summary.' with 'Headlines promising uplifting joy, delightful surprise, or infectious warmth strongly outperform cynical takes, moral outrage, or heavy guilt.'",
+      "b": 80,
+      "c": 86,
+      "p": 0.706473,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T18:31:24.181952+00:00"
+    },
+    {
+      "arm": "L",
+      "round": 3,
+      "candidate_id": "L-r3-c3",
+      "based_on": "L-v0",
+      "reason": "Top-performing exploration picks consistently followed a two-part setup plus genuine emotional reaction structure.",
+      "change": "append:  Favor headlines that pair a concrete setup with an authentic personal reaction clause (e.g., ', And It's Glorious' or 'And I Just Can't Stop Smiling') over vague teasers.",
+      "b": 83,
+      "c": 88,
+      "p": 0.676758,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T18:31:24.183342+00:00"
+    },
+    {
+      "arm": "L",
+      "round": 4,
+      "candidate_id": "L-r4-c1",
+      "based_on": "L-v0",
+      "reason": "Clarifies that quantified framing applies to easy-to-digest listicle counts rather than alarmist health or guilt statistics that drive low clicks.",
+      "change": "replace 'Fourth, favor quantified, easily digestible structures like listicles with specific numbers, which promise effortless scanning.' with 'Fourth, favor quantified packaging like listicles with specific item counts, which promise effortless scanning, but avoid alarmist or guilt-inducing statistics.'",
+      "b": 81,
+      "c": 79,
+      "p": 0.46851,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T19:01:34.166140+00:00"
+    },
+    {
+      "arm": "L",
+      "round": 4,
+      "candidate_id": "L-r4-c2",
+      "based_on": "L-v0",
+      "reason": "Penalizes patronizing meta-lectures telling the reader what is important, which repeatedly yielded low CTRs.",
+      "change": "replace 'Conversely, eliminate headlines that spoil their own ending, rely on passive voice, or read like academic press releases.' with 'Conversely, eliminate headlines that spoil their own ending, lecture the reader on what matters ('Here's why that's important'), rely on passive voice, or read like academic press releases.'",
+      "b": 91,
+      "c": 78,
+      "p": 0.178002,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T19:01:34.170416+00:00"
+    },
+    {
+      "arm": "L",
+      "round": 4,
+      "candidate_id": "L-r4-c3",
+      "based_on": "L-v0",
+      "reason": "Prevents the decider from choosing aggressive or accusatory second-person headlines that alienate readers.",
+      "change": "append:  Avoid confrontational or guilt-inducing direct address ('You (yes, YOU!)', 'How many chemicals are in your home?') that puts readers on the defensive.",
+      "b": 86,
+      "c": 86,
+      "p": 0.530375,
+      "passed": false,
+      "status": "rejected",
+      "kept": false,
+      "at": "2026-09-27T19:01:34.171498+00:00"
+    }
+  ],
+  "gates": [
+    {
+      "loop": "J",
+      "round": 1,
+      "kept": "J-r1-c2",
+      "proposed": 3,
+      "results": {
+        "J-r1-c1": {
+          "b": 103,
+          "c": 142,
+          "p": 0.994772
+        },
+        "J-r1-c2": {
+          "b": 204,
+          "c": 127,
+          "p": 1.4e-05
+        },
+        "J-r1-c3": {
+          "b": 85,
+          "c": 88,
+          "p": 0.619429
+        }
+      },
+      "at": "2026-09-27T16:33:31.139351+00:00"
+    },
+    {
+      "loop": "J",
+      "round": 2,
+      "kept": null,
+      "proposed": 3,
+      "results": {
+        "J-r2-c1": {
+          "b": 128,
+          "c": 128,
+          "p": 0.52491
+        },
+        "J-r2-c3": {
+          "b": 151,
+          "c": 152,
+          "p": 0.545724
+        }
+      },
+      "at": "2026-09-27T16:38:33.678077+00:00"
+    },
+    {
+      "loop": "J",
+      "round": 3,
+      "kept": "J-r3-c2",
+      "proposed": 3,
+      "results": {
+        "J-r3-c1": {
+          "b": 63,
+          "c": 51,
+          "p": 0.151439
+        },
+        "J-r3-c2": {
+          "b": 138,
+          "c": 111,
+          "p": 0.049612
+        },
+        "J-r3-c3": {
+          "b": 83,
+          "c": 65,
+          "p": 0.081036
+        }
+      },
+      "at": "2026-09-27T16:44:19.455891+00:00"
+    },
+    {
+      "loop": "J",
+      "round": 4,
+      "kept": null,
+      "proposed": 3,
+      "results": {
+        "J-r4-c1": {
+          "b": 85,
+          "c": 84,
+          "p": 0.5
+        },
+        "J-r4-c2": {
+          "b": 59,
+          "c": 87,
+          "p": 0.991951
+        },
+        "J-r4-c3": {
+          "b": 54,
+          "c": 62,
+          "p": 0.798265
+        }
+      },
+      "at": "2026-09-27T16:51:54.056634+00:00"
+    },
+    {
+      "loop": "R",
+      "round": 1,
+      "kept": "R-r1-c3",
+      "proposed": 3,
+      "results": {
+        "R-r1-c1": {
+          "b": 113,
+          "c": 124,
+          "p": 0.78212
+        },
+        "R-r1-c2": {
+          "b": 261,
+          "c": 230,
+          "p": 0.087857
+        },
+        "R-r1-c3": {
+          "b": 208,
+          "c": 134,
+          "p": 3.7e-05
+        }
+      },
+      "at": "2026-09-27T16:51:55.090115+00:00"
+    },
+    {
+      "loop": "R",
+      "round": 2,
+      "kept": null,
+      "proposed": 3,
+      "results": {
+        "R-r2-c1": {
+          "b": 116,
+          "c": 114,
+          "p": 0.473723
+        },
+        "R-r2-c2": {
+          "b": 43,
+          "c": 45,
+          "p": 0.625335
+        },
+        "R-r2-c3": {
+          "b": 89,
+          "c": 92,
+          "p": 0.61684
+        }
+      },
+      "at": "2026-09-27T17:01:54.836576+00:00"
+    },
+    {
+      "loop": "R",
+      "round": 3,
+      "kept": null,
+      "proposed": 3,
+      "results": {
+        "R-r3-c1": {
+          "b": 54,
+          "c": 69,
+          "p": 0.925592
+        },
+        "R-r3-c3": {
+          "b": 60,
+          "c": 77,
+          "p": 0.938113
+        }
+      },
+      "at": "2026-09-27T17:17:31.941072+00:00"
+    },
+    {
+      "loop": "R",
+      "round": 4,
+      "kept": null,
+      "proposed": 3,
+      "results": {
+        "R-r4-c1": {
+          "b": 113,
+          "c": 113,
+          "p": 0.526508
+        },
+        "R-r4-c3": {
+          "b": 42,
+          "c": 44,
+          "p": 0.626733
+        }
+      },
+      "at": "2026-09-27T17:28:24.650637+00:00"
+    },
+    {
+      "loop": "L",
+      "round": 1,
+      "kept": null,
+      "proposed": 3,
+      "results": {
+        "L-r1-c1": {
+          "b": 82,
+          "c": 91,
+          "p": 0.776411
+        },
+        "L-r1-c2": {
+          "b": 115,
+          "c": 94,
+          "p": 0.08319
+        },
+        "L-r1-c3": {
+          "b": 102,
+          "c": 117,
+          "p": 0.860206
+        }
+      },
+      "at": "2026-09-27T17:29:53.931352+00:00"
+    },
+    {
+      "loop": "L",
+      "round": 2,
+      "kept": null,
+      "proposed": 3,
+      "results": {
+        "L-r2-c1": {
+          "b": 98,
+          "c": 86,
+          "p": 0.20874
+        },
+        "L-r2-c2": {
+          "b": 92,
+          "c": 81,
+          "p": 0.223589
+        },
+        "L-r2-c3": {
+          "b": 83,
+          "c": 74,
+          "p": 0.26165
+        }
+      },
+      "at": "2026-09-27T18:00:40.146542+00:00"
+    },
+    {
+      "loop": "L",
+      "round": 3,
+      "kept": null,
+      "proposed": 3,
+      "results": {
+        "L-r3-c1": {
+          "b": 81,
+          "c": 76,
+          "p": 0.374833
+        },
+        "L-r3-c2": {
+          "b": 80,
+          "c": 86,
+          "p": 0.706473
+        },
+        "L-r3-c3": {
+          "b": 83,
+          "c": 88,
+          "p": 0.676758
+        }
+      },
+      "at": "2026-09-27T18:31:24.184455+00:00"
+    },
+    {
+      "loop": "L",
+      "round": 4,
+      "kept": null,
+      "proposed": 3,
+      "results": {
+        "L-r4-c1": {
+          "b": 81,
+          "c": 79,
+          "p": 0.46851
+        },
+        "L-r4-c2": {
+          "b": 91,
+          "c": 78,
+          "p": 0.178002
+        },
+        "L-r4-c3": {
+          "b": 86,
+          "c": 86,
+          "p": 0.530375
+        }
+      },
+      "at": "2026-09-27T19:01:34.172439+00:00"
+    }
+  ],
+  "current_versions": {
+    "J": {
+      "version_id": "J-r3-c2",
+      "rubric_questions": [
+        {
+          "question_id": "withholds_key_payoff",
+          "text": "Does the headline deliberately withhold the final outcome or core punchline to create an information gap?",
+          "direction": "helps"
+        },
+        {
+          "question_id": "features_list_number",
+          "text": "Does the headline include a specific number indicating a curated list of items or examples?",
+          "direction": "helps"
+        },
+        {
+          "question_id": "promises_extreme_emotion",
+          "text": "Does the headline contain hyperbolic emotional reaction phrases (e.g., 'will blow your mind', 'leave you in tears', 'restore your faith')?",
+          "direction": "helps"
+        },
+        {
+          "question_id": "spoils_factual_resolution",
+          "text": "Does the headline provide a complete, self-contained summary of the outcome that eliminates the need to read further?",
+          "direction": "hurts"
+        },
+        {
+          "question_id": "uses_formal_bureaucratic_language",
+          "text": "Does the headline rely on passive voice, academic terminology, or dry institutional jargon?",
+          "direction": "hurts"
+        },
+        {
+          "question_id": "references_third_person_protagonist",
+          "text": "Does the headline refer to an individual person using third-person pronouns such as 'he', 'she', 'him', or 'her'?",
+          "direction": "helps"
+        }
+      ]
+    },
+    "R": {
+      "version_id": "R-r1-c3",
+      "rubric_questions": [
+        {
+          "question_id": "withholds_key_payoff",
+          "text": "Does the headline deliberately withhold the final outcome or core punchline to create an information gap?",
+          "direction": "helps"
+        },
+        {
+          "question_id": "features_list_number",
+          "text": "Does the headline include a specific number indicating a curated list of items or examples?",
+          "direction": "helps"
+        },
+        {
+          "question_id": "promises_extreme_emotion",
+          "text": "Does the headline contain hyperbolic emotional reaction phrases (e.g., 'will blow your mind', 'leave you in tears', 'restore your faith')?",
+          "direction": "helps"
+        },
+        {
+          "question_id": "spoils_factual_resolution",
+          "text": "Does the headline provide a complete, self-contained summary of the outcome that eliminates the need to read further?",
+          "direction": "hurts"
+        },
+        {
+          "question_id": "uses_formal_bureaucratic_language",
+          "text": "Does the headline rely on passive voice, academic terminology, or dry institutional jargon?",
+          "direction": "hurts"
+        }
+      ]
+    }
+  },
+  "notes": [
+    {
+      "at": "2026-09-27T19:01:34.316012+00:00",
+      "note": "learning complete; final versions frozen"
+    }
+  ],
+  "updated_at": "2026-09-27T19:01:34.316021+00:00",
+  "spend_usd": 24.1662,
+  "spend_cap_usd": 40.0,
+  "paid_calls": 87734
+}

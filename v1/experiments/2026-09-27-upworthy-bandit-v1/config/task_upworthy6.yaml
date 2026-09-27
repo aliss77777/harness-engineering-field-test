@@ -1,0 +1,21 @@
+name: upworthy_bandit
+starting_prompt: >-
+  You're an editor at a viral news site in 2014. What makes a headline get more clicks?
+data:
+  practice: data/jd64p-osfstorage-archive/upworthy-archive-datasets/upworthy-archive-exploratory-packages-03.12.2020.csv
+  gate: data/jd64p-osfstorage-archive/upworthy-archive-datasets/upworthy-archive-confirmatory-packages-03.12.2020.csv
+  sealed: data/jd64p-osfstorage-archive/upworthy-archive-datasets/upworthy-archive-holdout-packages-03.12.2020.csv
+paths:
+  pairs: data/upworthy6/tests
+  splits: data/upworthy6/splits
+  results: results/upworthy6
+  logs: logs/upworthy6
+wording:
+  item: headline
+  items: headlines
+  context: story
+  decider_question: Which of these headlines will get the most clicks?
+  outcome: which headline will get the most clicks
+  item_scope: one headline alone
+  helps_meaning: yes predicts more clicks
+jev_state_template: "{item}"
