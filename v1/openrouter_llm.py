@@ -18,6 +18,10 @@ class RouteMismatchError(RuntimeError):
     """The provider served a different model or route than preregistered."""
 
 
+class IncompleteResponseError(RuntimeError):
+    """A 200 response without a model name (usually an error body); retried."""
+
+
 class OpenRouterJsonClient:
     def __init__(
         self,
@@ -108,6 +112,8 @@ class OpenRouterJsonClient:
                 )
                 response.raise_for_status()
                 body = response.json()
+                if not body.get("model") or "error" in body:
+                    raise IncompleteResponseError(f"response without model: {str(body)[:300]}")
                 self._validate_route(body.get("model"), body.get("provider"))
                 content = body["choices"][0]["message"]["content"]
                 if not isinstance(content, str):

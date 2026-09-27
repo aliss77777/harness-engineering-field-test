@@ -30,8 +30,10 @@ from workspace import Workspace
 
 
 class LoopRunner:
-    def __init__(self, ws: Workspace, loop: str, *, run_id: str, llm, jev, logger, telemetry: Telemetry):
+    def __init__(self, ws: Workspace, loop: str, *, run_id: str, llm, jev, logger, telemetry: Telemetry,
+                 stop: threading.Event | None = None):
         self.ws, self.loop, self.run_id = ws, loop, run_id
+        self.stop = stop or threading.Event()
         self.config = ws.config
         self.llm, self.jev, self.logger, self.telemetry = llm, jev, logger, telemetry
         pairs_dir = ws.path("pairs")
@@ -45,6 +47,8 @@ class LoopRunner:
 
     # --- evaluation -------------------------------------------------------
     def evaluate(self, version: dict[str, Any], version_id: str, set_name: str, round_number: int) -> list[dict[str, Any]]:
+        if self.stop.is_set():
+            raise RuntimeError("stopped because the other loop failed")
         frame = self.practice if set_name == "practice" else self.gate_frame
 
         def progress(**values):
@@ -232,7 +236,9 @@ def run_learning(ws: Workspace, run_id: str) -> dict[str, Any]:
     jev = build_jev_client(config, ws.root, run_id, logs_dir=logs, spend=spend)
     starts = {"A": {"instructions": version0["instructions"]},
               "B": {"rubric_questions": version0["rubric_questions"]}}
-    runners = {loop: LoopRunner(ws, loop, run_id=run_id, llm=llm, jev=jev, logger=logger, telemetry=telemetry)
+    stop = threading.Event()
+    runners = {loop: LoopRunner(ws, loop, run_id=run_id, llm=llm, jev=jev, logger=logger,
+                                telemetry=telemetry, stop=stop)
                for loop in ("A", "B")}
     finals: dict[str, Any] = {}
     errors: dict[str, str] = {}
@@ -242,6 +248,7 @@ def run_learning(ws: Workspace, run_id: str) -> dict[str, Any]:
             finals[loop] = runners[loop].run(starts[loop])
         except Exception as error:
             errors[loop] = f"{type(error).__name__}: {error}"
+            stop.set()  # the other loop stops at its next evaluation; its finished calls stay cached
             telemetry.stage(loop, stage="failed", error=errors[loop])
             traceback.print_exc()
 

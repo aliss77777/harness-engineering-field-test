@@ -110,3 +110,28 @@ def test_openrouter_route_mismatch_stops_without_retry(tmp_path):
     with pytest.raises(RuntimeError, match="served model changed"):
         client.generate_json(prompt="test", schema=SCHEMA, event={"run_id": "test"})
     assert calls == 1
+
+
+def test_error_body_without_model_is_retried_not_a_route_change(tmp_path):
+    import httpx
+    from cache import DiskCache
+    from log import JsonlLogger
+    from openrouter_llm import OpenRouterJsonClient
+
+    responses = iter([
+        httpx.Response(200, json={"error": {"code": 429, "message": "rate limited"}}),
+        httpx.Response(200, json={
+            "model": "google/gemini-test", "provider": "Google AI Studio",
+            "choices": [{"message": {"content": '{"status": "OK"}'}}],
+            "usage": {"prompt_tokens": 1, "completion_tokens": 1, "cost": 0.0},
+        }),
+    ])
+    client = OpenRouterJsonClient(
+        model="google/gemini-test", api_key="k", cache=DiskCache(tmp_path / "c"),
+        logger=JsonlLogger(tmp_path / "l.jsonl"), retries=2, backoff_seconds=0, temperature=0,
+        reasoning_effort="medium", expected_model="google/gemini-test",
+        expected_provider="Google AI Studio", allow_fallbacks=False,
+        http_client=httpx.Client(transport=httpx.MockTransport(lambda request: next(responses))),
+    )
+    assert client.generate_json(prompt="p", schema={}, event={}) == {"status": "OK"}
+    assert "IncompleteResponseError" in (tmp_path / "l.jsonl").read_text()
