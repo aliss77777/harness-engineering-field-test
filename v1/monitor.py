@@ -47,9 +47,10 @@ def main() -> None:
         ties = sum(bool(r["coin_flip_tie"]) for r in records) / n
         picks_x = sum(r["prediction"] == "X" for r in records) / n
         win_x = sum(r["winner"] == "X" for r in records) / n
-        missing = sum(1 for r in records if (r["loop"] == "A" and not r.get("reason"))
+        missing = sum(1 for r in records if (r["loop"] == "A" and not r.get("reason") and not r.get("blocked"))
                       or (r["loop"] == "B" and not r.get("questions")))
-        print(f"{key}: n={n} acc={acc:.1%} picks_first={picks_x:.1%} winner_first={win_x:.1%} tie={ties:.1%}")
+        blocked = sum(bool(r.get("blocked")) for r in records)
+        print(f"{key}: n={n} blocked={blocked} acc={acc:.1%} picks_first={picks_x:.1%} winner_first={win_x:.1%} tie={ties:.1%}")
         if n != expected.get(key[2], n):
             issues.append(f"STOP: {key} has {n} pairs, expected {expected[key[2]]}")
         if missing:
