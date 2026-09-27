@@ -6,6 +6,36 @@
 
 A Jev rubric that learns its criteria from real outcomes decides at about **1/23 of an LLM's cost**. On its own it is 3–7 points less accurate. **Routed together**, with Jev deciding the cases it is confident about and the LLM only the close calls, they **matched the LLM's accuracy (76.2% vs 76.3%) at 43% of the cost and a third less latency** (experiment 5). **Without an answer key** (experiment 6: each policy saw only its own choices' click rates), the Jev rubric still learned (p 0.02), and the router kept ~84% of the LLM's gain at 46% of the cost, within the preregistered margin.
 
+## Chef's kiss scorecard
+
+"Chef's kiss" means a Jev + LLM combination that is **as good as the LLM alone at half the cost or less**, confirmed on a sealed set.
+
+| Criterion | Exp 4: stacked vote | **Exp 5: router, labelled data** | Exp 6: router, partial feedback |
+|---|---|---|---|
+| As accurate as the LLM | ✅ 75.6% vs 75.7% | ✅ **76.2% vs 76.3%**; difference −1.8 to +1.6 points, centred on zero | ⚠️ Within the ±5 margin, but −2.1 lift points (interval −4.0 to −0.1, excludes zero) |
+| At ≤ ½ the LLM's cost | ❌ 104% (runs both on every decision) | ✅ **43%** | ✅ 46% |
+| Faster than the LLM | ❌ | ✅ **874 ms vs 1,285 ms** (−32%) | ≈ same (1,278 vs 1,302 ms) |
+| Learned without an answer key | — | — (labelled data) | ✅ Jev-only learned (p 0.02) · ❌ the router itself did not |
+| **Verdict** | No meaningful gain | **✅ Clear chef's kiss** | **Win with an asterisk** |
+
+**Why experiment 5 is the clear winner:**
+- **No measurable accuracy loss.** Every accuracy check came out even:
+  - The router beat the LLM on 36 decisions and lost on 37.
+  - The interval for the difference sits evenly around zero.
+- **Less than half the cost, and faster:** 43% of the LLM's cost, about a third faster.
+- **It shows the mechanism, not just an average.** On the 62% of cases where Jev was confident, it was as accurate as the LLM (81.6% vs 81.7% on the same cases). Paying for the LLM there bought nothing. The LLM earned its cost only on the close calls.
+- **Preregistered and fresh:** the routing threshold was frozen on the gate set before a new, never-seen test set was scored.
+
+**Why experiment 6 carries an asterisk:**
+- The router met the preregistered rule, but kept about 84% of the LLM's gain rather than all of it.
+- Its own learning was not significant.
+- The standout result there is different: **the Jev rubric learned with no answer key.**
+
+**Caveats that apply to experiment 5:**
+- Arena is labelled data.
+- The LLM's memorization flag was on.
+- The 40% routing budget was informed by experiment 4's exploratory curve. This is disclosed, and the test set was new.
+
 ## Labels used below
 
 | Label | What it is |
