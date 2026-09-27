@@ -1,6 +1,6 @@
 # Task #6 brief: learning from partial feedback (contextual bandit on Upworthy)
 
-**Written:** 2026-09-27 · **Owner:** Alexander · **Status:** design only, not scheduled · **Builds on:** the harness from experiments 2–5 (single-edit updates, anti-repeat, gate, sealed sets, spend cap, telemetry, supervisor). · **Repo:** new config/task pair (`config_upworthy6.yaml`, `task_upworthy6.yaml`).
+**Written:** 2026-09-27 · **Owner:** Alexander · **Status:** built and preregistered 2026-09-27; **revised to make the Jev + LLM router the primary policy** (Alexander: production-like — no answer key). Code: `prep_upworthy6.py`, `bandit.py`, `learn_bandit.py`, `verdict_bandit.py`. Sections 3, 6 and 7 below are superseded by the addendum at the end where they differ. · **Builds on:** the harness from experiments 2–5 (single-edit updates, anti-repeat, gate, sealed sets, spend cap, telemetry, supervisor). · **Repo:** new config/task pair (`config_upworthy6.yaml`, `task_upworthy6.yaml`).
 
 ## 1. Why this experiment
 
@@ -108,3 +108,34 @@ About 2–3 hours with BYOK; the supervisor runs it unattended.
 ## 10. Out of scope
 
 Live traffic; multi-step RL; re-learning the router; Arena as a bandit (it is pairwise, and a reconstruction from pairwise votes would be sparse and indirect).
+
+
+## Addendum (2026-09-27): the router is the primary policy — this supersedes sections 3, 6 and 7 where they differ
+
+**Why:** in production an LLM/agent has no answer key. The strongest harness so far is the experiment 5 router (Jev for speed and cost, the LLM for the hard calls), so the question becomes: *can that hybrid learn from partial feedback alone, and stay at LLM quality for about half the cost?*
+
+**Arms (all from experiment 1's version 0):**
+- **R — Jev + LLM router (primary).** Jev scores every headline. If Jev's top-vs-second score margin is at least τ, Jev picks; otherwise the LLM (fixed version-0 instructions) picks; a refused test falls back to Jev. τ is the quantile of the margins **on the tests being decided** that sends **40%** to the LLM, so it needs no outcomes. **The Jev rubric learns** from partial feedback.
+- **L — LLM only** (quality reference): the LLM picks every test; **its instructions learn**.
+- **J — Jev only**: top-scoring headline; **the rubric learns**.
+- **C — Thompson sampling** on six surface features (no LLM, no editor, $0).
+- Reported at the end: **R with both components learned** (R's final rubric + L's final instructions).
+
+**Metric:** click **lift over a random pick**, in points: chosen click rate ÷ the test's mean click rate − 1 (random = 0; always picking the best headline ≈ +40 on this archive, measured before any policy ran). Regret and best-headline hit rate also reported. All evaluation-only; never shown to a learner.
+
+**Preregistered verdict (`bandit_v1`), primary R final vs L final on sealed, paired per test (two-sided Wilcoxon; seeded bootstrap 95% interval of the mean difference). First match wins:**
+
+| Result | Verdict |
+|---|---|
+| Neither R nor L final beats a random pick (bootstrap lower bound ≤ 0) | **No signal from partial feedback** |
+| R significantly better than L | **Router beats the LLM** |
+| Interval of (R − L) within **±5 lift points** and R's cost ≤ ½ of L's | **Same quality, half the cost** (chef's kiss) |
+| R significantly worse and interval below −5 | **Routing costs quality** |
+| Within ±5 but cost > ½ | **Same quality, not cheap enough** |
+| Anything else | **Inconclusive** |
+
+**Also preregistered, reported separately:** did R, L and J each **learn from partial feedback** (final vs version 0: mean lift difference > 0 and Wilcoxon p < 0.05)? Plus J vs L, R vs J, C vs L, R-with-both-learned vs L, LLM share, cost, latency, and the memorization flag (L's version-0 best-headline hit rate > 70%).
+
+**Cost:** smoke test (10 tests): $0.0014 per LLM decision, $0.0001 per Jev decision. Worst case ≈ **$31** (every round gates 3 candidates in every arm); cap **$40**. Router cost = Jev on every test + the LLM on routed tests only (the LLM is asked for every test in a fixed batch order so restarts replay from cache; unrouted answers are not charged, as in experiment 5).
+
+**Other settings:** 4 rounds × 300 new practice tests; 15% seeded exploration; gate on 1,000 tests comparing each policy's own greedy picks (one-sided sign test on tests where picks differ, p < 0.05, best passing edit kept); sealed 1,000 tests, once; up to 8 headlines per test (seeded sample if more).

@@ -9,7 +9,7 @@ Experiments testing whether a decision model (Jev) helps an AI agent learn its o
 | 3 | Arena, decision-trace Jev loop (B-prime, B-plus) | Complete: *trace no detectable difference; weights help* | [`experiments/2026-09-26-arena-trace-v1`](experiments/2026-09-26-arena-trace-v1/README.md) |
 | 4 | Arena, one LLM + Jev hybrid (stacked vote) | Complete: *no meaningful gain* | [`experiments/2026-09-27-arena-hybrid-v1`](experiments/2026-09-27-arena-hybrid-v1/README.md) |
 | 5 | Arena, route between Jev and the LLM (cascade) | Complete: ***same quality, half the cost*** | [`experiments/2026-09-27-arena-router-v1`](experiments/2026-09-27-arena-router-v1/README.md) |
-| 6 | Upworthy, learning from partial feedback (contextual bandit) | Designed, not scheduled | brief: `Task Brief 6_Bandit.md` |
+| 6 | Upworthy, Jev + LLM router learning from partial feedback (contextual bandit) | Running | brief: `Task Brief 6_Bandit.md` · `config_upworthy6.yaml` + `task_upworthy6.yaml` |
 
 **One-page summary: [`RESULTS.md`](RESULTS.md).** Side-by-side detail and lessons: [`experiments/COMPARISON.md`](experiments/COMPARISON.md). The full, dated record of every decision, deviation and result is in [`MVP Project Plan.md`](MVP%20Project%20Plan.md).
 
@@ -76,6 +76,14 @@ Live while running: `results/arena/run_status.json` (current stage per loop, ETA
 .venv/bin/python prep_arena4.py --config config_arena5.yaml --task task_arena5.yaml   # sealed-5
 .venv/bin/python sealed_router.py --stage fit --run-id RUN_ID          # freeze tau on gate
 .venv/bin/python sealed_router.py --stage sealed --run-id RUN_ID-sealed  # once, guarded
+```
+
+## Experiment 6 (router learning from partial feedback)
+
+```sh
+.venv/bin/python prep_upworthy6.py                                   # multi-headline tests
+.venv/bin/python learn_bandit.py --stage learn --run-id RUN_ID         # arms R, L, J (+ Thompson C)
+.venv/bin/python learn_bandit.py --stage sealed --run-id RUN_ID-sealed # once, guarded
 ```
 
 Experiment 1's commands (`prep.py`, `controls.py`, the old `run.py` smoke modes) are at tag `exp1-upworthy-v1`.
