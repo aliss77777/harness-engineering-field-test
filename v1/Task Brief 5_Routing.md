@@ -1,6 +1,6 @@
 # Task #5 brief: route between Jev and the LLM (cascade)
 
-**Written:** 2026-09-27 · **Owner:** Alexander · **Status:** design only, not scheduled · **Builds on:** experiment 4 (stacked vote: no meaningful gain; exploratory cascade: ≈ same accuracy at about half the cost). Harness, logging, spend cap, content-block rule and telemetry unchanged. · **Repo:** new config/task pair (`config_arena5.yaml`, `task_arena5.yaml`).
+**Written:** 2026-09-27 · **Owner:** Alexander · **Status:** built and preregistered 2026-09-27 (code: `prep_arena4.py` with `config_arena5.yaml`, `router.py`, `sealed_router.py`, `verdict_router.py`) · **Builds on:** experiment 4 (stacked vote: no meaningful gain; exploratory cascade: ≈ same accuracy at about half the cost). Harness, logging, spend cap, content-block rule and telemetry unchanged. · **Repo:** new config/task pair (`config_arena5.yaml`, `task_arena5.yaml`).
 
 ## 1. Why this experiment
 

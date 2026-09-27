@@ -1,0 +1,93 @@
+# Experiment 5: route between Jev and the LLM (Task Brief 5_Routing.md). Fixed before any paid run.
+# Components are read from the archived experiments 2 and 3 (committed artifacts).
+seed: 20260926
+sets:
+  practice: 500
+  gate: 1500
+  # Future experiments use 1,000 pairs per set (Alexander, 2026-09-26).
+  sealed: 1000
+components:
+  # A*: best LLM harness. J*: best Jev harness by experiment 3's fresh sealed set (B-plus).
+  llm_versions: experiments/2026-09-26-arena-v1/artifacts/final_versions.json
+  llm_version: A
+  jev_versions: experiments/2026-09-26-arena-trace-v1/artifacts/final_versions.json
+  jev_version: Bw
+  # Pairs already used by earlier sealed sets; sealed-4 excludes all of them.
+  used_sealed_ids:
+    - data/arena/splits/sealed_pair_ids.txt
+    - experiments/2026-09-26-arena-trace-v1/splits/sealed_pair_ids.txt
+    - experiments/2026-09-27-arena-hybrid-v1/splits/sealed_pair_ids.txt
+  source_pairs: data/arena/pairs
+filters:
+  max_response_words: 1500
+  # Share of prompt-hash buckets assigned to each set (split by prompt, not row).
+  split_fractions:
+    practice: 0.2
+    gate: 0.4
+    sealed: 0.4
+learning:
+  rounds: 4
+  feedback_mistakes: 20
+  # Mistakes shown to the editor are a fresh seeded sample each round.
+  resample_mistakes_each_round: true
+  gate_mode: single_edit
+  gate_p_threshold: 0.05
+  max_changes: 3
+  max_kept_per_round: 1
+  max_instructions_words: 300
+  max_rubric_questions: 10
+  starting_rubric_min_questions: 5
+  starting_rubric_max_questions: 8
+  question_check_mode: reworded_questions
+  question_check_items: 10
+  question_check_max_disagreements: 1
+  # Candidate edits this similar to an already-rejected one are refused without gating.
+  duplicate_similarity: 0.9
+  # Each text the editor sees is trimmed to this many words (both loops alike).
+  editor_item_word_limit: 400
+fresh_sealed:
+  sample_offset: 500
+  orient_offset: 5000
+router:
+  # Jev decides when its |score margin| >= tau; tau is the gate-set margin quantile that
+  # sends this share of gate pairs to the LLM (a fixed budget, not tuned for accuracy).
+  llm_share: 0.40
+  max_cost_ratio: 0.5
+verdict:
+  rules_version: router_v1
+  alpha: 0.05
+  equivalence_margin: 0.03
+  max_cost_ratio: 0.20
+  memorization_accuracy: 0.70
+  mcnemar_exact_max_discordant: 25
+budget:
+  spend_cap_usd: 5.0
+api:
+  # Operational only (results are identical at any concurrency). Raised after 429s
+  # from Gemini at 8 workers in the first launch.
+  retries: 12
+  backoff_seconds: 5.0
+  # Backoff doubles from 5 s up to this cap: ~15 min of patience for a rate-limited call.
+  max_backoff_seconds: 120.0
+  batch_size: 5
+  temperature: 0.0
+  reasoning_effort: medium
+  llm_workers: 3
+  jev_workers: 8
+models:
+  llm: google/gemini-3.8-flash
+  llm_expected_served: google/gemini-3.8-flash
+  llm_expected_provider: Google AI Studio
+  llm_allow_fallbacks: false
+  direct_llm: gemini-3.8-flash
+  jev: typesafe/jev-1.13
+  jev_expected_served: typesafe/jev-1.13-20260917
+  jev_expected_provider: TypeSafe
+  llm_provider: openrouter
+  jev_provider: openrouter
+prices_per_million_tokens:
+  # Paid reference rate for Gemini 3.8 Flash through 2026-12-31.
+  llm_input: 0.75
+  llm_output: 3.75
+  jev_input: 0.042
+  jev_output: 0.0

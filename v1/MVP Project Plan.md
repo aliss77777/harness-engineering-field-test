@@ -359,3 +359,21 @@ Experiment 1's exact code is preserved at git tag `exp1-upworthy-v1` (commit `c2
 - 2026-09-27: **Hybrid fitted and frozen** (`arena4-fit-20260927`, $0.00 — every practice/gate decision replayed from cache). CV chose C = 10 (least regularized). Coefficients: LLM pick +0.89; Jev questions (on B-plus-weighted parts) instructions +1.08, factual errors −3.54, filler −1.10, formatting +0.83, refusal +3.15, incomplete −0.44, total −0.02. Fit accuracy on practice ∪ gate: hybrid 76.7% in-sample vs LLM alone 76.8% and Jev alone ≈ 70.3% — an early sign that stacking adds little. Exploratory cascade threshold from gate: 0.608 (49% of pairs to the LLM; 75.9% on gate vs 77.1% for the LLM alone). Proceeding to the sealed stage unchanged.
 - 2026-09-27: **Experiment 4 sealed evaluation complete** (`arena4-sealed-20260927-s1`, 1,000 pairs, once). **Preregistered verdict: No meaningful gain.** Hybrid 75.6% vs LLM 75.7% (8 better / 9 worse, p 1.0; 95% interval of the difference −0.9 to +0.7, inside ±3). Jev alone 71.8%; style baseline 62.2%. LLM and Jev agreed on 79.3% of pairs; the hybrid sided with Jev on 8% of disagreements. Costs per 1,000: LLM $1.51, Jev $0.065, hybrid $1.57. Exploratory cascade (threshold from gate): 49% of pairs to the LLM, 75.2%, $0.80 per 1,000. Experiment 4 total spend: **$1.57**. Archived `experiments/2026-09-27-arena-hybrid-v1/`; comparison updated.
 - 2026-09-27: **Experiment 5 designed (not scheduled):** route between Jev and the LLM. Jev decides pairs where its score margin is at least τ; the rest go to the LLM. τ is set on gate so that 40% of pairs go to the LLM. Scored on a fresh 1,000-pair sealed set ("sealed-5", excluding all earlier sealed pairs). Preregistered rows: router beats the LLM → same quality (±3) at ≤ ½ cost → routing costs real accuracy → same quality but not cheap enough → inconclusive. ≈ $1.6–2. Brief: `Task Brief 5_Routing.md`.
+
+---
+
+# Experiment 5: route between Jev and the LLM
+
+**Brief:** `Task Brief 5_Routing.md`. **Go-ahead:** Alexander, 2026-09-27. **Config:** `config_arena5.yaml` + `task_arena5.yaml`. **Outputs:** `data/arena5/`, `results/arena5/`, `logs/arena5/`.
+
+## Design (fixed before any paid call)
+
+- Components as in experiment 4: LLM = experiment 2's `A-r1-c2`; Jev = experiment 3's B-plus `Bw-r4-c1`.
+- Router: Jev decides when |its weighted score| ≥ τ; otherwise the LLM decides (Jev if Gemini refuses). τ = the gate-set margin quantile sending **40%** of gate pairs to the LLM, frozen to `results/arena5/router_model.json` before sealed.
+- Sealed-5: 1,000 fresh pairs (sample seed + 500, orientation seed + 5,000) excluding all 4,000 earlier sealed pairs; 9,789 left in the pool; no overlaps; winner first in exactly 50%; no "N/A"-style texts. `prep_arena4.py` now takes the seed offsets from config (defaults keep experiment 4's set byte-identical, verified).
+- Verdict (`verdict_router.py`, rows in order): router significantly better → *router beats the LLM*; interval of (router − LLM) within ±3 and cost ≤ ½ → *same quality, half the cost*; significantly worse with interval below −3 → *routing costs real accuracy*; within ±3 but cost > ½ → *same quality, not cheap enough*; else *inconclusive*.
+- Cost: router = Jev on every pair + the LLM on routed pairs only. Cap $5.
+
+## Progress log
+
+- 2026-09-27 (build): sealed-5 drawn; router, verdict and staged runner written; 79 tests pass (4 new); fake-client dry run of both stages passed. Committed before any paid call.

@@ -1,4 +1,4 @@
-"""Experiment 4 sets: experiment 2's practice and gate (identical files, for fitting the
+"""Fresh sealed set for experiments 4 and 5 (config decides which). Experiment 4 sets: experiment 2's practice and gate (identical files, for fitting the
 hybrid) and a fresh 1,000-pair sealed set ("sealed-4") that no system has ever seen.
 
 Sealed-4 comes from the same prompt-hash buckets as the earlier sealed sets, excluding
@@ -43,11 +43,13 @@ def main() -> None:
         selected = fresh.set_index("pair_id").loc[id_path.read_text().split()].reset_index()
         how = "loaded_saved_ids"
     else:
-        selected = fresh.sample(n=config["sets"]["sealed"], random_state=seed + 400)
+        offsets = config.get("fresh_sealed", {})
+        selected = fresh.sample(n=config["sets"]["sealed"], random_state=seed + offsets.get("sample_offset", 400))
         selected = selected.sort_values("pair_id").reset_index(drop=True)
         id_path.write_text("\n".join(selected["pair_id"]) + "\n")
         how = "sampled_and_saved"
-    orient(selected, seed + 4_000).to_csv(pairs_dir / "sealed.csv", index=False)
+    orient(selected, seed + config.get("fresh_sealed", {}).get("orient_offset", 4_000)).to_csv(
+        pairs_dir / "sealed.csv", index=False)
 
     frames = {name: read_pairs(pairs_dir / f"{name}.csv") for name in ("practice", "gate", "sealed")}
     report = {
