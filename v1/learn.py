@@ -27,7 +27,7 @@ from log import JsonlLogger
 from openrouter_llm import ContentBlockedError
 from spend import SpendTracker
 from telemetry import Telemetry
-from workspace import Workspace
+from workspace import Workspace, read_pairs
 
 
 class LoopRunner:
@@ -38,8 +38,8 @@ class LoopRunner:
         self.config = ws.config
         self.llm, self.jev, self.logger, self.telemetry = llm, jev, logger, telemetry
         pairs_dir = ws.path("pairs")
-        self.practice = pd.read_csv(pairs_dir / "practice.csv", dtype={"pair_id": str})
-        self.gate_frame = pd.read_csv(pairs_dir / "gate.csv", dtype={"pair_id": str})
+        self.practice = read_pairs(pairs_dir / "practice.csv")
+        self.gate_frame = read_pairs(pairs_dir / "gate.csv")
         self.practice_by_id = self.practice.set_index("pair_id")
         self.history: list[dict[str, Any]] = []
         self.rejected: list[str] = []

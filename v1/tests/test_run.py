@@ -124,3 +124,12 @@ def test_failfast_pool_cancels_queued_work():
             for future in futures:
                 future.result()
     assert len(started) < 5
+
+
+def test_read_pairs_keeps_literal_na_text(tmp_path):
+    from workspace import read_pairs
+    path = tmp_path / "pairs.csv"
+    pd.DataFrame({"pair_id": ["001"], "prompt": ["Say N/A"], "response_x": ["N/A"],
+                  "response_y": ["null"], "winner": ["X"]}).to_csv(path, index=False)
+    row = read_pairs(path).iloc[0]
+    assert row["pair_id"] == "001" and row["response_x"] == "N/A" and row["response_y"] == "null"

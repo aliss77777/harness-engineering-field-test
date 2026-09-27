@@ -1,0 +1,25 @@
+{
+  "run_id": "arena-smoke",
+  "pairs": 20,
+  "max_words_in_sample": 782,
+  "loop_a": {
+    "pairs": 20,
+    "accuracy": 0.65,
+    "tie_rate": 0.0,
+    "picks_x": 0.6,
+    "cost": 0.03160799999999999,
+    "cost_per_1000": 1.5803999999999996,
+    "input_tokens_per_decision": 868.95,
+    "output_tokens_per_decision": 247.64999999999992
+  },
+  "loop_b": {
+    "pairs": 20,
+    "accuracy": 0.5,
+    "tie_rate": 0.0,
+    "picks_x": 0.55,
+    "cost": 0.0014698740000000001,
+    "cost_per_1000": 0.07349370000000001,
+    "input_tokens_per_decision": 1749.85
+  },
+  "note": "Plumbing and cost check on practice pairs only; not a finding."
+}

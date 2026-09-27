@@ -18,7 +18,7 @@ from sealed import baseline_predictions
 from spend import SpendTracker
 from telemetry import Telemetry
 from verdict_trace import compute_trace_verdict
-from workspace import Workspace
+from workspace import Workspace, read_pairs
 
 
 def main() -> None:
@@ -40,7 +40,7 @@ def main() -> None:
         raise RuntimeError("experiment 3 versions are not frozen")
     exp2_frozen = json.loads((exp2 / "final_versions.json").read_text())
 
-    sealed = pd.read_csv(ws.path("pairs") / "sealed.csv", dtype={"pair_id": str})
+    sealed = read_pairs(ws.path("pairs") / "sealed.csv")
     logs = ws.path("logs")
     logger = JsonlLogger(logs / f"{args.run_id}.jsonl")
     spend = SpendTracker(results / "spend.json", config["budget"]["spend_cap_usd"])

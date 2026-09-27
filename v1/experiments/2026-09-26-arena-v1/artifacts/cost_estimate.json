@@ -1,0 +1,14 @@
+{
+  "decisions_per_loop_worst_case": {
+    "practice": 2500,
+    "gate": 19500,
+    "sealed": 3000
+  },
+  "loop_a_usd": 39.51,
+  "loop_b_usd": 1.84,
+  "editor_usd": 0.8,
+  "worst_case_total_usd": 42.15,
+  "spend_cap_usd": 75.0,
+  "within_cap": true,
+  "cost_ratio_b_over_a": 0.046503227031131376
+}

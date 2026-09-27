@@ -1,0 +1,35 @@
+{
+  "instructions": "When evaluating two AI assistant responses to determine which a user would prefer, prioritize instruction compliance, factual accuracy, and efficient communication. First, check whether each response strictly fulfills all explicit user instructions, constraints, and format requirements; a response that overlooks explicit instructions is rarely preferred. Second, evaluate correctness and reasoning: penalize factual errors, hallucinations, and flawed logic heavily. Third, evaluate directness and efficiency. Users prefer responses that provide the requested information or solution immediately without tedious preambles, redundant restatements of the prompt, or excessive conversational filler. Fourth, evaluate readability and organization: well-structured answers using clear paragraph breaks, bullet points, or code formatting are significantly easier to digest. Finally, ensure tone is polite, objective, and helpful without being preachy, patronizing, or overly apologetic. Choose the response that offers the highest utility with the least cognitive burden.",
+  "rubric_questions": [
+    {
+      "question_id": "satisfies_explicit_instructions",
+      "text": "Does the response fully follow all explicit constraints and instructions stated in the user prompt?",
+      "direction": "helps"
+    },
+    {
+      "question_id": "contains_factual_or_logical_errors",
+      "text": "Does the response contain any clear factual inaccuracies, fabricated facts, or logical contradictions?",
+      "direction": "hurts"
+    },
+    {
+      "question_id": "directly_answers_without_filler",
+      "text": "Does the response address the core request promptly without unnecessary conversational fluff, boilerplate, or repetitive preambles?",
+      "direction": "helps"
+    },
+    {
+      "question_id": "uses_clean_scannable_formatting",
+      "text": "Does the response utilize clear structure and formatting (such as headings, lists, or code blocks) that make it easy to scan?",
+      "direction": "helps"
+    },
+    {
+      "question_id": "unnecessary_refusal_or_excessive_hedging",
+      "text": "Does the response inappropriately refuse, excessively hedge, or lecture the user on a safe and benign topic?",
+      "direction": "hurts"
+    },
+    {
+      "question_id": "leaves_task_incomplete",
+      "text": "Does the response omit essential parts of the prompt or stop before fully addressing the request?",
+      "direction": "hurts"
+    }
+  ]
+}

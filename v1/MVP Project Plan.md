@@ -282,6 +282,8 @@ Experiment 1's exact code is preserved at git tag `exp1-upworthy-v1` (commit `c2
   - Total experiment 2 paid spend: **$37.09** (learning $32.41).
 - 2026-09-26 23:46: **Experiment 3 sealed attempt 1 failed on a new kind of Gemini refusal:** "Gemini blocked the response: OTHER" (code 502) — Gemini generated an answer, then withheld it — repeated on every retry for one Loop A batch. The block detector only knew request blocks. Supervisor stopped before attempt 2 could repeat it.
 - 2026-09-26 23:55: **Fix:** a response block is retried twice, and on the third identical refusal is treated like a request block (batch split into single pairs; a refused pair gets the seeded coin flip, flagged `blocked`, cached). Same rule as before, one more signature. Test added (61 pass). Experiment 2's results are unaffected (its sealed stage had already completed without this error). Relaunching the supervisor for experiment 3's sealed stage only (run ids `arena3-sealed-20260926b-s*`).
+- 2026-09-27 00:15: **Experiment 3 sealed attempt (`arena3-sealed-20260926b-s1`) crashed at the very end** (style baseline): one fresh-sealed response is literally the text "N/A", which pandas' CSV reader turns into a missing value; the deciders had been shown "nan" for that pair and the baseline crashed on it. No verdict was written. Checked every pair file: experiment 2's practice, gate and sealed sets contain **no** such case, so experiment 2's results are unaffected.
+- 2026-09-27 00:25: **Fix:** all pair files are read as text (`workspace.read_pairs`, `keep_default_na=False`), so "N/A" stays "N/A". Test added (62 pass). Rerunning experiment 3's sealed stage (`arena3-sealed-20260926c-s*`): every pair except that one replays from cache; that pair gets new calls with its real text.
 
 ---
 
@@ -332,3 +334,4 @@ Experiment 1's exact code is preserved at git tag `exp1-upworthy-v1` (commit `c2
   - Many candidates were stopped cheaply before the gate: pre-screen rejections and failed question checks (see `wip_summary.json`). Several near misses (p 0.07–0.08).
   - Reference (gate, not sealed): experiment 2's plain B reached 72.0% with one kept edit. The preregistered comparison is on the fresh sealed set.
 - 2026-09-26 23:22–23:46: Sealed attempt 1 (`arena3-sealed-20260926-s1`) failed on a Gemini response block (see experiment 2's log, 23:46); fixed on `main` and merged here. Relaunched as `arena3-sealed-20260926b-s*`.
+- 2026-09-27 00:25: Sealed rerun after the "N/A" text fix (see experiment 2 log, 00:15-00:25): `arena3-sealed-20260926c-s*`.
