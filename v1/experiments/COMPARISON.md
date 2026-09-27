@@ -66,6 +66,7 @@ The cascade idea from experiment 4, preregistered with the threshold frozen on g
 ## Next
 
 - **Replicate the router on a second task** where the LLM cannot have memorized the answers; that is the step that turns experiment 5 into a general claim.
+- **From supervised to RL-style learning (designed: `Task Brief 6_Bandit.md`):** Upworthy as a contextual bandit — the policy picks one of 3+ headlines and sees only that headline's click rate; same harness, with exploration and a gate that compares policies by their own picks.
 - **Rerun experiment 1 (Upworthy) with the experiment 2 harness**, to separate "better harness" from "easier task".
 - **Loop C** (rubric answered by an LLM) to earn the word "Jev" in the headline.
 - A second task where the LLM cannot have memorized the answers.

@@ -381,3 +381,9 @@ Experiment 1's exact code is preserved at git tag `exp1-upworthy-v1` (commit `c2
 - 2026-09-27: **Sealed stage stopped: OpenRouter 402 (out of credit)** during the LLM's sealed-5 pass. Stopped at once (fatal-error rule, no retries); no verdict written. Finished calls are cached; the rerun after a top-up resumes them for free.
 - 2026-09-27: Key limit raised to $100 by Alexander (the $50 cap was on the API key itself, separate from account credit). Sealed attempt 2 resumed from cache and completed.
 - 2026-09-27: **Experiment 5 sealed evaluation complete** (`arena5-sealed-20260927-s2`, 1,000 pairs, once). **Preregistered verdict: Same quality, half the cost.** Router 76.2% vs LLM alone 76.3% (36 better / 37 worse, p 1.0; 95% interval of the difference −1.8 to +1.6, inside ±3); cost $0.633 vs $1.481 per 1,000 (ratio 0.43 ≤ 0.5). Jev decided 61.8% of pairs at 81.6% (the LLM scored 81.7% on those same pairs); the LLM decided 38.2% at 67.5%. Jev alone 72.7%, baseline 59.9%. Average latency per decision: router 874 ms vs LLM 1,285 ms. Experiment 5 spend: **$1.54**. Archived `experiments/2026-09-27-arena-router-v1/`; comparison updated.
+
+---
+
+# Experiment 6 (designed): learning from partial feedback
+
+- 2026-09-27: **Designed, not scheduled.** Upworthy as a contextual bandit: ≈ 11,900 tests with 3+ comparable headlines (median 4) qualify. The policy picks one headline per test and sees only its click rate; a new practice batch each round; 15% seeded exploration; the gate compares policies by the click rates of their own picks; the sealed set is scored by regret against the best headline (never shown to the learner). Arms: LLM policy, Jev policy, a Thompson-sampling baseline on code features, and a random control, starting from experiment 1's version 0. Preregistered rows mirror `arena_v2`, measured on reward and regret. ≈ $15–18. Brief: `Task Brief 6_Bandit.md`.
