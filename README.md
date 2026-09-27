@@ -8,7 +8,7 @@ Experiments testing whether a decision model (Jev) helps an AI agent learn its o
 | 2 | Chatbot Arena long responses | Complete: *only the Jev loop learned* | [`experiments/2026-09-26-arena-v1`](experiments/2026-09-26-arena-v1/README.md) |
 | 3 | Arena, decision-trace Jev loop (B-prime, B-plus) | Complete: *trace no detectable difference; weights help* | [`experiments/2026-09-26-arena-trace-v1`](experiments/2026-09-26-arena-trace-v1/README.md) |
 | 4 | Arena, one LLM + Jev hybrid (stacked vote) | Complete: *no meaningful gain* | [`experiments/2026-09-27-arena-hybrid-v1`](experiments/2026-09-27-arena-hybrid-v1/README.md) |
-| 5 | Arena, route between Jev and the LLM (cascade) | Running | brief: `Task Brief 5_Routing.md` · `config_arena5.yaml` + `task_arena5.yaml` |
+| 5 | Arena, route between Jev and the LLM (cascade) | Complete: ***same quality, half the cost*** | [`experiments/2026-09-27-arena-router-v1`](experiments/2026-09-27-arena-router-v1/README.md) |
 
 Side-by-side results and lessons: [`experiments/COMPARISON.md`](experiments/COMPARISON.md). The full, dated record of every decision, deviation and result is in [`MVP Project Plan.md`](MVP%20Project%20Plan.md).
 

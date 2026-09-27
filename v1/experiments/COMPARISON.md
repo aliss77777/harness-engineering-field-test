@@ -1,4 +1,4 @@
-# Experiments 1–4 compared
+# Experiments 1–5 compared
 
 **Written:** 2026-09-27 · Each experiment's own report is the source of truth; this page lines them up. All accuracies are on sealed sets that no loop, editor or baseline saw during learning, evaluated once.
 
@@ -9,6 +9,7 @@
 | 1 | Upworthy headlines: does a Jev rubric loop learn better or cheaper than an LLM loop? | **Hypothesis weakened.** Neither loop learned (no edit passed the gate); the LLM was more accurate. |
 | 2 | Arena responses, with a rebuilt harness: same question | **Only the Jev loop learned.** Jev: 66.7% → 70.1% (p 0.00002). LLM: 72.9% → 73.3% (p 0.50). LLM still more accurate; Jev ≈23× cheaper. |
 | 3 | Arena: does a decision trace help the Jev loop? Do fitted weights? | **Trace: no detectable difference. Weights: help** (+1.9 over the trace arm, p 0.011); the weighted loop learned (p 0.002). |
+| 5 | Arena: can Jev decide the confident cases and the LLM the rest, at the LLM's quality for half the cost? | **Same quality, half the cost.** Router 76.2% vs LLM 76.3% (interval −1.8 to +1.6) at 43% of the cost; Jev decided 62% of pairs. |
 | 4 | Arena: does a fitted vote of the best LLM and best Jev harness beat the LLM alone? | **No meaningful gain** (75.6% vs 75.7%, interval −0.9 to +0.7). Exploratory cascade: Jev decides half the pairs → 75.2% at about half the cost. |
 
 ## The numbers side by side
@@ -58,9 +59,13 @@ One decision step, two datasets, one LLM (Gemini 3.8 Flash) as decider and edito
 
 On 1,000 fresh pairs, a fitted vote of the best LLM harness (75.7% alone) and the best Jev harness (71.8% alone) scored 75.6%: **no meaningful gain**. The two agreed on 79% of pairs; where they disagreed, the vote followed the LLM 92% of the time. The promising direction is routing instead of voting: in an exploratory cascade, Jev decided the 51% of pairs where it was most confident and the LLM the rest, for **75.2% at $0.80 per 1,000 decisions vs $1.51** — within half a point of the LLM at about half the cost. That was not preregistered, so it is a lead, not a result.
 
+## Experiment 5: routing, preregistered
+
+The cascade idea from experiment 4, preregistered with the threshold frozen on gate (40% of pairs to the LLM) and tested on a fifth, fresh sealed set: **router 76.2% vs LLM 76.3%** (95% interval of the difference −1.8 to +1.6 points), at **$0.63 vs $1.48 per 1,000 decisions** (43%) and about a third less latency. The reason is clean: on the 62% of pairs where the rubric was confident, it was as accurate as the LLM (81.6% vs 81.7% on the same pairs); the LLM only earned its cost on the close calls. This is the strongest result of the series and the one that fits how Jev is meant to be used: a cheap, readable decider for most decisions, the LLM for the hard ones.
+
 ## Next
 
-- **Preregistered cascade test (designed: `Task Brief 5_Routing.md`):** Jev decides confident pairs, the LLM the rest (40% LLM share, threshold set on gate); chef's kiss = within ±3 points of the LLM at ≤ ½ its cost, on a fresh 1,000-pair sealed set.
+- **Replicate the router on a second task** where the LLM cannot have memorized the answers; that is the step that turns experiment 5 into a general claim.
 - **Rerun experiment 1 (Upworthy) with the experiment 2 harness**, to separate "better harness" from "easier task".
 - **Loop C** (rubric answered by an LLM) to earn the word "Jev" in the headline.
 - A second task where the LLM cannot have memorized the answers.

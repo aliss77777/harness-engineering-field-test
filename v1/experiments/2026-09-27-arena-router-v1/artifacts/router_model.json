@@ -1,0 +1,17 @@
+{
+  "frozen": true,
+  "run_id": "arena5-fit-20260927",
+  "llm_share_target": 0.4,
+  "tau": 0.4452560000000002,
+  "components": {
+    "llm": "A-r1-c2",
+    "jev": "Bw-r4-c1"
+  },
+  "gate": {
+    "llm_share": 0.4,
+    "router_accuracy": 0.752,
+    "llm_accuracy": 0.7706666666666667,
+    "jev_accuracy": 0.7093333333333334
+  },
+  "paid_spend_usd": 0.0
+}

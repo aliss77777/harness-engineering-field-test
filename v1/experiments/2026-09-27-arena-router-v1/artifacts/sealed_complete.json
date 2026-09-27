@@ -1,0 +1,166 @@
+{
+  "run_id": "arena5-sealed-20260927-s2",
+  "task": "arena_router",
+  "components": {
+    "llm": "A-r1-c2",
+    "jev": "Bw-r4-c1"
+  },
+  "tau": 0.4452560000000002,
+  "verdict": {
+    "verdict": "same_quality_half_cost",
+    "accuracy": {
+      "llm": 0.763,
+      "jev": 0.727,
+      "router": 0.762,
+      "baseline": 0.599
+    },
+    "intervals_95": {
+      "router": [
+        0.7346343310291411,
+        0.7873604475244281
+      ],
+      "llm": [
+        0.7356684892970144,
+        0.7883186357395835
+      ],
+      "router_minus_llm": [
+        -0.01775420412337314,
+        0.01575420412337314
+      ]
+    },
+    "tests": {
+      "router_vs_llm": {
+        "b": 36,
+        "c": 37,
+        "discordant": 73,
+        "p_value": 1.0,
+        "method": "chi_square_continuity_corrected"
+      },
+      "router_vs_jev": {
+        "b": 85,
+        "c": 50,
+        "discordant": 135,
+        "p_value": 0.003430706168790228,
+        "method": "chi_square_continuity_corrected"
+      },
+      "llm_vs_baseline": {
+        "b": 287,
+        "c": 123,
+        "discordant": 410,
+        "p_value": 8.279659840718542e-16,
+        "method": "chi_square_continuity_corrected"
+      },
+      "jev_vs_baseline": {
+        "b": 257,
+        "c": 129,
+        "discordant": 386,
+        "p_value": 1.018833913148151e-10,
+        "method": "chi_square_continuity_corrected"
+      },
+      "router_vs_baseline": {
+        "b": 278,
+        "c": 115,
+        "discordant": 393,
+        "p_value": 3.0377402098296015e-16,
+        "method": "chi_square_continuity_corrected"
+      }
+    },
+    "checks": {
+      "router_better": false,
+      "router_worse": false,
+      "within_margin": true,
+      "cost_ratio": 0.42729078048666724,
+      "cheap_enough": true,
+      "memorization_flag_llm": true
+    },
+    "costs_per_1000": {
+      "llm": 1.4808645000000022,
+      "jev": 0.06481204800000005,
+      "router": 0.6327597479999992
+    },
+    "rules_version": "router_v1",
+    "thresholds": {
+      "alpha": 0.05,
+      "equivalence_margin": 0.03,
+      "max_cost_ratio": 0.5
+    }
+  },
+  "routing": {
+    "llm_share": 0.382,
+    "decided_by_jev": {
+      "pairs": 618,
+      "accuracy": 0.8155339805825242
+    },
+    "decided_by_llm": {
+      "pairs": 382,
+      "accuracy": 0.675392670157068
+    }
+  },
+  "llm_on_jev_decided_pairs": 0.8171521035598706,
+  "curve": [
+    {
+      "target_llm_share": 0.0,
+      "llm_share": 0.0,
+      "accuracy": 0.727
+    },
+    {
+      "target_llm_share": 0.1,
+      "llm_share": 0.1,
+      "accuracy": 0.741
+    },
+    {
+      "target_llm_share": 0.2,
+      "llm_share": 0.2,
+      "accuracy": 0.751
+    },
+    {
+      "target_llm_share": 0.3,
+      "llm_share": 0.3,
+      "accuracy": 0.759
+    },
+    {
+      "target_llm_share": 0.4,
+      "llm_share": 0.4,
+      "accuracy": 0.761
+    },
+    {
+      "target_llm_share": 0.5,
+      "llm_share": 0.5,
+      "accuracy": 0.758
+    },
+    {
+      "target_llm_share": 0.6,
+      "llm_share": 0.6,
+      "accuracy": 0.76
+    },
+    {
+      "target_llm_share": 0.7,
+      "llm_share": 0.7,
+      "accuracy": 0.759
+    },
+    {
+      "target_llm_share": 0.8,
+      "llm_share": 0.8,
+      "accuracy": 0.76
+    },
+    {
+      "target_llm_share": 0.9,
+      "llm_share": 0.9,
+      "accuracy": 0.761
+    },
+    {
+      "target_llm_share": 1.0,
+      "llm_share": 1.0,
+      "accuracy": 0.763
+    }
+  ],
+  "avg_latency_ms_per_decision": {
+    "llm": 1284.6800000000017,
+    "jev": 383.954,
+    "router": 874.2750000000007
+  },
+  "blocked": {
+    "pairs": 1
+  },
+  "paid_spend_usd_total_experiment5": 1.5407
+}

@@ -1,0 +1,34 @@
+name: arena_router
+starting_prompt: >-
+  You're reviewing AI assistant responses. What makes a user prefer one response over another?
+data:
+  source: data/arena/raw/train.csv
+  dataset: lmarena-ai/arena-human-preference-55k
+  sha256: 0692154aaf20fc6649090c3f49b6b5dd1e693a765ecb5f0856ae0da5946f5be2
+paths:
+  pairs: data/arena5/pairs
+  splits: data/arena5/splits
+  results: results/arena5
+  logs: logs/arena5
+columns:
+  context: prompt
+  x: response_x
+  y: response_y
+labels:
+  x: "1"
+  y: "2"
+wording:
+  item: response
+  items: responses
+  context: user request
+  decider_question: Which response did the user prefer?
+  outcome: which response the user preferred
+  item_scope: one response (with the user request that prompted it)
+  helps_meaning: yes predicts the user prefers the response
+baseline: arena_style
+jev_state_template: |-
+  USER REQUEST:
+  {context}
+
+  ASSISTANT RESPONSE:
+  {item}
