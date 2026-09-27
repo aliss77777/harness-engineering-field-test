@@ -36,7 +36,7 @@ Details:
 ## 4. Data
 
 - Practice and gate: the same files as experiments 2 and 3 (tuning only).
-- **New sealed set ("sealed-4"):** 2,000 pairs from the same prompt-hash buckets, excluding every pair used in experiment 2's and experiment 3's sealed sets (≈10,800 remain). Winner shown first in exactly 50%. Larger than before (2,000 vs 1,500) because hybrid gains may be small.
+- **New sealed set ("sealed-4"):** **1,000 pairs** (Alexander, 2026-09-26: future experiments use 1,000 pairs per set instead of 1,500, for speed) from the same prompt-hash buckets, excluding every pair used in experiment 2's and experiment 3's sealed sets (≈10,800 remain). Winner shown first in exactly 50%. At 1,000 pairs a real gain of about 3–4 points is needed to show up clearly; smaller hybrid gains may read as inconclusive.
 - Every system (A\*, J\*, H1–H3, baseline) is scored once on sealed-4, on the same pairs.
 
 ## 5. Preregistered analysis
@@ -59,11 +59,11 @@ Details:
 
 | Item | Pairs | Estimate |
 |---|---|---|
-| A\* on sealed-4 | 2,000 | ≈ $3.20 |
-| J\* on sealed-4 (and on gate/practice for H1/H2 features, mostly cached) | 2,000 (+cache) | ≈ $0.15 |
-| H3 on gate (one check) + sealed-4 | 3,500 | ≈ $7–9 (larger prompt) |
+| A\* on sealed-4 | 1,000 | ≈ $1.60 |
+| J\* on sealed-4 (and on gate/practice for H1/H2 features, mostly cached) | 1,000 (+cache) | ≈ $0.10 |
+| H3 on gate (one check) + sealed-4 | 2,500 | ≈ $5–6 (larger prompt) |
 | H1 and H2 | computed from A\* and J\* decisions | ≈ $0 |
-| **Total** | | **≈ $11–13**, cap $20 |
+| **Total** | | **≈ $7–8**, cap $15 |
 
 Time: under an hour if the Gemini rate limit is lifted (see section 8), about 2 hours at the current 3 workers.
 
@@ -76,7 +76,7 @@ Time: under an hour if the Gemini rate limit is lifted (see section 8), about 2 
 
 ## 8. Before running
 
-1. **Speed:** enable OpenRouter BYOK with the Google AI Studio key (billing-enabled project). Verify with one call that the served provider is unchanged and that per-call cost reporting still captures Google's charge; adjust cost accounting if not. Fallback: split traffic across both keys by pair hash, with a 100-pair parity check.
+1. **Speed:** OpenRouter BYOK with the Google AI Studio key is **enabled** (2026-09-26). Checked: served provider still "Google AI Studio"; reported cost still equals tokens × reference price. Keep OpenRouter's shared-capacity fallback on, so throttling on the BYOK quota overflows to shared capacity.
 2. Experiment 3's sealed verdict must exist (it selects J\*).
 3. Commit this design, the analysis code and its tests before any paid call, as in experiments 2 and 3.
 
