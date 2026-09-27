@@ -331,4 +331,4 @@ Experiment 1's exact code is preserved at git tag `exp1-upworthy-v1` (commit `c2
   - **B-plus:** 32 candidates proposed, **1 kept**. Weights alone lifted version 0 to 69.3% on gate. Kept r4: reword `satisfies_explicit_instructions` (b 78 / c 55, p 0.028) → **70.8%**. Final weights (practice-fitted): instructions 2.27, formatting 1.18, incomplete 0.66, filler 0.28, refusal 0.22, factual errors 0.14 — instruction-following dominates.
   - Many candidates were stopped cheaply before the gate: pre-screen rejections and failed question checks (see `wip_summary.json`). Several near misses (p 0.07–0.08).
   - Reference (gate, not sealed): experiment 2's plain B reached 72.0% with one kept edit. The preregistered comparison is on the fresh sealed set.
-- 2026-09-26 23:22–23:46: Sealed attempt 1 () failed on a Gemini response block (see experiment 2's log, 23:46); fixed on  and merged here. Relaunched as .
+- 2026-09-26 23:22–23:46: Sealed attempt 1 (`arena3-sealed-20260926-s1`) failed on a Gemini response block (see experiment 2's log, 23:46); fixed on `main` and merged here. Relaunched as `arena3-sealed-20260926b-s*`.
