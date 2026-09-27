@@ -14,3 +14,12 @@ cache/
 /results/
 data/arena/raw/
 data/arena/pairs/
+
+# worktree symlinks to shared local data
+.venv
+.env
+cache
+data/arena/raw
+data/arena/pairs
+results/arena
+data/arena3/pairs/

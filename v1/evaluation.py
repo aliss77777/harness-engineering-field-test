@@ -101,17 +101,21 @@ def evaluate_loop_a(
 def evaluate_loop_b(
     ws: Workspace, frame, questions_data: list[dict[str, str]], *, client, logger, run_id: str,
     round_number: int | str, set_name: str, version_id: str,
-    progress: Callable[..., None] | None = None,
+    progress: Callable[..., None] | None = None, weights: dict[str, float] | None = None,
+    loop: str = "B",
 ) -> list[dict[str, Any]]:
-    """Loop B: Jev answers the rubric for each item (with its context); code picks. No LLM."""
+    """Loop B: Jev answers the rubric for each item (with its context); code picks. No LLM.
+
+    weights (Loop B-plus) scale each question's signed probability; None = plain sum.
+    """
     config = ws.config
     questions = [RubricQuestion(**item) for item in questions_data]
-    scorer = RubricDecider(questions, lambda _item, _questions: {}, seed=config["seed"])
+    scorer = RubricDecider(questions, lambda _item, _questions: {}, seed=config["seed"], weights=weights)
     pairs = [ws.pair_view(row) for _, row in frame.iterrows()]
     winners = dict(zip(frame["pair_id"].astype(str), frame["winner"]))
 
     def run(pair: dict[str, str]) -> dict[str, Any]:
-        event = {"run_id": run_id, "loop": "B", "round": round_number, "set": set_name,
+        event = {"run_id": run_id, "loop": loop, "round": round_number, "set": set_name,
                  "pair_id": pair["pair_id"], "version_id": version_id, "call_type": "rubric_evaluation"}
         x = client.evaluate(ws.jev_state(pair["context"], pair["x"]), questions, {**event, "item_side": "X"})
         x_usage = dict(client.last_call)

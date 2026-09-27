@@ -22,7 +22,7 @@ class InvalidCandidate(ValueError):
     """The proposed operation cannot be applied to the current version."""
 
 
-def candidate_schema(loop: str, config: dict[str, Any]) -> dict[str, Any]:
+def candidate_schema(loop: str, config: dict[str, Any], max_items: int | None = None) -> dict[str, Any]:
     if loop == "A":
         item = {
             "operation": {"type": "string", "enum": list(A_OPERATIONS)},
@@ -43,7 +43,7 @@ def candidate_schema(loop: str, config: dict[str, Any]) -> dict[str, Any]:
     return {
         "type": "object",
         "properties": {"candidates": {
-            "type": "array", "minItems": 1, "maxItems": config["learning"]["max_changes"],
+            "type": "array", "minItems": 1, "maxItems": max_items or config["learning"]["max_changes"],
             "items": {"type": "object", "properties": item,
                       "required": list(item), "additionalProperties": False},
         }},
@@ -156,6 +156,7 @@ def sample_mistakes(records: list[dict[str, Any]], *, count: int, seed: int, rou
 def candidate_prompt(
     *, loop: str, current: dict[str, Any], feedback: dict[str, Any], history: list[dict[str, Any]],
     rejected: list[str], config: dict[str, Any], wording: dict[str, str],
+    max_items: int | None = None, guidance: str = "",
 ) -> str:
     limits = config["learning"]
     if loop == "A":
@@ -175,8 +176,8 @@ def candidate_prompt(
         )
     return f"""You improve a decision file for learning Loop {loop}. The task: {wording.get('decider_question', '')}
 
-Propose up to {limits['max_changes']} ALTERNATIVE single edits. Each is tested on its own on held-out pairs; at most one will be kept.
-{operations}
+Propose up to {max_items or limits['max_changes']} ALTERNATIVE single edits. Each is tested on its own on held-out pairs; at most one will be kept.
+{operations}{guidance}
 Make the candidates genuinely different from each other. Each needs a one-line reason.
 
 DO NOT resubmit any edit listed under REJECTED EDITS, or a near-copy of one. They were tested and did not help.

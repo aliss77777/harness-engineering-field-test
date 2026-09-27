@@ -24,14 +24,18 @@ class RubricQuestion:
 
 
 def rubric_score(
-    questions: Iterable[RubricQuestion], yes_probabilities: dict[str, float]
+    questions: Iterable[RubricQuestion],
+    yes_probabilities: dict[str, float],
+    weights: dict[str, float] | None = None,
 ) -> float:
+    """Sum of yes-probabilities signed by direction; optional per-question weights (Loop B-plus)."""
     score = 0.0
     for question in questions:
         probability = float(yes_probabilities[question.question_id])
         if not 0 <= probability <= 1:
             raise ValueError("yes probabilities must be between 0 and 1")
-        score += probability if question.direction == "helps" else -probability
+        weight = 1.0 if weights is None else float(weights[question.question_id])
+        score += weight * (probability if question.direction == "helps" else -probability)
     return score
 
 
@@ -49,10 +53,12 @@ class RubricDecider:
         questions: list[RubricQuestion],
         evaluator: Callable[[str, list[RubricQuestion]], dict[str, float]],
         seed: int,
+        weights: dict[str, float] | None = None,
     ):
         self.questions = questions
         self.evaluator = evaluator
         self.rng = random.Random(seed)
+        self.weights = weights
 
     def decide(self, headline_x: str, headline_y: str) -> Decision:
         x = self.evaluator(headline_x, self.questions)
@@ -66,8 +72,8 @@ class RubricDecider:
         tie_breaker: random.Random | None = None,
     ) -> Decision:
         """Pass tie_breaker (seeded per pair) when pairs are scored concurrently."""
-        x_score = rubric_score(self.questions, x)
-        y_score = rubric_score(self.questions, y)
+        x_score = rubric_score(self.questions, x, self.weights)
+        y_score = rubric_score(self.questions, y, self.weights)
         tied = x_score == y_score
         rng = tie_breaker or self.rng
         prediction: Choice = rng.choice(("X", "Y")) if tied else ("X" if x_score > y_score else "Y")

@@ -253,3 +253,42 @@ Experiment 1's exact code is preserved at git tag `exp1-upworthy-v1` (commit `c2
   - Blocked pairs are excluded from the mistakes shown to either editor. If an editor prompt is itself blocked, the editor retries with a different seeded mistake sample (up to 3 attempts).
   - The sealed stage also reports a **sensitivity verdict** with every pair blocked for Loop A removed from all systems (A, B, baseline). This is reported, not used for the verdict.
   - Block counts are reported per evaluation (`blocked` in `wip_summary.json`). 58 tests pass.
+
+---
+
+# Experiment 3: Arena, decision-trace learning for the Jev loop
+
+**Why:** in experiment 2, Loop B kept one edit (round 1) and then stalled: 9 of 12 candidates were "add a question", and every later one lowered gate accuracy. The editor never saw *why* a pair was missed: Jev's per-question answers, which are the whole point of the hypothesis ("Jev tells the learner which criterion was wrong and by how much"). **Question:** does decision-trace feedback make the Jev loop learn more? And separately: do fitted question weights help on top of it?
+
+**Decisions (Alexander, 2026-09-26):** run on Arena; include the weighted B-plus arm; build on branch `exp3-decision-trace` in a git worktree (`../jev-test-poc-exp3`) so experiment 2's run and sealed stage keep using `main`'s code; launch only after experiment 2's sealed verdict is written.
+
+## Design (fixed before any experiment-3 paid call)
+
+- **Arms (both start from experiment 2's version 0 rubric):**
+  - **B-prime (`Bp`):** decision-trace feedback + practice pre-screen; unweighted sum, as in B.
+  - **B-plus (`Bw`):** the same, plus per-question weights fitted on practice for every version (logistic regression, no intercept; a negative weight means the direction looks backwards).
+  - **Loop A is not rerun.** Experiment 2's Loop A (version 0 and final) is the comparison; its procedure is unchanged.
+- **Decision trace for the editor:** for each of 20 sampled practice mistakes, the top 4 per-question pushes (Jev P(yes) for both responses, which response each question pushed toward, and whether that was the winner). Plus an aggregate over all practice pairs: how often each question pushed a mistake toward the loser, and how often it alone decided a pick right vs wrong. Plus a richer evidence table: win rate by probability-gap size and which questions overlap (|r| ≥ 0.6). The pick is an exact sum over questions, so the trace is exact, not an approximation.
+- **Pre-screen:** the editor proposes up to 8 single edits; each valid one is scored on the 500 practice pairs with Jev (≈7¢); the best 3 with a net practice gain (b > c) go to the gate. Gate rule unchanged: one-sided sign test, p < 0.05 per edit, keep at most one per round. Same edit limits, question check, duplicate refusal and 4 rounds as experiment 2.
+- **Fresh sealed set:** 1,500 pairs drawn (seed + 300) from the same prompt-hash buckets as experiment 2's sealed set, excluding all 1,500 of experiment 2's sealed pairs. No pair shared with experiment 2's sealed set; no prompt shared with practice or gate. Practice and gate files are byte-identical copies of experiment 2's. Winner shown first in exactly 50%.
+- **Preregistered analysis (`verdict_trace.py`):**
+  - **Primary (two-sided McNemar on the fresh sealed set, Holm-corrected across both):** P1 `Bp` final vs experiment 2's `B` final (does the trace help?); P2 `Bw` final vs `Bp` final (do weights help?). Each answer: helps / hurts / no detectable difference.
+  - **Reported:** learning checks (`Bp` final vs version 0; `Bw` final vs its version 0); the Arena headline verdict (`arena_v2` rows) with `Bp` as "B" vs experiment 2's Loop A, and `Bw` as a secondary line; each arm vs the style baseline; cost per 1,000 decisions; learning cost including pre-screening.
+- **Budget:** separate tracker, cap $20; experiments 2 + 3 together stay under the $75 approved.
+- **Fairness note:** Loop A already learns from its own trace (its one-line reasons). The pre-screen is Jev-only because Jev makes it cheap (≈7¢ vs ≈80¢ per candidate for Loop A); that is part of the claim being tested and will be stated in the write-up.
+
+## Checklist
+
+- [x] Worktree + branch; experiment 2 data, cache and results linked read-only.
+- [x] Fresh sealed set (`prep_arena3.py`).
+- [x] Trace, aggregate trace, rich evidence, fitted weights (`trace.py`), with tests.
+- [x] `learn_trace.py` (two arms in parallel), `sealed_trace.py` (guarded; refuses until experiment 2's verdict exists), `verdict_trace.py` (Holm), with tests; end-to-end dry run with fake clients. 66 tests pass.
+- [ ] Commit before any paid call.
+- [ ] Launch after experiment 2's sealed verdict; monitor; sealed; verdict.
+- [ ] Merge to `main`; archive; compare experiments 1–3.
+
+## Progress log
+
+- 2026-09-26 19:14: Worktree `../jev-test-poc-exp3` on branch `exp3-decision-trace` created from `main` (`fdb7755`).
+- 2026-09-26 19:15: Fresh sealed set: 13,789 pairs in the sealed buckets → 12,289 after excluding experiment 2's sealed pairs → 1,500 sampled. Overlap checks all zero.
+- 2026-09-26 19:18: Build complete; dry run with fake editor and fake Jev passed (both arms, 2 rounds, trace present in the editor prompt, pre-screen and gate exercised, weights only in B-plus). 66 tests pass.
