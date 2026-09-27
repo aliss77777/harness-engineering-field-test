@@ -76,12 +76,29 @@ def main() -> None:
         b_final=[r["correct"] for r in records["b_final"]],
         a_cost_per_1000=a_cost, b_cost_per_1000=b_cost, config=config["verdict"], baseline=baseline,
     )
+    # Sensitivity check (not the verdict): drop pairs Gemini refused to read in any
+    # Loop A evaluation, from every system alike, and recompute.
+    blocked = {r["pair_id"] for name in ("a_version0", "a_final") for r in records[name] if r.get("blocked")}
+    keep = [i for i, pair_id in enumerate(sealed["pair_id"]) if pair_id not in blocked]
+    sensitivity = None
+    if blocked:
+        pick = lambda values: [values[i] for i in keep]
+        sensitivity = compute_verdict(
+            a_version0=pick([r["correct"] for r in records["a_version0"]]),
+            a_final=pick([r["correct"] for r in records["a_final"]]),
+            b_version0=pick([r["correct"] for r in records["b_version0"]]),
+            b_final=pick([r["correct"] for r in records["b_final"]]),
+            a_cost_per_1000=a_cost, b_cost_per_1000=b_cost, config=config["verdict"],
+            baseline=pick(baseline) if baseline is not None else None,
+        )
     spend.flush()
     result = {
         "run_id": args.run_id,
         "task": ws.task["name"],
         "summaries": {name: summarize(items) for name, items in records.items()},
         "verdict": verdict,
+        "blocked_pairs": sorted(blocked),
+        "sensitivity_excluding_blocked": sensitivity,
         "edits": frozen.get("edits"),
         "notes": {**frozen["notes"], "total_paid_spend_usd": round(spend.total_usd, 4)},
     }

@@ -22,6 +22,19 @@ class IncompleteResponseError(RuntimeError):
     """A 200 response without a model name (usually an error body); retried."""
 
 
+class ContentBlockedError(RuntimeError):
+    """The provider refused the input under its content policy. Not retried; cached."""
+
+
+def is_content_block(body: dict[str, Any]) -> bool:
+    error = body.get("error") or {}
+    metadata = error.get("metadata") or {}
+    return error.get("code") == 403 and (
+        metadata.get("error_type") == "content_policy_violation"
+        or "PROHIBITED_CONTENT" in str(error.get("message", ""))
+    )
+
+
 class OpenRouterJsonClient:
     def __init__(
         self,
@@ -82,6 +95,9 @@ class OpenRouterJsonClient:
         }
         cache_payload = {"provider": "openrouter", **request_body}
         cached = self.cache.get(cache_payload)
+        if cached is not None and cached.get("blocked"):
+            self.logger.write({**event, "model": self.model, "cached": True, "blocked": True, "cost": 0.0})
+            raise ContentBlockedError(cached["error"])
         if cached is not None:
             self._validate_route(cached.get("model"), cached.get("provider"))
             self.last_call = {**cached["usage"], "model": cached["model"], "provider": cached["provider"], "cached": True}
@@ -112,6 +128,13 @@ class OpenRouterJsonClient:
                 )
                 response.raise_for_status()
                 body = response.json()
+                if is_content_block(body):
+                    message = str(body["error"].get("message"))
+                    # Cached so a rerun makes the same call the same way.
+                    self.cache.put(cache_payload, {"blocked": True, "error": message})
+                    self.logger.write({**event, "model": self.model, "cached": False, "attempt": attempt,
+                                       "blocked": True, "cost": 0.0, "error": message})
+                    raise ContentBlockedError(message)
                 if not body.get("model") or "error" in body:
                     raise IncompleteResponseError(f"response without model: {str(body)[:300]}")
                 self._validate_route(body.get("model"), body.get("provider"))
@@ -161,7 +184,7 @@ class OpenRouterJsonClient:
                         "error": str(error),
                     }
                 )
-                if isinstance(error, RouteMismatchError) or attempt == self.retries:
+                if isinstance(error, (RouteMismatchError, ContentBlockedError)) or attempt == self.retries:
                     raise
                 time.sleep(self.backoff_seconds * (2 ** (attempt - 1)))
         raise RuntimeError("unreachable")

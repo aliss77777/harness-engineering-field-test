@@ -4,7 +4,8 @@ import random
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any, Callable
 
-from deciders import LLMDecider, RubricDecider, RubricQuestion
+from deciders import Decision, LLMDecider, RubricDecider, RubricQuestion
+from openrouter_llm import ContentBlockedError
 from workspace import Workspace
 
 
@@ -43,22 +44,31 @@ def evaluate_loop_a(
             decisions = decider.decide_batch(instructions=instructions, pairs=batch, event=event)
             usage = dict(client.last_call)  # thread-local: this batch's call
             return batch, decisions, usage
-        except ValueError as error:
-            # The LLM skipped or duplicated a pair. Its (paid) answer is counted, then each
-            # pair is re-asked on its own; a pair that still fails stops the run.
+        except (ValueError, ContentBlockedError) as error:
+            # The LLM skipped/duplicated a pair, or the provider refused the batch's content.
+            # Any paid answer is counted, then each pair is asked on its own. A pair the
+            # provider refuses gets a seeded coin flip and is flagged `blocked`.
             wasted = dict(client.last_call)
             logger.write({**event, "call_type": "decision_batch_fallback", "error": str(error)})
-            decisions, usage = {}, {key: wasted.get(key, 0) for key in USAGE_KEYS}
+            decisions, usage, single = {}, {key: wasted.get(key, 0) for key in USAGE_KEYS}, {}
             for pair in batch:
-                decisions.update(decider.decide_batch(
-                    instructions=instructions, pairs=[pair],
-                    event={**event, "call_type": "decision_single", "fallback_for_batch": batch_number},
-                ))
-                single = dict(client.last_call)
-                usage = {key: usage.get(key, 0) + single.get(key, 0) for key in USAGE_KEYS}
+                client.last_call = {}
+                try:
+                    decisions.update(decider.decide_batch(
+                        instructions=instructions, pairs=[pair],
+                        event={**event, "call_type": "decision_single", "fallback_for_batch": batch_number},
+                    ))
+                except ContentBlockedError:
+                    coin = random.Random(f"{config['seed']}:blocked:{round_number}:{set_name}:{pair['pair_id']}")
+                    decisions[pair["pair_id"]] = Decision(prediction=coin.choice(("X", "Y")), reason=None)
+                    blocked.add(pair["pair_id"])
+                this = dict(client.last_call)
+                usage = {key: usage.get(key, 0) + this.get(key, 0) for key in USAGE_KEYS}
+                single = this or single
             usage.update(model=single.get("model"), cached=single.get("cached"))
             return batch, decisions, usage
 
+    blocked: set[str] = set()
     by_pair: dict[str, dict[str, Any]] = {}
     done: list[dict[str, Any]] = []
     with ThreadPoolExecutor(max_workers=config["api"]["llm_workers"]) as pool:
@@ -75,6 +85,7 @@ def evaluate_loop_a(
                     "winner": winners[pair["pair_id"]], "prediction": decision.prediction,
                     "correct": decision.prediction == winners[pair["pair_id"]],
                     "reason": decision.reason, "questions": None, "coin_flip_tie": False,
+                    "blocked": pair["pair_id"] in blocked,
                     **{key: usage.get(key, 0) / len(batch) for key in USAGE_KEYS},
                 }
                 by_pair[pair["pair_id"]] = record
@@ -115,6 +126,7 @@ def evaluate_loop_b(
             "winner": winner, "prediction": decision.prediction,
             "correct": decision.prediction == winner, "reason": None,
             "questions": decision.question_probabilities, "coin_flip_tie": decision.coin_flip_tie,
+            "blocked": False,
             **{key: x_usage.get(key, 0) + y_usage.get(key, 0) for key in USAGE_KEYS},
         }
 
@@ -139,6 +151,7 @@ def summarize(records: list[dict[str, Any]]) -> dict[str, Any]:
         "pairs": len(records),
         "accuracy": sum(item["correct"] for item in records) / len(records),
         "tie_rate": sum(item["coin_flip_tie"] for item in records) / len(records),
+        "blocked": sum(bool(item.get("blocked")) for item in records),
         "picks_x": sum(item["prediction"] == "X" for item in records) / len(records),
         "cost": sum(float(item.get("cost", 0)) for item in records),
     }

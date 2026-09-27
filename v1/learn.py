@@ -24,6 +24,7 @@ from evidence import build_evidence_table
 from gate import best_passing, gate_version
 from llm_factory import build_jev_client, build_llm_client
 from log import JsonlLogger
+from openrouter_llm import ContentBlockedError
 from spend import SpendTracker
 from telemetry import Telemetry
 from workspace import Workspace
@@ -65,14 +66,17 @@ class LoopRunner:
         return records
 
     # --- editor feedback ----------------------------------------------------
-    def feedback(self, records: list[dict[str, Any]], version: dict[str, Any], round_number: int) -> dict[str, Any]:
+    def feedback(self, records: list[dict[str, Any]], version: dict[str, Any], round_number: int,
+                 attempt: int = 1) -> dict[str, Any]:
         learning = self.config["learning"]
         labels, limit = self.ws.labels, learning["editor_item_word_limit"]
         columns = self.ws.columns
         shown = {"X": labels["x"], "Y": labels["y"]}
         mistakes = []
-        for item in sample_mistakes(records, count=learning["feedback_mistakes"], seed=self.config["seed"],
-                                    round_number=round_number, loop=self.loop):
+        readable = [item for item in records if not item.get("blocked")]
+        sample_round = round_number if attempt == 1 else f"{round_number}-retry{attempt}"
+        for item in sample_mistakes(readable, count=learning["feedback_mistakes"], seed=self.config["seed"],
+                                    round_number=sample_round, loop=self.loop):
             row = self.practice_by_id.loc[item["pair_id"]]
             entry = {"pair_id": item["pair_id"]}
             if columns["context"]:
@@ -135,6 +139,8 @@ class LoopRunner:
                  "pair_id": None, "version_id": version_id, "call_type": "candidate_proposal", "target_loop": self.loop}
         try:
             return self.llm.generate_json(prompt=prompt, schema=candidate_schema(self.loop, self.config), event=event)["candidates"]
+        except ContentBlockedError:
+            raise
         except Exception as error:  # a failed proposal is logged and the round continues without edits
             self.logger.write({**event, "call_type": "candidate_proposal_failed", "error": str(error)})
             self.telemetry.note(f"Loop {self.loop} round {round_number}: editor proposal failed ({error})")
@@ -149,9 +155,17 @@ class LoopRunner:
             practice_records = self.evaluate(current, current["version_id"], "practice", round_number)
             if gate_current is None:
                 gate_current = self.evaluate(current, current["version_id"], "gate", round_number)
-            feedback = self.feedback(practice_records, current, round_number)
             owned = {k: v for k, v in current.items() if k != "version_id"}
-            proposals = self.propose(owned, feedback, round_number, current["version_id"])
+            proposals: list[dict[str, Any]] = []
+            for attempt in (1, 2, 3):
+                # If the provider refuses a mistake's text, show the editor a different sample.
+                feedback = self.feedback(practice_records, current, round_number, attempt)
+                try:
+                    proposals = self.propose(owned, feedback, round_number, current["version_id"])
+                    break
+                except ContentBlockedError:
+                    self.telemetry.note(f"Loop {self.loop} round {round_number}: editor prompt blocked "
+                                        f"(attempt {attempt}); resampling mistakes")
             round_signatures: list[str] = []
             gated: list[tuple[str, Any]] = []
             versions: dict[str, tuple[dict[str, Any], list[dict[str, Any]], dict[str, Any]]] = {}

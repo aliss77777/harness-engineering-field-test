@@ -79,3 +79,25 @@ def test_telemetry_writes_status_and_summary(tmp_path):
     summary = json.loads((tmp_path / "wip_summary.json").read_text())
     assert status["loops"]["A"]["completed"] == 5
     assert summary["evaluations"][0]["accuracy"] == 0.6
+
+
+def test_content_blocked_pair_gets_seeded_coin_flip_and_flag(tmp_path):
+    from openrouter_llm import ContentBlockedError
+
+    class BlockingLLM(FakeLLMClient):
+        def generate_json(self, *, prompt, schema, event):
+            if "7" in event["pair_id"]:
+                self.last_call = {}
+                raise ContentBlockedError("PROHIBITED_CONTENT")
+            return super().generate_json(prompt=prompt, schema=schema, event=event)
+
+    ws = workspace(tmp_path)
+    runs = []
+    for _ in range(2):
+        records = evaluate_loop_a(ws, frame(12), "x", client=BlockingLLM(3), logger=JsonlLogger(tmp_path / "l.jsonl"),
+                                  run_id="t", round_number=1, set_name="gate", version_id="v")
+        runs.append([r["prediction"] for r in records])
+        assert [r["pair_id"] for r in records if r["blocked"]] == ["7"]
+        assert summarize(records)["blocked"] == 1
+        assert len(records) == 12
+    assert runs[0] == runs[1]
