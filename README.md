@@ -6,10 +6,10 @@ Experiments testing whether a decision model (Jev) helps an AI agent learn its o
 |---|---|---|---|
 | 1 | Upworthy headline A/B tests | Complete: *hypothesis weakened* | [`experiments/2026-09-26-upworthy-v1`](experiments/2026-09-26-upworthy-v1/README.md); code at tag `exp1-upworthy-v1` |
 | 2 | Chatbot Arena long responses | Complete: *only the Jev loop learned* | [`experiments/2026-09-26-arena-v1`](experiments/2026-09-26-arena-v1/README.md) |
-| 3 | Arena, decision-trace Jev loop (B-prime, B-plus) | Learning done; sealed queued | branch `exp3-decision-trace` · `config_arena3.yaml` + `task_arena3.yaml` |
+| 3 | Arena, decision-trace Jev loop (B-prime, B-plus) | Complete: *trace no detectable difference; weights help* | [`experiments/2026-09-26-arena-trace-v1`](experiments/2026-09-26-arena-trace-v1/README.md) |
 | 4 | Arena, one LLM + Jev hybrid (stacked vote) | Designed, not scheduled | brief: `Task Brief 4_Hybrids.md` |
 
-The full, dated record of every decision, deviation and result is in [`MVP Project Plan.md`](MVP%20Project%20Plan.md).
+Side-by-side results and lessons: [`experiments/COMPARISON.md`](experiments/COMPARISON.md). The full, dated record of every decision, deviation and result is in [`MVP Project Plan.md`](MVP%20Project%20Plan.md).
 
 ## Repository layout
 
@@ -52,7 +52,7 @@ Raw data is never committed: Upworthy under `data/jd64p-osfstorage-archive/`; Ar
 
 Live while running: `results/arena/run_status.json` (current stage per loop, ETA, spend), `results/arena/wip_summary.json` (every finished evaluation, candidate edit and gate decision), and `.venv/bin/python monitor.py --run-id RUN_ID` (read-only health check). Spend is capped in code (`budget.spend_cap_usd`).
 
-## Experiment 3 (branch `exp3-decision-trace`)
+## Experiment 3 (merged into `main`)
 
 ```sh
 .venv/bin/python prep_arena3.py                      # fresh sealed set; practice/gate copied from experiment 2

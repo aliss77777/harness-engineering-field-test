@@ -50,8 +50,8 @@ Updated as work progresses. The experiment rules in `MVP-BRIEF-jev-learning-loop
 - [x] Evaluate version 0 and final versions once on the sealed set.
 - [x] Apply the pre-registered verdict rules without modification.
 - [x] Write final versions, history, costs, machine-readable results, and concise verdict.
-- [ ] Document setup and one-command rerun in `README.md`.
-- [ ] Commit clean checkpoints and push to private `aliss77777/jev-test-poc`.
+- [x] Document setup and one-command rerun in `README.md`.
+- [x] Commit clean checkpoints and push to private `aliss77777/jev-test-poc`.
 
 ## Progress log
 
@@ -224,9 +224,9 @@ Experiment 1's exact code is preserved at git tag `exp1-upworthy-v1` (commit `c2
 - [x] Commit before any paid run (`b18f99b`).
 - [x] Version 0 (same LLM, same prompt for both loops).
 - [x] Paid smoke test (includes the longest responses) and cost estimate vs cap.
-- [ ] Four learning rounds for both loops.
-- [ ] One guarded sealed evaluation; verdict.
-- [ ] Archive, write up, and compare with experiment 1.
+- [x] Four learning rounds for both loops.
+- [x] One guarded sealed evaluation; verdict.
+- [x] Archive, write up, and compare with experiment 1.
 
 ## Progress log
 
@@ -316,8 +316,8 @@ Experiment 1's exact code is preserved at git tag `exp1-upworthy-v1` (commit `c2
 - [x] `learn_trace.py` (two arms in parallel), `sealed_trace.py` (guarded; refuses until experiment 2's verdict exists), `verdict_trace.py` (Holm), with tests; end-to-end dry run with fake clients. 66 tests pass.
 - [x] Commit before any paid call (`cd8f701`).
 - [x] Launch learning (in parallel with experiment 2, per Alexander).
-- [ ] Monitor; sealed (after experiment 2's verdict); verdict. (Paused 19:35: OpenRouter out of credit; see experiment 2's log.)
-- [ ] Merge to `main`; archive; compare experiments 1–3.
+- [x] Monitor; sealed (after experiment 2's verdict); verdict.
+- [x] Merge to `main`; archive; compare experiments 1–3.
 
 ## Progress log
 
@@ -335,3 +335,5 @@ Experiment 1's exact code is preserved at git tag `exp1-upworthy-v1` (commit `c2
   - Reference (gate, not sealed): experiment 2's plain B reached 72.0% with one kept edit. The preregistered comparison is on the fresh sealed set.
 - 2026-09-26 23:22–23:46: Sealed attempt 1 (`arena3-sealed-20260926-s1`) failed on a Gemini response block (see experiment 2's log, 23:46); fixed on `main` and merged here. Relaunched as `arena3-sealed-20260926b-s*`.
 - 2026-09-27 00:25: Sealed rerun after the "N/A" text fix (see experiment 2 log, 00:15-00:25): `arena3-sealed-20260926c-s*`.
+- 2026-09-27 00:17: **Experiment 3 sealed evaluation complete** (`arena3-sealed-20260926c-s1`, fresh 1,500-pair set, once). **Preregistered answers: trace → no detectable difference** (B-prime final 67.9% vs B final 69.0%, b 57 / c 74, p 0.16); **weights → help** (B-plus final 69.8% vs B-prime 67.9%, b 75 / c 46, p 0.011, significant after Holm). Learning: B-prime did not learn (p 0.11); **B-plus learned** (67.5% → 69.8%, p 0.002). Loop A on this set: 73.6% → 75.3% (p 0.009). Headline rows vs Loop A: hypothesis weakened for both arms. Cost ≈ 4% of Loop A per decision. Experiment 3 paid spend: $9.10.
+- 2026-09-27 00:30: Archived `experiments/2026-09-26-arena-trace-v1/`; merged branch `exp3-decision-trace` into `main` (fast-forward); wrote `experiments/COMPARISON.md`. Experiment 4's Jev component resolved by its preregistered rule: **B-plus final**.

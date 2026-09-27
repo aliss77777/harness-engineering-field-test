@@ -15,7 +15,7 @@ One hybrid, one preregistered comparison: no multiple-testing correction, and a 
 ## 2. The components (fixed before this experiment's sealed set is touched)
 
 - **A\*** = experiment 2's final Loop A instructions: the best LLM harness.
-- **J\*** = the best Jev harness: whichever of experiment 2's B final, experiment 3's B-prime final and experiment 3's B-plus final has the highest accuracy on **experiment 3's fresh sealed set**. That set is this experiment's *selection* set; this experiment gets its own new sealed set (section 4), so choosing J\* there is not peeking.
+- **J\*** = the best Jev harness: whichever of experiment 2's B final, experiment 3's B-prime final and experiment 3's B-plus final has the highest accuracy on **experiment 3's fresh sealed set**. **Resolved 2026-09-27: B-plus final** (69.8%, vs B 69.0% and B-prime 67.9%). That set is this experiment's *selection* set; this experiment gets its own new sealed set (section 4), so choosing J\* there is not peeking.
 - **Style baseline** (experiment 2's six features), as a reference line.
 
 No component is re-learned here. This experiment tests *combination*, not learning.
