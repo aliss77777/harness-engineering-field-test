@@ -40,7 +40,7 @@ Style baseline across Arena sets: 59.9–62.2%. Every LLM and Jev system beat it
 
 ## Caveats
 
-- **One LLM, two datasets.** The LLM's starting accuracy exceeded the memorization threshold (70%) every time, so part of its lead may be recall.
+- **One LLM, two datasets.** The LLM's starting accuracy exceeded the memorization threshold (70%) in experiments 1–5, so part of its lead there may be recall (the flag was off in experiment 6, where its best-headline hit rate was 34%).
 - **Experiments 1–5 were supervised learning with text parameters** (every pair came with its answer). **Experiment 6 used partial feedback** (a contextual bandit on replayed randomized tests), the first RL-style step; it is replay, not live traffic.
 - **"Jev" vs "a yes/no rubric":** a headline claim about Jev specifically needs Loop C (the same rubric answered by an LLM), not yet run.
 
