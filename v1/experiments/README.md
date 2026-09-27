@@ -6,7 +6,7 @@ Completed experiments are immutable snapshots. Start a new folder instead of ove
 |---|---|---|---|
 | [`2026-09-26-upworthy-v1`](2026-09-26-upworthy-v1/README.md) | Upworthy headline choice | Complete | Hypothesis weakened |
 | [`2026-09-26-arena-v1`](2026-09-26-arena-v1/README.md) | Chatbot Arena, long responses | Complete | Only the Jev loop learned |
-| `2026-09-26-arena-trace-v1` (to be archived) | Arena, decision-trace Jev loop | Running on branch `exp3-decision-trace` | — |
+| [`2026-09-26-arena-trace-v1`](2026-09-26-arena-trace-v1/README.md) | Arena, decision-trace Jev loop | Complete | Trace: no detectable difference · weights: help |
 
 ## Package convention
 

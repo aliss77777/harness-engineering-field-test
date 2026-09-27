@@ -1,0 +1,310 @@
+{
+  "run_id": "arena3-sealed-20260926c-s1",
+  "task": "arena_decision_trace",
+  "summaries": {
+    "a_version0": {
+      "pairs": 1500,
+      "accuracy": 0.736,
+      "tie_rate": 0.0,
+      "blocked": 3,
+      "picks_x": 0.528,
+      "cost": 2.266401000000014
+    },
+    "a_final": {
+      "pairs": 1500,
+      "accuracy": 0.7533333333333333,
+      "tie_rate": 0.0,
+      "blocked": 3,
+      "picks_x": 0.5253333333333333,
+      "cost": 2.344578749999998
+    },
+    "b_version0": {
+      "pairs": 1500,
+      "accuracy": 0.6653333333333333,
+      "tie_rate": 0.004,
+      "blocked": 0,
+      "picks_x": 0.492,
+      "cost": 0.09815660399999977
+    },
+    "b_final": {
+      "pairs": 1500,
+      "accuracy": 0.69,
+      "tie_rate": 0.0033333333333333335,
+      "blocked": 0,
+      "picks_x": 0.51,
+      "cost": 0.10181060400000007
+    },
+    "bp_final": {
+      "pairs": 1500,
+      "accuracy": 0.6786666666666666,
+      "tie_rate": 0.006,
+      "blocked": 0,
+      "picks_x": 0.5026666666666667,
+      "cost": 0.0941246039999998
+    },
+    "bw_version0": {
+      "pairs": 1500,
+      "accuracy": 0.6746666666666666,
+      "tie_rate": 0.0006666666666666666,
+      "blocked": 0,
+      "picks_x": 0.49733333333333335,
+      "cost": 0.09815660399999977
+    },
+    "bw_final": {
+      "pairs": 1500,
+      "accuracy": 0.698,
+      "tie_rate": 0.0006666666666666666,
+      "blocked": 0,
+      "picks_x": 0.5033333333333333,
+      "cost": 0.09790460400000003
+    }
+  },
+  "verdict": {
+    "primary": {
+      "trace": "no_detectable_difference",
+      "weights": "helps"
+    },
+    "primary_tests": {
+      "p1_trace_bp_vs_b": {
+        "b": 57,
+        "c": 74,
+        "discordant": 131,
+        "p_value": 0.1621351427341069,
+        "method": "chi_square_continuity_corrected",
+        "significant_after_holm": false
+      },
+      "p2_weights_bw_vs_bp": {
+        "b": 75,
+        "c": 46,
+        "discordant": 121,
+        "p_value": 0.010913557148115472,
+        "method": "chi_square_continuity_corrected",
+        "significant_after_holm": true
+      }
+    },
+    "learning_checks": {
+      "bp_final_vs_version0": {
+        "b": 82,
+        "c": 62,
+        "discordant": 144,
+        "p_value": 0.1133455092195258,
+        "method": "chi_square_continuity_corrected",
+        "learned": false
+      },
+      "bw_final_vs_version0": {
+        "b": 78,
+        "c": 43,
+        "discordant": 121,
+        "p_value": 0.0019954471725758213,
+        "method": "chi_square_continuity_corrected",
+        "learned": true
+      }
+    },
+    "accuracy": {
+      "a_version0": 0.736,
+      "a_final": 0.7533333333333333,
+      "b_version0": 0.6653333333333333,
+      "b_final": 0.69,
+      "bp_final": 0.6786666666666666,
+      "bw_version0": 0.6746666666666666,
+      "bw_final": 0.698,
+      "baseline": 0.6033333333333334
+    },
+    "headline_arena_v2": {
+      "primary_bp": {
+        "verdict": "hypothesis_weakened",
+        "accuracy": {
+          "a_version0": 0.736,
+          "a_final": 0.7533333333333333,
+          "b_version0": 0.6653333333333333,
+          "b_final": 0.6786666666666666,
+          "code_baseline": 0.6033333333333334
+        },
+        "intervals_95": {
+          "a_final": [
+            0.7308896799583833,
+            0.7744827418100579
+          ],
+          "b_final": [
+            0.6546036233642627,
+            0.7018169267250591
+          ],
+          "b_minus_a": [
+            -0.09854142398342376,
+            -0.050791909349909584
+          ]
+        },
+        "tests": {
+          "a_learning": {
+            "b": 59,
+            "c": 33,
+            "discordant": 92,
+            "p_value": 0.009149147579593788,
+            "method": "chi_square_continuity_corrected"
+          },
+          "b_learning": {
+            "b": 82,
+            "c": 62,
+            "discordant": 144,
+            "p_value": 0.1133455092195258,
+            "method": "chi_square_continuity_corrected"
+          },
+          "b_vs_a": {
+            "b": 115,
+            "c": 227,
+            "discordant": 342,
+            "p_value": 1.946706060180685e-09,
+            "method": "chi_square_continuity_corrected"
+          },
+          "b_vs_baseline": {
+            "b": 361,
+            "c": 248,
+            "discordant": 609,
+            "p_value": 5.66641153497934e-06,
+            "method": "chi_square_continuity_corrected"
+          }
+        },
+        "checks": {
+          "signal_a": true,
+          "signal_b": true,
+          "a_learned": true,
+          "b_learned": false,
+          "b_better": false,
+          "a_better": true,
+          "same_quality": false,
+          "cheaper": true,
+          "b_beats_baseline": true,
+          "memorization_flag": true
+        },
+        "cost": {
+          "a_per_1000": 1.5630524999999986,
+          "b_per_1000": 0.06274973599999988,
+          "b_over_a_ratio": 0.04014563554327186
+        },
+        "rules_version": "arena_v2",
+        "thresholds": {
+          "rules_version": "arena_v2",
+          "trace_primary_alpha": 0.05,
+          "alpha": 0.05,
+          "equivalence_margin": 0.03,
+          "max_cost_ratio": 0.2,
+          "memorization_accuracy": 0.7,
+          "mcnemar_exact_max_discordant": 25
+        }
+      },
+      "secondary_bw": {
+        "verdict": "hypothesis_weakened",
+        "accuracy": {
+          "a_version0": 0.736,
+          "a_final": 0.7533333333333333,
+          "b_version0": 0.6746666666666666,
+          "b_final": 0.698,
+          "code_baseline": 0.6033333333333334
+        },
+        "intervals_95": {
+          "a_final": [
+            0.7308896799583833,
+            0.7744827418100579
+          ],
+          "b_final": [
+            0.6742838890543356,
+            0.7207045563804725
+          ],
+          "b_minus_a": [
+            -0.07858343816107685,
+            -0.03208322850558981
+          ]
+        },
+        "tests": {
+          "a_learning": {
+            "b": 59,
+            "c": 33,
+            "discordant": 92,
+            "p_value": 0.009149147579593788,
+            "method": "chi_square_continuity_corrected"
+          },
+          "b_learning": {
+            "b": 78,
+            "c": 43,
+            "discordant": 121,
+            "p_value": 0.0019954471725758213,
+            "method": "chi_square_continuity_corrected"
+          },
+          "b_vs_a": {
+            "b": 119,
+            "c": 202,
+            "discordant": 321,
+            "p_value": 4.721566809335499e-06,
+            "method": "chi_square_continuity_corrected"
+          },
+          "b_vs_baseline": {
+            "b": 365,
+            "c": 223,
+            "discordant": 588,
+            "p_value": 6.072747517328606e-09,
+            "method": "chi_square_continuity_corrected"
+          }
+        },
+        "checks": {
+          "signal_a": true,
+          "signal_b": true,
+          "a_learned": true,
+          "b_learned": true,
+          "b_better": false,
+          "a_better": true,
+          "same_quality": false,
+          "cheaper": true,
+          "b_beats_baseline": true,
+          "memorization_flag": true
+        },
+        "cost": {
+          "a_per_1000": 1.5630524999999986,
+          "b_per_1000": 0.06526973600000002,
+          "b_over_a_ratio": 0.04175786545877383
+        },
+        "rules_version": "arena_v2",
+        "thresholds": {
+          "rules_version": "arena_v2",
+          "trace_primary_alpha": 0.05,
+          "alpha": 0.05,
+          "equivalence_margin": 0.03,
+          "max_cost_ratio": 0.2,
+          "memorization_accuracy": 0.7,
+          "mcnemar_exact_max_discordant": 25
+        }
+      }
+    },
+    "costs_per_1000": {
+      "a_final": 1.5630524999999986,
+      "bp_final": 0.06274973599999988,
+      "bw_final": 0.06526973600000002
+    }
+  },
+  "blocked_pairs": [
+    "1623478562",
+    "1786049557",
+    "3902857699",
+    "805218091"
+  ],
+  "edits": {
+    "Bp": {
+      "proposed": 31,
+      "kept": 2
+    },
+    "Bw": {
+      "proposed": 32,
+      "kept": 1
+    }
+  },
+  "notes": {
+    "task": "arena_decision_trace",
+    "feedback_mode": "decision_trace",
+    "prescreen": {
+      "proposals": 8,
+      "gate_top": 3
+    },
+    "gate_p_threshold": 0.05,
+    "learning_paid_spend_usd": 4.0884,
+    "experiment3_paid_spend_usd": 9.0976
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "filters": {
+    "1_rows_loaded": 57477,
+    "2_after_drop_ties": 39716,
+    "3_after_single_turn": 34297,
+    "4_after_drop_empty_or_unparseable": 34269,
+    "5_after_length_cap": 34267,
+    "6_after_hiding_model_names": 34267
+  },
+  "fresh_sealed": {
+    "pool_pairs_in_sealed_buckets": 13789,
+    "excluded_experiment2_sealed": 1500,
+    "fresh_pool": 12289,
+    "pairs_saved": 1500,
+    "ids": "sampled_and_saved",
+    "winner_is_x": 0.5,
+    "overlap_with_experiment2_sealed_pairs": 0,
+    "prompt_overlap_with_practice": 0,
+    "prompt_overlap_with_gate": 0
+  }
+}

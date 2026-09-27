@@ -1,0 +1,21 @@
+{
+  "run_id": "arena3-sealed-20260926c-s1",
+  "started_at": "2026-09-27T06:16:47.385523+00:00",
+  "loops": {
+    "sealed": {
+      "stage": "done",
+      "primary": {
+        "trace": "no_detectable_difference",
+        "weights": "helps"
+      },
+      "updated_at": "2026-09-27T06:17:00.658842+00:00",
+      "stage_elapsed_seconds": 0,
+      "eta_seconds_for_stage": null
+    }
+  },
+  "updated_at": "2026-09-27T06:17:00.658848+00:00",
+  "elapsed_seconds": 13,
+  "spend_usd": 9.0976,
+  "spend_cap_usd": 20.0,
+  "paid_calls": 119948
+}

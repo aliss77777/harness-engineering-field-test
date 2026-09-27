@@ -1,0 +1,92 @@
+# Experiment 3: Arena, decision-trace learning for the Jev loop (B-prime and B-plus).
+# Same data, practice and gate sets, version 0, gate rule and limits as experiment 2;
+# a fresh, never-used sealed set. Fixed before any paid run.
+seed: 20260926
+sets:
+  practice: 500
+  gate: 1500
+  sealed: 1500
+experiment2:
+  # Read-only inputs from experiment 2.
+  results: results/arena
+  pairs: data/arena/pairs
+  splits: data/arena/splits
+filters:
+  max_response_words: 1500
+  # Share of prompt-hash buckets assigned to each set (split by prompt, not row).
+  split_fractions:
+    practice: 0.2
+    gate: 0.4
+    sealed: 0.4
+learning:
+  rounds: 4
+  feedback_mistakes: 20
+  # Mistakes shown to the editor are a fresh seeded sample each round.
+  resample_mistakes_each_round: true
+  gate_mode: single_edit
+  gate_p_threshold: 0.05
+  max_changes: 3
+  max_kept_per_round: 1
+  max_instructions_words: 300
+  max_rubric_questions: 10
+  starting_rubric_min_questions: 5
+  starting_rubric_max_questions: 8
+  question_check_mode: reworded_questions
+  question_check_items: 10
+  question_check_max_disagreements: 1
+  # Candidate edits this similar to an already-rejected one are refused without gating.
+  duplicate_similarity: 0.9
+  # Each text the editor sees is trimmed to this many words (both loops alike).
+  editor_item_word_limit: 400
+  # --- Experiment 3 additions (Jev loops only) ---
+  feedback_mode: decision_trace
+  prescreen:
+    # The editor proposes up to `proposals` single edits; each valid one is scored on
+    # practice with Jev; the best `gate_top` with a net practice gain are gated.
+    proposals: 8
+    gate_top: 3
+  trace:
+    gap_bins: [0.2, 0.5]
+    overlap_threshold: 0.6
+  weights:
+    # Loop B-plus: per-question weights fitted on practice (logistic regression, no intercept).
+    regularization_c: 1.0
+verdict:
+  rules_version: arena_v2
+  # Experiment 3 primary tests (Holm-corrected across the two): B-prime vs B, B-plus vs B-prime.
+  trace_primary_alpha: 0.05
+  alpha: 0.05
+  equivalence_margin: 0.03
+  max_cost_ratio: 0.20
+  memorization_accuracy: 0.70
+  mcnemar_exact_max_discordant: 25
+budget:
+  # Separate from experiment 2's tracker; experiments 2 + 3 together stay under $75.
+  spend_cap_usd: 20.0
+api:
+  # Operational only (results are identical at any concurrency). Raised after 429s
+  # from Gemini at 8 workers in the first launch.
+  retries: 8
+  backoff_seconds: 5.0
+  batch_size: 5
+  temperature: 0.0
+  reasoning_effort: medium
+  llm_workers: 3
+  jev_workers: 8
+models:
+  llm: google/gemini-3.8-flash
+  llm_expected_served: google/gemini-3.8-flash
+  llm_expected_provider: Google AI Studio
+  llm_allow_fallbacks: false
+  direct_llm: gemini-3.8-flash
+  jev: typesafe/jev-1.13
+  jev_expected_served: typesafe/jev-1.13-20260917
+  jev_expected_provider: TypeSafe
+  llm_provider: openrouter
+  jev_provider: openrouter
+prices_per_million_tokens:
+  # Paid reference rate for Gemini 3.8 Flash through 2026-12-31.
+  llm_input: 0.75
+  llm_output: 3.75
+  jev_input: 0.042
+  jev_output: 0.0

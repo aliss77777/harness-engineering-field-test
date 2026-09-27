@@ -1,0 +1,18 @@
+2026-09-26 21:24:39 supervisor started
+2026-09-26 22:45:47 exp2 learning: done
+2026-09-26 22:45:47 exp2 sealed: attempt 1 (arena-sealed-20260926-s1)
+2026-09-26 23:22:24 exp2 sealed: done
+2026-09-26 23:22:24 exp3 sealed: attempt 1 (arena3-sealed-20260926-s1)
+2026-09-26 23:46:33 exp3 sealed: attempt 1 ended without output (openrouter_llm.IncompleteResponseError: response without model: {'id': 'gen-1790487987-324HagS38wfRTYzfEIAG', 'error': {'message': 'Gemini blocked the response:); retrying in 60 s
+2026-09-26 23:47:33 exp3 sealed: attempt 2 (arena3-sealed-20260926-s2)
+2026-09-26 23:51:18 supervisor started
+2026-09-26 23:51:18 exp2 learning: done
+2026-09-26 23:51:18 exp2 sealed: done
+2026-09-26 23:51:18 exp3 sealed: attempt 1 (arena3-sealed-20260926b-s1)
+2026-09-27 00:15:15 exp3 sealed: attempt 1 ended without output (AttributeError: 'float' object has no attribute 'split'); retrying in 60 s
+2026-09-27 00:16:46 supervisor started
+2026-09-27 00:16:46 exp2 learning: done
+2026-09-27 00:16:46 exp2 sealed: done
+2026-09-27 00:16:46 exp3 sealed: attempt 1 (arena3-sealed-20260926c-s1)
+2026-09-27 00:17:00 exp3 sealed: done
+2026-09-27 00:17:00 ALL DONE: experiment 2 and 3 verdicts written
