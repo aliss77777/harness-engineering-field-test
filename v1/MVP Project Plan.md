@@ -7,8 +7,8 @@ Updated as work progresses. The experiment rules in `MVP-BRIEF-jev-learning-loop
 - [x] Create a reproducible local project and private Git history.
 - [x] Prepare fixed Upworthy practice, gate, and sealed pairs.
 - [x] Run the code-feature baseline and fake-decider sanity check.
-- [ ] Complete one end-to-end learning round for Loops A and B.
-- [ ] Save results, costs, logs, and a clear next-run command.
+- [x] Complete one end-to-end learning round for Loops A and B.
+- [x] Save results, costs, logs, and a clear next-run command.
 
 ## 1. Preflight
 
