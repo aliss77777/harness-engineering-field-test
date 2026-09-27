@@ -31,12 +31,24 @@ class ContentBlockedError(RuntimeError):
 
 
 def is_content_block(body: dict[str, Any]) -> bool:
+    """The provider refused to read the request (403 content policy)."""
     error = body.get("error") or {}
     metadata = error.get("metadata") or {}
     return error.get("code") == 403 and (
         metadata.get("error_type") == "content_policy_violation"
         or "PROHIBITED_CONTENT" in str(error.get("message", ""))
     )
+
+
+def is_response_block(body: dict[str, Any]) -> bool:
+    """Gemini generated an answer but withheld it ("blocked the response")."""
+    error = body.get("error") or {}
+    return "blocked the response" in str(error.get("message", "")).lower()
+
+
+# A response block counts as a refusal only after this many identical attempts,
+# so a one-off provider glitch is retried rather than recorded as a block.
+RESPONSE_BLOCK_ATTEMPTS = 3
 
 
 class OpenRouterJsonClient:
@@ -56,6 +68,7 @@ class OpenRouterJsonClient:
         allow_fallbacks: bool,
         http_client: httpx.Client | None = None,
         spend=None,
+        max_backoff_seconds: float = 120.0,
     ):
         self.model = model
         self.api_key = api_key
@@ -70,6 +83,7 @@ class OpenRouterJsonClient:
         self.allow_fallbacks = allow_fallbacks
         self._local = threading.local()
         self.spend = spend
+        self.max_backoff_seconds = max_backoff_seconds
         self.http = http_client or httpx.Client(timeout=120.0)
 
     def generate_json(
@@ -134,7 +148,9 @@ class OpenRouterJsonClient:
                     raise OutOfCreditsError("OpenRouter returned 402 Payment Required: add credit, then rerun (finished calls are cached)")
                 response.raise_for_status()
                 body = response.json()
-                if is_content_block(body):
+                if is_response_block(body) and attempt < RESPONSE_BLOCK_ATTEMPTS:
+                    raise IncompleteResponseError(f"response blocked (attempt {attempt}): {str(body)[:300]}")
+                if is_content_block(body) or is_response_block(body):
                     message = str(body["error"].get("message"))
                     # Cached so a rerun makes the same call the same way.
                     self.cache.put(cache_payload, {"blocked": True, "error": message})
@@ -192,7 +208,7 @@ class OpenRouterJsonClient:
                 )
                 if isinstance(error, (RouteMismatchError, ContentBlockedError, OutOfCreditsError)) or attempt == self.retries:
                     raise
-                time.sleep(self.backoff_seconds * (2 ** (attempt - 1)))
+                time.sleep(min(self.backoff_seconds * (2 ** (attempt - 1)), self.max_backoff_seconds))
         raise RuntimeError("unreachable")
 
     @property

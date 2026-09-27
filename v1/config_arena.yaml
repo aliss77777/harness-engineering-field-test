@@ -43,8 +43,10 @@ budget:
 api:
   # Operational only (results are identical at any concurrency). Raised after 429s
   # from Gemini at 8 workers in the first launch.
-  retries: 8
+  retries: 12
   backoff_seconds: 5.0
+  # Backoff doubles from 5 s up to this cap: ~15 min of patience for a rate-limited call.
+  max_backoff_seconds: 120.0
   batch_size: 5
   temperature: 0.0
   reasoning_effort: medium

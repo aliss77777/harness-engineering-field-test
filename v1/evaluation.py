@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import random
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from contextlib import contextmanager
 from typing import Any, Callable
 
 from deciders import Decision, LLMDecider, RubricDecider, RubricQuestion
@@ -10,6 +11,22 @@ from workspace import Workspace
 
 
 USAGE_KEYS = ("input_tokens", "output_tokens", "reasoning_tokens", "cost", "latency_ms")
+
+
+@contextmanager
+def failfast_pool(workers: int):
+    """A thread pool that cancels queued calls as soon as one fails.
+
+    The plain `with ThreadPoolExecutor()` waits for every queued call before raising,
+    so a failed run kept spending for minutes before it stopped.
+    """
+    pool = ThreadPoolExecutor(max_workers=workers)
+    try:
+        yield pool
+    except BaseException:
+        pool.shutdown(wait=True, cancel_futures=True)
+        raise
+    pool.shutdown(wait=True)
 
 
 def batched(items: list[dict[str, str]], size: int):
@@ -71,7 +88,7 @@ def evaluate_loop_a(
     blocked: set[str] = set()
     by_pair: dict[str, dict[str, Any]] = {}
     done: list[dict[str, Any]] = []
-    with ThreadPoolExecutor(max_workers=config["api"]["llm_workers"]) as pool:
+    with failfast_pool(config["api"]["llm_workers"]) as pool:
         futures = [pool.submit(run, number, batch) for number, batch in enumerate(batches)]
         for future in as_completed(futures):
             batch, decisions, usage = future.result()
@@ -136,7 +153,7 @@ def evaluate_loop_b(
 
     by_pair: dict[str, dict[str, Any]] = {}
     done: list[dict[str, Any]] = []
-    with ThreadPoolExecutor(max_workers=config["api"]["jev_workers"]) as pool:
+    with failfast_pool(config["api"]["jev_workers"]) as pool:
         futures = [pool.submit(run, pair) for pair in pairs]
         for future in as_completed(futures):
             record = future.result()
