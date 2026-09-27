@@ -377,3 +377,4 @@ Experiment 1's exact code is preserved at git tag `exp1-upworthy-v1` (commit `c2
 ## Progress log
 
 - 2026-09-27 (build): sealed-5 drawn; router, verdict and staged runner written; 79 tests pass (4 new); fake-client dry run of both stages passed. Committed before any paid call.
+- 2026-09-27: **τ frozen** (`arena5-fit-20260927`, $0.00, gate decisions from cache): τ = 0.4453 sends 40.0% of gate pairs to the LLM. On gate: router 75.2%, LLM alone 77.1%, Jev alone 70.9%. Proceeding to the sealed stage unchanged.
