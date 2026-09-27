@@ -193,7 +193,7 @@ Experiment 1 is archived under `experiments/2026-09-26-upworthy-v1/`:
 
 # Experiment 2: Chatbot Arena (long responses)
 
-**Brief:** `Task Brief 2_Arena.md` (builds on `MVP-BRIEF-jev-learning-loop-v2_5.md`). **Started:** 2026-09-26 18:00 MDT. **Config:** `config_arena.yaml` + `task_arena.yaml`. **Outputs:** `data/arena/`, `results/arena/`, `logs/arena/`; archived at the end under `experiments/`.
+**Brief:** `Task Brief 2_Arena.md` (builds on `MVP-BRIEF-jev-learning-loop-v2_5.md`). **Started:** 2026-09-26 18:00 MDT (times below are MDT, from file and commit timestamps). **Config:** `config_arena.yaml` + `task_arena.yaml`. **Outputs:** `data/arena/`, `results/arena/`, `logs/arena/`; archived at the end under `experiments/`.
 
 Experiment 1's exact code is preserved at git tag `exp1-upworthy-v1` (commit `c2170c5`); its archive in `experiments/2026-09-26-upworthy-v1/` is untouched.
 
@@ -221,9 +221,9 @@ Experiment 1's exact code is preserved at git tag `exp1-upworthy-v1` (commit `c2
 - [x] "Neither loop learned" and "Only the Jev loop learned" verdict rows (`rules_version: arena_v2`), with tests.
 - [x] Live telemetry: `results/arena/run_status.json` and `results/arena/wip_summary.json`.
 - [x] Fake decider through the real pipeline on all sets.
-- [ ] Commit before any paid run.
-- [ ] Version 0 (same LLM, same prompt for both loops).
-- [ ] Paid smoke test (includes the longest responses) and cost estimate vs cap.
+- [x] Commit before any paid run (`b18f99b`).
+- [x] Version 0 (same LLM, same prompt for both loops).
+- [x] Paid smoke test (includes the longest responses) and cost estimate vs cap.
 - [ ] Four learning rounds for both loops.
 - [ ] One guarded sealed evaluation; verdict.
 - [ ] Archive, write up, and compare with experiment 1.
@@ -231,9 +231,15 @@ Experiment 1's exact code is preserved at git tag `exp1-upworthy-v1` (commit `c2
 ## Progress log
 
 - 2026-09-26 18:05: Dataset downloaded (57,477 rows).
-- 2026-09-26 18:10: Filters: 57,477 loaded → 39,716 after dropping ties → 34,297 single-turn → 34,269 after dropping empty/unparseable → 34,267 after the 1,500-word cap (removed 2) → 34,267 after hiding model names (removes columns, not rows).
-- 2026-09-26 18:10: Prompt-hash split (20/40/40% of buckets) → pools of 6,933 / 13,545 / 13,789 pairs; sampled 500 / 1,500 / 1,500. Zero prompts shared between sets. Median response ≈ 155–170 words.
-- 2026-09-26 18:12: **Deviation (position balance):** per-pair coin flips put the winner first in only 44.2% of practice pairs (p ≈ 0.01). Replaced with seeded balanced ordering: exactly 50.0% winner-first in every set. Done before any decider saw the pairs.
-- 2026-09-26 18:15: Style code baseline (length, list items, headers, code block, refusal phrases, log length ratio; no intercept) trained on practice: **60.4% practice, 62.5% gate**. Longer responses, code blocks and non-refusals win. As the brief warned, style alone carries real signal, so Loop B must beat this baseline to claim more than style detection.
-- 2026-09-26 18:40: Harness changes built (see Decisions). Verdict rules `arena_v2` added with tests; experiment 1 rules unchanged under `mvp_v1`. 56 tests pass.
-- 2026-09-26 18:42: Fake decider through the real pipeline: Loop A 51.2 / 49.3 / 49.7% and Loop B 48.6 / 50.7 / 49.7% (practice / gate / sealed), tie rate ≤ 0.4%. Fake gate check correctly rejected (b 365, c 367, p 0.54).
+- 2026-09-26 18:08: Filters: 57,477 loaded → 39,716 after dropping ties → 34,297 single-turn → 34,269 after dropping empty/unparseable → 34,267 after the 1,500-word cap (removed 2) → 34,267 after hiding model names (removes columns, not rows).
+- 2026-09-26 18:08: Prompt-hash split (20/40/40% of buckets) → pools of 6,933 / 13,545 / 13,789 pairs; sampled 500 / 1,500 / 1,500. Zero prompts shared between sets. Median response ≈ 155–170 words.
+- 2026-09-26 18:08: **Deviation (position balance):** per-pair coin flips put the winner first in only 44.2% of practice pairs (p ≈ 0.01). Replaced with seeded balanced ordering: exactly 50.0% winner-first in every set. Done before any decider saw the pairs.
+- 2026-09-26 18:08: Style code baseline (length, list items, headers, code block, refusal phrases, log length ratio; no intercept) trained on practice: **60.4% practice, 62.5% gate**. Longer responses, code blocks and non-refusals win. As the brief warned, style alone carries real signal, so Loop B must beat this baseline to claim more than style detection.
+- 2026-09-26 18:13: Harness changes built (see Decisions). Verdict rules `arena_v2` added with tests; experiment 1 rules unchanged under `mvp_v1`. 56 tests pass.
+- 2026-09-26 18:14: Fake decider through the real pipeline: Loop A 51.2 / 49.3 / 49.7% and Loop B 48.6 / 50.7 / 49.7% (practice / gate / sealed), tie rate ≤ 0.4%. Fake gate check correctly rejected (b 365, c 367, p 0.54).
+- 2026-09-26 18:14: Committed `b18f99b` (harness + locked `arena_v2` verdict rules) before any paid Arena call. Experiment 1 code tagged `exp1-upworthy-v1`.
+- 2026-09-26 18:14: Version 0 generated from the brief's prompt in one Gemini call ($0.007): 135-word instructions (instruction compliance, correctness, directness, readability, tone) and six rubric questions (`satisfies_explicit_instructions`+, `contains_factual_or_logical_errors`−, `directly_answers_without_filler`+, `uses_clean_scannable_formatting`+, `unnecessary_refusal_or_excessive_hedging`−, `leaves_task_incomplete`−). Saved to `results/arena/version0.json`.
+- 2026-09-26 18:15: Paid smoke test, 20 practice pairs (incl. the 5 longest): no failures. Loop A $1.58 per 1,000 decisions (869 input + 248 output tokens per decision); Loop B $0.073 per 1,000 (1,750 Jev input tokens per decision). **B/A cost ratio 0.047 (~21× cheaper)**, similar to experiment 1's 18.9×. Jev accepted the longest gate response (1,313 words, 2,241 tokens).
+- 2026-09-26 18:15: Worst-case estimate (every round proposes and gates 3 edits for both loops): **$42.15**, within the $75 cap (`results/arena/cost_estimate.json`). Proceeding under Alexander's approval.
+- 2026-09-26 18:15: Learning launched: `learn.py --run-id arena-learn-20260926`. Loops A and B run in parallel threads. Live status: `results/arena/run_status.json`; finished results so far: `results/arena/wip_summary.json`; health check: `python monitor.py --run-id arena-learn-20260926`.
+- 2026-09-26 18:17: **Launch 1 stopped.** Loop A hit `429 Too Many Requests` from Gemini on all 8 concurrent workers (24 failed attempts, 3 retries each, no pair lost yet). Stopped before a retry could exhaust and crash the run. Operational fix only: `llm_workers` 8 → 3 and `retries` 5 → 8 (backoff doubling from 5 s). Results do not depend on concurrency, and all finished calls are cached, so the restart reproduces launch 1's work without new spend. Launch 1's partial log is kept at `logs/arena/arena-learn-20260926.jsonl`.

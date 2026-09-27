@@ -41,12 +41,14 @@ verdict:
 budget:
   spend_cap_usd: 75.0
 api:
-  retries: 5
+  # Operational only (results are identical at any concurrency). Raised after 429s
+  # from Gemini at 8 workers in the first launch.
+  retries: 8
   backoff_seconds: 5.0
   batch_size: 5
   temperature: 0.0
   reasoning_effort: medium
-  llm_workers: 8
+  llm_workers: 3
   jev_workers: 8
 models:
   llm: google/gemini-3.8-flash
