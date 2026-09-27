@@ -141,10 +141,11 @@ class LoopRunner:
             return self.llm.generate_json(prompt=prompt, schema=candidate_schema(self.loop, self.config), event=event)["candidates"]
         except ContentBlockedError:
             raise
-        except Exception as error:  # a failed proposal is logged and the round continues without edits
+        except Exception as error:
+            # Never turn a failed editor call into "no edits this round": that would silently
+            # waste a round. Log it and stop the loop; finished calls are cached for a rerun.
             self.logger.write({**event, "call_type": "candidate_proposal_failed", "error": str(error)})
-            self.telemetry.note(f"Loop {self.loop} round {round_number}: editor proposal failed ({error})")
-            return []
+            raise
 
     def run(self, version0: dict[str, Any]) -> dict[str, Any]:
         learning = self.config["learning"]

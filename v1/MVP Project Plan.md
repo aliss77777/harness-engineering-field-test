@@ -253,6 +253,14 @@ Experiment 1's exact code is preserved at git tag `exp1-upworthy-v1` (commit `c2
   - Blocked pairs are excluded from the mistakes shown to either editor. If an editor prompt is itself blocked, the editor retries with a different seeded mistake sample (up to 3 attempts).
   - The sealed stage also reports a **sensitivity verdict** with every pair blocked for Loop A removed from all systems (A, B, baseline). This is reported, not used for the verdict.
   - Block counts are reported per evaluation (`blocked` in `wip_summary.json`). 58 tests pass.
+- 2026-09-26 18:41: Launch 4 (`arena-learn-20260926d`) started. Loop B finished all 4 rounds by 18:48 (1 edit kept of 12 proposed; see below); Loop A is rate-limited (3 workers, ≈12 min per 1,500-pair gate check).
+- 2026-09-26 18:48: **Loop B learning result (gate set, not a verdict):** round 1 kept `provides_helpful_explanation_and_depth` (67.6% → 72.0%, b 110 / c 44). Rounds 2–4: 7 candidates gated and rejected (each lowered gate accuracy, 69.3–71.4%), 2 failed the question check. Loop A version 0: 75.6% practice, 75.3% gate (1 pair blocked by Gemini).
+- 2026-09-26 19:18: Experiment 3 (decision-trace Jev loop) designed, built and committed on branch `exp3-decision-trace` (worktree `../jev-test-poc-exp3`) before any experiment-3 paid call. Design and log: the "Experiment 3" section of this file on that branch (merged here when complete).
+- 2026-09-26 19:20: **Decision (Alexander): run experiment 3's learning in parallel with experiment 2** instead of waiting for experiment 2's verdict. Experiment 3's learning reads only practice and gate; its sealed stage is still guarded to run only after experiment 2's sealed verdict exists. Its few editor calls share Gemini's rate limit with experiment 2's Loop A (a small slowdown at most).
+- 2026-09-26 19:35: **Both runs stopped: OpenRouter account out of credit.** From about 19:15, Gemini calls returned `402 Payment Required`; Loop A slowed to a crawl (retries with backoff) and some calls exhausted all 8 retries. Experiment 3's two editor calls also got 402. Stopped both runs before a failure could be recorded as a result. Experiment 2 paid spend at stop: **$7.99** (36,504 paid calls). Every finished call is cached; restarting after credit is added replays them for free and reproduces the same results.
+  - Experiment 2 state at stop: Loop B complete (4 rounds); Loop A in round 1 — version 0 scored (75.6% practice, 75.3% gate), candidate 1 gated (76.7% gate), candidate 2 at 940/1,500.
+- 2026-09-26 19:45: **Fixes (safety only, no effect on results):** a 402 now stops the run at once with an "add credit" message instead of being retried; a failed editor call now stops the loop instead of being treated as "no edits this round" (which would have silently wasted rounds). Tests added (59 pass).
+- **Waiting on Alexander:** add OpenRouter credit (Claude cannot make payments). Remaining estimate: experiment 2 ≈ $25–35 worst case (Loop A rounds 1–4 + sealed); experiment 3 ≈ $10–15.
 
 ---
 
@@ -285,7 +293,7 @@ Experiment 1's exact code is preserved at git tag `exp1-upworthy-v1` (commit `c2
 - [x] `learn_trace.py` (two arms in parallel), `sealed_trace.py` (guarded; refuses until experiment 2's verdict exists), `verdict_trace.py` (Holm), with tests; end-to-end dry run with fake clients. 66 tests pass.
 - [x] Commit before any paid call (`cd8f701`).
 - [x] Launch learning (in parallel with experiment 2, per Alexander).
-- [ ] Monitor; sealed (after experiment 2's verdict); verdict.
+- [ ] Monitor; sealed (after experiment 2's verdict); verdict. (Paused 19:35: OpenRouter out of credit; see experiment 2's log.)
 - [ ] Merge to `main`; archive; compare experiments 1–3.
 
 ## Progress log
@@ -295,3 +303,4 @@ Experiment 1's exact code is preserved at git tag `exp1-upworthy-v1` (commit `c2
 - 2026-09-26 19:18: Build complete; dry run with fake editor and fake Jev passed (both arms, 2 rounds, trace present in the editor prompt, pre-screen and gate exercised, weights only in B-plus). 66 tests pass.
 - 2026-09-26 19:20: **Learning launched in parallel with experiment 2** (`learn_trace.py --run-id arena3-learn-20260926`). Live: `results/arena3/run_status.json`, `results/arena3/wip_summary.json`.
 - 2026-09-26 19:21: Version 0 on gate: `Bp` 67.6% (identical to experiment 2's B v0, replayed from cache as expected); `Bw` 69.3% (same rubric, weights fitted on practice, no edits yet).
+- 2026-09-26 19:35: **Stopped: OpenRouter out of credit** (402 on both round-1 editor calls, before any candidate was gated). Experiment 3 paid spend so far ≈ /bin/zsh (version 0 evaluations replayed from cache). Will restart under a new run id after credit is added; the failed editor calls were not cached, so the restart asks again.

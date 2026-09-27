@@ -115,9 +115,9 @@ class TraceRunner(LoopRunner):
         except ContentBlockedError:
             raise
         except Exception as error:
+            # Stop rather than record a silent "no edits" round; finished calls are cached.
             self.logger.write({**event, "call_type": "candidate_proposal_failed", "error": str(error)})
-            self.telemetry.note(f"{self.arm} round {round_number}: editor proposal failed ({error})")
-            return []
+            raise
 
     def run(self, version0: dict[str, Any]) -> dict[str, Any]:
         learning = self.config["learning"]
