@@ -11,7 +11,7 @@ Experiments testing whether a decision model (Jev) helps an AI agent learn its o
 | 5 | Arena, route between Jev and the LLM (cascade) | Complete: ***same quality, half the cost*** | [`experiments/2026-09-27-arena-router-v1`](experiments/2026-09-27-arena-router-v1/README.md) |
 | 6 | Upworthy, learning from partial feedback (contextual bandit) | Designed, not scheduled | brief: `Task Brief 6_Bandit.md` |
 
-Side-by-side results and lessons: [`experiments/COMPARISON.md`](experiments/COMPARISON.md). The full, dated record of every decision, deviation and result is in [`MVP Project Plan.md`](MVP%20Project%20Plan.md).
+**One-page summary: [`RESULTS.md`](RESULTS.md).** Side-by-side detail and lessons: [`experiments/COMPARISON.md`](experiments/COMPARISON.md). The full, dated record of every decision, deviation and result is in [`MVP Project Plan.md`](MVP%20Project%20Plan.md).
 
 ## Repository layout
 
