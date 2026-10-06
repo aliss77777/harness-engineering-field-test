@@ -28,7 +28,15 @@ v1 showed, on public benchmarks, that a learned yes/no rubric (the **Jev rubric 
 
 ## How to run
 
-*Placeholder until Phase 0.* Like v1, everything runs from inside this folder (`cd v2`).
+Everything runs from inside this folder (`cd v2`). Python 3.13 (AutomationBench requires it).
+
+1. Download AutomationBench into `z-ignore/AutomationBench-main` (git-ignored).
+2. `python3.13 -m venv .venv && .venv/bin/python -m pip install -e z-ignore/AutomationBench-main -r requirements.txt`
+3. Tests: `.venv/bin/python -m pytest -q`
+4. Free end-to-end check (no model calls): `.venv/bin/python scripts/phase0_free_check.py`
+5. Regenerate UI data: `.venv/bin/python scripts/export_ui_data.py`
+
+Harness code is in `src/jevloop/` (`bench.py` is the only module that touches AutomationBench). Model-backed agents come after the Phase 0 model choice.
 
 ## Methodology appendix: what changes from v1, and why
 

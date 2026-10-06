@@ -26,7 +26,9 @@
 | Simple | 200 | 1 |
 
 Note for the domain choice: Support has by far the most checks per task, so full passes will be rarer there while partial credit carries the most detail.
-- **Still to check in code (brief item 3d):** whether we can plug in our own agent loop. `auto-bench` runs a model through `verifiers` (`AutomationBenchEnv`, a `StatefulToolEnv`); a custom loop could drive the same environment and call `rubric.partial_credit` directly.
+- **Item 3d, our own agent loop: yes.** `src/jevloop/bench.py` drives the bench's own pieces directly (the simulated `WorldState`, the default `api` toolset of `api_search` / `api_fetch` / `base64_encode`, and the bench's `partial_credit` grader) without `auto-bench`, so our cache, spend cap and logging stay in charge. Proof at $0: a hand-written solution to `simple:3001` scores 1.0 through the bench's grader; a do-nothing run scores 0.
+- **Items 3a–3c at $0:** (a) K independent candidates per task, each in a fresh world (`runs.py`); (b) each graded by the bench (`partial_credit`, pass/fail); (c) a run summary with no grading-check text (`summary.py`; leak tests in `tests/test_summary.py`, including a canary check and a sweep of all 800 tasks). Paid confirmation of (a) needs a real agent: identical prompts must not replay one cached answer K times, so each candidate's index goes into the cache key.
+- **Free check, rerunnable:** `.venv/bin/python scripts/phase0_free_check.py`.
 
 ## Numbers (paid spike, not run yet)
 
