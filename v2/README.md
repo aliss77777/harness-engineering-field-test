@@ -69,6 +69,32 @@ It is the same select-or-escalate **Router** as v1's experiment 5. It now works 
 - **The Jev rubric loop** learns what a correct run looks like in each business domain.
 - **The Agent skill loop** learns how to do the task: the agent's skill file, effectively the company's playbook for the agent, improving from graded outcomes.
 
+### Best-of-K is the picking step; the v1 learning loop still runs on top
+
+Two things learn, round by round.
+
+**1. The Jev rubric (the checker).** Same loop as v1:
+- **Practice:** Jev scores the agent's K runs on practice tasks, and we see which runs actually passed.
+- **Mistakes:** the editor sees the runs Jev ranked wrong and proposes one edit. For example, *add "Did it notify the account owner?"*, or drop or reword a question.
+- **Gate:** the edit is kept only if picks improve on held-out tasks.
+- **Weights:** refit from the graders' partial credit, as in v1's B+.
+- **Over rounds:** the rubric learns what "done correctly" means in each business domain.
+
+**2. The agent's skill file (its playbook).** Mirrors v1's LLM loop:
+- **Failures:** the editor sees failed runs and which grading checks were missed. For example, *"forgot to update the ticket status."*
+- **Edit:** one targeted fix to the instructions. For example, *"Always close the ticket after replying."*
+- **Gate:** kept only if the pass rate improves on held-out tasks.
+- **Cost note:** this is the expensive part (every candidate edit re-runs the agent), so it is optional in the lean plan.
+
+**Same v1 rules throughout:** single edits, memory of rejected edits, fresh mistakes each round, the held-out gate, a sealed set used once, and preregistration.
+
+**Net effect over time:**
+- The agent makes better attempts.
+- The checker picks better among them.
+- The Router escalates less as Jev's confidence becomes trustworthy.
+
+All three show up as accuracy gains or cost cuts on the sealed set.
+
 ### The claim v2 can make, if it works
 
 > A cheap agent plus a learned checker matches a strong agent on real business tasks at half the cost.
