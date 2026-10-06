@@ -9,8 +9,8 @@
 # MAX_ATTEMPTS per stage. Fatal ones stop everything: out of credit, served model or
 # provider changed, spend cap reached. Log: logs/supervisor.log
 set -u
-MAIN=~/Documents/jev-test-poc
-EXP3=~/Documents/jev-test-poc-exp3
+MAIN=${0:A:h}  # this script's folder (v1/)
+EXP3=$MAIN  # the exp3 worktree was merged and removed (2026-10-05); its code and outputs live in v1/
 LOG=$MAIN/logs/supervisor.log
 MAX_ATTEMPTS=6
 FATAL='OutOfCreditsError|RouteMismatchError|SpendCapExceeded'

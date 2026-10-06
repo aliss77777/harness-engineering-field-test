@@ -3,7 +3,7 @@
 # Transient failures are retried (finished calls replay from cache); fatal ones stop:
 # out of credit, served model/provider changed, spend cap reached. Log: logs/supervisor6.log
 set -u
-MAIN=~/Documents/jev-test-poc
+MAIN=${0:A:h}  # this script's folder (v1/)
 LOG=$MAIN/logs/supervisor6.log
 MAX_ATTEMPTS=6
 FATAL='OutOfCreditsError|RouteMismatchError|SpendCapExceeded'
