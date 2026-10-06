@@ -31,3 +31,6 @@ dist/
 /v2/cache/
 /v2/logs/
 /v2/results/
+
+# Local downloads and scratch (e.g. v2/z-ignore/AutomationBench-main); never committed
+z-ignore/
