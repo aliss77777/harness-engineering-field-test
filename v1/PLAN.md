@@ -1,6 +1,6 @@
-# MVP Project Plan
+# MVP Project Plan (v1 — formerly `MVP Project Plan.md`)
 
-Updated as work progresses. The experiment rules in `MVP-BRIEF-jev-learning-loop-v2_5.md` stay fixed.
+Updated as work progresses. The experiment rules in [`briefs/MVP-BRIEF-jev-learning-loop-v2_5.md`](briefs/MVP-BRIEF-jev-learning-loop-v2_5.md) stay fixed.
 
 ## Two-hour target
 

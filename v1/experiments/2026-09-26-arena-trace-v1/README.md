@@ -1,6 +1,6 @@
 # Experiment 3: Arena, decision-trace learning for the Jev loop — Results
 
-**Completed:** 2026-09-27 00:17 MDT · **Design:** "Experiment 3" section of `MVP Project Plan.md` (committed before any paid call, `cd8f701`) · **Preregistered answers:** decision trace → **no detectable difference**; fitted weights → **help**
+**Completed:** 2026-09-27 00:17 MDT · **Design:** "Experiment 3" section of [`v1/PLAN.md`](../../PLAN.md) (formerly `MVP Project Plan.md`) (committed before any paid call, `cd8f701`) · **Preregistered answers:** decision trace → **no detectable difference**; fitted weights → **help**
 
 ## Headline
 

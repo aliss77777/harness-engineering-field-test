@@ -145,7 +145,7 @@ jev-loop-v2/
   story/insights.yaml    ← single source of truth for headline sentences and key numbers
   RESULTS.md             ← one page: scorecard + learning table (same names as the UI)
   GLOSSARY.md            ← one name per concept
-  PLAN.md                ← dated log of every decision, deviation and fix (like MVP Project Plan.md)
+  PLAN.md                ← dated log of every decision, deviation and fix (like v1/PLAN.md, formerly MVP Project Plan.md)
   briefs/                ← one brief per experiment, preregistration included
   phase0/FEASIBILITY.md
   experiments/<date>-<id>/

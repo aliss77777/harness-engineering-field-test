@@ -1,4 +1,6 @@
-# Jev Learning Loop MVP
+# Jev Learning Loop — v1 (experiments 1–6)
+
+*Part of a series; see the [repo landing page](../README.md). Everything below runs from inside `v1/` (`cd v1` first). Repo state before the v1/v2 split: tag `v1-final`.*
 
 Experiments testing whether a decision model (Jev) helps an AI agent learn its own decision criteria from real outcomes, compared with an LLM that learns from its own reasoning.
 
@@ -10,15 +12,17 @@ Experiments testing whether a decision model (Jev) helps an AI agent learn its o
 | 4 | Arena, one LLM + Jev hybrid (stacked vote) | Complete: *no meaningful gain* | [`experiments/2026-09-27-arena-hybrid-v1`](experiments/2026-09-27-arena-hybrid-v1/README.md) |
 | 5 | Arena, route between Jev and the LLM (cascade) | Complete: ***same quality, half the cost*** | [`experiments/2026-09-27-arena-router-v1`](experiments/2026-09-27-arena-router-v1/README.md) |
 | 6 | Upworthy, Jev + LLM router learning from partial feedback (contextual bandit) | Complete: *same quality, half the cost*; Jev learned without an answer key | [`experiments/2026-09-27-upworthy-bandit-v1`](experiments/2026-09-27-upworthy-bandit-v1/README.md) |
-| 7 | **v2:** the winning harness on real business tasks (AutomationBench) + a Magic Patterns observability UI | Designed, not scheduled | brief: `Task Brief 7_V2_Business.md` |
+| 7 | **v2:** the winning harness on real business tasks (AutomationBench) + a Magic Patterns observability UI | Designed, not scheduled | [`../v2/`](../v2/README.md); brief: [`Task Brief 7_V2_Business.md`](../v2/briefs/Task%20Brief%207_V2_Business.md) |
 
-**One-page summary: [`RESULTS.md`](RESULTS.md).** Side-by-side detail and lessons: [`experiments/COMPARISON.md`](experiments/COMPARISON.md). The full, dated record of every decision, deviation and result is in [`MVP Project Plan.md`](MVP%20Project%20Plan.md).
+**One-page summary: [`RESULTS.md`](RESULTS.md).** Side-by-side detail and lessons: [`experiments/COMPARISON.md`](experiments/COMPARISON.md). The full, dated record of every decision, deviation and result is in [`PLAN.md`](PLAN.md) (formerly `MVP Project Plan.md`). Experiment briefs: [`briefs/`](briefs/).
 
 ## Repository layout
 
 - `experiments/` — completed, immutable experiment packages.
 - `data/splits/` — registered pair IDs shared by the Upworthy experiment.
-- Root Python files — reusable experiment harness.
+- Python files in `v1/` — reusable experiment harness (paths resolve from `v1/`).
+- `briefs/` — the MVP brief and Task Briefs 2–6.
+- `ui-demo/` — Magic Patterns React/Vite demo built from v1's results (`npm install && npm run dev`).
 - `results/`, `logs/`, and `cache/` — ignored working directories for the next run.
 
 Completed experiments are named `YYYY-MM-DD-task-version`. Each package contains its report, machine-readable artifacts, configuration snapshot, split IDs, and compressed telemetry. Do not modify a completed package; create a new one for the next experiment.
@@ -87,6 +91,6 @@ Live while running: `results/arena/run_status.json` (current stage per loop, ETA
 .venv/bin/python learn_bandit.py --stage sealed --run-id RUN_ID-sealed # once, guarded
 ```
 
-Experiment 1's commands (`prep.py`, `controls.py`, the old `run.py` smoke modes) are at tag `exp1-upworthy-v1`.
+Experiment 1's commands (`prep.py`, `controls.py`, the old `run.py` smoke modes) are at tag `exp1-upworthy-v1` (pre-restructure layout: run from the repo root at that tag).
 
 Afterward, package `results/` and `logs/` under a new immutable `experiments/YYYY-MM-DD-task-version/` folder before starting another experiment.
