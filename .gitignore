@@ -1,29 +1,33 @@
+# Secrets and local environments (anywhere in the repo)
 .env
 .venv/
+.venv
 __pycache__/
 .pytest_cache/
 .DS_Store
 *.py[cod]
-
-# Raw archive and generated run artifacts
-data/jd64p-osfstorage-archive/
-data/jd64p-osfstorage-archive.zip
-data/pairs/
-cache/
-/logs/
-/results/
-data/arena/raw/
-data/arena/pairs/
-
-# worktree symlinks to shared local data
-.venv
-.env
-cache
-data/arena/raw
-data/arena/pairs
-results/arena
-data/arena3/pairs/
 *.stdout
-data/arena4/pairs/
-data/arena5/pairs/
-data/upworthy6/tests/
+
+# Front-end build output (ui demos)
+node_modules/
+dist/
+
+# ---- v1: raw archives, API cache, generated run artifacts ----
+/v1/cache/
+/v1/cache
+/v1/logs/
+/v1/results/
+/v1/data/jd64p-osfstorage-archive/
+/v1/data/jd64p-osfstorage-archive.zip
+/v1/data/pairs/
+/v1/data/arena/raw/
+/v1/data/arena/pairs/
+/v1/data/arena3/pairs/
+/v1/data/arena4/pairs/
+/v1/data/arena5/pairs/
+/v1/data/upworthy6/tests/
+
+# ---- v2: local working dirs (same idea as v1) ----
+/v2/cache/
+/v2/logs/
+/v2/results/
