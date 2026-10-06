@@ -23,6 +23,7 @@ Experiments testing whether a decision model (Jev) helps an AI agent learn its o
 - Python files in `v1/` — reusable experiment harness (paths resolve from `v1/`).
 - `briefs/` — the MVP brief and Task Briefs 2–6.
 - `ui-demo/` — Magic Patterns React/Vite demo built from v1's results (`npm install && npm run dev`).
+- `ui-demo-2/` — revised Magic Patterns demo (2026-10-05): one scrolling story in chapters; the floor for v2's Phase 2 UI. Numbers are still hardcoded in `src/data/*.ts`.
 - `results/`, `logs/`, and `cache/` — ignored working directories for the next run.
 
 Completed experiments are named `YYYY-MM-DD-task-version`. Each package contains its report, machine-readable artifacts, configuration snapshot, split IDs, and compressed telemetry. Do not modify a completed package; create a new one for the next experiment.
