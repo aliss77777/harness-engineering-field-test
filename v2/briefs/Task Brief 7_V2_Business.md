@@ -75,6 +75,7 @@ What carries over from v1, one-to-one:
    - the projected Phase 1 cost fits the cap.
 5. **Choose the domains:** start with **two** domains where the outcome is a clear decision (suggested: **Support**, which covers ticket routing and SLAs, and **Sales**, which covers CRM and leads). Use the full set of 6 only if cost allows.
 6. **If K-run generation is too expensive,** fall back to the 200 "simple" tasks (one or two steps), which behave like v1's decisions.
+7. **Cheap-agent bake-off (added 2026-10-05):** before step 2's measurements, compare Gemini 3.8 Flash with two open-weight models on OpenRouter (Nemotron 3 Super, gpt-oss-120b) on the same 20 tasks. Pick the cheapest that passes 20–80% of tasks with under 10% tool-call errors; pin one provider. Protocol, prices and selection rule: `phase0/FEASIBILITY.md`.
 
 Deliverable: `phase0/FEASIBILITY.md` with the numbers and the go/no-go call, committed.
 

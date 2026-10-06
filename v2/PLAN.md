@@ -15,7 +15,8 @@ Dated log of every decision, deviation and fix (same discipline as [`../v1/PLAN.
 
 - [x] Repo: folder in this repo (2026-10-05).
 - [ ] Domains (suggested: Support + Sales), informed by Phase 0.
-- [ ] Models: Cheap agent, Strong agent, escalation option (LLM judge vs Strong agent re-run).
+- [ ] Models: Cheap agent (**decided by the Phase 0 bake-off**: Gemini 3.8 Flash vs Nemotron 3 Super vs gpt-oss-120b), Strong agent, escalation option (LLM judge vs Strong agent re-run).
 - [ ] Budget cap after Phase 0 (placeholder $60, enforced in code).
 [line omitted from the public copy]
 - [x] AutomationBench licence: MIT (2026-10-05).
+- 2026-10-05: **Cheap-agent bake-off added to Phase 0 (Alexander).** Open-weight models on OpenRouter are much cheaper than Gemini 3.8 Flash ($0.75 / $3.75 per million tokens): Nemotron 3 Super $0.08 / $0.45 (≈ 8–9× cheaper), gpt-oss-120b $0.037 / $0.17 (≈ 20×). Same 20 tasks, one run each, $5 cap; selection rule fixed in advance: the cheapest model with a 20–80% pass rate and under 10% tool-call errors, else keep Gemini. One provider pinned per model. The editor stays on a strong model. If an open-weight model wins, the lean Phase 1 estimate drops from ≈ $40–60 to ≈ $20–30. Details: `phase0/FEASIBILITY.md`.
