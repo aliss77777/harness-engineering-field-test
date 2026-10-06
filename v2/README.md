@@ -29,3 +29,42 @@ v1 showed, on public benchmarks, that a learned yes/no rubric (the **Jev rubric 
 ## How to run
 
 *Placeholder until Phase 0.* Like v1, everything runs from inside this folder (`cd v2`).
+
+## Methodology appendix: what changes from v1, and why
+
+**Short version:** the harness barely changes. What changes is *what the system is doing*, and that is the point of v2.
+
+### v1 predicted a judgment; v2 does the work
+
+- **v1: predicting a judgment.** We gave the system two existing responses or headlines and asked it to predict which one a human preferred. The outcome was someone else's vote or click. That was useful for proving the learning loop works. But in a business you rarely need to guess which of two finished things a stranger liked.
+- **v2: doing the work and being graded on whether it worked.** In AutomationBench an agent actually performs a business task: update the CRM, route the ticket, file the expense. The grade is whether the systems end up in the correct state, checked automatically against the task's assertions. That is much closer to production: **the reward is "did the job get done correctly"**, not a human's taste.
+
+### What stays the same: the harness
+
+- **A policy written as text, learning in batches.** Each round runs practice, grading, and one edit at a time. A held-out gate decides whether an edit is kept. A sealed set is used once, at the end.
+- **The Jev rubric loop**, with code-fitted weights.
+- **The Router.** Jev handles the confident cases; the more expensive model handles the hard ones.
+- **Every lesson from v1:** preregistration, single edits, memory of rejected edits, the spend cap, and the supervisor that resumes from cache (see [`../v1/RESULTS.md`](../v1/RESULTS.md), "What the harness taught us").
+
+### The one real adaptation: the agent produces the candidates
+
+In v1 the two candidates were given; in v2 the agent has to produce them. So the **Cheap agent** runs each task a few times (K runs):
+
+1. The Jev rubric checks each run, e.g. "Did it update the right record?"
+2. If Jev is confident, its best run is kept.
+3. If not, the task escalates to the **Strong agent** (or an LLM judge chooses among the runs).
+
+It is the same select-or-escalate **Router** as v1's experiment 5. It now works on the agent's own attempts instead of someone else's responses.
+
+### What gets learned shifts, in a business-relevant way
+
+- **The Jev rubric loop** learns what a correct run looks like in each business domain.
+- **The Agent skill loop** learns how to do the task: the agent's skill file, effectively the company's playbook for the agent, improving from graded outcomes.
+
+### The claim v2 can make, if it works
+
+> A cheap agent plus a learned checker matches a strong agent on real business tasks at half the cost.
+
+That is the claim a business actually cares about.
+
+*Terminology: in [Task Brief 7](briefs/Task%20Brief%207_V2_Business.md), **Phase 1** is the experiments on the new data and **Phase 2** is the Magic Patterns UI and tutorial.*
