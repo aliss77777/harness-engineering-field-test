@@ -47,6 +47,25 @@ If comparable, Nemotron 3 Super becomes the Cheap agent. If not, Gemini 3.8 Flas
 
 **Other notes:** the editor makes few calls and stays on Gemini 3.8 Flash, as in v1. **Gemini 3.8 Flash is also the Strong agent** (approved 2026-10-06); no frontier model.
 
+### Smoke test (2026-10-06, $0.52 spent)
+
+Both models, one run each, on `simple:3001` and `finance:4001` (the first Finance task of the check). Settings as committed in `config_phase0.yaml`.
+
+| Model (host) | Task | Credit | Pass | Steps | Input tokens | Cost | Model time |
+|---|---|---|---|---|---|---|---|
+| Gemini 3.8 Flash (Google AI Studio) | simple:3001 | 1.00 | ✅ | 9 | 35k | $0.013 | 95 s |
+| Gemini 3.8 Flash | finance:4001 | 0.50 | ❌ | 45 | 1.79M | **$0.484** | 548 s |
+| Nemotron 3 Super (DeepInfra bf16) | simple:3001 | 1.00 | ✅ | 9 | 44k | $0.004 | 27 s |
+| Nemotron 3 Super | finance:4001 | 0.00 | ❌ | 21 | 203k | **$0.019** | 101 s |
+
+What it showed:
+- **The plumbing works:** tool calls parse, the pinned hosts served every call, and costs are reported.
+- **Bug found and fixed:** Gemini sometimes returns an empty reply (`finish_reason=error`). The first version treated that as the agent finishing and scored it 0. Now it is retried, and if it persists the run stops loudly.
+- **Nemotron's 0 on finance:4001 is a real failure:** it logged invoices the AP guidelines say to hold, shifted the spreadsheet columns, and reported the wrong total. Gemini got half the checks.
+- **Cost:** on this business task Gemini cost about **25× more** than Nemotron and took 5× longer, mostly because it ran 45 steps and each step re-sends the whole conversation (1.79M input tokens in total).
+- **Projection:** at the smoke rate, the 50-task check costs about **$24 on Gemini + $1 on Nemotron ≈ $25**, over the $10 Phase 0 cap. **Stopped here, as agreed; waiting on Alexander.** The projection rests on one business task per model, so it is rough.
+- **Cache replays are partial:** the simulator stamps clock times and random IDs into tool results, so a rerun can't replay model calls past the first write. Fix: resume by whole runs (finished runs are reloaded from the log; only missing tasks run).
+
 | Model | Host pinned | Mean credit | Pass rate | Run failures | $ / run | s / run | Steps / run |
 |---|---|---|---|---|---|---|---|
 | Gemini 3.8 Flash | Google AI Studio | | | | | | |

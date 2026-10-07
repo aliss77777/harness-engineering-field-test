@@ -81,19 +81,45 @@ def cmd_select(_args) -> None:
     print(f"{len(ids)} task IDs -> {path.relative_to(ROOT)}")
 
 
-def run_models(task_list: list[str], run_id: str) -> dict:
+def run_models(task_list: list[str], run_id: str, reuse_from: tuple[str, ...] = ()) -> dict:
     tracker = spend()
     tasks = {t.task_id: t for t in bench.load_tasks(sorted({i.split(":")[0] for i in task_list}))}
     chosen = [tasks[i] for i in task_list]
     out = {}
     for name in CONFIG["models"]:
-        logger = JsonlLogger(LOGS / f"{run_id}-{name}-runs.jsonl")
-        runs = run_candidates(chosen, agent(name, tracker, run_id), k=1, max_workers=CONFIG["workers"],
-                              logger=logger, run_id=run_id)
+        log_path = LOGS / f"{run_id}-{name}-runs.jsonl"
+        # Resume by whole runs: the simulator stamps clock times and random IDs into tool results,
+        # so a rerun can't replay model calls from the cache past the first write. Finished runs are
+        # reloaded from the log and only missing tasks run (an interrupted run is paid for again).
+        finished = {}
+        for earlier in reuse_from:  # same settings, same tasks: e.g. the smoke test's business task
+            finished |= {t: r for t, r in load_finished(LOGS / f"{earlier}-{name}-runs.jsonl").items() if t in task_list}
+        finished |= load_finished(log_path)
+        todo = [t for t in chosen if t.task_id not in finished]
+        if finished:
+            print(f"{name}: {len(finished)} finished runs reloaded from {log_path.name}; {len(todo)} to run")
+        new = run_candidates(todo, agent(name, tracker, run_id), k=1, max_workers=CONFIG["workers"],
+                             logger=JsonlLogger(log_path), run_id=run_id)
+        by_id = {**finished, **{r.task_id: r for r in new}}
+        runs = [by_id[t] for t in task_list]
         out[name] = runs
         tracker.flush()
         print(f"{name}: done; Phase 0 spend so far ${tracker.total_usd:.4f}")
     return out
+
+
+def load_finished(log_path: Path) -> dict:
+    """Candidate-0 runs already recorded in a runs log, keyed by task ID (last record wins)."""
+    from jevloop.runs import CandidateRun
+
+    finished = {}
+    if log_path.exists():
+        for line in log_path.read_text().splitlines():
+            record = json.loads(line)
+            if record.get("event") == "candidate_run" and record.get("candidate") == 0:
+                fields = {k: v for k, v in record.items() if k in CandidateRun.__dataclass_fields__}
+                finished[record["task_id"]] = CandidateRun(**fields)
+    return finished
 
 
 def describe(runs) -> None:
@@ -133,7 +159,7 @@ def cmd_check(args) -> None:
     if tracker.total_usd + projection * args.safety > tracker.cap_usd:
         sys.exit(f"STOP: projected ${projection:.2f} (x{args.safety} safety) + spent ${tracker.total_usd:.2f} "
                  f"exceeds the ${tracker.cap_usd:.2f} cap. Ask Alexander before running.")
-    out = run_models(task_ids(), "check")
+    out = run_models(task_ids(), "check", reuse_from=("smoke",))
     result = comparability(out["gemini"], out["nemotron"])
     for name, runs in out.items():
         s = summarize_model(runs)

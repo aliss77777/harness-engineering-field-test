@@ -6,7 +6,7 @@
 
 ## Status at a glance
 
-*Updated 2026-10-06.*
+*Updated 2026-10-06 (after the smoke test).*
 
 | | |
 |---|---|
@@ -14,12 +14,12 @@
 | **Spend cap** | $10 for all of Phase 0, enforced in code |
 | **Done** | AutomationBench installed and checked; free harness built; domain analysis; focus and models decided |
 | **Next** | Build the model-backed agent and its OpenRouter client (free), then a smoke test (cents) |
-| **Waiting on Alexander** | Nothing: the remaining Phase 0 steps are approved within a $10 hard cap; I stop and ask if a projection goes over |
-| **Spend so far** | $0 |
+| **Waiting on Alexander** | **Budget decision:** the 50-task check projects to ≈ $25 (Gemini ≈ $24 of it), over the $10 Phase 0 cap. Stopped as agreed |
+| **Spend so far** | $0.52 of the $10 Phase 0 cap |
 
 ## Plan and progress
 
-✅ done · ▶️ next · ⬜ not started
+✅ done · ▶️ next · ⏸️ paused · ⬜ not started
 
 **Phase 0 — feasibility** · detail: [`phase0/FEASIBILITY.md`](phase0/FEASIBILITY.md)
 
@@ -28,9 +28,9 @@
 | 0.1 Install AutomationBench; check its licence and tests | ✅ 2026-10-05 | MIT licence; its 1,398 tests pass; all 800 tasks load and grade |
 | 0.2 Free harness: bench adapter, K runs per task, run summary, leak tests | ✅ 2026-10-05 | `src/jevloop/`; 27 tests; our own agent loop drives the bench |
 | 0.2b Domain analysis: anatomy of a task; which tasks fit back-office work | ✅ 2026-10-06 | [`phase0/DOMAINS.md`](phase0/DOMAINS.md): **Finance + HR adopted** |
-| 0.3 Model-backed agent + tool-calling OpenRouter client, tested on fake responses | ▶️ | free |
-| 0.4 Smoke test: 2 tasks per model | ⬜ | cents; measures tokens per run, then the check's cost |
-| 0.5 Cheap-agent comparability check: Gemini 3.8 Flash vs Nemotron 3 Super, 50 Finance + HR tasks | ⬜ | [below](#cheap-agent-comparability-check); within the $10 cap |
+| 0.3 Model-backed agent + tool-calling OpenRouter client, tested on fake responses | ✅ 2026-10-06 | `src/jevloop/openrouter.py`, `llm_agent.py`; 42 tests |
+| 0.4 Smoke test: 2 tasks per model | ✅ 2026-10-06 | $0.52. Both pass the simple task; one business task cost $0.48 on Gemini vs $0.019 on Nemotron. [Results](phase0/FEASIBILITY.md#smoke-test-2026-10-06-052-spent) |
+| 0.5 Cheap-agent comparability check: Gemini 3.8 Flash vs Nemotron 3 Super, 50 Finance + HR tasks | ⏸️ | **Paused:** projects to ≈ $25, over the cap. [below](#cheap-agent-comparability-check) |
 | 0.6 Phase 0 spike: the Cheap agent with K runs per task, plus the Strong agent (Gemini 3.8 Flash) on the same tasks | ⬜ | within the $10 cap; no frontier model |
 | 0.7 Go/no-go call (Alexander) | ⬜ | [criteria](phase0/FEASIBILITY.md#gono-go-criteria) |
 
@@ -58,7 +58,8 @@
 | Best-fit domains for back-office work | Finance + HR, adopted (Operations in reserve) | [DOMAINS](phase0/DOMAINS.md) |
 | A do-nothing agent scores | 0 on all 800 tasks (the grader drops checks already true at the start) | [FEASIBILITY](phase0/FEASIBILITY.md#free-checks-2026-10-05-no-model-calls) |
 | Our own agent loop drives the bench | Yes: a hand-written solution scores 1.0 through the bench's grader | [FEASIBILITY](phase0/FEASIBILITY.md#free-checks-2026-10-05-no-model-calls) |
-| Nemotron 3 Super comparable to Gemini 3.8 Flash? | *not run* | [below](#cheap-agent-comparability-check) |
+| Cost per business-task run, smoke test (one task) | Gemini 3.8 Flash $0.48 vs Nemotron 3 Super $0.019 (≈ 25× cheaper, 5× faster on that task) | [FEASIBILITY](phase0/FEASIBILITY.md#smoke-test-2026-10-06-052-spent) |
+| Nemotron 3 Super comparable to Gemini 3.8 Flash? | *not run (paused on budget)* | [below](#cheap-agent-comparability-check) |
 | Cheap / Strong agent pass rates; share of tasks with mixed pass/fail | *not run* | Phase 0 spike |
 | Go/no-go | *pending* | |
 
