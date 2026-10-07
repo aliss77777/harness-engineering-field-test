@@ -1,6 +1,6 @@
 # Phase 0: feasibility
 
-**Status:** free checks done (2026-10-05); paid spike not started. Budget ≈ ½ day, ≤ $10. Go/no-go for everything else (Task Brief 7, section 3).
+**Status:** free checks done (2026-10-05); remaining steps approved 2026-10-06 within a **$10 hard cap**, enforced in code. Go/no-go for everything else (Task Brief 7, section 3).
 
 ## Plan
 
@@ -23,7 +23,7 @@
 | `nvidia/nemotron-3-super-120b-a12b` | Candidate | Yes | $0.08 / $0.45 (≈ 8–9× cheaper) |
 
 **Protocol (fixed before any paid run):**
-- **Tasks:** 50 business tasks, 25 Sales + 25 Support (the suggested Phase 1 domains), drawn with a fixed seed. The task IDs are committed to `phase0/comparability_task_ids.txt` before the run. These 50 tasks must not go into Phase 1's sealed set; they may go into practice or gate.
+- **Tasks:** 50 business tasks, 25 Finance + 25 HR (the Phase 1 domains, adopted 2026-10-06; see `DOMAINS.md`), drawn with a fixed seed. The task IDs are committed to `phase0/comparability_task_ids.txt` before the run. These 50 tasks must not go into Phase 1's sealed set; they may go into practice or gate.
 - **Runs:** one per model per task (100 in total). Both models get the same agent prompt (the bench's own system prompt), the same `api` tools, the same 50-step cap, and the same temperature (the value Phase 1 will use, proposed 0.7). Reasoning effort is fixed per model and recorded.
 - **Hosting:** Nemotron runs through one pinned OpenRouter provider (no fallbacks), and Gemini on Google AI Studio. v1's route check carries over: the run stops if a different model or host answers. The host is logged.
 - **Harness:** the free Phase 0 harness (`src/jevloop/`), with caching, logging and a spend cap in code.
@@ -42,10 +42,10 @@ If comparable, Nemotron 3 Super becomes the Cheap agent. If not, Gemini 3.8 Flas
 **Order of work:**
 1. Build the model-backed agent and a tool-calling OpenRouter client (free; tested on fake responses).
 2. **Smoke test:** 2 tasks per model (cents). It confirms tool calls parse, route pinning holds and costs are logged, and it measures real tokens per run.
-3. Estimate the check's cost from the smoke test. Alexander sets the spend cap.
+3. Project the check's cost from the smoke test. It runs within the **$10 hard cap for all of Phase 0** (Alexander, 2026-10-06); if the projection goes over, stop and ask.
 4. Run the check, fill in the table, apply the rule, and record the choice here and in `PLAN.md` before any further paid run.
 
-**Other notes:** the editor makes few calls and stays on Gemini 3.8 Flash, as in v1. The Strong agent is chosen separately (brief section 9, decision 3). **No frontier model is approved** (Alexander, 2026-10-06); the proposal is Gemini 3.8 Flash as the Strong agent if Nemotron becomes the Cheap agent.
+**Other notes:** the editor makes few calls and stays on Gemini 3.8 Flash, as in v1. **Gemini 3.8 Flash is also the Strong agent** (approved 2026-10-06); no frontier model.
 
 | Model | Host pinned | Mean credit | Pass rate | Run failures | $ / run | s / run | Steps / run |
 |---|---|---|---|---|---|---|---|

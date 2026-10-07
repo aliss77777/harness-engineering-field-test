@@ -1,5 +1,7 @@
 # v2: the winning harness on real business tasks
 
+**Main focus (Alexander, 2026-10-06):** an **open-weight agent plus Jev**, improved by a self-learning harness, against **Gemini 3.8 Flash** on back-office business tasks (Finance and HR). The hoped-for result, as in v1: *as good as Gemini Flash, but cheaper and faster.*
+
 **This is the one page for tracking v2:** status, plan and progress, key results, and open decisions. Each row links to the file with the detail. [`PLAN.md`](PLAN.md) is the full dated log; [`Task Brief 7`](briefs/Task%20Brief%207_V2_Business.md) is the design.
 
 ## Status at a glance
@@ -8,10 +10,11 @@
 
 | | |
 |---|---|
-| **Phase** | 0 — feasibility (gates everything else) |
-| **Done** | AutomationBench installed and checked; free harness built (27 tests) |
+| **Phase** | 0 — feasibility (gates everything else); remaining steps approved 2026-10-06 |
+| **Spend cap** | $10 for all of Phase 0, enforced in code |
+| **Done** | AutomationBench installed and checked; free harness built; domain analysis; focus and models decided |
 | **Next** | Build the model-backed agent and its OpenRouter client (free), then a smoke test (cents) |
-| **Waiting on Alexander** | Review the domain recommendation ([`phase0/DOMAINS.md`](phase0/DOMAINS.md): Finance + HR); spend cap for the comparability check (after the smoke test); the Strong-agent proposal (Gemini 3.8 Flash, no frontier model) |
+| **Waiting on Alexander** | Nothing: the remaining Phase 0 steps are approved within a $10 hard cap; I stop and ask if a projection goes over |
 | **Spend so far** | $0 |
 
 ## Plan and progress
@@ -24,11 +27,11 @@
 |---|---|---|
 | 0.1 Install AutomationBench; check its licence and tests | ✅ 2026-10-05 | MIT licence; its 1,398 tests pass; all 800 tasks load and grade |
 | 0.2 Free harness: bench adapter, K runs per task, run summary, leak tests | ✅ 2026-10-05 | `src/jevloop/`; 27 tests; our own agent loop drives the bench |
-| 0.2b Domain analysis: anatomy of a task; which tasks fit back-office work | ✅ 2026-10-06 | [`phase0/DOMAINS.md`](phase0/DOMAINS.md): recommends Finance + HR; awaiting review |
+| 0.2b Domain analysis: anatomy of a task; which tasks fit back-office work | ✅ 2026-10-06 | [`phase0/DOMAINS.md`](phase0/DOMAINS.md): **Finance + HR adopted** |
 | 0.3 Model-backed agent + tool-calling OpenRouter client, tested on fake responses | ▶️ | free |
 | 0.4 Smoke test: 2 tasks per model | ⬜ | cents; measures tokens per run, then the check's cost |
-| 0.5 Cheap-agent comparability check: Gemini 3.8 Flash vs Nemotron 3 Super, 50 tasks | ⬜ | [below](#cheap-agent-comparability-check); spend cap set after 0.4 |
-| 0.6 Phase 0 spike: the Cheap agent with K runs per task, plus the Strong agent on the same tasks | ⬜ | budget set after 0.5; **no frontier model unless Alexander approves it** |
+| 0.5 Cheap-agent comparability check: Gemini 3.8 Flash vs Nemotron 3 Super, 50 Finance + HR tasks | ⬜ | [below](#cheap-agent-comparability-check); within the $10 cap |
+| 0.6 Phase 0 spike: the Cheap agent with K runs per task, plus the Strong agent (Gemini 3.8 Flash) on the same tasks | ⬜ | within the $10 cap; no frontier model |
 | 0.7 Go/no-go call (Alexander) | ⬜ | [criteria](phase0/FEASIBILITY.md#gono-go-criteria) |
 
 **Phase 1 — experiments on business tasks** (preregistered in code before each paid run) · detail: [brief section 3](briefs/Task%20Brief%207_V2_Business.md)
@@ -52,7 +55,7 @@
 
 | Result | Value | Where |
 |---|---|---|
-| Best-fit domains for back-office work | Finance + HR (Operations in reserve); recommendation, pending review | [DOMAINS](phase0/DOMAINS.md) |
+| Best-fit domains for back-office work | Finance + HR, adopted (Operations in reserve) | [DOMAINS](phase0/DOMAINS.md) |
 | A do-nothing agent scores | 0 on all 800 tasks (the grader drops checks already true at the start) | [FEASIBILITY](phase0/FEASIBILITY.md#free-checks-2026-10-05-no-model-calls) |
 | Our own agent loop drives the bench | Yes: a hand-written solution scores 1.0 through the bench's grader | [FEASIBILITY](phase0/FEASIBILITY.md#free-checks-2026-10-05-no-model-calls) |
 | Nemotron 3 Super comparable to Gemini 3.8 Flash? | *not run* | [below](#cheap-agent-comparability-check) |
@@ -67,26 +70,27 @@ Once Phase 1 has results, the 3–5 numbered insights go here, copied verbatim f
 |---|---|
 | Repo layout | ✅ v2 is a folder in this repo (2026-10-05) |
 | AutomationBench licence | ✅ MIT (2026-10-05) |
-| Cheap agent | Decided by the comparability check (below) |
-| Strong agent | **No frontier LLM: not approved (2026-10-06).** Proposed: Gemini 3.8 Flash, v1's model, if Nemotron becomes the Cheap agent. Pending approval |
-| Phase 1 domains | Recommended: **Finance + HR** ([analysis](phase0/DOMAINS.md)); pending Alexander's review. If adopted, the comparability check switches from Sales + Support to Finance + HR |
-| Spend caps | Open: the comparability check's cap after the smoke test; Phase 1 placeholder $60 |
+| Experiment focus | ✅ Open-weight agent + Jev vs Gemini 3.8 Flash (2026-10-06) |
+| Cheap agent | Nemotron 3 Super (open weight), if the comparability check passes; otherwise Gemini 3.8 Flash |
+| Strong agent, editor, escalation judge | ✅ Gemini 3.8 Flash, v1's model (2026-10-06). No frontier LLM |
+| Phase 1 domains | ✅ **Finance + HR** ([analysis](phase0/DOMAINS.md), 2026-10-06) |
+| Spend caps | ✅ Phase 0: $10 hard cap (2026-10-06). Phase 1: open (placeholder $60) |
 [line omitted from the public copy]
 
 ## Cheap-agent comparability check
 
 A **stability check, not a quality ranking or harness training**: can the open-weight **Nemotron 3 Super** (about 8–9× cheaper per token) stand in for **Gemini 3.8 Flash** as the Cheap agent? It replaces the earlier 20-task, three-model bake-off: 20 tasks can't separate models on quality, since one task is 5 points of pass rate.
 
-- **Tasks:** 50 business tasks (25 Sales + 25 Support), fixed seed, IDs committed first. They stay out of Phase 1's sealed set.
+- **Tasks:** 50 business tasks (25 Finance + 25 HR), fixed seed, IDs committed first. They stay out of Phase 1's sealed set.
 - **Runs:** one per model per task; same prompt, tools, 50-step cap and temperature; Nemotron's provider pinned on OpenRouter.
 - **Rule (fixed in advance):** Nemotron is comparable if its mean partial credit is **within 10 points** of Gemini's (paired, same tasks) **and under 10% of its runs fail**. Then it becomes the Cheap agent; otherwise Gemini stays. At n=50 the check can rule out a large gap, not prove the models equal.
-- **Order:** build the agent (free) → smoke test, 2 tasks per model (cents) → Alexander sets the cap → run.
+- **Order:** build the agent (free) → smoke test, 2 tasks per model (cents) → project the cost → run within the $10 Phase 0 cap (stop and ask if the projection goes over).
 
 Full protocol and results table: [`phase0/FEASIBILITY.md`](phase0/FEASIBILITY.md#cheap-agent-comparability-check-revised-2026-10-06-alexander).
 
 ## The question
 
-v1 showed, on public benchmarks, that a learned yes/no rubric (the **Jev rubric loop**) learns from outcomes when an LLM doesn't, and that a **Router** gives LLM-level quality at less than half the cost. v2 asks whether that holds on real business work: the graded workflow tasks in Zapier's AutomationBench. Results from v1: [`../v1/RESULTS.md`](../v1/RESULTS.md).
+v1 showed, on public benchmarks, that a learned yes/no rubric (the **Jev rubric loop**) learns from outcomes when an LLM doesn't, and that a **Router** gives LLM-level quality at less than half the cost. v2 asks whether that holds on real back-office work (the Finance and HR tasks in Zapier's AutomationBench) with a cheaper worker: **can an open-weight agent plus Jev, improved by a self-learning harness, be as good as Gemini 3.8 Flash, but cheaper and faster?** Results from v1: [`../v1/RESULTS.md`](../v1/RESULTS.md).
 
 ## Where things are
 
@@ -127,8 +131,8 @@ Harness code is in `src/jevloop/` (`bench.py` is the only module that touches Au
 
 | Role | What it is | What it does |
 |---|---|---|
-| **Cheap agent** | An LLM: Gemini 3.8 Flash, or Nemotron 3 Super if the comparability check passes | Does each task K times, calling the tools |
-| **Strong agent** | The pricier agent the Router is measured against. **No frontier LLM (not approved).** Proposed: Gemini 3.8 Flash, v1's model | New in v2. The baseline v2 must match ("as good as a strong agent, for less") and, under escalation option B, the fallback that re-does a task Jev isn't confident about. Under option A an LLM judge picks among the K runs instead, which is v1's exact escalation |
+| **Cheap agent** | An open-weight LLM: Nemotron 3 Super, if the comparability check passes (otherwise Gemini 3.8 Flash) | Does each task K times, calling the tools |
+| **Strong agent** | Gemini 3.8 Flash, v1's model (approved 2026-10-06; no frontier LLM) | New in v2. The baseline v2 must match ("as good as a strong agent, for less") and, under escalation option B, the fallback that re-does a task Jev isn't confident about. Under option A an LLM judge picks among the K runs instead, which is v1's exact escalation |
 | **Jev** | The decision model from v1 (`typesafe/jev-1.13` via OpenRouter) | Answers the rubric's yes/no questions about each run's summary, so the runs can be scored. It never calls tools or does the task. |
 | **Router** | Code | Keeps Jev's top-scoring run when Jev is confident; otherwise escalates to the Strong agent |
 | **Editor** | An LLM; in v1, Gemini 3.8 Flash (few calls) | **Same role as in v1:** the learning step. After each practice round it reads the mistakes and proposes one edit, to the rubric (Jev rubric loop) or to the agent's skill file (Agent skill loop); the gate keeps or rejects it. Without it there is selection but no learning |
@@ -203,7 +207,7 @@ All three show up as accuracy gains or cost cuts on the sealed set.
 
 ### The claim v2 can make, if it works
 
-> A cheap agent plus a learned checker matches a strong agent on real business tasks at half the cost.
+> An open-weight agent plus a learned checker (Jev) matches Gemini Flash on real back-office tasks, cheaper and faster.
 
 That is the claim a business actually cares about.
 

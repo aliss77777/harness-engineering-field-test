@@ -1,6 +1,6 @@
 # Which AutomationBench tasks to use: fit with back-office work
 
-**Written:** 2026-10-06 · **Status:** recommendation for review; not yet adopted · **Numbers:** `phase0/domain_profile.json`, from `scripts/profile_domains.py` (task data only, no model calls)
+**Written:** 2026-10-06 · **Status:** adopted 2026-10-06 (Finance + HR for Phase 1 and the comparability check) · **Numbers:** `phase0/domain_profile.json`, from `scripts/profile_domains.py` (task data only, no model calls)
 
 ## Bottom line
 
