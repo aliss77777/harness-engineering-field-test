@@ -141,7 +141,12 @@ class ChatClient:
                 if "error" in payload or not payload.get("model") or not payload.get("choices"):
                     raise IncompleteResponseError(f"response without a message: {str(payload)[:300]}")
                 self._validate_route(payload["model"], payload.get("provider"))
-                message = payload["choices"][0]["message"]
+                choice = payload["choices"][0]
+                message = choice["message"]
+                finish_reason = choice.get("finish_reason") or choice.get("native_finish_reason")
+                if not message.get("tool_calls") and not (message.get("content") or "").strip():
+                    # e.g. only reasoning came back, with no usage: a provider glitch, not the agent stopping
+                    raise IncompleteResponseError(f"empty reply (no content, no tool calls; finish_reason={finish_reason})")
                 usage_body = payload.get("usage") or {}
                 details = usage_body.get("completion_tokens_details") or {}
                 usage = {
@@ -150,6 +155,7 @@ class ChatClient:
                     "reasoning_tokens": int(details.get("reasoning_tokens", 0) or 0),
                     "cost": float(usage_body.get("cost", 0) or 0),
                     "latency_ms": round((time.perf_counter() - started) * 1000),
+                    "finish_reason": finish_reason,
                 }
                 if self.spend is not None:
                     self.spend.record(usage["cost"])

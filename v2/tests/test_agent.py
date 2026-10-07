@@ -172,3 +172,11 @@ def test_bootstrap_interval_brackets_the_mean():
     diffs = [0.1, -0.2, 0.0, 0.3, -0.1] * 10
     lo, hi = paired_bootstrap_interval(diffs)
     assert lo < sum(diffs) / len(diffs) < hi
+
+
+def test_empty_reply_is_retried_not_treated_as_done(tmp_path):
+    empty = reply({"content": None, "reasoning": "thinking only"})
+    empty["usage"] = {}
+    server = FakeServer([(200, empty), (200, reply({"content": "real answer"}))])
+    out = client(tmp_path, server).complete([], [], cache_key={}, event={})
+    assert out["message"]["content"] == "real answer" and len(server.requests) == 2
