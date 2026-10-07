@@ -45,7 +45,7 @@ If comparable, Nemotron 3 Super becomes the Cheap agent. If not, Gemini 3.8 Flas
 3. Estimate the check's cost from the smoke test. Alexander sets the spend cap.
 4. Run the check, fill in the table, apply the rule, and record the choice here and in `PLAN.md` before any further paid run.
 
-**Other notes:** the editor (few calls, quality matters) stays on a strong model whatever the outcome. The Strong agent is chosen separately (brief section 9, decision 3).
+**Other notes:** the editor makes few calls and stays on Gemini 3.8 Flash, as in v1. The Strong agent is chosen separately (brief section 9, decision 3). **No frontier model is approved** (Alexander, 2026-10-06); the proposal is Gemini 3.8 Flash as the Strong agent if Nemotron becomes the Cheap agent.
 
 | Model | Host pinned | Mean credit | Pass rate | Run failures | $ / run | s / run | Steps / run |
 |---|---|---|---|---|---|---|---|

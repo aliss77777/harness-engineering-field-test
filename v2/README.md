@@ -11,7 +11,7 @@
 | **Phase** | 0 — feasibility (gates everything else) |
 | **Done** | AutomationBench installed and checked; free harness built (27 tests) |
 | **Next** | Build the model-backed agent and its OpenRouter client (free), then a smoke test (cents) |
-| **Waiting on Alexander** | Review the domain recommendation ([`phase0/DOMAINS.md`](phase0/DOMAINS.md): Finance + HR); spend cap for the comparability check (after the smoke test); Strong agent shortlist |
+| **Waiting on Alexander** | Review the domain recommendation ([`phase0/DOMAINS.md`](phase0/DOMAINS.md): Finance + HR); spend cap for the comparability check (after the smoke test); the Strong-agent proposal (Gemini 3.8 Flash, no frontier model) |
 | **Spend so far** | $0 |
 
 ## Plan and progress
@@ -28,7 +28,7 @@
 | 0.3 Model-backed agent + tool-calling OpenRouter client, tested on fake responses | ▶️ | free |
 | 0.4 Smoke test: 2 tasks per model | ⬜ | cents; measures tokens per run, then the check's cost |
 | 0.5 Cheap-agent comparability check: Gemini 3.8 Flash vs Nemotron 3 Super, 50 tasks | ⬜ | [below](#cheap-agent-comparability-check); spend cap set after 0.4 |
-| 0.6 Phase 0 spike: the Cheap agent with K runs per task, plus the Strong agent on the same tasks | ⬜ | budget set after 0.5 |
+| 0.6 Phase 0 spike: the Cheap agent with K runs per task, plus the Strong agent on the same tasks | ⬜ | budget set after 0.5; **no frontier model unless Alexander approves it** |
 | 0.7 Go/no-go call (Alexander) | ⬜ | [criteria](phase0/FEASIBILITY.md#gono-go-criteria) |
 
 **Phase 1 — experiments on business tasks** (preregistered in code before each paid run) · detail: [brief section 3](briefs/Task%20Brief%207_V2_Business.md)
@@ -68,7 +68,7 @@ Once Phase 1 has results, the 3–5 numbered insights go here, copied verbatim f
 | Repo layout | ✅ v2 is a folder in this repo (2026-10-05) |
 | AutomationBench licence | ✅ MIT (2026-10-05) |
 | Cheap agent | Decided by the comparability check (below) |
-| Strong agent | Open: shortlist needed before step 0.6 |
+| Strong agent | **No frontier LLM: not approved (2026-10-06).** Proposed: Gemini 3.8 Flash, v1's model, if Nemotron becomes the Cheap agent. Pending approval |
 | Phase 1 domains | Recommended: **Finance + HR** ([analysis](phase0/DOMAINS.md)); pending Alexander's review. If adopted, the comparability check switches from Sales + Support to Finance + HR |
 | Spend caps | Open: the comparability check's cap after the smoke test; Phase 1 placeholder $60 |
 [line omitted from the public copy]
@@ -128,10 +128,10 @@ Harness code is in `src/jevloop/` (`bench.py` is the only module that touches Au
 | Role | What it is | What it does |
 |---|---|---|
 | **Cheap agent** | An LLM: Gemini 3.8 Flash, or Nemotron 3 Super if the comparability check passes | Does each task K times, calling the tools |
-| **Strong agent** | A frontier LLM (to be chosen) | New in v2. The baseline v2 must match ("as good as a strong agent, for less") and, under escalation option B, the fallback that re-does a task Jev isn't confident about. Under option A an LLM judge picks among the K runs instead, which is v1's exact escalation |
+| **Strong agent** | The pricier agent the Router is measured against. **No frontier LLM (not approved).** Proposed: Gemini 3.8 Flash, v1's model | New in v2. The baseline v2 must match ("as good as a strong agent, for less") and, under escalation option B, the fallback that re-does a task Jev isn't confident about. Under option A an LLM judge picks among the K runs instead, which is v1's exact escalation |
 | **Jev** | The decision model from v1 (`typesafe/jev-1.13` via OpenRouter) | Answers the rubric's yes/no questions about each run's summary, so the runs can be scored. It never calls tools or does the task. |
 | **Router** | Code | Keeps Jev's top-scoring run when Jev is confident; otherwise escalates to the Strong agent |
-| **Editor** | A strong LLM | **Same role as in v1:** the learning step. After each practice round it reads the mistakes and proposes one edit, to the rubric (Jev rubric loop) or to the agent's skill file (Agent skill loop); the gate keeps or rejects it. Without it there is selection but no learning |
+| **Editor** | An LLM; in v1, Gemini 3.8 Flash (few calls) | **Same role as in v1:** the learning step. After each practice round it reads the mistakes and proposes one edit, to the rubric (Jev rubric loop) or to the agent's skill file (Agent skill loop); the gate keeps or rejects it. Without it there is selection but no learning |
 
 Jev enters in Phase 1. Phase 0 only measures the agents.
 
