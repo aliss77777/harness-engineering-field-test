@@ -13,7 +13,7 @@
 | **Phase** | 0 — feasibility (gates everything else); remaining steps approved 2026-10-06 |
 | **Spend cap** | $10 for all of Phase 0, enforced in code |
 | **Done** | AutomationBench installed and checked; free harness built; domain analysis; focus and models decided |
-| **Next** | Nemotron screen: 4 runs on each of the 50 Finance + HR tasks (≈ $4), then the go/no-go numbers |
+| **Now** | Nemotron screen running (started 2026-10-07): slowed by upstream rate limits at the pinned host; ≈ $0.027 per run, projected ≈ $5.40 |
 | **Waiting on Alexander** | Nothing until the go/no-go call (0.7). Lean budget approved 2026-10-07 ([Budget](#budget)) |
 | **Spend so far** | $0.52 of the $10 Phase 0 cap |
 
