@@ -119,6 +119,33 @@ Harness code is in `src/jevloop/` (`bench.py` is the only module that touches Au
 
 ## Methodology appendix: what changes from v1, and why
 
+> "this is exponentially more complicated than the harness experiment in v1; but it seems like the appropriate jump in difficulty, from a lab experiment to a real world task."
+>
+> — Alexander, 2026-10-06, on seeing the anatomy of an AutomationBench task ([`phase0/DOMAINS.md`](phase0/DOMAINS.md#anatomy-of-a-task-the-experiments-atomic-unit))
+
+### Who does what: agents do the work, Jev checks it
+
+| Role | What it is | What it does |
+|---|---|---|
+| **Cheap agent** | An LLM: Gemini 3.8 Flash, or Nemotron 3 Super if the comparability check passes | Does each task K times, calling the tools |
+| **Strong agent** | A frontier LLM (to be chosen) | Does the task when the Router escalates it; the quality bar to match |
+| **Jev** | The decision model from v1 (`typesafe/jev-1.13` via OpenRouter) | Answers the rubric's yes/no questions about each run's summary, so the runs can be scored. It never calls tools or does the task. |
+| **Router** | Code | Keeps Jev's top-scoring run when Jev is confident; otherwise escalates to the Strong agent |
+| **Editor** | A strong LLM | Proposes one edit per round, to the rubric or to the agent's skill file |
+
+Jev enters in Phase 1. Phase 0 only measures the agents.
+
+### Does v1's improvement loop carry over?
+
+The mechanics carry over unchanged: practice → mistakes → one edit → held-out gate → keep or reject. Whether it still *learns* here is what V2-2 tests. What changes:
+
+- **For the rubric, the hard part shrinks back to v1's problem.** Two runs of the same task, one passing and one failing, are a v1-style pair with a known winner. The editor compares their summaries, and the difference is visible (for example, one run emailed the customer on a payment plan). This is the strongest reason to expect the rubric loop to keep learning.
+- **It only works when runs differ.** If all K runs fail, there is nothing to pick between; only escalation helps. That is why the go/no-go needs at least 30% of tasks with mixed pass/fail.
+- **Credit assignment is harder for the agent's skill file.** A failed run is up to 50 steps, and the editor has to find the step that went wrong. Agent runs are also noisy, so the gate needs several runs per task to tell a real improvement from luck, which makes this loop expensive.
+- **Lessons must transfer across workflows.** v1's items were all the same kind (headline pairs, response pairs). Here every task is a different workflow, so a kept edit has to be general ("Did it apply the policy it found in the inbox?") rather than specific. The held-out gate enforces this, but it may reject more edits, so learning could be slower.
+- **Less data, richer signal.** About 200 tasks instead of thousands of pairs, so less statistical power; but partial credit is a much denser signal than v1's single right/wrong per item.
+
+
 **Short version:** the harness barely changes. What changes is *what the system is doing*, and that is the point of v2.
 
 ### v1 predicted a judgment; v2 does the work
