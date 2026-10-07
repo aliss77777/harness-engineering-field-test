@@ -6,15 +6,15 @@
 
 ## Status at a glance
 
-*Updated 2026-10-06 (after the smoke test).*
+*Updated 2026-10-07.*
 
 | | |
 |---|---|
 | **Phase** | 0 — feasibility (gates everything else); remaining steps approved 2026-10-06 |
 | **Spend cap** | $10 for all of Phase 0, enforced in code |
 | **Done** | AutomationBench installed and checked; free harness built; domain analysis; focus and models decided |
-| **Next** | Build the model-backed agent and its OpenRouter client (free), then a smoke test (cents) |
-| **Waiting on Alexander** | **Budget decision:** the 50-task check projects to ≈ $25 (Gemini ≈ $24 of it), over the $10 Phase 0 cap. Stopped as agreed |
+| **Next** | Nemotron screen: 4 runs on each of the 50 Finance + HR tasks (≈ $4), then the go/no-go numbers |
+| **Waiting on Alexander** | Nothing until the go/no-go call (0.7). Lean budget approved 2026-10-07 ([Budget](#budget)) |
 | **Spend so far** | $0.52 of the $10 Phase 0 cap |
 
 ## Plan and progress
@@ -30,15 +30,15 @@
 | 0.2b Domain analysis: anatomy of a task; which tasks fit back-office work | ✅ 2026-10-06 | [`phase0/DOMAINS.md`](phase0/DOMAINS.md): **Finance + HR adopted** |
 | 0.3 Model-backed agent + tool-calling OpenRouter client, tested on fake responses | ✅ 2026-10-06 | `src/jevloop/openrouter.py`, `llm_agent.py`; 42 tests |
 | 0.4 Smoke test: 2 tasks per model | ✅ 2026-10-06 | $0.52. Both pass the simple task; one business task cost $0.48 on Gemini vs $0.019 on Nemotron. [Results](phase0/FEASIBILITY.md#smoke-test-2026-10-06-052-spent) |
-| 0.5 Cheap-agent comparability check: Gemini 3.8 Flash vs Nemotron 3 Super, 50 Finance + HR tasks | ⏸️ | **Paused:** projects to ≈ $25, over the cap. [below](#cheap-agent-comparability-check) |
-| 0.6 Phase 0 spike: the Cheap agent with K runs per task, plus the Strong agent (Gemini 3.8 Flash) on the same tasks | ⬜ | within the $10 cap; no frontier model |
+| 0.5 Nemotron screen: 4 runs on each of the 50 Finance + HR tasks (replaces the comparability check and the spike) | ▶️ | ≈ $4; [why](#cheap-agent-comparability-moved-into-phase-1) |
+| 0.6 ~~Spike~~ | merged into 0.5 | the Gemini comparison moves to Phase 1's sealed set |
 | 0.7 Go/no-go call (Alexander) | ⬜ | [criteria](phase0/FEASIBILITY.md#gono-go-criteria) |
 
 **Phase 1 — experiments on business tasks** (preregistered in code before each paid run) · detail: [brief section 3](briefs/Task%20Brief%207_V2_Business.md)
 
 | Experiment | Question | Status |
 |---|---|---|
-| V2-1 Controls | How much room is there (random pick → best of K; Cheap → Strong agent)? | ⬜ |
+| V2-1 Controls | How much room is there (random pick → best of K; Cheap → Strong agent)? Includes the **Nemotron vs Gemini comparability test** on the 80 sealed tasks | ⬜ |
 | V2-2 Learning | Do the Jev rubric loop and the Agent skill loop learn on business tasks? | ⬜ |
 | V2-3 Router (headline) | Does routing keep Strong-agent quality for less? | ⬜ |
 | V2-4 Partial feedback (optional) | Does it still learn without an answer key? | ⬜ |
@@ -59,7 +59,8 @@
 | A do-nothing agent scores | 0 on all 800 tasks (the grader drops checks already true at the start) | [FEASIBILITY](phase0/FEASIBILITY.md#free-checks-2026-10-05-no-model-calls) |
 | Our own agent loop drives the bench | Yes: a hand-written solution scores 1.0 through the bench's grader | [FEASIBILITY](phase0/FEASIBILITY.md#free-checks-2026-10-05-no-model-calls) |
 | Cost per business-task run, smoke test (one task) | Gemini 3.8 Flash $0.48 vs Nemotron 3 Super $0.019 (≈ 25× cheaper, 5× faster on that task) | [FEASIBILITY](phase0/FEASIBILITY.md#smoke-test-2026-10-06-052-spent) |
-| Nemotron 3 Super comparable to Gemini 3.8 Flash? | *not run (paused on budget)* | [below](#cheap-agent-comparability-check) |
+| Nemotron 3 Super: pass rate, failures, varied runs, best-of-4 on 50 tasks | *running* | [FEASIBILITY](phase0/FEASIBILITY.md#nemotron-screen-2026-10-07) |
+| Nemotron 3 Super comparable to Gemini 3.8 Flash? | *Phase 1 (V2-1, sealed set)* | [below](#cheap-agent-comparability-moved-into-phase-1) |
 | Cheap / Strong agent pass rates; share of tasks with mixed pass/fail | *not run* | Phase 0 spike |
 | Go/no-go | *pending* | |
 
@@ -72,22 +73,36 @@ Once Phase 1 has results, the 3–5 numbered insights go here, copied verbatim f
 | Repo layout | ✅ v2 is a folder in this repo (2026-10-05) |
 | AutomationBench licence | ✅ MIT (2026-10-05) |
 | Experiment focus | ✅ Open-weight agent + Jev vs Gemini 3.8 Flash (2026-10-06) |
-| Cheap agent | Nemotron 3 Super (open weight), if the comparability check passes; otherwise Gemini 3.8 Flash |
+| Cheap agent | Nemotron 3 Super (open weight), subject to the Phase 0 go/no-go; comparability with Gemini tested in Phase 1 |
 | Strong agent, editor, escalation judge | ✅ Gemini 3.8 Flash, v1's model (2026-10-06). No frontier LLM |
 | Phase 1 domains | ✅ **Finance + HR** ([analysis](phase0/DOMAINS.md), 2026-10-06) |
-| Spend caps | ✅ Phase 0: $10 hard cap (2026-10-06). Phase 1: open (placeholder $60) |
+| Spend caps | ✅ Phase 0: $10 hard cap (2026-10-06). ✅ Lean budget ≈ $60 in total (2026-10-07). Phase 1 cap: set after Phase 0 (placeholder $60) |
+| Agent skill loop in Phase 1 | Open (+≈ $40 if included) |
 [line omitted from the public copy]
 
-## Cheap-agent comparability check
+## Budget
 
-A **stability check, not a quality ranking or harness training**: can the open-weight **Nemotron 3 Super** (about 8–9× cheaper per token) stand in for **Gemini 3.8 Flash** as the Cheap agent? It replaces the earlier 20-task, three-model bake-off: 20 tasks can't separate models on quality, since one task is 5 points of pass rate.
+*Approved 2026-10-07 (Alexander): the lean plan, with the comparability check folded into Phase 1. Estimates from the smoke test (one business task per model: Gemini 3.8 Flash $0.48 per run, Nemotron 3 Super $0.019), so they are rough.*
 
-- **Tasks:** 50 business tasks (25 Finance + 25 HR), fixed seed, IDs committed first. They stay out of Phase 1's sealed set.
-- **Runs:** one per model per task; same prompt, tools, 50-step cap and temperature; Nemotron's provider pinned on OpenRouter.
-- **Rule (fixed in advance):** Nemotron is comparable if its mean partial credit is **within 10 points** of Gemini's (paired, same tasks) **and under 10% of its runs fail**. Then it becomes the Cheap agent; otherwise Gemini stays. At n=50 the check can rule out a large gap, not prove the models equal.
-- **Order:** build the agent (free) → smoke test, 2 tasks per model (cents) → project the cost → run within the $10 Phase 0 cap (stop and ask if the projection goes over).
+| Step | What runs | Central | Range |
+|---|---|---|---|
+| Phase 0, spent | smoke test | $0.52 | — |
+| Phase 0, Nemotron screen | 4 runs × 50 Finance + HR tasks = 200 Nemotron runs | ≈ $4 | $2–8 |
+| Phase 1, Nemotron runs | 4 runs × 200 tasks = 800 runs (the Jev rubric loop re-scores these; no new agent runs per round) | ≈ $15 | $8–32 |
+| Phase 1, Gemini baseline | 1 run × 80 sealed tasks (also the paired comparability test) | ≈ $38 | $20–48 |
+| Phase 1, Jev + editor + escalation judge | small calls | ≈ $3 | $2–5 |
+| **Total, lean plan** | | **≈ $60** | **$33–93** |
+| Open: Agent skill loop | each candidate edit re-runs the agent (≈ 2,100 Nemotron runs) | +≈ $40 | +$21–84 |
 
-Full protocol and results table: [`phase0/FEASIBILITY.md`](phase0/FEASIBILITY.md#cheap-agent-comparability-check-revised-2026-10-06-alexander).
+- **Phase 0 cap: $10, enforced in code.** The screen projects to ≈ $4.
+- **Phase 1 cap: placeholder $60**, to be set after Phase 0 (the lean plan's Phase 1 is ≈ $56).
+- **Not adopted** (Alexander, 2026-10-07): Gemini's half-price flex tier (its timings would not fairly test "faster"); dropping the Agent skill loop (stays an open Phase 1 decision); reusing Gemini's sealed runs as option-B escalations.
+
+## Cheap-agent comparability: moved into Phase 1
+
+*Revised 2026-10-07.* Comparing Nemotron 3 Super with Gemini 3.8 Flash on 50 Phase 0 tasks would have cost ≈ $25, mostly Gemini, and Phase 1 runs the same comparison anyway: Gemini on the 80 sealed tasks against Nemotron's runs. So the comparison happens there, on more tasks, with the same preregistered rule (Nemotron comparable if its mean partial credit is within 10 points of Gemini's, paired, and under 10% of its runs fail).
+
+**Phase 0 instead screens Nemotron alone** on the same 50 Finance + HR tasks (`phase0/comparability_task_ids.txt`, kept out of the sealed set), 4 runs each, for the go/no-go numbers: its pass rate, run failures, the share of tasks where its runs differ, best-of-4, and cost per run. The trade-off: if Nemotron turns out far behind Gemini, we learn it in Phase 1, after its ≈ $15 of runs, rather than before. Details: [`phase0/FEASIBILITY.md`](phase0/FEASIBILITY.md#nemotron-screen-2026-10-07).
 
 ## The question
 

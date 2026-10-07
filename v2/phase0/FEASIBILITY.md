@@ -9,7 +9,24 @@
 2. Measure cost and time per run, and the Cheap and Strong agents' pass rates.
 3. Confirm we can: (a) run K independent candidates per task; (b) grade each one; (c) export a run summary with no assertion text; (d) plug in our own agent loop or wrap theirs.
 
-## Cheap-agent comparability check (revised 2026-10-06, Alexander)
+## Nemotron screen (2026-10-07)
+
+*Replaces the comparability check below and the Phase 0 spike (Alexander, 2026-10-07). The Gemini comparison moves to Phase 1, where Gemini runs on the 80 sealed tasks anyway; the same preregistered rule applies there.*
+
+**What runs:** Nemotron 3 Super only, **4 runs on each of the 50 Finance + HR tasks** in `comparability_task_ids.txt` (still kept out of Phase 1's sealed set), with the committed settings (`config_phase0.yaml`). The smoke test's `finance:4001` run is reused as that task's run 0. Projected ≈ $4 (range $2–8) at the smoke rate; the script refuses to start if spend + 1.5 × projection would pass the $10 cap.
+
+**Measures (all from the same 200 runs):**
+- first-run pass rate and mean partial credit;
+- random pick of 4 and best-of-4 (oracle) pass rate and credit: the room selection has;
+- share of tasks whose 4 runs mix pass and fail;
+- run-failure rate (step cap, unparseable tool call, error);
+- cost, model time and steps per run; projected Phase 1 cost.
+
+**Go/no-go (unchanged rule):** pass rate 20–80%; at least 30% of tasks with mixed pass/fail; projected Phase 1 cost within the Phase 1 cap (placeholder $60). Also reported: Nemotron's failure rate against the 10% limit of the Phase 1 comparability rule.
+
+Results: *(filled in after the run)*
+
+## Cheap-agent comparability check (revised 2026-10-06, Alexander; superseded 2026-10-07 — moved into Phase 1)
 
 *Replaces the 2026-10-05 three-model bake-off (20 tasks; Gemini 3.8 Flash, Nemotron 3 Super, gpt-oss-120b). Revised because 20 tasks with one run each can't separate models on quality: each task is 5 points of pass rate. gpt-oss-120b is dropped.*
 

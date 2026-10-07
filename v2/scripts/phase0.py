@@ -1,8 +1,10 @@
-"""Phase 0 paid steps: task selection, smoke test, cheap-agent comparability check.
+"""Phase 0 paid steps: task selection, smoke test, Nemotron screen.
 
     .venv/bin/python scripts/phase0.py select   # fix the 50 task IDs (free; committed before any run)
-    .venv/bin/python scripts/phase0.py smoke    # 2 tasks per model (cents); projects the check's cost
-    .venv/bin/python scripts/phase0.py check    # 50 Finance + HR tasks per model, one run each
+    .venv/bin/python scripts/phase0.py smoke    # 2 tasks per model (cents); measures cost per run
+    .venv/bin/python scripts/phase0.py screen   # Nemotron alone, 4 runs x 50 Finance + HR tasks (go/no-go)
+
+The Nemotron vs Gemini comparability test moved to Phase 1 (2026-10-07); see phase0/FEASIBILITY.md.
 
 Settings: phase0/config_phase0.yaml. Spend is capped in code for all of Phase 0; finished model
 calls are cached, so a rerun after any stop resumes for free.
@@ -20,7 +22,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from jevloop import bench  # noqa: E402
 from jevloop.cache import DiskCache  # noqa: E402
-from jevloop.feasibility import comparability, select_tasks, summarize_model  # noqa: E402
+from jevloop.feasibility import select_tasks  # noqa: E402
 from jevloop.llm_agent import LLMAgent  # noqa: E402
 from jevloop.log import JsonlLogger  # noqa: E402
 from jevloop.openrouter import ChatClient  # noqa: E402
@@ -147,38 +149,95 @@ def cmd_smoke(_args) -> None:
         {name: [r.record() for r in runs] for name, runs in out.items()}, indent=2) + "\n")
 
 
-def cmd_check(args) -> None:
-    smoke = json.loads((RESULTS / "smoke.json").read_text()) if (RESULTS / "smoke.json").exists() else None
-    if smoke is None:
-        sys.exit("run `smoke` first: the check's cost is projected from it")
+GEMINI_SMOKE_COST_PER_RUN = 0.4842  # smoke test, finance:4001 (one task): the only Gemini business-task measurement
+PHASE1_NEMOTRON_RUNS = 800  # 4 runs x 200 Finance + HR tasks (practice, gate, sealed)
+PHASE1_GEMINI_RUNS = 80  # Strong agent on the sealed set
+PHASE1_OVERHEAD_USD = 3.0  # Jev scoring, editor and escalation-judge calls (v1 prices)
+PHASE1_CAP_USD = 60.0  # placeholder Phase 1 cap (brief); set after Phase 0
+SKILL_LOOP_RUNS = 2100  # optional Agent skill loop: 5 rounds x (60 practice + 3 edits x 60 gate x 2)
+
+
+def cmd_screen(args) -> None:
+    """Nemotron alone, K runs on each of the 50 Finance + HR tasks: the go/no-go numbers."""
+    from concurrent.futures import ThreadPoolExecutor
+
+    from jevloop.feasibility import frame, go_no_go
+    from jevloop.runs import run_candidate
+
+    k, name, run_id = args.k, "nemotron", "screen"
+    ids = task_ids()
     tracker = spend()
-    projection = sum(
-        sum(r["cost_usd"] for r in runs if not r["task_id"].startswith("simple:")) * len(task_ids())
-        for runs in smoke.values()
-    )
+    smoke_cost = [r for r in json.loads((RESULTS / "smoke.json").read_text())[name] if not r["task_id"].startswith("simple:")]
+    per_run = sum(r["cost_usd"] for r in smoke_cost) / len(smoke_cost)
+    log_path = LOGS / f"{run_id}-{name}-runs.jsonl"
+    finished = {(t, 0): r for t, r in load_finished(LOGS / f"smoke-{name}-runs.jsonl").items() if t in ids}
+    finished |= load_finished_all(log_path)
+    tasks = {t.task_id: t for t in bench.load_tasks(CONFIG["comparability"]["domains"])}
+    jobs = [(tasks[t], c) for t in ids for c in range(k) if (t, c) not in finished]
+    projection = per_run * len(jobs)
+    print(f"{len(finished)} runs reloaded, {len(jobs)} to run; projected ${projection:.2f} "
+          f"(spent ${tracker.total_usd:.2f} of ${tracker.cap_usd:.2f})")
     if tracker.total_usd + projection * args.safety > tracker.cap_usd:
-        sys.exit(f"STOP: projected ${projection:.2f} (x{args.safety} safety) + spent ${tracker.total_usd:.2f} "
-                 f"exceeds the ${tracker.cap_usd:.2f} cap. Ask Alexander before running.")
-    out = run_models(task_ids(), "check", reuse_from=("smoke",))
-    result = comparability(out["gemini"], out["nemotron"])
-    for name, runs in out.items():
-        s = summarize_model(runs)
-        print(f"{name}: credit {s.mean_credit:.3f} pass {s.pass_rate:.0%} failures {s.failures} "
-              f"${s.cost_per_run_usd:.4f}/run {s.model_seconds_per_run:.1f}s/run {s.steps_per_run:.1f} steps/run")
-    lo, hi = result.interval
-    print(f"difference (Nemotron - Gemini): {result.difference:+.3f} [{lo:+.3f}, {hi:+.3f}] -> "
-          f"{'COMPARABLE' if result.comparable else 'NOT comparable'} "
-          f"(credit_ok={result.credit_ok}, failures_ok={result.failures_ok})")
-    RESULTS.mkdir(parents=True, exist_ok=True)
-    (RESULTS / "check_runs.json").write_text(json.dumps(
-        {name: [r.record() for r in runs] for name, runs in out.items()}, indent=2) + "\n")
-    per_task = {t: {name: {"credit": r.partial_credit, "passed": r.passed, "failed": r.failed, "steps": r.steps,
-                           "cost_usd": r.cost_usd, "model_seconds": r.model_seconds}
-                    for name, runs in out.items() for r in runs if r.task_id == t} for t in task_ids()}
-    (ROOT / "phase0" / "comparability_results.json").write_text(json.dumps(
-        {"verdict": result.record(), "settings": {k: CONFIG[k] for k in ("seed", "max_steps", "temperature", "reasoning_effort")}
-         | {"models": CONFIG["models"]}, "per_task": per_task}, indent=2) + "\n")
-    print("written: phase0/comparability_results.json")
+        sys.exit(f"STOP: spend + {args.safety} x projection would pass the ${tracker.cap_usd:.2f} cap. Ask Alexander.")
+    logger = JsonlLogger(log_path)
+    nemotron = agent(name, tracker, run_id)
+
+    def one(job):
+        run = run_candidate(job[0], nemotron, job[1])
+        logger.write({"event": "candidate_run", "run_id": run_id, **run.record()})
+        return run
+
+    with ThreadPoolExecutor(max_workers=CONFIG["workers"]) as pool:
+        for i, run in enumerate(pool.map(one, jobs), 1):
+            if i % 10 == 0 or i == len(jobs):
+                print(f"  {i}/{len(jobs)} runs; spend ${tracker.total_usd:.2f}", flush=True)
+    tracker.flush()
+    finished |= load_finished_all(log_path)
+    runs = [finished[(t, c)] for t in ids for c in range(k)]
+    f = frame(runs)
+    cost = f.cost_per_run_usd
+    phase1 = cost * PHASE1_NEMOTRON_RUNS + GEMINI_SMOKE_COST_PER_RUN * PHASE1_GEMINI_RUNS + PHASE1_OVERHEAD_USD
+    decision = go_no_go(f, projected_phase1_cost_usd=phase1, cap_usd=PHASE1_CAP_USD)
+    first = [finished[(t, 0)] for t in ids]
+    failure_rate = sum(r.failed for r in runs) / len(runs)
+    by_domain = {d: {"first_run_pass_rate": sum(r.passed for r in first if r.domain == d) / sum(r.domain == d for r in first),
+                     "first_run_credit": sum(r.partial_credit for r in first if r.domain == d) / sum(r.domain == d for r in first)}
+                 for d in CONFIG["comparability"]["domains"]}
+    report = {
+        "frame": f.record(), "by_domain": by_domain,
+        "run_failure_rate": failure_rate, "run_failures": sum(r.failed for r in runs),
+        "stop_reasons": {s_: sum(r.stop_reason == s_ for r in runs) for s_ in ("done", "max_steps", "error")},
+        "parse_error_runs": sum(r.parse_errors > 0 for r in runs),
+        "steps_per_run": sum(r.steps for r in runs) / len(runs),
+        "projected_phase1_cost_usd": phase1,
+        "projected_phase1_cost_with_skill_loop_usd": phase1 + cost * SKILL_LOOP_RUNS,
+        "projection_inputs": {"nemotron_cost_per_run": cost, "gemini_cost_per_run_smoke": GEMINI_SMOKE_COST_PER_RUN,
+                              "nemotron_runs": PHASE1_NEMOTRON_RUNS, "gemini_runs": PHASE1_GEMINI_RUNS,
+                              "overhead_usd": PHASE1_OVERHEAD_USD, "phase1_cap_usd": PHASE1_CAP_USD},
+        "go_no_go": {"go": decision.go, "pass_rate_ok": decision.pass_rate_ok, "mixed_ok": decision.mixed_ok,
+                     "cost_ok": decision.cost_ok, "reasons": list(decision.reasons)},
+        "phase0_spend_usd": tracker.total_usd,
+        "per_task": {t: [{"credit": finished[(t, c)].partial_credit, "passed": finished[(t, c)].passed,
+                          "failed": finished[(t, c)].failed, "steps": finished[(t, c)].steps,
+                          "cost_usd": finished[(t, c)].cost_usd} for c in range(k)] for t in ids},
+    }
+    (ROOT / "phase0" / "screen_results.json").write_text(json.dumps(report, indent=2) + "\n")
+    print(json.dumps({k_: v for k_, v in report.items() if k_ != "per_task"}, indent=2))
+    print("written: phase0/screen_results.json")
+
+
+def load_finished_all(log_path: Path) -> dict:
+    """All runs in a runs log, keyed by (task ID, candidate); last record wins."""
+    from jevloop.runs import CandidateRun
+
+    finished = {}
+    if log_path.exists():
+        for line in log_path.read_text().splitlines():
+            record = json.loads(line)
+            if record.get("event") == "candidate_run":
+                fields = {k: v for k, v in record.items() if k in CandidateRun.__dataclass_fields__}
+                finished[(record["task_id"], record["candidate"])] = CandidateRun(**fields)
+    return finished
 
 
 def main() -> None:
@@ -186,9 +245,10 @@ def main() -> None:
     sub = parser.add_subparsers(dest="cmd", required=True)
     sub.add_parser("select").set_defaults(fn=cmd_select)
     sub.add_parser("smoke").set_defaults(fn=cmd_smoke)
-    check = sub.add_parser("check")
-    check.add_argument("--safety", type=float, default=1.5, help="multiplier on the projected cost for the cap check")
-    check.set_defaults(fn=cmd_check)
+    screen = sub.add_parser("screen")
+    screen.add_argument("--k", type=int, default=4)
+    screen.add_argument("--safety", type=float, default=1.5, help="multiplier on the projected cost for the cap check")
+    screen.set_defaults(fn=cmd_screen)
     args = parser.parse_args()
     args.fn(args)
 
