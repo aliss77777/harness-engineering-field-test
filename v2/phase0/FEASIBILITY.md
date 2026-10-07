@@ -5,44 +5,55 @@
 ## Plan
 
 1. Install AutomationBench; run the Cheap agent on 20 "simple" tasks and 20 tasks from one business domain.
-   **First, pick the Cheap agent with a bake-off** (below): the agent's model is v2's biggest cost lever.
+   **First, the cheap-agent comparability check** (below): can open-weight Nemotron 3 Super stand in for Gemini 3.8 Flash?
 2. Measure cost and time per run, and the Cheap and Strong agents' pass rates.
 3. Confirm we can: (a) run K independent candidates per task; (b) grade each one; (c) export a run summary with no assertion text; (d) plug in our own agent loop or wrap theirs.
 
-## Cheap-agent bake-off (added 2026-10-05, Alexander)
+## Cheap-agent comparability check (revised 2026-10-06, Alexander)
 
-**Why:** the Cheap agent's runs are most of v2's cost. Open-weight models on OpenRouter cost a small fraction of Gemini 3.8 Flash per token, and a cheaper agent also widens the gap the Router can exploit, provided the agent is good enough. Settle it with data instead of guessing.
+*Replaces the 2026-10-05 three-model bake-off (20 tasks; Gemini 3.8 Flash, Nemotron 3 Super, gpt-oss-120b). Revised because 20 tasks with one run each can't separate models on quality: each task is 5 points of pass rate. gpt-oss-120b is dropped.*
 
-**Candidates** (OpenRouter list prices on 2026-10-05, $ per million tokens, input / output):
+**What it is:** a stability check, not a quality ranking and not harness training. Question: **does the open-weight Nemotron 3 Super perform comparably to Gemini 3.8 Flash as the Cheap agent?** If yes, v2 runs on the much cheaper model.
 
-| Model | Open weight? | Price | vs Gemini 3.8 Flash |
+**Models** (OpenRouter list prices on 2026-10-05, $ per million tokens, input / output):
+
+| Model | Role | Open weight? | Price |
 |---|---|---|---|
-| `google/gemini-3.8-flash` (v1's model; reference) | No | $0.75 / $3.75 | — |
-| `nvidia/nemotron-3-super-120b-a12b` | Yes | $0.08 / $0.45 | ≈ 8–9× cheaper |
-| `openai/gpt-oss-120b` | Yes | $0.037 / $0.17 | ≈ 20× cheaper |
+| `google/gemini-3.8-flash` | Reference (v1's model) | No | $0.75 / $3.75 |
+| `nvidia/nemotron-3-super-120b-a12b` | Candidate | Yes | $0.08 / $0.45 (≈ 8–9× cheaper) |
 
-**Protocol:**
-- The same 20 tasks for every model: 10 from "simple", 10 from the first business domain.
-- One run each, with the same agent prompt, tool set and step cap.
-- Run on the free Phase 0 harness (`src/jevloop/`), with caching, logging and a spend cap of **$5**.
-- **Pin one provider per open-weight model** through OpenRouter (no fallbacks). v1's route check carries over: the run stops if a different model or host answers. Log the host used.
+**Protocol (fixed before any paid run):**
+- **Tasks:** 50 business tasks, 25 Sales + 25 Support (the suggested Phase 1 domains), drawn with a fixed seed. The task IDs are committed to `phase0/comparability_task_ids.txt` before the run. These 50 tasks must not go into Phase 1's sealed set; they may go into practice or gate.
+- **Runs:** one per model per task (100 in total). Both models get the same agent prompt (the bench's own system prompt), the same `api` tools, the same 50-step cap, and the same temperature (the value Phase 1 will use, proposed 0.7). Reasoning effort is fixed per model and recorded.
+- **Hosting:** Nemotron runs through one pinned OpenRouter provider (no fallbacks), and Gemini on Google AI Studio. v1's route check carries over: the run stops if a different model or host answers. The host is logged.
+- **Harness:** the free Phase 0 harness (`src/jevloop/`), with caching, logging and a spend cap in code.
 
-**Measure, per model:** pass rate, mean partial credit, cost per run (from the API's reported cost), time per run, steps per run, and tool-call errors (malformed calls, loops, step-cap hits).
+**Measures, per model:**
+- **Primary:** mean partial credit, and the **paired difference** (Nemotron − Gemini) on the same 50 tasks, with a 95% paired bootstrap interval.
+- **Also:** pass rate, run failures, cost per run (from the API's reported cost), time per run, and steps per run.
+- **Run failure:** the run hits the step cap, makes a tool call our client can't parse, or ends on an API error. Errors returned by the simulated apps don't count; agents hit those normally while exploring.
 
-**Selection rule (fixed before the bake-off runs):** pick the **cheapest model whose pass rate on the 20 tasks is between 20% and 80%** (room for selection to matter) **and whose tool-call error rate is under 10% of runs**. Tie or near-tie (within 5 points of pass rate): take the cheaper one. If no open-weight model qualifies, keep Gemini 3.8 Flash. Record the choice and the numbers here and in `PLAN.md` before any further paid run.
+**Comparability rule (fixed before the run):** Nemotron 3 Super is **comparable** if both hold:
+1. its mean partial credit is **no more than 10 points below** Gemini's (paired point estimate);
+2. its run-failure rate is **under 10%** (at most 4 of 50 runs).
 
-**Other notes:**
-- **The editor** (few calls, quality matters) stays on a strong model regardless of the bake-off.
-- **The Strong agent** is chosen separately (brief section 9, decision 3).
-- **Cost of the bake-off:** about $2–3 (60 runs).
+If comparable, Nemotron 3 Super becomes the Cheap agent. If not, Gemini 3.8 Flash stays. The interval is reported either way. At n=50 it will be wide, so the check can rule out a large gap but cannot prove the models are equal.
 
-| Model | Host pinned | Pass rate | Mean credit | $ / run | s / run | Steps / run | Tool-call errors |
+**Order of work:**
+1. Build the model-backed agent and a tool-calling OpenRouter client (free; tested on fake responses).
+2. **Smoke test:** 2 tasks per model (cents). It confirms tool calls parse, route pinning holds and costs are logged, and it measures real tokens per run.
+3. Estimate the check's cost from the smoke test. Alexander sets the spend cap.
+4. Run the check, fill in the table, apply the rule, and record the choice here and in `PLAN.md` before any further paid run.
+
+**Other notes:** the editor (few calls, quality matters) stays on a strong model whatever the outcome. The Strong agent is chosen separately (brief section 9, decision 3).
+
+| Model | Host pinned | Mean credit | Pass rate | Run failures | $ / run | s / run | Steps / run |
 |---|---|---|---|---|---|---|---|
 | Gemini 3.8 Flash | Google AI Studio | | | | | | |
 | Nemotron 3 Super | | | | | | | |
-| gpt-oss-120b | | | | | | | |
+| **Difference (N − G)** | | *(95% interval)* | | | | | |
 
-**Chosen Cheap agent:** *(fill in with date and reasoning)*
+**Outcome:** *(comparable / not comparable, with date and the chosen Cheap agent)*
 
 ## Free checks (2026-10-05, no model calls)
 
@@ -70,7 +81,7 @@ Note for the domain choice: Support has by far the most checks per task, so full
 
 | Measure | Value |
 |---|---|
-| Cheap agent model (from the bake-off) | |
+| Cheap agent model (from the comparability check) | |
 | Cost per run (Cheap agent) | |
 | Cost per run (Strong agent) | |
 | Time per run | |
