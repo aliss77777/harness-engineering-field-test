@@ -180,14 +180,17 @@ def cmd_screen(args) -> None:
     if tracker.total_usd + projection * args.safety > tracker.cap_usd:
         sys.exit(f"STOP: spend + {args.safety} x projection would pass the ${tracker.cap_usd:.2f} cap. Ask Alexander.")
     logger = JsonlLogger(log_path)
+    if args.retries:
+        CONFIG["retries"] = args.retries
     nemotron = agent(name, tracker, run_id)
+    workers = args.workers or CONFIG["workers"]
 
     def one(job):
         run = run_candidate(job[0], nemotron, job[1])
         logger.write({"event": "candidate_run", "run_id": run_id, **run.record()})
         return run
 
-    with ThreadPoolExecutor(max_workers=CONFIG["workers"]) as pool:
+    with ThreadPoolExecutor(max_workers=workers) as pool:
         for i, run in enumerate(pool.map(one, jobs), 1):
             if i % 10 == 0 or i == len(jobs):
                 print(f"  {i}/{len(jobs)} runs; spend ${tracker.total_usd:.2f}", flush=True)
@@ -247,6 +250,8 @@ def main() -> None:
     sub.add_parser("smoke").set_defaults(fn=cmd_smoke)
     screen = sub.add_parser("screen")
     screen.add_argument("--k", type=int, default=4)
+    screen.add_argument("--workers", type=int, default=None, help="override config workers (results do not depend on it)")
+    screen.add_argument("--retries", type=int, default=None, help="override config retries")
     screen.add_argument("--safety", type=float, default=1.5, help="multiplier on the projected cost for the cap check")
     screen.set_defaults(fn=cmd_screen)
     args = parser.parse_args()
