@@ -1,6 +1,7 @@
 """Phase 0 numbers and the go/no-go rule (Task Brief 7, section 3, Phase 0 item 4)."""
 from __future__ import annotations
 
+import random
 import statistics
 from collections import defaultdict
 from dataclasses import asdict, dataclass
@@ -84,3 +85,88 @@ def go_no_go(cheap: Frame, projected_phase1_cost_usd: float, cap_usd: float) -> 
     if not cost_ok:
         reasons.append(f"projected Phase 1 cost ${projected_phase1_cost_usd:.2f} over cap ${cap_usd:.2f}")
     return GoNoGo(pass_rate_ok and mixed_ok and cost_ok, pass_rate_ok, mixed_ok, cost_ok, tuple(reasons))
+
+
+# ---- Cheap-agent comparability check (phase0/FEASIBILITY.md, fixed 2026-10-06 before any run) ----
+
+COMPARABILITY_MARGIN = 0.10  # Nemotron's mean partial credit may be at most 10 points below Gemini's
+MAX_FAILURE_RATE = 0.10  # under 10% of Nemotron's runs may fail (step cap, unparseable call, error)
+
+
+def select_tasks(task_ids_by_domain: dict[str, list[str]], per_domain: int, seed: int) -> list[str]:
+    """Fixed-seed sample of `per_domain` task IDs from each domain, in a stable order."""
+    chosen = []
+    for domain in sorted(task_ids_by_domain):
+        ids = sorted(task_ids_by_domain[domain], key=lambda t: int(t.split(":")[1]))
+        chosen += sorted(random.Random(f"{seed}:{domain}").sample(ids, per_domain), key=lambda t: int(t.split(":")[1]))
+    return chosen
+
+
+@dataclass(frozen=True)
+class ModelSummary:
+    agent: str
+    runs: int
+    mean_credit: float
+    pass_rate: float
+    failures: int
+    failure_rate: float
+    cost_per_run_usd: float
+    model_seconds_per_run: float
+    steps_per_run: float
+
+    def record(self) -> dict:
+        return asdict(self)
+
+
+def summarize_model(runs: list[CandidateRun]) -> ModelSummary:
+    mean = statistics.fmean
+    return ModelSummary(
+        agent=runs[0].agent,
+        runs=len(runs),
+        mean_credit=mean(r.partial_credit for r in runs),
+        pass_rate=mean(r.passed for r in runs),
+        failures=sum(r.failed for r in runs),
+        failure_rate=mean(r.failed for r in runs),
+        cost_per_run_usd=mean(r.cost_usd for r in runs),
+        model_seconds_per_run=mean(r.model_seconds for r in runs),
+        steps_per_run=mean(r.steps for r in runs),
+    )
+
+
+def paired_bootstrap_interval(diffs: list[float], *, resamples: int = 10_000, seed: int = 20261006) -> tuple[float, float]:
+    """95% percentile bootstrap interval for the mean of paired differences."""
+    rng = random.Random(seed)
+    n = len(diffs)
+    means = sorted(statistics.fmean(diffs[rng.randrange(n)] for _ in range(n)) for _ in range(resamples))
+    return means[int(0.025 * resamples)], means[int(0.975 * resamples) - 1]
+
+
+@dataclass(frozen=True)
+class Comparability:
+    comparable: bool
+    credit_ok: bool
+    failures_ok: bool
+    difference: float  # candidate minus reference, mean partial credit (0-1 scale)
+    interval: tuple[float, float]
+    reference: ModelSummary
+    candidate: ModelSummary
+
+    def record(self) -> dict:
+        return {"comparable": self.comparable, "credit_ok": self.credit_ok, "failures_ok": self.failures_ok,
+                "difference": self.difference, "interval_95": list(self.interval),
+                "reference": self.reference.record(), "candidate": self.candidate.record()}
+
+
+def comparability(reference: list[CandidateRun], candidate: list[CandidateRun]) -> Comparability:
+    """Paired by task: both lists must cover the same tasks, one run each."""
+    ref = {r.task_id: r for r in reference}
+    cand = {r.task_id: r for r in candidate}
+    if set(ref) != set(cand) or len(ref) != len(reference) or len(cand) != len(candidate):
+        raise ValueError("reference and candidate must have exactly one run on each of the same tasks")
+    diffs = [cand[t].partial_credit - ref[t].partial_credit for t in sorted(ref)]
+    difference = statistics.fmean(diffs)
+    cand_summary = summarize_model(candidate)
+    credit_ok = difference >= -COMPARABILITY_MARGIN
+    failures_ok = cand_summary.failure_rate < MAX_FAILURE_RATE
+    return Comparability(credit_ok and failures_ok, credit_ok, failures_ok, difference,
+                         paired_bootstrap_interval(diffs), summarize_model(reference), cand_summary)

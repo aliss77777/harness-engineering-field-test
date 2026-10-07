@@ -1,0 +1,28 @@
+# Phase 0 run settings. Fixed 2026-10-06, before any paid call (see phase0/FEASIBILITY.md).
+seed: 20261006
+spend_cap_usd: 10.0          # hard cap for all of Phase 0 (Alexander, 2026-10-06)
+max_steps: 50                # the bench's default step cap
+temperature: 0.7             # the value Phase 1 will use; above 0 so K runs can differ
+reasoning_effort: medium     # v1's setting, same for both models
+workers: 8
+retries: 8
+
+models:
+  gemini:                    # reference; also the Strong agent
+    model: google/gemini-3.8-flash
+    provider: Google AI Studio
+    provider_tag: google-ai-studio        # standard tier ($0.75 / $3.75 per million), as in v1
+    expected_model: google/gemini-3.8-flash
+  nemotron:                  # open-weight candidate for the Cheap agent
+    model: nvidia/nemotron-3-super-120b-a12b
+    provider: DeepInfra
+    provider_tag: deepinfra/bf16          # full-precision weights ($0.085 / $0.40 per million)
+    expected_model: nvidia/nemotron-3-super-120b-a12b
+
+comparability:
+  domains: [finance, hr]
+  per_domain: 25
+  task_ids_file: phase0/comparability_task_ids.txt
+
+smoke:
+  simple_task: simple:3001   # plus the first Finance task of the comparability list

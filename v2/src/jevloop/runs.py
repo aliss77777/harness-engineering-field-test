@@ -12,8 +12,16 @@ from dataclasses import asdict, dataclass, field
 from typing import Any, Protocol
 
 from jevloop import bench
+import httpx
+
 from jevloop.log import JsonlLogger
+from jevloop.openrouter import IncompleteResponseError, OutOfCreditsError, RouteMismatchError
+from jevloop.spend import SpendCapExceeded
 from jevloop.summary import summarize
+
+
+# Problems with the provider, the account or the budget: they stop the whole run.
+INFRASTRUCTURE_ERRORS = (SpendCapExceeded, OutOfCreditsError, RouteMismatchError, IncompleteResponseError, httpx.HTTPError)
 
 
 @dataclass(frozen=True)
@@ -48,6 +56,9 @@ class AgentResult:
     input_tokens: int = 0
     output_tokens: int = 0
     stop_reason: str = "done"  # done | max_steps | error
+    steps: int = 0
+    parse_errors: int = 0  # tool calls whose arguments could not be parsed
+    model_seconds: float = 0.0  # summed model latency (original latency on cache replays)
 
 
 class Agent(Protocol):
@@ -70,7 +81,18 @@ class CandidateRun:
     seconds: float
     stop_reason: str
     summary: str = field(repr=False)
+    steps: int = 0
+    parse_errors: int = 0
+    model_seconds: float = 0.0
+    model_calls: int = 0
+    input_tokens: int = 0
+    output_tokens: int = 0
     calls: list[dict[str, Any]] = field(default_factory=list, repr=False)
+
+    @property
+    def failed(self) -> bool:
+        """A run failure (comparability rule): step cap hit, an unparseable tool call, or an error."""
+        return self.stop_reason in ("max_steps", "error") or self.parse_errors > 0
 
     def record(self) -> dict[str, Any]:
         return asdict(self)
@@ -83,6 +105,8 @@ def run_candidate(task: bench.Task, agent: Agent, candidate: int) -> CandidateRu
     started = time.monotonic()
     try:
         result = agent.run(task.public, tools, candidate)
+    except INFRASTRUCTURE_ERRORS:
+        raise  # fail loudly; a rerun resumes from cache. Never graded as the agent's failure.
     except Exception as error:  # a crashed run is graded as it stands, and marked
         result = AgentResult(final_message=f"{type(error).__name__}: {error}", stop_reason="error")
     seconds = time.monotonic() - started
@@ -101,6 +125,12 @@ def run_candidate(task: bench.Task, agent: Agent, candidate: int) -> CandidateRu
         stop_reason=result.stop_reason,
         summary=summarize(task.public, tools.calls, before, bench.world_snapshot(world)),
         calls=[asdict(c) for c in tools.calls],
+        steps=result.steps,
+        parse_errors=result.parse_errors,
+        model_seconds=result.model_seconds,
+        model_calls=result.model_calls,
+        input_tokens=result.input_tokens,
+        output_tokens=result.output_tokens,
     )
 
 
