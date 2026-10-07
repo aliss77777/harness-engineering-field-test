@@ -1,10 +1,86 @@
 # v2: the winning harness on real business tasks
 
-**Status:** designed, no experiments yet. Phase 0 (feasibility) gates everything else. Design: [`Task Brief 7`](briefs/Task%20Brief%207_V2_Business.md).
+**This is the one page for tracking v2:** status, plan and progress, key results, and open decisions. Each row links to the file with the detail. [`PLAN.md`](PLAN.md) is the full dated log; [`Task Brief 7`](briefs/Task%20Brief%207_V2_Business.md) is the design.
 
-## Insights
+## Status at a glance
 
-*Placeholder.* The 3–5 numbered insights go here, copied verbatim from [`story/insights.yaml`](story/insights.yaml) once Phase 1 has results. Each links to the experiments that support it.
+*Updated 2026-10-06.*
+
+| | |
+|---|---|
+| **Phase** | 0 — feasibility (gates everything else) |
+| **Done** | AutomationBench installed and checked; free harness built (27 tests) |
+| **Next** | Build the model-backed agent and its OpenRouter client (free), then a smoke test (cents) |
+| **Waiting on Alexander** | Spend cap for the comparability check (after the smoke test); Strong agent shortlist; Phase 1 domains |
+| **Spend so far** | $0 |
+
+## Plan and progress
+
+✅ done · ▶️ next · ⬜ not started
+
+**Phase 0 — feasibility** · detail: [`phase0/FEASIBILITY.md`](phase0/FEASIBILITY.md)
+
+| Step | Status | Result / where |
+|---|---|---|
+| 0.1 Install AutomationBench; check its licence and tests | ✅ 2026-10-05 | MIT licence; its 1,398 tests pass; all 800 tasks load and grade |
+| 0.2 Free harness: bench adapter, K runs per task, run summary, leak tests | ✅ 2026-10-05 | `src/jevloop/`; 27 tests; our own agent loop drives the bench |
+| 0.3 Model-backed agent + tool-calling OpenRouter client, tested on fake responses | ▶️ | free |
+| 0.4 Smoke test: 2 tasks per model | ⬜ | cents; measures tokens per run, then the check's cost |
+| 0.5 Cheap-agent comparability check: Gemini 3.8 Flash vs Nemotron 3 Super, 50 tasks | ⬜ | [below](#cheap-agent-comparability-check); spend cap set after 0.4 |
+| 0.6 Phase 0 spike: the Cheap agent with K runs per task, plus the Strong agent on the same tasks | ⬜ | budget set after 0.5 |
+| 0.7 Go/no-go call (Alexander) | ⬜ | [criteria](phase0/FEASIBILITY.md#gono-go-criteria) |
+
+**Phase 1 — experiments on business tasks** (preregistered in code before each paid run) · detail: [brief section 3](briefs/Task%20Brief%207_V2_Business.md)
+
+| Experiment | Question | Status |
+|---|---|---|
+| V2-1 Controls | How much room is there (random pick → best of K; Cheap → Strong agent)? | ⬜ |
+| V2-2 Learning | Do the Jev rubric loop and the Agent skill loop learn on business tasks? | ⬜ |
+| V2-3 Router (headline) | Does routing keep Strong-agent quality for less? | ⬜ |
+| V2-4 Partial feedback (optional) | Does it still learn without an answer key? | ⬜ |
+
+**Phase 2 — Magic Patterns UI and tutorial**
+
+| Step | Status | Where |
+|---|---|---|
+| 2a Harden the story: insights, experiment template, generated `ui-data/` | ⬜ (scaffold ready) | [`story/insights.yaml`](story/insights.yaml), [`experiments/_TEMPLATE.md`](experiments/_TEMPLATE.md) |
+| 2b Build the UI with Magic Patterns (minimum bar: [`v1/ui-demo-2`](../v1/ui-demo-2/README.md)) | ⬜ | |
+| 2c Tutorial chapters | ⬜ (stubs) | [`tutorial/`](tutorial/) |
+
+## Key results
+
+| Result | Value | Where |
+|---|---|---|
+| A do-nothing agent scores | 0 on all 800 tasks (the grader drops checks already true at the start) | [FEASIBILITY](phase0/FEASIBILITY.md#free-checks-2026-10-05-no-model-calls) |
+| Our own agent loop drives the bench | Yes: a hand-written solution scores 1.0 through the bench's grader | [FEASIBILITY](phase0/FEASIBILITY.md#free-checks-2026-10-05-no-model-calls) |
+| Nemotron 3 Super comparable to Gemini 3.8 Flash? | *not run* | [below](#cheap-agent-comparability-check) |
+| Cheap / Strong agent pass rates; share of tasks with mixed pass/fail | *not run* | Phase 0 spike |
+| Go/no-go | *pending* | |
+
+Once Phase 1 has results, the 3–5 numbered insights go here, copied verbatim from [`story/insights.yaml`](story/insights.yaml), each linked to its experiments.
+
+## Open decisions
+
+| Decision | Status |
+|---|---|
+| Repo layout | ✅ v2 is a folder in this repo (2026-10-05) |
+| AutomationBench licence | ✅ MIT (2026-10-05) |
+| Cheap agent | Decided by the comparability check (below) |
+| Strong agent | Open: shortlist needed before step 0.6 |
+| Phase 1 domains | Open: suggested Support + Sales (the comparability check uses those) |
+| Spend caps | Open: the comparability check's cap after the smoke test; Phase 1 placeholder $60 |
+[line omitted from the public copy]
+
+## Cheap-agent comparability check
+
+A **stability check, not a quality ranking or harness training**: can the open-weight **Nemotron 3 Super** (about 8–9× cheaper per token) stand in for **Gemini 3.8 Flash** as the Cheap agent? It replaces the earlier 20-task, three-model bake-off: 20 tasks can't separate models on quality, since one task is 5 points of pass rate.
+
+- **Tasks:** 50 business tasks (25 Sales + 25 Support), fixed seed, IDs committed first. They stay out of Phase 1's sealed set.
+- **Runs:** one per model per task; same prompt, tools, 50-step cap and temperature; Nemotron's provider pinned on OpenRouter.
+- **Rule (fixed in advance):** Nemotron is comparable if its mean partial credit is **within 10 points** of Gemini's (paired, same tasks) **and under 10% of its runs fail**. Then it becomes the Cheap agent; otherwise Gemini stays. At n=50 the check can rule out a large gap, not prove the models equal.
+- **Order:** build the agent (free) → smoke test, 2 tasks per model (cents) → Alexander sets the cap → run.
+
+Full protocol and results table: [`phase0/FEASIBILITY.md`](phase0/FEASIBILITY.md#cheap-agent-comparability-check-revised-2026-10-06-alexander).
 
 ## The question
 
