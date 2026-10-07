@@ -11,7 +11,7 @@
 | **Phase** | 0 — feasibility (gates everything else) |
 | **Done** | AutomationBench installed and checked; free harness built (27 tests) |
 | **Next** | Build the model-backed agent and its OpenRouter client (free), then a smoke test (cents) |
-| **Waiting on Alexander** | Spend cap for the comparability check (after the smoke test); Strong agent shortlist; Phase 1 domains |
+| **Waiting on Alexander** | Review the domain recommendation ([`phase0/DOMAINS.md`](phase0/DOMAINS.md): Finance + HR); spend cap for the comparability check (after the smoke test); Strong agent shortlist |
 | **Spend so far** | $0 |
 
 ## Plan and progress
@@ -24,6 +24,7 @@
 |---|---|---|
 | 0.1 Install AutomationBench; check its licence and tests | ✅ 2026-10-05 | MIT licence; its 1,398 tests pass; all 800 tasks load and grade |
 | 0.2 Free harness: bench adapter, K runs per task, run summary, leak tests | ✅ 2026-10-05 | `src/jevloop/`; 27 tests; our own agent loop drives the bench |
+| 0.2b Domain analysis: which tasks fit back-office work | ✅ 2026-10-06 | [`phase0/DOMAINS.md`](phase0/DOMAINS.md): recommends Finance + HR; awaiting review |
 | 0.3 Model-backed agent + tool-calling OpenRouter client, tested on fake responses | ▶️ | free |
 | 0.4 Smoke test: 2 tasks per model | ⬜ | cents; measures tokens per run, then the check's cost |
 | 0.5 Cheap-agent comparability check: Gemini 3.8 Flash vs Nemotron 3 Super, 50 tasks | ⬜ | [below](#cheap-agent-comparability-check); spend cap set after 0.4 |
@@ -51,6 +52,7 @@
 
 | Result | Value | Where |
 |---|---|---|
+| Best-fit domains for back-office work | Finance + HR (Operations in reserve); recommendation, pending review | [DOMAINS](phase0/DOMAINS.md) |
 | A do-nothing agent scores | 0 on all 800 tasks (the grader drops checks already true at the start) | [FEASIBILITY](phase0/FEASIBILITY.md#free-checks-2026-10-05-no-model-calls) |
 | Our own agent loop drives the bench | Yes: a hand-written solution scores 1.0 through the bench's grader | [FEASIBILITY](phase0/FEASIBILITY.md#free-checks-2026-10-05-no-model-calls) |
 | Nemotron 3 Super comparable to Gemini 3.8 Flash? | *not run* | [below](#cheap-agent-comparability-check) |
@@ -67,7 +69,7 @@ Once Phase 1 has results, the 3–5 numbered insights go here, copied verbatim f
 | AutomationBench licence | ✅ MIT (2026-10-05) |
 | Cheap agent | Decided by the comparability check (below) |
 | Strong agent | Open: shortlist needed before step 0.6 |
-| Phase 1 domains | Open: suggested Support + Sales (the comparability check uses those) |
+| Phase 1 domains | Recommended: **Finance + HR** ([analysis](phase0/DOMAINS.md)); pending Alexander's review. If adopted, the comparability check switches from Sales + Support to Finance + HR |
 | Spend caps | Open: the comparability check's cap after the smoke test; Phase 1 placeholder $60 |
 [line omitted from the public copy]
 
