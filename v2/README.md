@@ -13,8 +13,8 @@
 | **Phase** | 0 — feasibility (gates everything else); remaining steps approved 2026-10-06 |
 | **Spend cap** | $10 for all of Phase 0, enforced in code |
 | **Done** | AutomationBench installed and checked; free harness built; domain analysis; focus and models decided |
-| **Now** | Nemotron screen running (started 2026-10-07): slowed by upstream rate limits at the pinned host; ≈ $0.027 per run, projected ≈ $5.40 |
-| **Waiting on Alexander** | Nothing until the go/no-go call (0.7). Lean budget approved 2026-10-07 ([Budget](#budget)) |
+| **Now** | ⏸️ Nemotron screen **paused**: 18 of 200 runs done. The pinned host (DeepInfra via OpenRouter's shared capacity) rate-limits about half the calls, and the run stopped twice after retries ran out |
+| **Waiting on Alexander** | How to unblock the screen: (1) add your own DeepInfra key to OpenRouter (recommended; settings unchanged), (2) switch to the fp8 host DekaLLM (a logged deviation), or (3) 2 runs per task instead of 4 |
 | **Spend so far** | $0.52 of the $10 Phase 0 cap |
 
 ## Plan and progress
@@ -30,7 +30,7 @@
 | 0.2b Domain analysis: anatomy of a task; which tasks fit back-office work | ✅ 2026-10-06 | [`phase0/DOMAINS.md`](phase0/DOMAINS.md): **Finance + HR adopted** |
 | 0.3 Model-backed agent + tool-calling OpenRouter client, tested on fake responses | ✅ 2026-10-06 | `src/jevloop/openrouter.py`, `llm_agent.py`; 42 tests |
 | 0.4 Smoke test: 2 tasks per model | ✅ 2026-10-06 | $0.52. Both pass the simple task; one business task cost $0.48 on Gemini vs $0.019 on Nemotron. [Results](phase0/FEASIBILITY.md#smoke-test-2026-10-06-052-spent) |
-| 0.5 Nemotron screen: 4 runs on each of the 50 Finance + HR tasks (replaces the comparability check and the spike) | ▶️ | ≈ $4; [why](#cheap-agent-comparability-moved-into-phase-1) |
+| 0.5 Nemotron screen: 4 runs on each of the 50 Finance + HR tasks (replaces the comparability check and the spike) | ⏸️ | 18/200 runs; paused on upstream rate limits; [why](#cheap-agent-comparability-moved-into-phase-1) |
 | 0.6 ~~Spike~~ | merged into 0.5 | the Gemini comparison moves to Phase 1's sealed set |
 | 0.7 Go/no-go call (Alexander) | ⬜ | [criteria](phase0/FEASIBILITY.md#gono-go-criteria) |
 
