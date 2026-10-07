@@ -77,7 +77,7 @@ Once Phase 1 has results, the 3–5 numbered insights go here, copied verbatim f
 | Strong agent, editor, escalation judge | ✅ Gemini 3.8 Flash, v1's model (2026-10-06). No frontier LLM |
 | Phase 1 domains | ✅ **Finance + HR** ([analysis](phase0/DOMAINS.md), 2026-10-06) |
 | Spend caps | ✅ Phase 0: $10 hard cap (2026-10-06). ✅ Lean budget ≈ $60 in total (2026-10-07). Phase 1 cap: set after Phase 0 (placeholder $60) |
-| Agent skill loop in Phase 1 | Open (+≈ $40 if included) |
+| Agent skill loop in Phase 1 | Optional, as in the brief; not in the lean plan (+≈ $40 if added) |
 [line omitted from the public copy]
 
 ## Budget
@@ -92,11 +92,12 @@ Once Phase 1 has results, the 3–5 numbered insights go here, copied verbatim f
 | Phase 1, Gemini baseline | 1 run × 80 sealed tasks (also the paired comparability test) | ≈ $38 | $20–48 |
 | Phase 1, Jev + editor + escalation judge | small calls | ≈ $3 | $2–5 |
 | **Total, lean plan** | | **≈ $60** | **$33–93** |
-| Open: Agent skill loop | each candidate edit re-runs the agent (≈ 2,100 Nemotron runs) | +≈ $40 | +$21–84 |
+| *Optional, not in the lean plan:* Agent skill loop | each candidate edit re-runs the agent (≈ 2,100 Nemotron runs) | +≈ $40 | +$21–84 |
 
 - **Phase 0 cap: $10, enforced in code.** The screen projects to ≈ $4.
 - **Phase 1 cap: placeholder $60**, to be set after Phase 0 (the lean plan's Phase 1 is ≈ $56).
-- **Not adopted** (Alexander, 2026-10-07): Gemini's half-price flex tier (its timings would not fairly test "faster"); dropping the Agent skill loop (stays an open Phase 1 decision); reusing Gemini's sealed runs as option-B escalations.
+- **The Agent skill loop is optional** (as in the brief): not in the lean plan; it runs only if Alexander adds it later (+≈ $40).
+- **Not adopted** (Alexander, 2026-10-07): Gemini's half-price flex tier (its timings would not fairly test "faster"); reusing Gemini's sealed runs as option-B escalations.
 
 ## Cheap-agent comparability: moved into Phase 1
 
