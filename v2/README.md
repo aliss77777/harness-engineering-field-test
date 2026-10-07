@@ -128,10 +128,10 @@ Harness code is in `src/jevloop/` (`bench.py` is the only module that touches Au
 | Role | What it is | What it does |
 |---|---|---|
 | **Cheap agent** | An LLM: Gemini 3.8 Flash, or Nemotron 3 Super if the comparability check passes | Does each task K times, calling the tools |
-| **Strong agent** | A frontier LLM (to be chosen) | Does the task when the Router escalates it; the quality bar to match |
+| **Strong agent** | A frontier LLM (to be chosen) | New in v2. The baseline v2 must match ("as good as a strong agent, for less") and, under escalation option B, the fallback that re-does a task Jev isn't confident about. Under option A an LLM judge picks among the K runs instead, which is v1's exact escalation |
 | **Jev** | The decision model from v1 (`typesafe/jev-1.13` via OpenRouter) | Answers the rubric's yes/no questions about each run's summary, so the runs can be scored. It never calls tools or does the task. |
 | **Router** | Code | Keeps Jev's top-scoring run when Jev is confident; otherwise escalates to the Strong agent |
-| **Editor** | A strong LLM | Proposes one edit per round, to the rubric or to the agent's skill file |
+| **Editor** | A strong LLM | **Same role as in v1:** the learning step. After each practice round it reads the mistakes and proposes one edit, to the rubric (Jev rubric loop) or to the agent's skill file (Agent skill loop); the gate keeps or rejects it. Without it there is selection but no learning |
 
 Jev enters in Phase 1. Phase 0 only measures the agents.
 
