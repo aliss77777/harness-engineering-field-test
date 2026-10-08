@@ -30,6 +30,8 @@ Dated log of every decision, deviation and fix (same discipline as [`../v1/PLAN.
 - 2026-10-07: **Free failure diagnosis ($0).** Replayed and graded check by check. MiniMax's failures are systematic: it read every policy email in only 4 of 13 runs (Gemini 12 of 12) and broke 19 "must not" checks (Gemini 7); when it skipped policy emails its credit was 0.41 with 0 passes, vs 0.55 when it read them all. Teachable by the skill loop. Details in the README and `phase0/failure_diagnosis.json`.
 - 2026-10-07: **Phase 1 designed and approved in outline (Alexander: "this brings back a strong learning story").** `briefs/Phase 1 design.md`: a cascade Router (MiniMax once → Jev keeps or Gemini does the task) plus two learning loops: the Agent skill loop (lean, 4 rounds, Gemini runs as the teacher) and the Jev rubric loop. Experiments V2-1, V2-2a, V2-2b, V2-3 with verdict rules; V2-4 dropped. 200 Finance + HR tasks: practice 60, gate 60, sealed 80. Budget ≈ $100 (range $70–140); proposed cap $120. Supersedes the best-of-K Router and Phase 1 table in Task Brief 7. Phase 0 go/no-go written up in `phase0/FEASIBILITY.md`: recommendation GO; decision pending Alexander.
 
+- 2026-10-07: **No learning from Gemini (Alexander).** The skill loop's "Gemini as teacher" step is removed: MiniMax learns only from its own graded outcomes on practice tasks; Gemini stays the baseline, the cascade's fallback and the editor. Phase 1 ≈ $80 (range $55–115); proposed cap $100.
+
 ## Open decisions (brief section 9)
 
 - [x] Repo: folder in this repo (2026-10-05).

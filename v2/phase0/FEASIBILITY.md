@@ -165,7 +165,7 @@ From the 3-model comparison (20 Finance + HR tasks, one run each) and the free f
 | Cheap agent run failures | 1 of 20 (5%) |
 | Cheap agent's failures systematic? | Yes: skips policy emails (read all in 4 of 13 runs) and breaks ≈ 3× more "must not" rules |
 | Share of tasks with mixed pass/fail across K | not measured: the cascade design runs each task once, so best-of-K no longer applies |
-| Projected Phase 1 cost | ≈ $100 (range $70–140); see `briefs/Phase 1 design.md` |
+| Projected Phase 1 cost | ≈ $80 (range $55–115); see `briefs/Phase 1 design.md` |
 | Phase 0 spend | $9.41 of the $25 cap |
 
 ## Go/no-go criteria
@@ -177,14 +177,14 @@ The original criteria assumed best-of-K selection. For the cascade (`briefs/Phas
 - [x] **The Cheap agent is much cheaper:** ≤ ⅓ of the Strong agent's cost per run, so the cascade can reach half cost (MiniMax ≈ ⅕).
 - [x] **There is something to learn:** the Cheap agent's failures are systematic, not random (policy emails skipped, rules broken).
 - [x] **The Cheap agent passes some tasks on its own:** pass rate ≥ 20% (MiniMax 20%, at the boundary).
-- [ ] **The projected Phase 1 cost fits the Phase 1 cap:** ≈ $100 against a proposed $120 cap. Needs Alexander to set the cap.
+- [ ] **The projected Phase 1 cost fits the Phase 1 cap:** ≈ $80 against a proposed $100 cap. Needs Alexander to set the cap.
 - *Retired:* "at least 30% of tasks with mixed pass/fail across K" (a best-of-K criterion).
 
 Caveats: 20 tasks, one run each; wide intervals; MiniMax's pass rate is exactly at the floor.
 
 ## Call
 
-**Recommendation (Claude, 2026-10-07): GO**, with MiniMax M3 as the Cheap agent and the cascade design, if Alexander sets a Phase 1 cap of about $120.
+**Recommendation (Claude, 2026-10-07): GO**, with MiniMax M3 as the Cheap agent and the cascade design, if Alexander sets a Phase 1 cap of about $100.
 
 *Decision (Alexander):* pending.
 

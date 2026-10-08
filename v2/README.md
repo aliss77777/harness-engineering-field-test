@@ -18,7 +18,7 @@
 | **Nemotron screen** | ⏸️ Stopped at 19/200 runs (upstream rate limits); superseded: Nemotron is out (0/20 passes) |
 | **Latest** | 3-model comparison done: **MiniMax M3 is comparable to Gemini 3.8 Flash** (credit 0.58 vs 0.66, at ≈ 1/5 the cost and 2× the speed), but passes 4 of 20 vs Gemini's 9. DeepSeek V4 Pro and Nemotron 3 Super are out ([results](#phase-0-results-so-far)) |
 | **Latest** | Free diagnosis: **MiniMax's failures are systematic**: it skips the policy emails (read all of them in 4 of 13 runs vs Gemini's 12 of 12) and breaks ~3× more "must not" rules. Teachable, so it supports bringing back the Agent skill loop ([details](#phase-0-results-so-far)) |
-| **Waiting on Alexander** | The go/no-go call (0.7) and the Phase 1 cap (proposed $120; Phase 1 projects to ≈ $100) |
+| **Waiting on Alexander** | The go/no-go call (0.7) and the Phase 1 cap (proposed $100; Phase 1 projects to ≈ $80) |
 | **Spend so far** | $9.41 of the $25 Phase 0 cap |
 
 ## Plan and progress
@@ -86,9 +86,9 @@ Once Phase 1 has results, the 3–5 numbered insights go here, copied verbatim f
 | Strong agent, editor, escalation judge | ✅ Gemini 3.8 Flash, v1's model (2026-10-06). No frontier LLM |
 | Phase 1 domains | ✅ **Finance + HR** ([analysis](phase0/DOMAINS.md), 2026-10-06) |
 | Spend caps | ✅ Phase 0: $10 hard cap (2026-10-06). ✅ Lean budget ≈ $60 in total (2026-10-07). Phase 1 cap: set after Phase 0 (placeholder $60) |
-| Agent skill loop in Phase 1 | ✅ **Back in, lean version, with Gemini as the teacher** (Alexander, 2026-10-07), supported by the failure diagnosis |
+| Agent skill loop in Phase 1 | ✅ **Back in, lean version** (Alexander, 2026-10-07), supported by the failure diagnosis. MiniMax learns only from its own graded outcomes, **never from Gemini's runs** |
 | Router design | ✅ **Cascade**, not best-of-K (2026-10-07) |
-| Phase 1 cap | Open: proposed $120 (Phase 1 projects to ≈ $100) |
+| Phase 1 cap | Open: proposed $100 (Phase 1 projects to ≈ $80) |
 [line omitted from the public copy]
 
 ## Phase 0 results so far
@@ -175,7 +175,7 @@ Once Phase 1 has results, the 3–5 numbered insights go here, copied verbatim f
 | Phase 1, Gemini baseline | 1 run × 80 sealed tasks (also the paired comparability test) | ≈ $38 | $20–48 |
 | Phase 1, Jev + editor + escalation judge | small calls | ≈ $3 | $2–5 |
 | **Total, lean plan** | | **≈ $60** | **$33–93** |
-| *Superseded:* the plan above assumed Nemotron and best-of-4. Phase 1 is now the cascade with both learning loops: **≈ $100** (range $70–140), [design](briefs/Phase%201%20design.md#budget) | | | |
+| *Superseded:* the plan above assumed Nemotron and best-of-4. Phase 1 is now the cascade with both learning loops: **≈ $80** (range $55–115), [design](briefs/Phase%201%20design.md#budget) | | | |
 
 - **Phase 0 cap: $25, enforced in code** (raised from $10 on 2026-10-07 for the 3-model, 20-task comparison).
 - **Phase 1 cap: placeholder $60**, to be set after Phase 0 (the lean plan's Phase 1 is ≈ $56).

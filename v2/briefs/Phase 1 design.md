@@ -27,7 +27,7 @@ task ──► MiniMax M3 runs it once (with its learned skill file) ──► r
 
 **Two things learn:**
 
-1. **The Agent skill loop teaches MiniMax its playbook.** MiniMax's version 0 is the bench's own system prompt. Each round, MiniMax runs a fresh sample of practice tasks; an editor (Gemini 3.8 Flash) sees its failed runs, which checks they missed, and, where Gemini passed the same practice task, Gemini's run side by side (the teacher). It proposes **one** edit to MiniMax's skill file (for example, *"Read every policy email and reference sheet before acting; handle every item before you stop"*). The edit is kept only if MiniMax does better on held-out gate tasks.
+1. **The Agent skill loop teaches MiniMax its playbook.** MiniMax's version 0 is the bench's own system prompt. Each round, MiniMax runs a fresh sample of practice tasks; an editor (Gemini 3.8 Flash) sees its failed runs and which checks they missed. **MiniMax learns only from its own graded outcomes; it never sees Gemini's runs** (Alexander, 2026-10-07: no learning from Gemini). The editor proposes **one** edit to MiniMax's skill file (for example, *"Read every policy email and reference sheet before acting; handle every item before you stop"*). The edit is kept only if MiniMax does better on held-out gate tasks.
 2. **The Jev rubric loop teaches the checker what a correct MiniMax run looks like.** Jev answers weighted yes/no questions about each run summary (*"Did it read the AP guidelines before logging?"*, *"Did it skip the accounts on hold?"*). The editor sees runs Jev judged wrongly and proposes one rubric edit; weights are refitted from partial credit (v1's B+); the edit is kept only if Jev's judgments improve on gate.
 
 **Same v1 rules throughout:** one edit per round; rejected edits shown to the editor and near-copies refused; a fresh mistake sample each round; a held-out gate decides; the sealed set is used once; the spend cap is in code; runs resume after any stop; preregistered verdicts in code with tests.
@@ -38,7 +38,7 @@ task ──► MiniMax M3 runs it once (with its learned skill file) ──► r
 |---|---|
 | **Tasks** | All 200 Finance + HR tasks. **Practice 60, gate 60, sealed 80**, stratified by domain (30/30, 30/30, 40/40), fixed seed. The 50 Phase 0 tasks go into practice and gate, never sealed. |
 | **Cheap agent** | MiniMax M3, pinned to MiniMax's own host (fp8) |
-| **Strong agent, editor** | Gemini 3.8 Flash, Google AI Studio standard tier |
+| **Strong agent, editor** | Gemini 3.8 Flash, Google AI Studio standard tier. Gemini is the baseline, the cascade's fallback, and the editor that writes the edits; MiniMax never learns from Gemini's runs |
 | **Checker** | Jev 1.13 (`typesafe/jev-1.13`, TypeSafe), as in v1 |
 | **Agent settings** | As Phase 0: temperature 0.7, reasoning effort medium, 50-step cap, the `api` toolset |
 | **Leak rule** | Jev reads only the run summary (no grading checks). The skill-loop editor may see missed checks, **on practice tasks only**. |
@@ -65,12 +65,11 @@ Costs per run from Phase 0: MiniMax $0.062, Gemini $0.32 (average of 20 business
 | Item | Runs | Cost |
 |---|---|---|
 | Agent skill loop (MiniMax) | 4 × (30 + 2 × 40) = 440 | ≈ $27 |
-| Teacher: Gemini on the 60 practice tasks | 60 | ≈ $19 |
 | Jev learning data: MiniMax (final skill) on practice + gate (plus the skill loop's runs) | 120 | ≈ $7 |
 | Sealed: MiniMax v0 + MiniMax final skill | 160 | ≈ $10 |
 | Sealed: Gemini baseline | 80 | ≈ $26 |
 | Sealed: fresh Gemini runs for escalated tasks (≈ 30%) | ≈ 24 | ≈ $8 |
 | Jev scoring, editor and other small calls | — | ≈ $4 |
-| **Total** | | **≈ $100** (range ≈ $70–140) |
+| **Total** | | **≈ $80** (range ≈ $55–115) |
 
-**Proposed Phase 1 cap: $120, enforced in code**; stop and ask if a projection goes over.
+**Proposed Phase 1 cap: $100, enforced in code**; stop and ask if a projection goes over.
