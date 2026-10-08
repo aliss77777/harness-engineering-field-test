@@ -151,30 +151,42 @@ Note for the domain choice: Support has by far the most checks per task, so full
 - **Items 3a–3c at $0:** (a) K independent candidates per task, each in a fresh world (`runs.py`); (b) each graded by the bench (`partial_credit`, pass/fail); (c) a run summary with no grading-check text (`summary.py`; leak tests in `tests/test_summary.py`, including a canary check and a sweep of all 800 tasks). Paid confirmation of (a) needs a real agent: identical prompts must not replay one cached answer K times, so each candidate's index goes into the cache key.
 - **Free check, rerunnable:** `.venv/bin/python scripts/phase0_free_check.py`.
 
-## Numbers (paid spike, not run yet)
+## Numbers (Phase 0, 2026-10-07)
+
+From the 3-model comparison (20 Finance + HR tasks, one run each) and the free failure diagnosis.
 
 | Measure | Value |
 |---|---|
-| Cheap agent model (from the comparability check) | |
-| Cost per run (Cheap agent) | |
-| Cost per run (Strong agent) | |
-| Time per run | |
-| Cheap agent pass rate | |
-| Strong agent pass rate | |
-| Share of tasks with mixed pass/fail across K | |
-| Projected Phase 1 cost | |
+| Cheap agent | **MiniMax M3** (adopted 2026-10-07) |
+| Cost per run: Cheap / Strong agent | $0.062 / $0.32 (≈ 1/5) |
+| Model time per run: Cheap / Strong agent | 129 s / 266 s (≈ 2× faster) |
+| Pass rate: Cheap / Strong agent | 20% / 45% |
+| Mean partial credit: Cheap / Strong agent | 0.58 / 0.66 (−0.08, 95% interval −0.29 to +0.14) |
+| Cheap agent run failures | 1 of 20 (5%) |
+| Cheap agent's failures systematic? | Yes: skips policy emails (read all in 4 of 13 runs) and breaks ≈ 3× more "must not" rules |
+| Share of tasks with mixed pass/fail across K | not measured: the cascade design runs each task once, so best-of-K no longer applies |
+| Projected Phase 1 cost | ≈ $100 (range $70–140); see `briefs/Phase 1 design.md` |
+| Phase 0 spend | $9.41 of the $25 cap |
 
 ## Go/no-go criteria
 
-- [ ] The Cheap agent passes 20–80% of tasks (so selection has room to matter).
-- [ ] Candidates differ: at least 30% of tasks have mixed pass/fail across K.
-- [ ] The projected Phase 1 cost fits the cap.
+The original criteria assumed best-of-K selection. For the cascade (`briefs/Phase 1 design.md`) they become:
 
-Fallback if K-run generation is too expensive: the 200 "simple" tasks.
+- [x] **The tasks are passable in our setup:** the Strong agent passes 20–80% (Gemini 45%).
+- [x] **The Cheap agent is comparable on credit:** within 10 points of the Strong agent, under 10% failed runs (MiniMax −8 points, 5%).
+- [x] **The Cheap agent is much cheaper:** ≤ ⅓ of the Strong agent's cost per run, so the cascade can reach half cost (MiniMax ≈ ⅕).
+- [x] **There is something to learn:** the Cheap agent's failures are systematic, not random (policy emails skipped, rules broken).
+- [x] **The Cheap agent passes some tasks on its own:** pass rate ≥ 20% (MiniMax 20%, at the boundary).
+- [ ] **The projected Phase 1 cost fits the Phase 1 cap:** ≈ $100 against a proposed $120 cap. Needs Alexander to set the cap.
+- *Retired:* "at least 30% of tasks with mixed pass/fail across K" (a best-of-K criterion).
+
+Caveats: 20 tasks, one run each; wide intervals; MiniMax's pass rate is exactly at the floor.
 
 ## Call
 
-*Go / no-go, with date and reasoning.*
+**Recommendation (Claude, 2026-10-07): GO**, with MiniMax M3 as the Cheap agent and the cascade design, if Alexander sets a Phase 1 cap of about $120.
+
+*Decision (Alexander):* pending.
 
 ## Domains chosen
 

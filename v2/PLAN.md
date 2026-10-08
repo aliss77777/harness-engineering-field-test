@@ -28,12 +28,13 @@ Dated log of every decision, deviation and fix (same discipline as [`../v1/PLAN.
 - 2026-10-07: **Decision (Alexander): MiniMax M3 is the Cheap agent.**
 - 2026-10-07: **Design discussion (Alexander).** With MiniMax at ≈ 1/5 of Gemini's price, best-of-4 plus escalation would cost more than Gemini alone (4 × $0.062 + 0.4 × $0.32 ≈ $0.38 vs $0.32), so the extra MiniMax runs were dropped and the Router becomes a **cascade**, as in v1's experiment 5: MiniMax runs once, Jev keeps confident runs, Gemini does the rest. Half cost needs about 70% of tasks kept, more than MiniMax's quality supports today, so Alexander asked to bring back the **Agent skill loop** (lean: ≈ 440 MiniMax runs, ≈ $27).
 - 2026-10-07: **Free failure diagnosis ($0).** Replayed and graded check by check. MiniMax's failures are systematic: it read every policy email in only 4 of 13 runs (Gemini 12 of 12) and broke 19 "must not" checks (Gemini 7); when it skipped policy emails its credit was 0.41 with 0 passes, vs 0.55 when it read them all. Teachable by the skill loop. Details in the README and `phase0/failure_diagnosis.json`.
+- 2026-10-07: **Phase 1 designed and approved in outline (Alexander: "this brings back a strong learning story").** `briefs/Phase 1 design.md`: a cascade Router (MiniMax once → Jev keeps or Gemini does the task) plus two learning loops: the Agent skill loop (lean, 4 rounds, Gemini runs as the teacher) and the Jev rubric loop. Experiments V2-1, V2-2a, V2-2b, V2-3 with verdict rules; V2-4 dropped. 200 Finance + HR tasks: practice 60, gate 60, sealed 80. Budget ≈ $100 (range $70–140); proposed cap $120. Supersedes the best-of-K Router and Phase 1 table in Task Brief 7. Phase 0 go/no-go written up in `phase0/FEASIBILITY.md`: recommendation GO; decision pending Alexander.
 
 ## Open decisions (brief section 9)
 
 - [x] Repo: folder in this repo (2026-10-05).
 - [x] Domains: **Finance + HR** (`phase0/DOMAINS.md`, adopted 2026-10-06).
-- [x] Models: Cheap agent **MiniMax M3** (2026-10-07; Nemotron 3 Super and DeepSeek V4 Pro tested and out). [x] Strong agent, editor, escalation judge: Gemini 3.8 Flash (2026-10-06; no frontier LLM). [ ] Escalation option (LLM judge vs Strong agent re-run).
+- [x] Models: Cheap agent **MiniMax M3** (2026-10-07; Nemotron 3 Super and DeepSeek V4 Pro tested and out). [x] Strong agent, editor, escalation judge: Gemini 3.8 Flash (2026-10-06; no frontier LLM). [x] Escalation: the Strong agent does the task (cascade; 2026-10-07).
 - [x] Phase 0 cap: $10 (2026-10-06). [ ] Phase 1 cap after Phase 0 (placeholder $60, enforced in code).
 [line omitted from the public copy]
 - [x] AutomationBench licence: MIT (2026-10-05).

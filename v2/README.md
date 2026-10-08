@@ -2,6 +2,8 @@
 
 **Main focus (Alexander, 2026-10-06):** an **open-weight agent (MiniMax M3, adopted 2026-10-07) plus Jev**, improved by a self-learning harness, against **Gemini 3.8 Flash** on back-office business tasks (Finance and HR). The hoped-for result, as in v1: *as good as Gemini Flash, but cheaper and faster.*
 
+**The learning story (2026-10-07):** two things learn. The **Agent skill loop** teaches MiniMax its playbook (Phase 0 showed it skips the policy emails and breaks the rules they set), and the **Jev rubric loop** teaches the checker what a correct MiniMax run looks like. A **cascade** then keeps MiniMax's runs Jev is confident in and hands the rest to Gemini. As both improve, fewer tasks need Gemini.
+
 **This is the one page for tracking v2:** status, plan and progress, key results, and open decisions. Each row links to the file with the detail. [`PLAN.md`](PLAN.md) is the full dated log; [`Task Brief 7`](briefs/Task%20Brief%207_V2_Business.md) is the design.
 
 ## Status at a glance
@@ -10,13 +12,13 @@
 
 | | |
 |---|---|
-| **Phase** | 0 — feasibility (gates everything else); remaining steps approved 2026-10-06 |
+| **Phase** | 0 — feasibility: **done; go/no-go call pending** (recommendation: GO). Phase 1 designed: [`briefs/Phase 1 design.md`](briefs/Phase%201%20design.md) |
 | **Spend cap** | $25 for all of Phase 0, enforced in code (raised from $10 on 2026-10-07 for the 3-model comparison) |
 | **Done** | AutomationBench installed and checked; free harness built; domain analysis; focus and models decided |
 | **Nemotron screen** | ⏸️ Stopped at 19/200 runs (upstream rate limits); superseded: Nemotron is out (0/20 passes) |
 | **Latest** | 3-model comparison done: **MiniMax M3 is comparable to Gemini 3.8 Flash** (credit 0.58 vs 0.66, at ≈ 1/5 the cost and 2× the speed), but passes 4 of 20 vs Gemini's 9. DeepSeek V4 Pro and Nemotron 3 Super are out ([results](#phase-0-results-so-far)) |
 | **Latest** | Free diagnosis: **MiniMax's failures are systematic**: it skips the policy emails (read all of them in 4 of 13 runs vs Gemini's 12 of 12) and breaks ~3× more "must not" rules. Teachable, so it supports bringing back the Agent skill loop ([details](#phase-0-results-so-far)) |
-| **Waiting on Alexander** | Phase 1 design: cascade (MiniMax once → Jev keeps or escalates to Gemini) + Jev rubric loop + lean Agent skill loop; then the go/no-go |
+| **Waiting on Alexander** | The go/no-go call (0.7) and the Phase 1 cap (proposed $120; Phase 1 projects to ≈ $100) |
 | **Spend so far** | $9.41 of the $25 Phase 0 cap |
 
 ## Plan and progress
@@ -32,18 +34,22 @@
 | 0.2b Domain analysis: anatomy of a task; which tasks fit back-office work | ✅ 2026-10-06 | [`phase0/DOMAINS.md`](phase0/DOMAINS.md): **Finance + HR adopted** |
 | 0.3 Model-backed agent + tool-calling OpenRouter client, tested on fake responses | ✅ 2026-10-06 | `src/jevloop/openrouter.py`, `llm_agent.py`; 42 tests |
 | 0.4 Smoke test: 2 tasks per model | ✅ 2026-10-06 | $0.52. Both pass the simple task; one business task cost $0.48 on Gemini vs $0.019 on Nemotron. [Results](phase0/FEASIBILITY.md#smoke-test-2026-10-06-052-spent) |
-| 0.5 Nemotron screen: 4 runs on each of the 50 Finance + HR tasks (replaces the comparability check and the spike) | ⏸️ | 18/200 runs; paused on upstream rate limits; [why](#cheap-agent-comparability-moved-into-phase-1) |
+| 0.5 Nemotron screen | ⏹️ stopped at 19/200 (rate limits); Nemotron out (0/20 passes) | [results](#phase-0-results-so-far) |
+| 0.5b 3-model comparison: Gemini vs MiniMax M3 vs DeepSeek V4 Pro, 20 tasks | ✅ 2026-10-07 | MiniMax comparable at ≈ 1/5 the cost; [results](#phase-0-results-so-far) |
+| 0.5c Free failure diagnosis | ✅ 2026-10-07 | MiniMax's failures are systematic and teachable |
+| 0.5d Phase 1 design (cascade + two learning loops) | ✅ 2026-10-07 | [`briefs/Phase 1 design.md`](briefs/Phase%201%20design.md) |
 | 0.6 ~~Spike~~ | merged into 0.5 | the Gemini comparison moves to Phase 1's sealed set |
-| 0.7 Go/no-go call (Alexander) | ⬜ | [criteria](phase0/FEASIBILITY.md#gono-go-criteria) |
+| 0.7 Go/no-go call (Alexander) | ▶️ recommendation: GO | [criteria and numbers](phase0/FEASIBILITY.md#gono-go-criteria) |
 
-**Phase 1 — experiments on business tasks** (preregistered in code before each paid run) · detail: [brief section 3](briefs/Task%20Brief%207_V2_Business.md)
+**Phase 1 — experiments on business tasks** (verdict rules preregistered in code before each paid run) · design: [`briefs/Phase 1 design.md`](briefs/Phase%201%20design.md)
 
 | Experiment | Question | Status |
 |---|---|---|
-| V2-1 Controls | How much room is there (random pick → best of K; Cheap → Strong agent)? Includes the **Nemotron vs Gemini comparability test** on the 80 sealed tasks | ⬜ |
-| V2-2 Learning | Do the Jev rubric loop and the Agent skill loop learn on business tasks? | ⬜ |
-| V2-3 Router (headline) | Does routing keep Strong-agent quality for less? | ⬜ |
-| V2-4 Partial feedback (optional) | Does it still learn without an answer key? | ⬜ |
+| V2-1 Controls | Where do we start? MiniMax (v0 skill) vs Gemini on the 80 sealed tasks | ⬜ |
+| V2-2a Agent skill loop | Does MiniMax learn its playbook? (final skill vs v0 on sealed) | ⬜ |
+| V2-2b Jev rubric loop | Does the checker learn what a correct MiniMax run looks like? | ⬜ |
+| V2-3 Router (headline) | Cascade: MiniMax once → Jev keeps or escalates to Gemini. As good as Gemini (±3 points), at ≤ ½ the cost, and faster? | ⬜ |
+| V2-4 Partial feedback | not run (out of budget) | — |
 
 **Phase 2 — Magic Patterns UI and tutorial**
 
@@ -80,7 +86,9 @@ Once Phase 1 has results, the 3–5 numbered insights go here, copied verbatim f
 | Strong agent, editor, escalation judge | ✅ Gemini 3.8 Flash, v1's model (2026-10-06). No frontier LLM |
 | Phase 1 domains | ✅ **Finance + HR** ([analysis](phase0/DOMAINS.md), 2026-10-06) |
 | Spend caps | ✅ Phase 0: $10 hard cap (2026-10-06). ✅ Lean budget ≈ $60 in total (2026-10-07). Phase 1 cap: set after Phase 0 (placeholder $60) |
-| Agent skill loop in Phase 1 | Optional in the brief; **proposed back in, lean version** (≈ $27 at MiniMax's price; + ≈ $14–19 if Gemini runs are used as the teacher), supported by the failure diagnosis. Pending Alexander |
+| Agent skill loop in Phase 1 | ✅ **Back in, lean version, with Gemini as the teacher** (Alexander, 2026-10-07), supported by the failure diagnosis |
+| Router design | ✅ **Cascade**, not best-of-K (2026-10-07) |
+| Phase 1 cap | Open: proposed $120 (Phase 1 projects to ≈ $100) |
 [line omitted from the public copy]
 
 ## Phase 0 results so far
@@ -167,7 +175,7 @@ Once Phase 1 has results, the 3–5 numbered insights go here, copied verbatim f
 | Phase 1, Gemini baseline | 1 run × 80 sealed tasks (also the paired comparability test) | ≈ $38 | $20–48 |
 | Phase 1, Jev + editor + escalation judge | small calls | ≈ $3 | $2–5 |
 | **Total, lean plan** | | **≈ $60** | **$33–93** |
-| *Optional, not in the lean plan:* Agent skill loop | each candidate edit re-runs the agent (≈ 2,100 Nemotron runs) | +≈ $40 | +$21–84 |
+| *Superseded:* the plan above assumed Nemotron and best-of-4. Phase 1 is now the cascade with both learning loops: **≈ $100** (range $70–140), [design](briefs/Phase%201%20design.md#budget) | | | |
 
 - **Phase 0 cap: $25, enforced in code** (raised from $10 on 2026-10-07 for the 3-model, 20-task comparison).
 - **Phase 1 cap: placeholder $60**, to be set after Phase 0 (the lean plan's Phase 1 is ≈ $56).
@@ -226,7 +234,7 @@ Harness code is in `src/jevloop/` (`bench.py` is the only module that touches Au
 | **Cheap agent** | An open-weight LLM: **MiniMax M3** (adopted 2026-10-07 after Phase 0's comparison) | Does each task K times, calling the tools |
 | **Strong agent** | Gemini 3.8 Flash, v1's model (approved 2026-10-06; no frontier LLM) | New in v2. The baseline v2 must match ("as good as a strong agent, for less") and, under escalation option B, the fallback that re-does a task Jev isn't confident about. Under option A an LLM judge picks among the K runs instead, which is v1's exact escalation |
 | **Jev** | The decision model from v1 (`typesafe/jev-1.13` via OpenRouter) | Answers the rubric's yes/no questions about each run's summary, so the runs can be scored. It never calls tools or does the task. |
-| **Router** | Code | Keeps Jev's top-scoring run when Jev is confident; otherwise escalates to the Strong agent |
+| **Router** | Code | **A cascade** (2026-10-07): MiniMax runs the task once; if Jev is confident the run is right, it is kept; otherwise Gemini does the task |
 | **Editor** | An LLM; in v1, Gemini 3.8 Flash (few calls) | **Same role as in v1:** the learning step. After each practice round it reads the mistakes and proposes one edit, to the rubric (Jev rubric loop) or to the agent's skill file (Agent skill loop); the gate keeps or rejects it. Without it there is selection but no learning |
 
 Jev enters in Phase 1. Phase 0 only measures the agents.
@@ -270,6 +278,8 @@ It is the same select-or-escalate **Router** as v1's experiment 5. It now works 
 
 - **The Jev rubric loop** learns what a correct run looks like in each business domain.
 - **The Agent skill loop** learns how to do the task: the agent's skill file, effectively the company's playbook for the agent, improving from graded outcomes.
+
+*Note (2026-10-07): Phase 0 replaced best-of-K with a **cascade** (MiniMax runs once; Jev keeps confident runs; Gemini does the rest), because at MiniMax's price four runs plus escalation cost more than Gemini alone. Both learning loops below still apply. See [`briefs/Phase 1 design.md`](briefs/Phase%201%20design.md).*
 
 ### Best-of-K is the picking step; the v1 learning loop still runs on top
 
