@@ -1,0 +1,678 @@
+{
+  "tasks": [
+    "finance:4001",
+    "finance:4009",
+    "finance:4010",
+    "finance:4011",
+    "finance:4012",
+    "finance:4015",
+    "finance:4028",
+    "finance:4032",
+    "finance:4036",
+    "finance:4037",
+    "hr:5005",
+    "hr:5021",
+    "hr:5023",
+    "hr:5028",
+    "hr:5029",
+    "hr:5031",
+    "hr:5034",
+    "hr:5043",
+    "hr:5048",
+    "hr:5054"
+  ],
+  "summaries": {
+    "deepseek": {
+      "agent": "deepseek",
+      "runs": 20,
+      "mean_credit": 0.2142063492063492,
+      "pass_rate": 0.05,
+      "failures": 8,
+      "failure_rate": 0.4,
+      "cost_per_run_usd": 0.04814300121,
+      "model_seconds_per_run": 443.09025,
+      "steps_per_run": 37.95,
+      "by_domain": {
+        "finance": {
+          "pass_rate": 0.0,
+          "mean_credit": 0.15095238095238095
+        },
+        "hr": {
+          "pass_rate": 0.1,
+          "mean_credit": 0.27746031746031746
+        }
+      }
+    },
+    "minimax": {
+      "agent": "minimax",
+      "runs": 20,
+      "mean_credit": 0.5813437950937951,
+      "pass_rate": 0.2,
+      "failures": 1,
+      "failure_rate": 0.05,
+      "cost_per_run_usd": 0.06199584,
+      "model_seconds_per_run": 129.09445,
+      "steps_per_run": 20.3,
+      "by_domain": {
+        "finance": {
+          "pass_rate": 0.1,
+          "mean_credit": 0.48987012987012984
+        },
+        "hr": {
+          "pass_rate": 0.3,
+          "mean_credit": 0.6728174603174603
+        }
+      }
+    },
+    "gemini": {
+      "agent": "gemini",
+      "runs": 20,
+      "mean_credit": 0.6582323232323233,
+      "pass_rate": 0.45,
+      "failures": 4,
+      "failure_rate": 0.2,
+      "cost_per_run_usd": 0.3193319325,
+      "model_seconds_per_run": 266.07014999999996,
+      "steps_per_run": 34.0,
+      "by_domain": {
+        "finance": {
+          "pass_rate": 0.3,
+          "mean_credit": 0.6164646464646465
+        },
+        "hr": {
+          "pass_rate": 0.6,
+          "mean_credit": 0.7
+        }
+      }
+    }
+  },
+  "versus_gemini": {
+    "deepseek": {
+      "comparable": false,
+      "credit_ok": false,
+      "failures_ok": false,
+      "difference": -0.444025974025974,
+      "interval_95": [
+        -0.5871212121212122,
+        -0.2990620490620491
+      ],
+      "reference": {
+        "agent": "gemini",
+        "runs": 20,
+        "mean_credit": 0.6582323232323233,
+        "pass_rate": 0.45,
+        "failures": 4,
+        "failure_rate": 0.2,
+        "cost_per_run_usd": 0.3193319325,
+        "model_seconds_per_run": 266.07014999999996,
+        "steps_per_run": 34.0
+      },
+      "candidate": {
+        "agent": "deepseek",
+        "runs": 20,
+        "mean_credit": 0.2142063492063492,
+        "pass_rate": 0.05,
+        "failures": 8,
+        "failure_rate": 0.4,
+        "cost_per_run_usd": 0.04814300121,
+        "model_seconds_per_run": 443.09025,
+        "steps_per_run": 37.95
+      }
+    },
+    "minimax": {
+      "comparable": true,
+      "credit_ok": true,
+      "failures_ok": true,
+      "difference": -0.07688852813852813,
+      "interval_95": [
+        -0.28714285714285714,
+        0.1376984126984127
+      ],
+      "reference": {
+        "agent": "gemini",
+        "runs": 20,
+        "mean_credit": 0.6582323232323233,
+        "pass_rate": 0.45,
+        "failures": 4,
+        "failure_rate": 0.2,
+        "cost_per_run_usd": 0.3193319325,
+        "model_seconds_per_run": 266.07014999999996,
+        "steps_per_run": 34.0
+      },
+      "candidate": {
+        "agent": "minimax",
+        "runs": 20,
+        "mean_credit": 0.5813437950937951,
+        "pass_rate": 0.2,
+        "failures": 1,
+        "failure_rate": 0.05,
+        "cost_per_run_usd": 0.06199584,
+        "model_seconds_per_run": 129.09445,
+        "steps_per_run": 20.3
+      }
+    }
+  },
+  "phase0_spend_usd": 9.41249695220002,
+  "per_task": {
+    "finance:4001": {
+      "deepseek": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 30,
+        "stop": "done",
+        "cost_usd": 0.0390104694,
+        "model_seconds": 431.55400000000003
+      },
+      "minimax": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 23,
+        "stop": "done",
+        "cost_usd": 0.05133282,
+        "model_seconds": 123.119
+      },
+      "gemini": {
+        "credit": 0.5,
+        "passed": false,
+        "steps": 45,
+        "stop": "done",
+        "cost_usd": 0.48417802499999996,
+        "model_seconds": 547.9729999999997
+      }
+    },
+    "finance:4009": {
+      "deepseek": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 50,
+        "stop": "max_steps",
+        "cost_usd": 0.06688344239999999,
+        "model_seconds": 403.57900000000006
+      },
+      "minimax": {
+        "credit": 0.2857142857142857,
+        "passed": false,
+        "steps": 10,
+        "stop": "done",
+        "cost_usd": 0.01756278,
+        "model_seconds": 55.077
+      },
+      "gemini": {
+        "credit": 1.0,
+        "passed": true,
+        "steps": 32,
+        "stop": "done",
+        "cost_usd": 0.21354847500000002,
+        "model_seconds": 144.702
+      }
+    },
+    "finance:4010": {
+      "deepseek": {
+        "credit": 0.5,
+        "passed": false,
+        "steps": 14,
+        "stop": "done",
+        "cost_usd": 0.0126084576,
+        "model_seconds": 308.279
+      },
+      "minimax": {
+        "credit": 0.8333333333333334,
+        "passed": false,
+        "steps": 15,
+        "stop": "done",
+        "cost_usd": 0.0250761,
+        "model_seconds": 67.66600000000001
+      },
+      "gemini": {
+        "credit": 1.0,
+        "passed": true,
+        "steps": 26,
+        "stop": "done",
+        "cost_usd": 0.25521825,
+        "model_seconds": 174.373
+      }
+    },
+    "finance:4011": {
+      "deepseek": {
+        "credit": 0.6666666666666666,
+        "passed": false,
+        "steps": 30,
+        "stop": "done",
+        "cost_usd": 0.0360796656,
+        "model_seconds": 399.11100000000005
+      },
+      "minimax": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 8,
+        "stop": "done",
+        "cost_usd": 0.013606980000000001,
+        "model_seconds": 35.068
+      },
+      "gemini": {
+        "credit": 1.0,
+        "passed": true,
+        "steps": 45,
+        "stop": "done",
+        "cost_usd": 0.2838145499999999,
+        "model_seconds": 190.27000000000004
+      }
+    },
+    "finance:4012": {
+      "deepseek": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 50,
+        "stop": "max_steps",
+        "cost_usd": 0.0735541152,
+        "model_seconds": 379.017
+      },
+      "minimax": {
+        "credit": 1.0,
+        "passed": true,
+        "steps": 42,
+        "stop": "done",
+        "cost_usd": 0.17287236000000003,
+        "model_seconds": 222.58599999999998
+      },
+      "gemini": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 50,
+        "stop": "max_steps",
+        "cost_usd": 0.33394935000000003,
+        "model_seconds": 206.17300000000006
+      }
+    },
+    "finance:4015": {
+      "deepseek": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 50,
+        "stop": "max_steps",
+        "cost_usd": 0.082213521,
+        "model_seconds": 457.09399999999994
+      },
+      "minimax": {
+        "credit": 0.7272727272727273,
+        "passed": false,
+        "steps": 23,
+        "stop": "done",
+        "cost_usd": 0.030135600000000002,
+        "model_seconds": 66.98
+      },
+      "gemini": {
+        "credit": 0.9090909090909091,
+        "passed": false,
+        "steps": 33,
+        "stop": "done",
+        "cost_usd": 0.30027075000000003,
+        "model_seconds": 182.328
+      }
+    },
+    "finance:4028": {
+      "deepseek": {
+        "credit": 0.2,
+        "passed": false,
+        "steps": 21,
+        "stop": "done",
+        "cost_usd": 0.016489979999999998,
+        "model_seconds": 320.36800000000005
+      },
+      "minimax": {
+        "credit": 0.4,
+        "passed": false,
+        "steps": 11,
+        "stop": "done",
+        "cost_usd": 0.02136714,
+        "model_seconds": 76.141
+      },
+      "gemini": {
+        "credit": 0.2,
+        "passed": false,
+        "steps": 31,
+        "stop": "done",
+        "cost_usd": 0.5821586999999999,
+        "model_seconds": 576.5339999999999
+      }
+    },
+    "finance:4032": {
+      "deepseek": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 50,
+        "stop": "max_steps",
+        "cost_usd": 0.07961441340000001,
+        "model_seconds": 556.8619999999999
+      },
+      "minimax": {
+        "credit": 0.6666666666666666,
+        "passed": false,
+        "steps": 39,
+        "stop": "done",
+        "cost_usd": 0.2004291,
+        "model_seconds": 505.0470000000001
+      },
+      "gemini": {
+        "credit": 0.4444444444444444,
+        "passed": false,
+        "steps": 50,
+        "stop": "max_steps",
+        "cost_usd": 0.5394011249999999,
+        "model_seconds": 348.331
+      }
+    },
+    "finance:4036": {
+      "deepseek": {
+        "credit": 0.14285714285714285,
+        "passed": false,
+        "steps": 50,
+        "stop": "max_steps",
+        "cost_usd": 0.0616584138,
+        "model_seconds": 745.5039999999998
+      },
+      "minimax": {
+        "credit": 0.2857142857142857,
+        "passed": false,
+        "steps": 16,
+        "stop": "done",
+        "cost_usd": 0.043491659999999994,
+        "model_seconds": 90.124
+      },
+      "gemini": {
+        "credit": 0.3333333333333333,
+        "passed": false,
+        "steps": 32,
+        "stop": "done",
+        "cost_usd": 0.590426325,
+        "model_seconds": 652.3319999999999
+      }
+    },
+    "finance:4037": {
+      "deepseek": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 50,
+        "stop": "max_steps",
+        "cost_usd": 0.04110527280000001,
+        "model_seconds": 457.13899999999984
+      },
+      "minimax": {
+        "credit": 0.7,
+        "passed": false,
+        "steps": 11,
+        "stop": "done",
+        "cost_usd": 0.0179484,
+        "model_seconds": 73.107
+      },
+      "gemini": {
+        "credit": 0.7777777777777778,
+        "passed": false,
+        "steps": 15,
+        "stop": "done",
+        "cost_usd": 0.12536475,
+        "model_seconds": 81.41499999999999
+      }
+    },
+    "hr:5005": {
+      "deepseek": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 43,
+        "stop": "done",
+        "cost_usd": 0.06795583919999999,
+        "model_seconds": 466.3159999999999
+      },
+      "minimax": {
+        "credit": 0.5555555555555556,
+        "passed": false,
+        "steps": 28,
+        "stop": "done",
+        "cost_usd": 0.13301754000000002,
+        "model_seconds": 211.243
+      },
+      "gemini": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 50,
+        "stop": "max_steps",
+        "cost_usd": 0.36178170000000004,
+        "model_seconds": 259.081
+      }
+    },
+    "hr:5021": {
+      "deepseek": {
+        "credit": 0.4444444444444444,
+        "passed": false,
+        "steps": 30,
+        "stop": "done",
+        "cost_usd": 0.027652967400000002,
+        "model_seconds": 377.94
+      },
+      "minimax": {
+        "credit": 0.5,
+        "passed": false,
+        "steps": 23,
+        "stop": "done",
+        "cost_usd": 0.049748460000000015,
+        "model_seconds": 124.514
+      },
+      "gemini": {
+        "credit": 1.0,
+        "passed": true,
+        "steps": 23,
+        "stop": "done",
+        "cost_usd": 0.18409357499999998,
+        "model_seconds": 150.05199999999996
+      }
+    },
+    "hr:5023": {
+      "deepseek": {
+        "credit": 0.4444444444444444,
+        "passed": false,
+        "steps": 34,
+        "stop": "done",
+        "cost_usd": 0.054519994200000005,
+        "model_seconds": 490.8829999999999
+      },
+      "minimax": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 13,
+        "stop": "done",
+        "cost_usd": 0.022181280000000005,
+        "model_seconds": 44.235
+      },
+      "gemini": {
+        "credit": 1.0,
+        "passed": true,
+        "steps": 17,
+        "stop": "done",
+        "cost_usd": 0.22415744999999998,
+        "model_seconds": 269.066
+      }
+    },
+    "hr:5028": {
+      "deepseek": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 26,
+        "stop": "done",
+        "cost_usd": 0.0255174132,
+        "model_seconds": 405.741
+      },
+      "minimax": {
+        "credit": 0.8333333333333334,
+        "passed": false,
+        "steps": 15,
+        "stop": "done",
+        "cost_usd": 0.05802816,
+        "model_seconds": 217.36800000000002
+      },
+      "gemini": {
+        "credit": 1.0,
+        "passed": true,
+        "steps": 31,
+        "stop": "done",
+        "cost_usd": 0.2738223,
+        "model_seconds": 263.038
+      }
+    },
+    "hr:5029": {
+      "deepseek": {
+        "credit": 1.0,
+        "passed": true,
+        "steps": 21,
+        "stop": "done",
+        "cost_usd": 0.0206231064,
+        "model_seconds": 242.215
+      },
+      "minimax": {
+        "credit": 1.0,
+        "passed": true,
+        "steps": 11,
+        "stop": "done",
+        "cost_usd": 0.010727039999999998,
+        "model_seconds": 31.581999999999997
+      },
+      "gemini": {
+        "credit": 1.0,
+        "passed": true,
+        "steps": 23,
+        "stop": "done",
+        "cost_usd": 0.18288525,
+        "model_seconds": 92.239
+      }
+    },
+    "hr:5031": {
+      "deepseek": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 50,
+        "stop": "max_steps",
+        "cost_usd": 0.07039953,
+        "model_seconds": 464.75200000000007
+      },
+      "minimax": {
+        "credit": 0.5,
+        "passed": false,
+        "steps": 50,
+        "stop": "max_steps",
+        "cost_usd": 0.22820274,
+        "model_seconds": 357.0830000000001
+      },
+      "gemini": {
+        "credit": 0.14285714285714285,
+        "passed": false,
+        "steps": 50,
+        "stop": "max_steps",
+        "cost_usd": 0.44264857500000004,
+        "model_seconds": 463.14199999999994
+      }
+    },
+    "hr:5034": {
+      "deepseek": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 50,
+        "stop": "max_steps",
+        "cost_usd": 0.06396558420000001,
+        "model_seconds": 627.2750000000002
+      },
+      "minimax": {
+        "credit": 0.625,
+        "passed": false,
+        "steps": 14,
+        "stop": "done",
+        "cost_usd": 0.03530424,
+        "model_seconds": 82.97800000000001
+      },
+      "gemini": {
+        "credit": 0.14285714285714285,
+        "passed": false,
+        "steps": 49,
+        "stop": "done",
+        "cost_usd": 0.40586744999999996,
+        "model_seconds": 290.188
+      }
+    },
+    "hr:5043": {
+      "deepseek": {
+        "credit": 0.6,
+        "passed": false,
+        "steps": 34,
+        "stop": "done",
+        "cost_usd": 0.03219998760000001,
+        "model_seconds": 427.644
+      },
+      "minimax": {
+        "credit": 1.0,
+        "passed": true,
+        "steps": 12,
+        "stop": "done",
+        "cost_usd": 0.011287440000000001,
+        "model_seconds": 31.975
+      },
+      "gemini": {
+        "credit": 1.0,
+        "passed": true,
+        "steps": 31,
+        "stop": "done",
+        "cost_usd": 0.224748225,
+        "model_seconds": 149.511
+      }
+    },
+    "hr:5048": {
+      "deepseek": {
+        "credit": 0.2857142857142857,
+        "passed": false,
+        "steps": 28,
+        "stop": "done",
+        "cost_usd": 0.017876151,
+        "model_seconds": 307.612
+      },
+      "minimax": {
+        "credit": 1.0,
+        "passed": true,
+        "steps": 8,
+        "stop": "done",
+        "cost_usd": 0.00814206,
+        "model_seconds": 23.674
+      },
+      "gemini": {
+        "credit": 1.0,
+        "passed": true,
+        "steps": 19,
+        "stop": "done",
+        "cost_usd": 0.16029375,
+        "model_seconds": 91.56099999999998
+      }
+    },
+    "hr:5054": {
+      "deepseek": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 48,
+        "stop": "done",
+        "cost_usd": 0.07293169979999999,
+        "model_seconds": 592.9199999999997
+      },
+      "minimax": {
+        "credit": 0.7142857142857143,
+        "passed": false,
+        "steps": 34,
+        "stop": "done",
+        "cost_usd": 0.08945489999999999,
+        "model_seconds": 142.322
+      },
+      "gemini": {
+        "credit": 0.7142857142857143,
+        "passed": false,
+        "steps": 28,
+        "stop": "done",
+        "cost_usd": 0.21801007500000003,
+        "model_seconds": 189.094
+      }
+    }
+  }
+}

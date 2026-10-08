@@ -45,6 +45,25 @@ Nemotron's screen had reached 6 Finance tasks (20 runs including the smoke run).
 **Reading it:** the setup is not the problem. Gemini passes half the tasks in our harness, inside the 20–80% band the go/no-go wants. Nemotron 3 Super trails by about 42 points of credit, far beyond the 10-point comparability margin, and even the best of its attempts per task (0.36) stays well below Gemini. On this evidence Nemotron 3 Super is not a viable Cheap agent for these tasks. Caveat: 6 tasks, all Finance; directional, not conclusive.
 
 
+## Three-model comparison (2026-10-07)
+
+One run on each of 20 tasks (first 10 Finance + first 10 HR of `comparability_task_ids.txt`; `compare_task_ids.txt`), same settings. Data: `compare_results.json`.
+
+| | Gemini 3.8 Flash | MiniMax M3 | DeepSeek V4 Pro |
+|---|---|---|---|
+| Host (pinned) | Google AI Studio | Minimax (fp8) | StreamLake (fp8) |
+| Pass rate | 45% | 20% | 5% |
+| Finance / HR pass rate | 30% / 60% | 10% / 30% | 0% / 10% |
+| Mean credit | 0.66 | 0.58 | 0.21 |
+| Credit vs Gemini, 95% paired bootstrap | — | −0.08 [−0.29, +0.14] | −0.44 [−0.59, −0.30] |
+| Run failures | 4/20 | 1/20 | 8/20 |
+| $ / run | 0.319 | 0.062 | 0.048 |
+| Model s / run | 266 | 129 | 443 |
+| Steps / run | 34.0 | 20.3 | 38.0 |
+| Comparability rule | reference | comparable | not comparable |
+
+MiniMax M3 meets the preregistered comparability rule; DeepSeek V4 Pro does not. Directional at n=20 (wide interval). MiniMax's pass rate (20%) sits exactly at the bottom of the go/no-go band.
+
 ## Cheap-agent comparability check (revised 2026-10-06, Alexander; superseded 2026-10-07 — moved into Phase 1)
 
 *Replaces the 2026-10-05 three-model bake-off (20 tasks; Gemini 3.8 Flash, Nemotron 3 Super, gpt-oss-120b). Revised because 20 tasks with one run each can't separate models on quality: each task is 5 points of pass rate. gpt-oss-120b is dropped.*
