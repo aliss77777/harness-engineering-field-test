@@ -25,11 +25,13 @@ Dated log of every decision, deviation and fix (same discipline as [`../v1/PLAN.
 - 2026-10-07: **Three-model comparison approved (Alexander): Gemini 3.8 Flash vs DeepSeek V4 Pro vs MiniMax M3, one run on each of 20 tasks** (first 10 Finance + first 10 HR of the committed list; `phase0/compare_task_ids.txt`). DeepSeek pinned to StreamLake (fp8, $0.21/$0.42 per million), MiniMax to its own host (fp8, $0.30/$1.20); same settings as before. Gemini's 6 existing runs reused. Estimated ≈ $8–18; **Phase 0 cap raised from $10 to $25**. Nemotron 3 Super is out (0/20 and throttled).
 - 2026-10-07: **Three-model comparison done (20 tasks, one run each; $6.43; Phase 0 spend $9.41).** Gemini 3.8 Flash: 45% pass, credit 0.66, $0.32/run, 266 s, 4 step-cap hits. **MiniMax M3: 20% pass, credit 0.58, $0.062/run (≈ 1/5), 129 s (≈ 2× faster), 1 failure; credit −0.08 vs Gemini [−0.29, +0.14] → comparable under the preregistered rule.** DeepSeek V4 Pro: 5% pass, credit 0.21, 8 step-cap hits → not comparable. MiniMax is close on credit but passes fewer tasks outright (4 vs 9): the gap the Jev rubric and Router are meant to close. Proposed: MiniMax M3 as the Cheap agent, pending Alexander.
 
+- 2026-10-07: **Decision (Alexander): MiniMax M3 is the Cheap agent.**
+
 ## Open decisions (brief section 9)
 
 - [x] Repo: folder in this repo (2026-10-05).
 - [x] Domains: **Finance + HR** (`phase0/DOMAINS.md`, adopted 2026-10-06).
-- [ ] Models: Cheap agent (**decided by the Phase 0 comparability check**: Nemotron 3 Super if comparable to Gemini 3.8 Flash, else Gemini). [x] Strong agent, editor, escalation judge: Gemini 3.8 Flash (2026-10-06; no frontier LLM). [ ] Escalation option (LLM judge vs Strong agent re-run).
+- [x] Models: Cheap agent **MiniMax M3** (2026-10-07; Nemotron 3 Super and DeepSeek V4 Pro tested and out). [x] Strong agent, editor, escalation judge: Gemini 3.8 Flash (2026-10-06; no frontier LLM). [ ] Escalation option (LLM judge vs Strong agent re-run).
 - [x] Phase 0 cap: $10 (2026-10-06). [ ] Phase 1 cap after Phase 0 (placeholder $60, enforced in code).
 [line omitted from the public copy]
 - [x] AutomationBench licence: MIT (2026-10-05).

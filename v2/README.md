@@ -1,6 +1,6 @@
 # v2: the winning harness on real business tasks
 
-**Main focus (Alexander, 2026-10-06):** an **open-weight agent plus Jev**, improved by a self-learning harness, against **Gemini 3.8 Flash** on back-office business tasks (Finance and HR). The hoped-for result, as in v1: *as good as Gemini Flash, but cheaper and faster.*
+**Main focus (Alexander, 2026-10-06):** an **open-weight agent (MiniMax M3, adopted 2026-10-07) plus Jev**, improved by a self-learning harness, against **Gemini 3.8 Flash** on back-office business tasks (Finance and HR). The hoped-for result, as in v1: *as good as Gemini Flash, but cheaper and faster.*
 
 **This is the one page for tracking v2:** status, plan and progress, key results, and open decisions. Each row links to the file with the detail. [`PLAN.md`](PLAN.md) is the full dated log; [`Task Brief 7`](briefs/Task%20Brief%207_V2_Business.md) is the design.
 
@@ -15,7 +15,7 @@
 | **Done** | AutomationBench installed and checked; free harness built; domain analysis; focus and models decided |
 | **Nemotron screen** | ⏸️ Stopped at 19/200 runs (upstream rate limits); superseded: Nemotron is out (0/20 passes) |
 | **Latest** | 3-model comparison done: **MiniMax M3 is comparable to Gemini 3.8 Flash** (credit 0.58 vs 0.66, at ≈ 1/5 the cost and 2× the speed), but passes 4 of 20 vs Gemini's 9. DeepSeek V4 Pro and Nemotron 3 Super are out ([results](#phase-0-results-so-far)) |
-| **Waiting on Alexander** | Adopt MiniMax M3 as the Cheap agent? Then the last Phase 0 step: 3 more MiniMax runs per task on the same 20 tasks (≈ $4) for best-of-4 and varied runs, then the go/no-go |
+| **Waiting on Alexander** | Whether to run the last Phase 0 step: 3 more MiniMax runs per task on the same 20 tasks (≈ $4) to measure best-of-4 and how often runs differ, then the go/no-go |
 | **Spend so far** | $9.41 of the $25 Phase 0 cap |
 
 ## Plan and progress
@@ -75,7 +75,7 @@ Once Phase 1 has results, the 3–5 numbered insights go here, copied verbatim f
 | Repo layout | ✅ v2 is a folder in this repo (2026-10-05) |
 | AutomationBench licence | ✅ MIT (2026-10-05) |
 | Experiment focus | ✅ Open-weight agent + Jev vs Gemini 3.8 Flash (2026-10-06) |
-| Cheap agent | **Proposed: MiniMax M3** (open weight; comparable to Gemini on 20 tasks, 2026-10-07). Nemotron 3 Super and DeepSeek V4 Pro out. Pending Alexander |
+| Cheap agent | ✅ **MiniMax M3** (open weight; comparable to Gemini on 20 tasks; adopted by Alexander 2026-10-07). Nemotron 3 Super and DeepSeek V4 Pro out |
 | Strong agent, editor, escalation judge | ✅ Gemini 3.8 Flash, v1's model (2026-10-06). No frontier LLM |
 | Phase 1 domains | ✅ **Finance + HR** ([analysis](phase0/DOMAINS.md), 2026-10-06) |
 | Spend caps | ✅ Phase 0: $10 hard cap (2026-10-06). ✅ Lean budget ≈ $60 in total (2026-10-07). Phase 1 cap: set after Phase 0 (placeholder $60) |
@@ -201,7 +201,7 @@ Harness code is in `src/jevloop/` (`bench.py` is the only module that touches Au
 
 | Role | What it is | What it does |
 |---|---|---|
-| **Cheap agent** | An open-weight LLM: Nemotron 3 Super, if the comparability check passes (otherwise Gemini 3.8 Flash) | Does each task K times, calling the tools |
+| **Cheap agent** | An open-weight LLM: **MiniMax M3** (adopted 2026-10-07 after Phase 0's comparison) | Does each task K times, calling the tools |
 | **Strong agent** | Gemini 3.8 Flash, v1's model (approved 2026-10-06; no frontier LLM) | New in v2. The baseline v2 must match ("as good as a strong agent, for less") and, under escalation option B, the fallback that re-does a task Jev isn't confident about. Under option A an LLM judge picks among the K runs instead, which is v1's exact escalation |
 | **Jev** | The decision model from v1 (`typesafe/jev-1.13` via OpenRouter) | Answers the rubric's yes/no questions about each run's summary, so the runs can be scored. It never calls tools or does the task. |
 | **Router** | Code | Keeps Jev's top-scoring run when Jev is confident; otherwise escalates to the Strong agent |
