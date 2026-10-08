@@ -18,6 +18,7 @@ from typing import Any
 
 from automationbench.domains import get_available_domains, get_domain_dataset
 from automationbench.rubric import partial_credit
+from automationbench.rubric.registry import AssertionRegistry
 from automationbench.runner import compute_allowed_services, strip_none_values
 from automationbench.schema.world import WorldState
 from automationbench.tools.api import API_TOOLS
@@ -58,6 +59,9 @@ class Grade:
     partial_credit: float
     passed: bool
     scored_checks: int
+    # Scored checks the run did not meet: {"type", "params", "negative"}. For the Agent skill loop's
+    # editor on practice tasks only; never part of the run summary Jev reads.
+    missed: tuple[dict[str, Any], ...] = ()
 
 
 def domains() -> list[str]:
@@ -142,5 +146,10 @@ def grade(task: Task, world: WorldState) -> Grade:
         "initial_state": copy.deepcopy(task.initial_state),
     }
     credit = partial_credit(state)
-    scored = sum(1 for r in state.get("_assertion_results", []) if not r.get("excluded"))
-    return Grade(partial_credit=credit, passed=credit == 1.0, scored_checks=scored)
+    results = state.get("_assertion_results", [])
+    scored = sum(1 for r in results if not r.get("excluded"))
+    missed = tuple(
+        {"type": r["type"], "params": r.get("params", {}), "negative": AssertionRegistry.is_negative(r["type"])}
+        for r in results if not r.get("excluded") and not r["passed"]
+    )
+    return Grade(partial_credit=credit, passed=credit == 1.0, scored_checks=scored, missed=missed)

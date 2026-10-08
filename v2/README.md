@@ -20,7 +20,8 @@
 | **Nemotron screen** | ⏸️ Stopped at 19/200 runs (upstream rate limits); superseded: Nemotron is out (0/20 passes) |
 | **Latest** | 3-model comparison done: **MiniMax M3 is comparable to Gemini 3.8 Flash** (credit 0.58 vs 0.66, at ≈ 1/5 the cost and 2× the speed), but passes 4 of 20 vs Gemini's 9. DeepSeek V4 Pro and Nemotron 3 Super are out ([results](#phase-0-results-so-far)) |
 | **Latest** | Free diagnosis: **MiniMax's failures are systematic**: it skips the policy emails (read all of them in 4 of 13 runs vs Gemini's 12 of 12) and breaks ~3× more "must not" rules. Teachable, so it supports bringing back the Agent skill loop ([details](#phase-0-results-so-far)) |
-| **Waiting on Alexander** | The go/no-go call (0.7) and the Phase 1 cap (proposed $100; Phase 1 projects to ≈ $80) |
+| **Now** | **Phase 1 pilot running** (not a GO): 2 rounds of the Agent skill loop on practice + gate tasks only, $20 hard cap. Is MiniMax learning? |
+| **Waiting on Alexander** | After the pilot: the go/no-go call and the Phase 1 cap |
 | **Spend so far** | $9.41 of the $25 Phase 0 cap |
 
 ## Plan and progress

@@ -1,0 +1,19 @@
+# Phase 1 settings. Fixed 2026-10-07 before any Phase 1 paid call (briefs/Phase 1 design.md).
+seed: 20261007
+domains: [finance, hr]
+phase0_task_ids_file: phase0/comparability_task_ids.txt   # these 50 never go into sealed
+
+# The 2-round pilot of the Agent skill loop (Alexander, 2026-10-07). Practice and gate only; sealed untouched.
+pilot:
+  spend_cap_usd: 20.0        # hard cap for the pilot, enforced in code
+  rounds: 2
+  practice_per_round: 30     # fresh seeded sample of the 60 practice tasks each round
+  gate_size: 40              # fixed seeded sample of the 60 gate tasks, the same every round
+  candidates_per_round: 2
+  mistakes_shown: 8          # fresh seeded sample of failed practice runs shown to the editor
+  gate_p_threshold: 0.10     # keep an edit if mean credit rises and one-sided Wilcoxon p < 0.10 (v1's gate level)
+  workers: 8
+  cost_per_run_estimate: 0.062   # MiniMax, Phase 0 average; for the spend guard
+
+# Agent and editor: MiniMax M3, same settings and pinned host as Phase 0 (phase0/config_phase0.yaml).
+agent_model: minimax

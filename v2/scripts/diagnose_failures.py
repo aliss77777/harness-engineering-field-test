@@ -24,10 +24,10 @@ from automationbench.rubric import partial_credit  # noqa: E402
 from automationbench.rubric.registry import AssertionRegistry  # noqa: E402
 
 from jevloop import bench  # noqa: E402
+from jevloop.diagnostics import policy_messages, read_ids  # noqa: E402
 
 LOGS = ROOT / "logs" / "phase0"
 MODELS = ["gemini", "minimax", "deepseek"]
-POLICY_WORDS = re.compile(r"polic|sop|guideline|procedure|process|rule|update|hold|do not|don't", re.I)
 
 
 def runs_for(name: str, ids: list[str]) -> dict:
@@ -71,16 +71,6 @@ def classify(result: dict, snapshot: dict) -> str:
     if "cell_contains" in params and kind.endswith("row_updated"):
         return "wrong content"  # the row exists from the start; the required values were not written
     return "missed action"
-
-
-def policy_messages(task: bench.Task) -> list[str]:
-    msgs = (task.initial_state.get("gmail") or {}).get("messages", [])
-    return [m["id"] for m in msgs if POLICY_WORDS.search(f"{m.get('subject', '')} {m.get('body_plain', '')[:300]}")]
-
-
-def read_ids(calls: list[dict]) -> set[str]:
-    text = " ".join(f"{c['args'].get('url', '')} {c['args'].get('params', '')}" for c in calls if c["name"] == "api_fetch")
-    return set(re.findall(r"[\w-]+", text))
 
 
 def main() -> None:

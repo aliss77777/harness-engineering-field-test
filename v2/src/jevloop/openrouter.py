@@ -88,10 +88,11 @@ class ChatClient:
         body: dict[str, Any] = {
             "model": self.model,
             "messages": messages,
-            "tools": tools,
             "temperature": self.temperature,
             "provider": {"order": [self.provider_tag], "allow_fallbacks": False, "require_parameters": True},
         }
+        if tools:  # the editor calls with no tools
+            body["tools"] = tools
         if self.reasoning_effort:
             body["reasoning"] = {"effort": self.reasoning_effort}
         return body
