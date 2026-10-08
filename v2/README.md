@@ -14,7 +14,7 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 |---|---|
 | **Phase** | 0 (feasibility) done · **Phase 1 pilot done** (not a GO) |
 | **Latest** | Pilot: **no fix kept in 2 rounds, but every candidate moved behaviour the right way** (fewer broken rules; the best fix +6.7 credit points). The gate is underpowered at 40 tasks × 1 run ([pilot report](phase1/pilot/README.md)) |
-| **Next** | Alexander: how to give the gate more power, then the go/no-go for Phase 1 and its cap |
+| **Next** | Alexander reviews the **[skill loop redesign](briefs/Skill%20loop%20redesign.md)** (multi-level telemetry: task, check, step; temperature 0; targeted tests + regression set), then the go/no-go for Phase 1 |
 | **Spend** | Phase 0: $9.41 (cap $25) · Pilot: $8.97 (cap $20) |
 
 ## The experiment in one picture
@@ -107,6 +107,7 @@ Caps are enforced in code: a run stops before it would pass its cap. Per-item es
 | Document | What it holds |
 |---|---|
 | [`briefs/Phase 1 design.md`](briefs/Phase%201%20design.md) | The current design: claim, loops, data, experiments, verdict rules, budget |
+| [`briefs/Skill loop redesign.md`](briefs/Skill%20loop%20redesign.md) | Draft after the pilot: multi-level telemetry and a new keep rule for long, noisy workflows |
 | [`JOURNEY.md`](JOURNEY.md) | The initial plan and the setbacks (including Nemotron), and how the design changed |
 | [`METHODOLOGY.md`](METHODOLOGY.md) | What changes from v1 and why; who does what |
 | [`phase0/FEASIBILITY.md`](phase0/FEASIBILITY.md) | Phase 0 measurements and the go/no-go |

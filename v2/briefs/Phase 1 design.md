@@ -1,6 +1,6 @@
 # Phase 1 design: MiniMax M3 + Jev vs Gemini 3.8 Flash on back-office tasks
 
-**Written:** 2026-10-07 · **Approved in outline:** Alexander, 2026-10-07 · **Status:** design; the verdict rules go into code with tests and are committed before any Phase 1 paid run · **Supersedes:** the best-of-K Router and the Phase 1 experiment table in `Task Brief 7_V2_Business.md` (sections 2–3); the rest of that brief stands.
+**Written:** 2026-10-07 · **Approved in outline:** Alexander, 2026-10-07 · **Status:** design; the verdict rules go into code with tests and are committed before any Phase 1 paid run · **Pending revision:** after the pilot, the skill loop's gate and editor inputs are being redesigned ([`Skill loop redesign.md`](Skill%20loop%20redesign.md), draft) · **Supersedes:** the best-of-K Router and the Phase 1 experiment table in `Task Brief 7_V2_Business.md` (sections 2–3); the rest of that brief stands.
 
 ## The core question (revised 2026-10-07)
 
