@@ -14,7 +14,8 @@
 | **Spend cap** | $10 for all of Phase 0, enforced in code |
 | **Done** | AutomationBench installed and checked; free harness built; domain analysis; focus and models decided |
 | **Now** | ⏸️ Nemotron screen paused (19/200 runs; upstream rate limits). Gemini reference on the same 6 tasks done: **Gemini passes 3 of 6, Nemotron 0 of 20** |
-| **Waiting on Alexander** | Next open-weight candidate(s) to try on the same 6 tasks (e.g. DeepSeek V4 Pro, MiniMax M3), or another path. Nemotron 3 Super looks not viable |
+| **Next** | One run on each of the 50 Finance + HR tasks: Gemini 3.8 Flash vs DeepSeek V4 Pro vs MiniMax M3 ([plan](#phase-0-results-so-far)) |
+| **Waiting on Alexander** | The spend cap for that comparison (it likely exceeds what's left of the $10) |
 | **Spend so far** | $2.98 of the $10 Phase 0 cap |
 
 ## Plan and progress
@@ -79,6 +80,32 @@ Once Phase 1 has results, the 3–5 numbered insights go here, copied verbatim f
 | Spend caps | ✅ Phase 0: $10 hard cap (2026-10-06). ✅ Lean budget ≈ $60 in total (2026-10-07). Phase 1 cap: set after Phase 0 (placeholder $60) |
 | Agent skill loop in Phase 1 | Optional, as in the brief; not in the lean plan (+≈ $40 if added) |
 [line omitted from the public copy]
+
+## Phase 0 results so far
+
+*Updated 2026-10-07. Phase 0 spend: $2.98 of the $10 cap.*
+
+**1. Our harness works on business tasks.** In the smoke test both models solved a simple task end to end, and the grader, tool calls, pinned hosts and cost logging all behaved. Two bugs were found and fixed on the way: empty provider replies were briefly scored as "agent finished" (now retried), and reruns couldn't replay cached calls because the simulator stamps clock times and random IDs (now resumed by whole runs).
+
+**2. Gemini 3.8 Flash vs Nemotron 3 Super on 6 Finance tasks:**
+
+| Task | Gemini 3.8 Flash | Nemotron 3 Super (each run) |
+|---|---|---|
+| finance:4001 | 0.50 | 0, 0, 0.17, 0.17 |
+| finance:4009 | **1.00 pass** | 0, 0.29, 0.29, 0.50 |
+| finance:4010 | **1.00 pass** | 0, 0.33, 0.33, 0.50 |
+| finance:4011 | **1.00 pass** | 0, 0, 0 |
+| finance:4012 | 0 (hit the 50-step cap) | 0, 0, 0, 0.60 |
+| finance:4028 | 0.20 | 0.40 |
+| **Pass rate** | **3 of 6** | **0 of 20** |
+| **Mean partial credit** | **0.62** | 0.20 (best of its runs per task: 0.36) |
+| **Cost per run** | $0.36 | $0.033 (≈ 11× cheaper) |
+
+- **The tasks are passable in our setup:** Gemini passes half, inside the 20–80% band the go/no-go wants.
+- **Nemotron 3 Super is not a viable Cheap agent here:** it trails by about 42 points of credit, far past the 10-point margin, and even its best attempt per task stays well below Gemini. Cheaper doesn't help if it can't do the work.
+- **Why only 6 of the 50 tasks:** the screen was meant to run all 50 tasks × 4 attempts. It worked task by task (all 4 attempts on one task before the next), and upstream rate limits at Nemotron's host stopped it after the first 6 Finance tasks. The other 44 tasks (19 Finance, all 25 HR) were never reached, so this result is **directional, not conclusive**, and says nothing yet about HR. Lesson applied: future runs go **breadth first** (attempt 1 on every task before attempt 2).
+
+**3. Next (approved 2026-10-07): one run on each of the 50 tasks for three models**, Gemini 3.8 Flash vs two other open-weight candidates, **DeepSeek V4 Pro** and **MiniMax M3**. Same settings, breadth first, one pinned host each. The aim is a proper read of each model's pass rate across Finance and HR, and the Gemini gap. Gemini's 6 existing runs are reused.
 
 ## Budget
 
