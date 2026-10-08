@@ -7,7 +7,7 @@ This repo holds the series. Each version is a self-contained folder with its own
 | Version | What | Status | Start here |
 |---|---|---|---|
 | **v1** | Six preregistered experiments on public benchmarks (Upworthy headline A/B tests, Chatbot Arena) | Complete | [`v1/RESULTS.md`](v1/RESULTS.md) · [`v1/README.md`](v1/README.md) |
-| **v2** | An open-weight agent + Jev vs Gemini 3.8 Flash on back-office business work (Zapier's AutomationBench: Finance, HR) + a Magic Patterns observability UI | Phase 0 (feasibility) in progress | **Tracker: [`v2/README.md`](v2/README.md)** (status, plan, results) · [brief](v2/briefs/Task%20Brief%207_V2_Business.md) |
+| **v2** | An open-weight agent + Jev vs Gemini 3.8 Flash on back-office business work (Zapier's AutomationBench: Finance, HR) + a Magic Patterns observability UI | Phase 0 done; Phase 1 pilot running | **Tracker: [`v2/README.md`](v2/README.md)** (status, plan, results) · [brief](v2/briefs/Task%20Brief%207_V2_Business.md) |
 
 ## v1 in three lines
 

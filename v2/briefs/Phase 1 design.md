@@ -57,7 +57,7 @@ task ──► MiniMax M3 runs it once (with its learned skill file) ──► r
 | Exp | Question | What runs | "Learned" / verdict rule |
 |---|---|---|---|
 | **V2-1 Controls** | Where do we start? | Sealed: MiniMax v0 skill, Gemini, 1 run each | — sets the frame (the starting gap) |
-| **V2-2a Agent skill loop** | Does MiniMax learn its playbook? | 4 rounds: 30 practice runs + 2 candidate edits × 40 gate runs per round; final skill vs v0 on sealed | **Learned** if final beats v0 on sealed partial credit, paired one-sided Wilcoxon, p < 0.05 |
+| **V2-2a Agent skill loop** | Does MiniMax learn its playbook? | 4 rounds: 30 practice runs, then the current version and 2 candidate edits on the same 40 gate tasks per round; final skill vs v0 on sealed | **Learned** if final beats v0 on sealed partial credit, paired one-sided Wilcoxon, p < 0.05 |
 | **V2-2b Jev rubric loop** | Does the checker learn what a correct run is? | Rubric learned on MiniMax runs from practice and gate (labels: run "good" = partial credit ≥ 0.8) | **Learned** if the final rubric classifies sealed runs as good / not good better than the starting rubric, paired McNemar, p < 0.05 |
 | **V2-3 Router (headline)** | As good as Gemini, cheaper and faster? | Sealed: MiniMax (final skill) once → Jev (final rubric) → keep, or Gemini does it. τ is the Jev score that escalates **30%** of gate runs, frozen before sealed | **Chef's kiss** if Router mean partial credit is within **±3 points** of Gemini alone (paired 95% interval) **and** cost per task ≤ **½** Gemini's; time per task reported |
 | V2-4 Partial feedback | — | not run (out of budget) | — |
@@ -73,12 +73,12 @@ Costs per run from Phase 0: MiniMax $0.062, Gemini $0.32 (average of 20 business
 
 | Item | Runs | Cost |
 |---|---|---|
-| Agent skill loop (MiniMax) | 4 × (30 + 2 × 40) = 440 | ≈ $27 |
+| Agent skill loop (MiniMax): practice, current version on gate, 2 candidates on gate | 4 × (30 + 40 + 2 × 40) = 600 | ≈ $37 |
 | Jev learning data: MiniMax (final skill) on practice + gate (plus the skill loop's runs) | 120 | ≈ $7 |
 | Sealed: MiniMax v0 + MiniMax final skill | 160 | ≈ $10 |
 | Sealed: Gemini baseline | 80 | ≈ $26 |
 | Sealed: fresh Gemini runs for escalated tasks (≈ 30%) | ≈ 24 | ≈ $8 |
 | Jev scoring, editor and other small calls | — | ≈ $4 |
-| **Total** | | **≈ $80** (range ≈ $55–115) |
+| **Total** | | **≈ $90** (range ≈ $60–125) |
 
 **Proposed Phase 1 cap: $100, enforced in code**; stop and ask if a projection goes over.
