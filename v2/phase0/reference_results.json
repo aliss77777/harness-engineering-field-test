@@ -1,0 +1,98 @@
+{
+  "note": "Gemini 3.8 Flash, one run per task, on the tasks Nemotron's screen reached (2026-10-07)",
+  "phase0_spend_usd": 2.9758833949999985,
+  "tasks": [
+    {
+      "task_id": "finance:4001",
+      "gemini_credit": 0.5,
+      "gemini_passed": false,
+      "gemini_steps": 45,
+      "gemini_cost_usd": 0.48417802499999996,
+      "gemini_stop": "done",
+      "nemotron_credits": [
+        0.0,
+        0.16666666666666666,
+        0.0,
+        0.16666666666666666
+      ],
+      "nemotron_passes": 0,
+      "nemotron_mean_cost_usd": 0.030334806250000002
+    },
+    {
+      "task_id": "finance:4009",
+      "gemini_credit": 1.0,
+      "gemini_passed": true,
+      "gemini_steps": 32,
+      "gemini_cost_usd": 0.21354847500000002,
+      "gemini_stop": "done",
+      "nemotron_credits": [
+        0.2857142857142857,
+        0.0,
+        0.2857142857142857,
+        0.5
+      ],
+      "nemotron_passes": 0,
+      "nemotron_mean_cost_usd": 0.028808781249999995
+    },
+    {
+      "task_id": "finance:4010",
+      "gemini_credit": 1.0,
+      "gemini_passed": true,
+      "gemini_steps": 26,
+      "gemini_cost_usd": 0.25521825,
+      "gemini_stop": "done",
+      "nemotron_credits": [
+        0.5,
+        0.0,
+        0.3333333333333333,
+        0.3333333333333333
+      ],
+      "nemotron_passes": 0,
+      "nemotron_mean_cost_usd": 0.0229078975
+    },
+    {
+      "task_id": "finance:4011",
+      "gemini_credit": 1.0,
+      "gemini_passed": true,
+      "gemini_steps": 45,
+      "gemini_cost_usd": 0.2838145499999999,
+      "gemini_stop": "done",
+      "nemotron_credits": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "nemotron_passes": 0,
+      "nemotron_mean_cost_usd": 0.02506316
+    },
+    {
+      "task_id": "finance:4012",
+      "gemini_credit": 0.0,
+      "gemini_passed": false,
+      "gemini_steps": 50,
+      "gemini_cost_usd": 0.33394935000000003,
+      "gemini_stop": "max_steps",
+      "nemotron_credits": [
+        0.6,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "nemotron_passes": 0,
+      "nemotron_mean_cost_usd": 0.06029979500000001
+    },
+    {
+      "task_id": "finance:4028",
+      "gemini_credit": 0.2,
+      "gemini_passed": false,
+      "gemini_steps": 31,
+      "gemini_cost_usd": 0.5821586999999999,
+      "gemini_stop": "done",
+      "nemotron_credits": [
+        0.4
+      ],
+      "nemotron_passes": 0,
+      "nemotron_mean_cost_usd": 0.02293689
+    }
+  ]
+}

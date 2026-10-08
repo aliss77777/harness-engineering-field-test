@@ -13,9 +13,9 @@
 | **Phase** | 0 — feasibility (gates everything else); remaining steps approved 2026-10-06 |
 | **Spend cap** | $10 for all of Phase 0, enforced in code |
 | **Done** | AutomationBench installed and checked; free harness built; domain analysis; focus and models decided |
-| **Now** | ⏸️ Nemotron screen **paused**: 18 of 200 runs done. The pinned host (DeepInfra via OpenRouter's shared capacity) rate-limits about half the calls, and the run stopped twice after retries ran out |
-| **Waiting on Alexander** | How to unblock the screen: (1) add your own DeepInfra key to OpenRouter (recommended; settings unchanged), (2) switch to the fp8 host DekaLLM (a logged deviation), or (3) 2 runs per task instead of 4 |
-| **Spend so far** | $0.52 of the $10 Phase 0 cap |
+| **Now** | ⏸️ Nemotron screen paused (19/200 runs; upstream rate limits). Gemini reference on the same 6 tasks done: **Gemini passes 3 of 6, Nemotron 0 of 20** |
+| **Waiting on Alexander** | Next open-weight candidate(s) to try on the same 6 tasks (e.g. DeepSeek V4 Pro, MiniMax M3), or another path. Nemotron 3 Super looks not viable |
+| **Spend so far** | $2.98 of the $10 Phase 0 cap |
 
 ## Plan and progress
 
@@ -59,7 +59,7 @@
 | A do-nothing agent scores | 0 on all 800 tasks (the grader drops checks already true at the start) | [FEASIBILITY](phase0/FEASIBILITY.md#free-checks-2026-10-05-no-model-calls) |
 | Our own agent loop drives the bench | Yes: a hand-written solution scores 1.0 through the bench's grader | [FEASIBILITY](phase0/FEASIBILITY.md#free-checks-2026-10-05-no-model-calls) |
 | Cost per business-task run, smoke test (one task) | Gemini 3.8 Flash $0.48 vs Nemotron 3 Super $0.019 (≈ 25× cheaper, 5× faster on that task) | [FEASIBILITY](phase0/FEASIBILITY.md#smoke-test-2026-10-06-052-spent) |
-| Nemotron 3 Super: pass rate, failures, varied runs, best-of-4 on 50 tasks | *running* | [FEASIBILITY](phase0/FEASIBILITY.md#nemotron-screen-2026-10-07) |
+| Gemini vs Nemotron on 6 Finance tasks (directional) | Gemini **3/6 passes, credit 0.62, $0.36/run**; Nemotron **0/20, credit 0.20, $0.033/run**. Nemotron trails by ≈ 42 points | [FEASIBILITY](phase0/FEASIBILITY.md#gemini-reference-on-the-screened-tasks-2026-10-07-167) |
 | Nemotron 3 Super comparable to Gemini 3.8 Flash? | *Phase 1 (V2-1, sealed set)* | [below](#cheap-agent-comparability-moved-into-phase-1) |
 | Cheap / Strong agent pass rates; share of tasks with mixed pass/fail | *not run* | Phase 0 spike |
 | Go/no-go | *pending* | |

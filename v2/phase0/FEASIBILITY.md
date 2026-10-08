@@ -24,7 +24,26 @@
 
 **Go/no-go (unchanged rule):** pass rate 20–80%; at least 30% of tasks with mixed pass/fail; projected Phase 1 cost within the Phase 1 cap (placeholder $60). Also reported: Nemotron's failure rate against the 10% limit of the Phase 1 comparability rule.
 
-Results: *(filled in after the run)*
+Results so far: paused at 19 of 200 runs on upstream rate limits (0 passes; mean credit 0.19).
+
+### Gemini reference on the screened tasks (2026-10-07, $1.67)
+
+Nemotron's screen had reached 6 Finance tasks (20 runs including the smoke run). Gemini 3.8 Flash ran once on each, same settings. Data: `reference_results.json`.
+
+| Task | Gemini 3.8 Flash | Nemotron 3 Super (each run) |
+|---|---|---|
+| finance:4001 | 0.50 | 0, 0, 0.17, 0.17 |
+| finance:4009 | **1.00 pass** | 0, 0.29, 0.29, 0.50 |
+| finance:4010 | **1.00 pass** | 0, 0.33, 0.33, 0.50 |
+| finance:4011 | **1.00 pass** | 0, 0, 0 |
+| finance:4012 | 0 (hit the 50-step cap) | 0, 0, 0, 0.60 |
+| finance:4028 | 0.20 | 0.40 |
+| **Pass rate** | **3 of 6** | **0 of 20** |
+| **Mean credit** | **0.62** | 0.20 (best of its runs: 0.36) |
+| **Cost per run** | $0.36 | $0.033 (≈ 11× cheaper) |
+
+**Reading it:** the setup is not the problem. Gemini passes half the tasks in our harness, inside the 20–80% band the go/no-go wants. Nemotron 3 Super trails by about 42 points of credit, far beyond the 10-point comparability margin, and even the best of its attempts per task (0.36) stays well below Gemini. On this evidence Nemotron 3 Super is not a viable Cheap agent for these tasks. Caveat: 6 tasks, all Finance; directional, not conclusive.
+
 
 ## Cheap-agent comparability check (revised 2026-10-06, Alexander; superseded 2026-10-07 — moved into Phase 1)
 
