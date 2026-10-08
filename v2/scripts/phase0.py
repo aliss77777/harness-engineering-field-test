@@ -229,6 +229,57 @@ def cmd_screen(args) -> None:
     print("written: phase0/screen_results.json")
 
 
+def cmd_reference(args) -> None:
+    """Gemini 3.8 Flash, one run per task, on tasks Nemotron has screened: is the task passable here?"""
+    from jevloop.runs import run_candidate
+
+    name, run_id = "gemini", "reference"
+    screened = load_finished_all(LOGS / "screen-nemotron-runs.jsonl")
+    smoke_nem = {(t, 0): r for t, r in load_finished(LOGS / "smoke-nemotron-runs.jsonl").items()}
+    nemotron = {**smoke_nem, **screened}
+    ids = sorted({t for t, _ in screened}, key=lambda t: (t.split(":")[0], int(t.split(":")[1])))
+    log_path = LOGS / f"{run_id}-{name}-runs.jsonl"
+    finished = {t: r for t, r in load_finished(LOGS / f"smoke-{name}-runs.jsonl").items() if t in ids}
+    finished |= load_finished(log_path)
+    todo = [t for t in ids if t not in finished]
+    tracker = spend()
+    projection = GEMINI_SMOKE_COST_PER_RUN * len(todo)
+    print(f"{len(ids)} tasks; {len(finished)} Gemini runs reloaded, {len(todo)} to run; projected ${projection:.2f} "
+          f"(spent ${tracker.total_usd:.2f} of ${tracker.cap_usd:.2f})")
+    if tracker.total_usd + projection * args.safety > tracker.cap_usd:
+        sys.exit("STOP: projection would pass the cap. Ask Alexander.")
+    tasks = {t.task_id: t for t in bench.load_tasks(sorted({i.split(":")[0] for i in ids}))}
+    gemini = agent(name, tracker, run_id)
+    logger = JsonlLogger(log_path)
+    from concurrent.futures import ThreadPoolExecutor
+
+    def one(task_id):
+        run = run_candidate(tasks[task_id], gemini, 0)
+        logger.write({"event": "candidate_run", "run_id": run_id, **run.record()})
+        return run
+
+    with ThreadPoolExecutor(max_workers=args.workers) as pool:
+        for run in pool.map(one, todo):
+            finished[run.task_id] = run
+            print(f"  gemini {run.task_id}: credit {run.partial_credit:.2f} pass {run.passed} steps {run.steps} "
+                  f"cost ${run.cost_usd:.3f}; spend ${tracker.total_usd:.2f}", flush=True)
+    tracker.flush()
+    rows = []
+    for t in ids:
+        nem = [nemotron[(t, c)] for c in range(4) if (t, c) in nemotron]
+        g = finished[t]
+        rows.append({"task_id": t, "gemini_credit": g.partial_credit, "gemini_passed": g.passed, "gemini_steps": g.steps,
+                     "gemini_cost_usd": g.cost_usd, "gemini_stop": g.stop_reason,
+                     "nemotron_credits": [r.partial_credit for r in nem], "nemotron_passes": sum(r.passed for r in nem),
+                     "nemotron_mean_cost_usd": sum(r.cost_usd for r in nem) / len(nem)})
+        print(f"{t}: gemini {g.partial_credit:.2f} {'PASS' if g.passed else 'fail'} | nemotron "
+              f"{[round(r.partial_credit, 2) for r in nem]}")
+    (ROOT / "phase0" / "reference_results.json").write_text(json.dumps(
+        {"note": "Gemini 3.8 Flash, one run per task, on the tasks Nemotron's screen reached (2026-10-07)",
+         "phase0_spend_usd": tracker.total_usd, "tasks": rows}, indent=2) + "\n")
+    print(f"written: phase0/reference_results.json; Phase 0 spend ${tracker.total_usd:.2f}")
+
+
 def load_finished_all(log_path: Path) -> dict:
     """All runs in a runs log, keyed by (task ID, candidate); last record wins."""
     from jevloop.runs import CandidateRun
@@ -254,6 +305,10 @@ def main() -> None:
     screen.add_argument("--retries", type=int, default=None, help="override config retries")
     screen.add_argument("--safety", type=float, default=1.5, help="multiplier on the projected cost for the cap check")
     screen.set_defaults(fn=cmd_screen)
+    reference = sub.add_parser("reference")
+    reference.add_argument("--workers", type=int, default=5)
+    reference.add_argument("--safety", type=float, default=1.5)
+    reference.set_defaults(fn=cmd_reference)
     args = parser.parse_args()
     args.fn(args)
 
