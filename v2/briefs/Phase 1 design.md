@@ -2,9 +2,15 @@
 
 **Written:** 2026-10-07 · **Approved in outline:** Alexander, 2026-10-07 · **Status:** design; the verdict rules go into code with tests and are committed before any Phase 1 paid run · **Supersedes:** the best-of-K Router and the Phase 1 experiment table in `Task Brief 7_V2_Business.md` (sections 2–3); the rest of that brief stands.
 
-## The claim
+## The core question (revised 2026-10-07)
 
-> **MiniMax M3, an open-weight agent, plus a learned Jev checker matches Gemini 3.8 Flash on real Finance and HR tasks at about half the cost, and faster, because two things learn: the agent's playbook and the checker.**
+> **Can a self-learning harness make an open-weight agent learn from its own mistakes, with Jev learning when to trust it, so the system matches Gemini Flash on real back-office work, cheaper and faster?**
+
+- **Learning first.** MiniMax M3 learns from its own graded mistakes; nobody shows it how. That is v1's learning loop applied to an agent doing real work.
+- **Jev's role, precisely.** Jev does not coach MiniMax. It learns what a correct MiniMax run looks like, so the system knows **when to trust** MiniMax and when to hand the task to Gemini.
+- **The business test.** The result must match Gemini 3.8 Flash on partial credit, at about half the cost and faster (V2-3).
+
+**No learning from Gemini, and no Gemini judgement inside the loops** (Alexander, 2026-10-07). MiniMax writes its own fixes and Jev's rubric edits. Gemini appears only as the baseline and as the cascade's fallback. If it works, the claim is: *an open-weight model ran the work, improved itself, and learned when to ask for help.*
 
 ## Why this design (from Phase 0)
 
@@ -27,8 +33,10 @@ task ──► MiniMax M3 runs it once (with its learned skill file) ──► r
 
 **Two things learn:**
 
-1. **The Agent skill loop teaches MiniMax its playbook.** MiniMax's version 0 is the bench's own system prompt. Each round, MiniMax runs a fresh sample of practice tasks; an editor (Gemini 3.8 Flash) sees its failed runs and which checks they missed. **MiniMax learns only from its own graded outcomes; it never sees Gemini's runs** (Alexander, 2026-10-07: no learning from Gemini). The editor proposes **one** edit to MiniMax's skill file (for example, *"Read every policy email and reference sheet before acting; handle every item before you stop"*). The edit is kept only if MiniMax does better on held-out gate tasks.
-2. **The Jev rubric loop teaches the checker what a correct MiniMax run looks like.** Jev answers weighted yes/no questions about each run summary (*"Did it read the AP guidelines before logging?"*, *"Did it skip the accounts on hold?"*). The editor sees runs Jev judged wrongly and proposes one rubric edit; weights are refitted from partial credit (v1's B+); the edit is kept only if Jev's judgments improve on gate.
+1. **The Agent skill loop: MiniMax learns from its own mistakes.** MiniMax's version 0 is the bench's own system prompt. Each round, MiniMax runs a fresh sample of practice tasks, then **MiniMax itself, acting as editor,** reads its failed runs and which checks they missed, and proposes **one** edit to its own skill file (for example, *"Read every policy email and reference sheet before acting; handle every item before you stop"*). The edit is kept only if MiniMax does better on held-out gate tasks. This mirrors v1's LLM loop, where the model edited its own instructions.
+2. **The Jev rubric loop: the checker learns when to trust MiniMax.** Jev answers weighted yes/no questions about each run summary (*"Did it read the AP guidelines before logging?"*, *"Did it skip the accounts on hold?"*). The rubric editor (**MiniMax**) sees runs Jev judged wrongly and proposes one rubric edit; weights are refitted from partial credit (v1's B+); the edit is kept only if Jev's judgments improve on gate.
+
+**Why MiniMax edits both** (pros and cons weighed with Alexander, 2026-10-07): a clean claim (gains come from the loop, not from a stronger model's judgement); closest to v1's self-editing LLM loop; and a deployment story where one open-weight model does the work and improves itself, so business data can stay on the company's own infrastructure. The risk is weaker fixes: the same blind spot that skips policy emails may miss why it failed. That risk is bounded: the gate rejects bad edits, so the worst case is an honest "did not learn". The editor sees the exact missed checks, which makes the diagnosis largely mechanical.
 
 **Same v1 rules throughout:** one edit per round; rejected edits shown to the editor and near-copies refused; a fresh mistake sample each round; a held-out gate decides; the sealed set is used once; the spend cap is in code; runs resume after any stop; preregistered verdicts in code with tests.
 
@@ -38,7 +46,8 @@ task ──► MiniMax M3 runs it once (with its learned skill file) ──► r
 |---|---|
 | **Tasks** | All 200 Finance + HR tasks. **Practice 60, gate 60, sealed 80**, stratified by domain (30/30, 30/30, 40/40), fixed seed. The 50 Phase 0 tasks go into practice and gate, never sealed. |
 | **Cheap agent** | MiniMax M3, pinned to MiniMax's own host (fp8) |
-| **Strong agent, editor** | Gemini 3.8 Flash, Google AI Studio standard tier. Gemini is the baseline, the cascade's fallback, and the editor that writes the edits; MiniMax never learns from Gemini's runs |
+| **Editor (both loops)** | MiniMax M3, same pinned host |
+| **Strong agent** | Gemini 3.8 Flash, Google AI Studio standard tier: the baseline and the cascade's fallback only |
 | **Checker** | Jev 1.13 (`typesafe/jev-1.13`, TypeSafe), as in v1 |
 | **Agent settings** | As Phase 0: temperature 0.7, reasoning effort medium, 50-step cap, the `api` toolset |
 | **Leak rule** | Jev reads only the run summary (no grading checks). The skill-loop editor may see missed checks, **on practice tasks only**. |

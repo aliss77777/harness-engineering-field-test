@@ -1,8 +1,10 @@
 # v2: the winning harness on real business tasks
 
+**Core question (revised 2026-10-07):** *can a self-learning harness make an open-weight agent learn from its own mistakes, with Jev learning when to trust it, so the system matches Gemini Flash on real back-office work, cheaper and faster?*
+
 **Main focus (Alexander, 2026-10-06):** an **open-weight agent (MiniMax M3, adopted 2026-10-07) plus Jev**, improved by a self-learning harness, against **Gemini 3.8 Flash** on back-office business tasks (Finance and HR). The hoped-for result, as in v1: *as good as Gemini Flash, but cheaper and faster.*
 
-**The learning story (2026-10-07):** two things learn. The **Agent skill loop** teaches MiniMax its playbook (Phase 0 showed it skips the policy emails and breaks the rules they set), and the **Jev rubric loop** teaches the checker what a correct MiniMax run looks like. A **cascade** then keeps MiniMax's runs Jev is confident in and hands the rest to Gemini. As both improve, fewer tasks need Gemini.
+**The learning story (2026-10-07):** two things learn, with **no help from Gemini**. In the **Agent skill loop**, MiniMax reads its own graded mistakes and rewrites its own playbook (Phase 0 showed it skips the policy emails and breaks the rules they set). In the **Jev rubric loop**, the checker learns what a correct MiniMax run looks like, so it knows when to trust MiniMax. MiniMax is the editor in both loops; Gemini is only the baseline and the fallback. A **cascade** then keeps MiniMax's runs Jev is confident in and hands the rest to Gemini. As both improve, fewer tasks need Gemini.
 
 **This is the one page for tracking v2:** status, plan and progress, key results, and open decisions. Each row links to the file with the detail. [`PLAN.md`](PLAN.md) is the full dated log; [`Task Brief 7`](briefs/Task%20Brief%207_V2_Business.md) is the design.
 
@@ -88,6 +90,8 @@ Once Phase 1 has results, the 3–5 numbered insights go here, copied verbatim f
 | Spend caps | ✅ Phase 0: $10 hard cap (2026-10-06). ✅ Lean budget ≈ $60 in total (2026-10-07). Phase 1 cap: set after Phase 0 (placeholder $60) |
 | Agent skill loop in Phase 1 | ✅ **Back in, lean version** (Alexander, 2026-10-07), supported by the failure diagnosis. MiniMax learns only from its own graded outcomes, **never from Gemini's runs** |
 | Router design | ✅ **Cascade**, not best-of-K (2026-10-07) |
+| Editor for both loops | ✅ **MiniMax M3** (2026-10-07): no Gemini judgement inside the loops |
+| Core question | ✅ Revised 2026-10-07 (top of this page) |
 | Phase 1 cap | Open: proposed $100 (Phase 1 projects to ≈ $80) |
 [line omitted from the public copy]
 
@@ -232,10 +236,10 @@ Harness code is in `src/jevloop/` (`bench.py` is the only module that touches Au
 | Role | What it is | What it does |
 |---|---|---|
 | **Cheap agent** | An open-weight LLM: **MiniMax M3** (adopted 2026-10-07 after Phase 0's comparison) | Does each task K times, calling the tools |
-| **Strong agent** | Gemini 3.8 Flash, v1's model (approved 2026-10-06; no frontier LLM) | New in v2. The baseline v2 must match ("as good as a strong agent, for less") and, under escalation option B, the fallback that re-does a task Jev isn't confident about. Under option A an LLM judge picks among the K runs instead, which is v1's exact escalation |
+| **Strong agent** | Gemini 3.8 Flash, v1's model (approved 2026-10-06; no frontier LLM). Baseline and fallback only; never an editor or teacher | New in v2. The baseline v2 must match ("as good as a strong agent, for less") and, under escalation option B, the fallback that re-does a task Jev isn't confident about. Under option A an LLM judge picks among the K runs instead, which is v1's exact escalation |
 | **Jev** | The decision model from v1 (`typesafe/jev-1.13` via OpenRouter) | Answers the rubric's yes/no questions about each run's summary, so the runs can be scored. It never calls tools or does the task. |
 | **Router** | Code | **A cascade** (2026-10-07): MiniMax runs the task once; if Jev is confident the run is right, it is kept; otherwise Gemini does the task |
-| **Editor** | An LLM; in v1, Gemini 3.8 Flash (few calls) | **Same role as in v1:** the learning step. After each practice round it reads the mistakes and proposes one edit, to the rubric (Jev rubric loop) or to the agent's skill file (Agent skill loop); the gate keeps or rejects it. Without it there is selection but no learning |
+| **Editor** | **MiniMax M3, editing its own playbook and Jev's rubric** (2026-10-07; in v1 the model edited its own instructions) | **Same role as in v1:** the learning step. After each practice round it reads the mistakes and proposes one edit, to the rubric (Jev rubric loop) or to the agent's skill file (Agent skill loop); the gate keeps or rejects it. Without it there is selection but no learning |
 
 Jev enters in Phase 1. Phase 0 only measures the agents.
 

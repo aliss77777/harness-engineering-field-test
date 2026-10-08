@@ -4,10 +4,11 @@ One name per concept. Use these exact names in docs, code comments and the UI; n
 
 | Name | Meaning |
 |---|---|
-| **Agent skill loop** | The LLM learning loop: the agent's skill/instruction file is edited, gated and kept or rejected (v1's "Loop A" / "LLM loop"). |
+| **Agent skill loop** | The agent's learning loop: MiniMax reads its own graded mistakes and edits its own skill file; each edit is gated and kept or rejected (v1's "Loop A" / "LLM loop"). |
 | **Jev rubric loop** | The rubric learning loop: weighted yes/no questions about a run, answered by Jev, edited and gated one change at a time (v1's "Loop B", weighted "B+"). |
 | **Router** | A cascade: the Cheap agent runs the task once; Jev keeps the run if confident, otherwise the Strong agent does the task. Threshold τ frozen on the gate set (escalates 30% of gate runs). |
 | **Strong agent** | Gemini 3.8 Flash (v1's model): the quality bar the Router must match for less. No frontier model. |
 | **Cheap agent** | The low-cost, open-weight agent that produces the K candidate runs per task: MiniMax M3 (adopted 2026-10-07). |
+| **Editor** | The learning step in both loops: reads the mistakes from a practice round and proposes one edit (to the skill file or the rubric). In v2 it is MiniMax M3; Gemini never edits. |
 | **Sealed set** | Tasks held out from all learning and tuning, scored once at the end. |
 | **Learned?** | The final version beats its own starting version on the Sealed set (preregistered test, p < 0.05). |
