@@ -26,6 +26,8 @@ Dated log of every decision, deviation and fix (same discipline as [`../v1/PLAN.
 - 2026-10-07: **Three-model comparison done (20 tasks, one run each; $6.43; Phase 0 spend $9.41).** Gemini 3.8 Flash: 45% pass, credit 0.66, $0.32/run, 266 s, 4 step-cap hits. **MiniMax M3: 20% pass, credit 0.58, $0.062/run (≈ 1/5), 129 s (≈ 2× faster), 1 failure; credit −0.08 vs Gemini [−0.29, +0.14] → comparable under the preregistered rule.** DeepSeek V4 Pro: 5% pass, credit 0.21, 8 step-cap hits → not comparable. MiniMax is close on credit but passes fewer tasks outright (4 vs 9): the gap the Jev rubric and Router are meant to close. Proposed: MiniMax M3 as the Cheap agent, pending Alexander.
 
 - 2026-10-07: **Decision (Alexander): MiniMax M3 is the Cheap agent.**
+- 2026-10-07: **Design discussion (Alexander).** With MiniMax at ≈ 1/5 of Gemini's price, best-of-4 plus escalation would cost more than Gemini alone (4 × $0.062 + 0.4 × $0.32 ≈ $0.38 vs $0.32), so the extra MiniMax runs were dropped and the Router becomes a **cascade**, as in v1's experiment 5: MiniMax runs once, Jev keeps confident runs, Gemini does the rest. Half cost needs about 70% of tasks kept, more than MiniMax's quality supports today, so Alexander asked to bring back the **Agent skill loop** (lean: ≈ 440 MiniMax runs, ≈ $27).
+- 2026-10-07: **Free failure diagnosis ($0).** Replayed and graded check by check. MiniMax's failures are systematic: it read every policy email in only 4 of 13 runs (Gemini 12 of 12) and broke 19 "must not" checks (Gemini 7); when it skipped policy emails its credit was 0.41 with 0 passes, vs 0.55 when it read them all. Teachable by the skill loop. Details in the README and `phase0/failure_diagnosis.json`.
 
 ## Open decisions (brief section 9)
 

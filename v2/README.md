@@ -15,7 +15,8 @@
 | **Done** | AutomationBench installed and checked; free harness built; domain analysis; focus and models decided |
 | **Nemotron screen** | ⏸️ Stopped at 19/200 runs (upstream rate limits); superseded: Nemotron is out (0/20 passes) |
 | **Latest** | 3-model comparison done: **MiniMax M3 is comparable to Gemini 3.8 Flash** (credit 0.58 vs 0.66, at ≈ 1/5 the cost and 2× the speed), but passes 4 of 20 vs Gemini's 9. DeepSeek V4 Pro and Nemotron 3 Super are out ([results](#phase-0-results-so-far)) |
-| **Waiting on Alexander** | Whether to run the last Phase 0 step: 3 more MiniMax runs per task on the same 20 tasks (≈ $4) to measure best-of-4 and how often runs differ, then the go/no-go |
+| **Latest** | Free diagnosis: **MiniMax's failures are systematic**: it skips the policy emails (read all of them in 4 of 13 runs vs Gemini's 12 of 12) and breaks ~3× more "must not" rules. Teachable, so it supports bringing back the Agent skill loop ([details](#phase-0-results-so-far)) |
+| **Waiting on Alexander** | Phase 1 design: cascade (MiniMax once → Jev keeps or escalates to Gemini) + Jev rubric loop + lean Agent skill loop; then the go/no-go |
 | **Spend so far** | $9.41 of the $25 Phase 0 cap |
 
 ## Plan and progress
@@ -79,7 +80,7 @@ Once Phase 1 has results, the 3–5 numbered insights go here, copied verbatim f
 | Strong agent, editor, escalation judge | ✅ Gemini 3.8 Flash, v1's model (2026-10-06). No frontier LLM |
 | Phase 1 domains | ✅ **Finance + HR** ([analysis](phase0/DOMAINS.md), 2026-10-06) |
 | Spend caps | ✅ Phase 0: $10 hard cap (2026-10-06). ✅ Lean budget ≈ $60 in total (2026-10-07). Phase 1 cap: set after Phase 0 (placeholder $60) |
-| Agent skill loop in Phase 1 | Optional, as in the brief; not in the lean plan (+≈ $40 if added) |
+| Agent skill loop in Phase 1 | Optional in the brief; **proposed back in, lean version** (≈ $27 at MiniMax's price; + ≈ $14–19 if Gemini runs are used as the teacher), supported by the failure diagnosis. Pending Alexander |
 [line omitted from the public copy]
 
 ## Phase 0 results so far
@@ -126,6 +127,27 @@ Once Phase 1 has results, the 3–5 numbered insights go here, copied verbatim f
 - **Caveats:** 20 tasks, one run each, so the interval is wide (−29 to +14 points). This is a directional read, not proof of equivalence. Gemini's own 4 step-cap hits show the 50-step limit binds on the longest tasks.
 
 **4. Nemotron 3 Super** (6 Finance tasks, above) is out: 0 passes in 20 runs.
+
+**5. Why MiniMax misses checks: a free diagnosis (2026-10-07, $0).** Each recorded run was replayed through a fresh copy of its world and graded check by check (`scripts/diagnose_failures.py`; all 20 MiniMax runs reproduced their scores exactly).
+
+| | Gemini 3.8 Flash | MiniMax M3 | DeepSeek V4 Pro |
+|---|---|---|---|
+| Missed checks (20 tasks) | 39 | 52 | 106 |
+| Of which: required action never taken | 51% | 35% | 62% |
+| Of which: action taken, required values missing | 31% | 29% | 16% |
+| Of which: **broke a "must not" rule** | 18% (7) | **37% (19)** | 22% (23) |
+| Read every policy email (tasks that have one) | **12 of 12** | **4 of 13** | 7 of 13 |
+| Steps per run | 33 | 20 | 38 |
+
+| MiniMax, tasks with policy emails | Runs | Mean credit | Broken "must not" rules | Passes |
+|---|---|---|---|---|
+| Read every policy email | 4 | 0.55 | 2 | 1 |
+| **Skipped at least one** | 9 | 0.41 | **11** | 0 |
+
+- **MiniMax's failures are systematic: it acts before reading the rules.** It often stops early (its worst runs are 8–13 steps), skips the policy emails, and then breaks the rules those emails set. Gemini reads every policy email and breaks far fewer rules.
+- **That is teachable.** It is a behaviour fix ("read every policy email and reference sheet before acting; handle every item"), exactly what the Agent skill loop edits. So the diagnosis supports bringing the skill loop back.
+- **DeepSeek's problem is different:** it reads but gets lost and runs out of steps, consistent with dropping it.
+- **Caveats:** 13 tasks with policy emails; "policy email" is detected by keywords in the subject and opening lines, so it is approximate; and correlation is not proof (skipped tasks might also be harder, though Gemini read and did well on the same tasks).
 
 <details><summary>Plan for the three-model comparison, as approved</summary>
 
