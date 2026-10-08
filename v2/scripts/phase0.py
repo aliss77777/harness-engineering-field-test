@@ -280,6 +280,76 @@ def cmd_reference(args) -> None:
     print(f"written: phase0/reference_results.json; Phase 0 spend ${tracker.total_usd:.2f}")
 
 
+# Upper-end cost per run for the cap guard (smoke/reference measurements; estimates for new models).
+COMPARE_COST_ESTIMATE = {"gemini": 0.36, "deepseek": 0.20, "minimax": 0.28, "nemotron": 0.034}
+
+
+def cmd_compare(args) -> None:
+    """One run per task per model on phase0/compare_task_ids.txt, breadth first; paired vs Gemini."""
+    from concurrent.futures import ThreadPoolExecutor
+
+    from jevloop.feasibility import comparability, summarize_model
+    from jevloop.runs import run_candidate
+
+    run_id = "compare"
+    ids = (ROOT / CONFIG["compare"]["task_ids_file"]).read_text().split()
+    models = CONFIG["compare"]["models"]
+    finished: dict = {}
+    for name in models:
+        done = {}
+        for earlier in ("smoke", "reference", "screen"):
+            done |= {t: r for t, r in load_finished(LOGS / f"{earlier}-{name}-runs.jsonl").items() if t in ids}
+        done |= load_finished(LOGS / f"{run_id}-{name}-runs.jsonl")
+        finished[name] = done
+    jobs = [(name, t) for t in ids for name in models if t not in finished[name]]  # breadth first
+    tracker = spend()
+    projection = sum(COMPARE_COST_ESTIMATE[name] for name, _ in jobs)
+    print(f"{len(ids)} tasks x {len(models)} models; {sum(len(v) for v in finished.values())} runs reloaded, "
+          f"{len(jobs)} to run; projected up to ${projection:.2f} (spent ${tracker.total_usd:.2f} of ${tracker.cap_usd:.2f})")
+    if tracker.total_usd + projection * args.safety > tracker.cap_usd:
+        sys.exit("STOP: projection would pass the cap. Ask Alexander.")
+    tasks = {t.task_id: t for t in bench.load_tasks(sorted({i.split(":")[0] for i in ids}))}
+    agents = {name: agent(name, tracker, run_id) for name in models}
+    loggers = {name: JsonlLogger(LOGS / f"{run_id}-{name}-runs.jsonl") for name in models}
+
+    def one(job):
+        name, task_id = job
+        run = run_candidate(tasks[task_id], agents[name], 0)
+        loggers[name].write({"event": "candidate_run", "run_id": run_id, **run.record()})
+        return name, run
+
+    with ThreadPoolExecutor(max_workers=args.workers) as pool:
+        for name, run in pool.map(one, jobs):
+            finished[name][run.task_id] = run
+            print(f"  {name:8} {run.task_id:13} credit {run.partial_credit:.2f} {'PASS' if run.passed else 'fail'} "
+                  f"steps {run.steps:2} stop {run.stop_reason:9} ${run.cost_usd:.3f}; spend ${tracker.total_usd:.2f}", flush=True)
+    tracker.flush()
+    summaries, versus = {}, {}
+    for name in models:
+        runs = [finished[name][t] for t in ids]
+        summaries[name] = summarize_model(runs).record() | {
+            "by_domain": {d: {"pass_rate": sum(r.passed for r in runs if r.domain == d) / sum(r.domain == d for r in runs),
+                              "mean_credit": sum(r.partial_credit for r in runs if r.domain == d) / sum(r.domain == d for r in runs)}
+                          for d in ("finance", "hr")}}
+        if name != "gemini":
+            versus[name] = comparability([finished["gemini"][t] for t in ids], runs).record()
+    report = {"tasks": ids, "summaries": summaries, "versus_gemini": versus, "phase0_spend_usd": tracker.total_usd,
+              "per_task": {t: {name: {"credit": finished[name][t].partial_credit, "passed": finished[name][t].passed,
+                                      "steps": finished[name][t].steps, "stop": finished[name][t].stop_reason,
+                                      "cost_usd": finished[name][t].cost_usd, "model_seconds": finished[name][t].model_seconds}
+                               for name in models} for t in ids}}
+    (ROOT / "phase0" / "compare_results.json").write_text(json.dumps(report, indent=2) + "\n")
+    for name, sm in summaries.items():
+        print(f"{name:8} pass {sm['pass_rate']:.0%} credit {sm['mean_credit']:.2f} failures {sm['failures']} "
+              f"${sm['cost_per_run_usd']:.3f}/run {sm['model_seconds_per_run']:.0f}s/run {sm['steps_per_run']:.1f} steps | "
+              f"finance pass {sm['by_domain']['finance']['pass_rate']:.0%} hr pass {sm['by_domain']['hr']['pass_rate']:.0%}")
+    for name, v in versus.items():
+        lo, hi = v["interval_95"]
+        print(f"{name} - gemini credit: {v['difference']:+.2f} [{lo:+.2f}, {hi:+.2f}] -> "
+              f"{'comparable' if v['comparable'] else 'NOT comparable'} (credit_ok={v['credit_ok']}, failures_ok={v['failures_ok']})")
+    print(f"written: phase0/compare_results.json; Phase 0 spend ${tracker.total_usd:.2f}")
+
+
 def load_finished_all(log_path: Path) -> dict:
     """All runs in a runs log, keyed by (task ID, candidate); last record wins."""
     from jevloop.runs import CandidateRun
@@ -309,6 +379,10 @@ def main() -> None:
     reference.add_argument("--workers", type=int, default=5)
     reference.add_argument("--safety", type=float, default=1.5)
     reference.set_defaults(fn=cmd_reference)
+    compare = sub.add_parser("compare")
+    compare.add_argument("--workers", type=int, default=9)
+    compare.add_argument("--safety", type=float, default=1.5)
+    compare.set_defaults(fn=cmd_compare)
     args = parser.parse_args()
     args.fn(args)
 

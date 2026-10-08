@@ -11,12 +11,12 @@
 | | |
 |---|---|
 | **Phase** | 0 — feasibility (gates everything else); remaining steps approved 2026-10-06 |
-| **Spend cap** | $10 for all of Phase 0, enforced in code |
+| **Spend cap** | $25 for all of Phase 0, enforced in code (raised from $10 on 2026-10-07 for the 3-model comparison) |
 | **Done** | AutomationBench installed and checked; free harness built; domain analysis; focus and models decided |
 | **Now** | ⏸️ Nemotron screen paused (19/200 runs; upstream rate limits). Gemini reference on the same 6 tasks done: **Gemini passes 3 of 6, Nemotron 0 of 20** |
-| **Next** | One run on each of the 50 Finance + HR tasks: Gemini 3.8 Flash vs DeepSeek V4 Pro vs MiniMax M3 ([plan](#phase-0-results-so-far)) |
-| **Waiting on Alexander** | The spend cap for that comparison (it likely exceeds what's left of the $10) |
-| **Spend so far** | $2.98 of the $10 Phase 0 cap |
+| **Next** | One run on each of 20 Finance + HR tasks: Gemini 3.8 Flash vs DeepSeek V4 Pro vs MiniMax M3 ([plan](#phase-0-results-so-far)), ≈ $8–18 |
+| **Waiting on Alexander** | Nothing until results |
+| **Spend so far** | $2.98 of the $25 Phase 0 cap |
 
 ## Plan and progress
 
@@ -83,7 +83,7 @@ Once Phase 1 has results, the 3–5 numbered insights go here, copied verbatim f
 
 ## Phase 0 results so far
 
-*Updated 2026-10-07. Phase 0 spend: $2.98 of the $10 cap.*
+*Updated 2026-10-07. Phase 0 spend: $2.98 (cap raised to $25 for the 3-model comparison).*
 
 **1. Our harness works on business tasks.** In the smoke test both models solved a simple task end to end, and the grader, tool calls, pinned hosts and cost logging all behaved. Two bugs were found and fixed on the way: empty provider replies were briefly scored as "agent finished" (now retried), and reruns couldn't replay cached calls because the simulator stamps clock times and random IDs (now resumed by whole runs).
 
@@ -105,7 +105,7 @@ Once Phase 1 has results, the 3–5 numbered insights go here, copied verbatim f
 - **Nemotron 3 Super is not a viable Cheap agent here:** it trails by about 42 points of credit, far past the 10-point margin, and even its best attempt per task stays well below Gemini. Cheaper doesn't help if it can't do the work.
 - **Why only 6 of the 50 tasks:** the screen was meant to run all 50 tasks × 4 attempts. It worked task by task (all 4 attempts on one task before the next), and upstream rate limits at Nemotron's host stopped it after the first 6 Finance tasks. The other 44 tasks (19 Finance, all 25 HR) were never reached, so this result is **directional, not conclusive**, and says nothing yet about HR. Lesson applied: future runs go **breadth first** (attempt 1 on every task before attempt 2).
 
-**3. Next (approved 2026-10-07): one run on each of the 50 tasks for three models**, Gemini 3.8 Flash vs two other open-weight candidates, **DeepSeek V4 Pro** and **MiniMax M3**. Same settings, breadth first, one pinned host each. The aim is a proper read of each model's pass rate across Finance and HR, and the Gemini gap. Gemini's 6 existing runs are reused.
+**3. Next (approved 2026-10-07): one run on each of 20 tasks for three models**: Gemini 3.8 Flash vs two open-weight candidates, **DeepSeek V4 Pro** (pinned to StreamLake, fp8) and **MiniMax M3** (pinned to MiniMax's own host, fp8). The 20 tasks are the first 10 Finance and first 10 HR of the committed list (`phase0/compare_task_ids.txt`), including the 6 Gemini has already run (reused). Same settings as before. Estimated ≈ $8–18; **Phase 0 cap raised to $25** (Alexander, 2026-10-07). Read: each model's pass rate and credit across Finance and HR, cost and time per run, and the paired gap to Gemini under the preregistered comparability rule (directional at 20 tasks).
 
 ## Budget
 
@@ -121,7 +121,7 @@ Once Phase 1 has results, the 3–5 numbered insights go here, copied verbatim f
 | **Total, lean plan** | | **≈ $60** | **$33–93** |
 | *Optional, not in the lean plan:* Agent skill loop | each candidate edit re-runs the agent (≈ 2,100 Nemotron runs) | +≈ $40 | +$21–84 |
 
-- **Phase 0 cap: $10, enforced in code.** The screen projects to ≈ $4.
+- **Phase 0 cap: $25, enforced in code** (raised from $10 on 2026-10-07 for the 3-model, 20-task comparison).
 - **Phase 1 cap: placeholder $60**, to be set after Phase 0 (the lean plan's Phase 1 is ≈ $56).
 - **The Agent skill loop is optional** (as in the brief): not in the lean plan; it runs only if Alexander adds it later (+≈ $40).
 - **Not adopted** (Alexander, 2026-10-07): Gemini's half-price flex tier (its timings would not fairly test "faster"); reusing Gemini's sealed runs as option-B escalations.

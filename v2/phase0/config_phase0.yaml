@@ -1,6 +1,6 @@
 # Phase 0 run settings. Fixed 2026-10-06, before any paid call (see phase0/FEASIBILITY.md).
 seed: 20261006
-spend_cap_usd: 10.0          # hard cap for all of Phase 0 (Alexander, 2026-10-06)
+spend_cap_usd: 25.0          # Phase 0 hard cap: $10 (2026-10-06), raised to $25 for the 3-model comparison (2026-10-07)
 max_steps: 50                # the bench's default step cap
 temperature: 0.7             # the value Phase 1 will use; above 0 so K runs can differ
 reasoning_effort: medium     # v1's setting, same for both models
@@ -18,6 +18,16 @@ models:
     provider: DeepInfra
     provider_tag: deepinfra/bf16          # full-precision weights ($0.085 / $0.40 per million)
     expected_model: nvidia/nemotron-3-super-120b-a12b
+  deepseek:                  # open-weight candidate (added 2026-10-07)
+    model: deepseek/deepseek-v4-pro
+    provider: StreamLake
+    provider_tag: streamlake/fp8          # fp8 ($0.209 / $0.418 per million; cached input $0.0174)
+    expected_model: deepseek/deepseek-v4-pro
+  minimax:                   # open-weight candidate (added 2026-10-07)
+    model: minimax/minimax-m3
+    provider: Minimax
+    provider_tag: minimax/fp8             # the model maker's own host ($0.30 / $1.20 per million)
+    expected_model: minimax/minimax-m3
 
 comparability:
   domains: [finance, hr]
@@ -26,3 +36,8 @@ comparability:
 
 smoke:
   simple_task: simple:3001   # plus the first Finance task of the comparability list
+
+# Added 2026-10-07 for the 3-model comparison (Alexander). expected_model set from a probe call.
+compare:
+  task_ids_file: phase0/compare_task_ids.txt
+  models: [deepseek, minimax, gemini]
