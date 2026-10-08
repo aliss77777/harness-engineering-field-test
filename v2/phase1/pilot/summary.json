@@ -1,0 +1,41 @@
+{
+  "rounds": 2,
+  "final_version": "v0",
+  "final_rules": [],
+  "kept_edits": [],
+  "pilot_spend_usd": 8.966299440000006,
+  "per_round": [
+    {
+      "round": 1,
+      "practice_credit": 0.5161471861471861,
+      "gate_current_credit": 0.5217796092796092,
+      "candidates": [
+        [
+          "After gathering source data and policy context, immediately switch to executing state-changing actions: send emails, update sheets, create invoices. Do not keep searching once you have enough to act. An empty action set always fails more checks than over-researching.",
+          0.06679105616605617,
+          0.16890169781190834,
+          false
+        ],
+        [
+          "When instructed to preserve source data verbatim, copy exact text/numbers into emails, sheets, and messages character-for-character. Do not paraphrase, round, change currency formatting, or alter numeric separators. Re-read the source value before writing it.",
+          0.03679639804639805,
+          0.18155429231704795,
+          false
+        ]
+      ]
+    },
+    {
+      "round": 2,
+      "practice_credit": 0.5513985088985088,
+      "gate_current_credit": 0.5217796092796092,
+      "candidates": [
+        [
+          "Before writing any item into an output, check it against every filter, scope, and category in the request. Exclude anything that does not clearly pass. Verifying inclusion rules is required to avoid leaking ineligible or out-of-scope data.",
+          -0.01866529304029304,
+          0.6568016634510145,
+          false
+        ]
+      ]
+    }
+  ]
+}

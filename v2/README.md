@@ -12,10 +12,10 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 
 | | |
 |---|---|
-| **Phase** | 0 (feasibility) done · **Phase 1 pilot running** (not a GO) |
-| **Now** | 2 rounds of the Agent skill loop on practice + gate tasks: is MiniMax learning? $20 hard cap; the sealed test set is untouched |
-| **Next** | Pilot read-out → go/no-go for Phase 1 and its cap (Alexander) |
-| **Spend** | Phase 0: $9.41 (cap $25) · Pilot: running (cap $20) |
+| **Phase** | 0 (feasibility) done · **Phase 1 pilot done** (not a GO) |
+| **Latest** | Pilot: **no fix kept in 2 rounds, but every candidate moved behaviour the right way** (fewer broken rules; the best fix +6.7 credit points). The gate is underpowered at 40 tasks × 1 run ([pilot report](phase1/pilot/README.md)) |
+| **Next** | Alexander: how to give the gate more power, then the go/no-go for Phase 1 and its cap |
+| **Spend** | Phase 0: $9.41 (cap $25) · Pilot: $8.97 (cap $20) |
 
 ## The experiment in one picture
 
@@ -47,7 +47,7 @@ Full design and preregistered verdicts: [`briefs/Phase 1 design.md`](briefs/Phas
 | Choose the cheap agent | ✅ | **MiniMax M3**. Nemotron 3 Super (rate-limited, 0/21 passes) and DeepSeek V4 Pro out ([JOURNEY](JOURNEY.md)) |
 | Diagnose the cheap agent's failures | ✅ | Systematic and teachable: skips policy emails, breaks "must not" rules |
 | Design Phase 1 | ✅ | Cascade + two learning loops ([design](briefs/Phase%201%20design.md)) |
-| Phase 1 pilot: 2 skill-loop rounds | ▶️ | Running |
+| Phase 1 pilot: 2 skill-loop rounds | ✅ | No fix kept; behaviour improved; gate underpowered ([report](phase1/pilot/README.md)) |
 | Go/no-go | ⬜ | Recommendation so far: GO ([criteria](phase0/FEASIBILITY.md#gono-go-criteria)) |
 
 **Phase 1: experiments** (200 tasks: practice 60, gate 60, sealed 80)
@@ -55,7 +55,7 @@ Full design and preregistered verdicts: [`briefs/Phase 1 design.md`](briefs/Phas
 | Experiment | Question | Status |
 |---|---|---|
 | V2-1 Controls | Where do we start? MiniMax vs Gemini on sealed | ⬜ |
-| V2-2a Agent skill loop | Does MiniMax learn from its own mistakes? | ▶️ pilot |
+| V2-2a Agent skill loop | Does MiniMax learn from its own mistakes? | pilot done ([report](phase1/pilot/README.md)) |
 | V2-2b Jev rubric loop | Does Jev learn when to trust MiniMax? | ⬜ |
 | **V2-3 Router (headline)** | As good as Gemini, at ≤ ½ the cost, faster? | ⬜ |
 
@@ -75,7 +75,7 @@ Full design and preregistered verdicts: [`briefs/Phase 1 design.md`](briefs/Phas
 
 **Why MiniMax falls short:** it acts before reading the rules. It read every policy email in 4 of 13 runs (Gemini: 12 of 12) and broke about 3× as many "must not" rules. That is what the skill loop has to fix. Details: [`phase0/FEASIBILITY.md`](phase0/FEASIBILITY.md) · Phase 0 story: [`JOURNEY.md`](JOURNEY.md)
 
-**Phase 1 pilot:** *running.* Settings: [`phase1/config_phase1.yaml`](phase1/config_phase1.yaml)
+**Phase 1 pilot (2 rounds, $8.97):** MiniMax's own fixes targeted its real failures, and all three cut broken "must not" checks (0.90 → 0.50–0.70 per run). The best fix raised credit by 6.7 points and pass rate from 15% to 25%, but **no fix passed the gate**: one run on each of 40 tasks can't confirm gains that size. Report: [`phase1/pilot/README.md`](phase1/pilot/README.md)
 
 ## Decisions
 
@@ -87,7 +87,7 @@ Full design and preregistered verdicts: [`briefs/Phase 1 design.md`](briefs/Phas
 | Checker | Jev 1.13 (v1's model) |
 | Router | A cascade (not best-of-K) |
 | Editor in both loops | MiniMax M3: no Gemini judgement inside the loops |
-| Agent skill loop | In, lean version (piloting now) |
+| Agent skill loop | In, lean version (piloted; gate power to be decided) |
 [line omitted from the public copy]
 
 How each decision was reached: [`JOURNEY.md`](JOURNEY.md); dates and detail: [`PLAN.md`](PLAN.md).
@@ -97,7 +97,7 @@ How each decision was reached: [`JOURNEY.md`](JOURNEY.md); dates and detail: [`P
 | | Estimate | Cap |
 |---|---|---|
 | Phase 0 | spent **$9.41** | $25 |
-| Phase 1 pilot (2 skill-loop rounds) | ≈ $19 | $20 |
+| Phase 1 pilot (2 skill-loop rounds) | spent **$8.97** | $20 |
 | Phase 1, full design | ≈ $90 (range ≈ $60–125) | to be set at go/no-go |
 
 Caps are enforced in code: a run stops before it would pass its cap. Per-item estimates: [`briefs/Phase 1 design.md`](briefs/Phase%201%20design.md#budget).

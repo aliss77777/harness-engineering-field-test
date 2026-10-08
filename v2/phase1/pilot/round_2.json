@@ -1,0 +1,178 @@
+{
+  "round": 2,
+  "version_before": "v0",
+  "rules_before": [],
+  "practice_tasks": [
+    "finance:4011",
+    "finance:4012",
+    "finance:4015",
+    "finance:4028",
+    "finance:4044",
+    "finance:4055",
+    "finance:4059",
+    "finance:4065",
+    "finance:4067",
+    "finance:4068",
+    "finance:4074",
+    "finance:4086",
+    "finance:4097",
+    "hr:5011",
+    "hr:5019",
+    "hr:5021",
+    "hr:5034",
+    "hr:5035",
+    "hr:5067",
+    "hr:5072",
+    "hr:5080",
+    "hr:5083",
+    "hr:5086",
+    "hr:5090",
+    "hr:5101",
+    "hr:5110",
+    "hr:5112",
+    "hr:5115",
+    "hr:5121",
+    "hr:5130"
+  ],
+  "practice": {
+    "tasks": 30,
+    "mean_credit": 0.5513985088985088,
+    "pass_rate": 0.23333333333333334,
+    "read_every_policy_email": "8/17",
+    "read_every_policy_email_rate": 0.47058823529411764,
+    "broken_must_not_per_run": 0.5333333333333333,
+    "steps_per_run": 15.033333333333333,
+    "cost_per_run_usd": 0.033210156
+  },
+  "mistakes_shown": [
+    "finance:4097",
+    "hr:5115",
+    "finance:4015",
+    "finance:4065",
+    "hr:5021",
+    "hr:5130",
+    "finance:4044",
+    "hr:5035"
+  ],
+  "edits_proposed": [
+    {
+      "op": "add",
+      "index": null,
+      "text": "Before writing any item into an output, check it against every filter, scope, and category in the request. Exclude anything that does not clearly pass. Verifying inclusion rules is required to avoid leaking ineligible or out-of-scope data.",
+      "why": "Tasks failed when ineligible references, vendors, fee types, or employee names were included in outputs because no check against stated rules was done before writing."
+    }
+  ],
+  "edits_refused": [
+    {
+      "edit": {
+        "op": "add",
+        "index": null,
+        "text": "Before including any item in an output (email, slack message, sheet row, report), verify it satisfies every criterion stated in the request. If a value, reference, person, fee type, or row appears in the source data but fails the stated filter, eligibility rule, scope, or category definition, exclude it. Cross-check each entry against the conditions before writing it out, and never include anything that does not clearly pass the criteria.",
+        "why": "Across several tasks the agent over-included items that should have been filtered out: an out-of-scope reference ID and vendor name in a reconciliation email, an out-of-scope fee category in a bank-fee analysis, and ineligible employee names in a payroll notification. The recurring error pattern is inclusion without validating against the stated rules, not under-research."
+      },
+      "reason": "rule must be 1-400 characters"
+    },
+    {
+      "edit": {
+        "op": "add",
+        "index": null,
+        "text": "When a primary API endpoint returns authentication (401/403) or not-found (404) errors, do not keep retrying the same call. Immediately pivot to alternative data sources: the internal knowledge base search, Google Drive, Notion pages, Gmail message bodies, and any spreadsheets or docs the search index surfaces. Treat the failing endpoint as one of several possible routes to the data and fall back to the others so the required deliverables (emails, slack posts, sheet updates) still get completed.",
+        "why": "Multiple HR and finance tasks scored 0.0 because the agent hit 401 errors on BambooHR or QuickBooks and then stopped without producing any state change. The fix is to keep going via other available sources instead of getting stuck on a single broken endpoint."
+      },
+      "reason": "rule must be 1-400 characters"
+    },
+    {
+      "edit": {
+        "op": "add",
+        "index": null,
+        "text": "When an API call returns 401/403/404, stop retrying it and switch to alternative sources: the knowledge-base search, Drive, Notion, Gmail message bodies, and surfaced spreadsheets. Treat the endpoint as one of several routes and still produce the required emails, slack posts, and sheet updates.",
+        "why": "Several tasks scored 0 because the agent stopped after auth errors on BambooHR or QuickBooks, never producing any state-changing deliverable."
+      },
+      "reason": "rule names a specific address, amount or ID; rules must be general"
+    }
+  ],
+  "gate_tasks": [
+    "finance:4001",
+    "finance:4002",
+    "finance:4003",
+    "finance:4005",
+    "finance:4007",
+    "finance:4008",
+    "finance:4016",
+    "finance:4021",
+    "finance:4025",
+    "finance:4032",
+    "finance:4036",
+    "finance:4039",
+    "finance:4042",
+    "finance:4061",
+    "finance:4063",
+    "finance:4072",
+    "finance:4076",
+    "finance:4080",
+    "finance:4084",
+    "finance:4088",
+    "finance:4090",
+    "hr:5010",
+    "hr:5023",
+    "hr:5028",
+    "hr:5029",
+    "hr:5031",
+    "hr:5039",
+    "hr:5044",
+    "hr:5048",
+    "hr:5049",
+    "hr:5062",
+    "hr:5063",
+    "hr:5066",
+    "hr:5069",
+    "hr:5078",
+    "hr:5079",
+    "hr:5088",
+    "hr:5103",
+    "hr:5104",
+    "hr:5122"
+  ],
+  "gate_current": {
+    "tasks": 40,
+    "mean_credit": 0.5217796092796092,
+    "pass_rate": 0.15,
+    "read_every_policy_email": "6/23",
+    "read_every_policy_email_rate": 0.2608695652173913,
+    "broken_must_not_per_run": 0.9,
+    "steps_per_run": 20.125,
+    "cost_per_run_usd": 0.054644514
+  },
+  "gate_candidates": [
+    {
+      "edit": {
+        "op": "add",
+        "index": null,
+        "text": "Before writing any item into an output, check it against every filter, scope, and category in the request. Exclude anything that does not clearly pass. Verifying inclusion rules is required to avoid leaking ineligible or out-of-scope data.",
+        "why": "Tasks failed when ineligible references, vendors, fee types, or employee names were included in outputs because no check against stated rules was done before writing."
+      },
+      "decision": {
+        "keep": false,
+        "mean_diff": -0.01866529304029304,
+        "p_value": 0.6568016634510145,
+        "better": 13,
+        "worse": 12,
+        "tasks": 40
+      },
+      "measures": {
+        "tasks": 40,
+        "mean_credit": 0.5031143162393162,
+        "pass_rate": 0.175,
+        "read_every_policy_email": "7/23",
+        "read_every_policy_email_rate": 0.30434782608695654,
+        "broken_must_not_per_run": 0.5,
+        "steps_per_run": 18.25,
+        "cost_per_run_usd": 0.0429035475
+      }
+    }
+  ],
+  "kept": null,
+  "version_after": "v0",
+  "rules_after": [],
+  "pilot_spend_usd": 8.966299440000006
+}

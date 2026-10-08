@@ -1,0 +1,201 @@
+{
+  "round": 1,
+  "version_before": "v0",
+  "rules_before": [],
+  "practice_tasks": [
+    "finance:4015",
+    "finance:4028",
+    "finance:4035",
+    "finance:4046",
+    "finance:4055",
+    "finance:4057",
+    "finance:4059",
+    "finance:4067",
+    "finance:4068",
+    "finance:4079",
+    "finance:4089",
+    "finance:4097",
+    "hr:5034",
+    "hr:5035",
+    "hr:5057",
+    "hr:5059",
+    "hr:5067",
+    "hr:5072",
+    "hr:5090",
+    "hr:5101",
+    "hr:5109",
+    "hr:5112",
+    "hr:5113",
+    "hr:5114",
+    "hr:5115",
+    "hr:5116",
+    "hr:5120",
+    "hr:5121",
+    "hr:5125",
+    "hr:5128"
+  ],
+  "practice": {
+    "tasks": 30,
+    "mean_credit": 0.5161471861471861,
+    "pass_rate": 0.13333333333333333,
+    "read_every_policy_email": "4/17",
+    "read_every_policy_email_rate": 0.23529411764705882,
+    "broken_must_not_per_run": 0.3,
+    "steps_per_run": 14.166666666666666,
+    "cost_per_run_usd": 0.028021498
+  },
+  "mistakes_shown": [
+    "hr:5101",
+    "hr:5035",
+    "finance:4028",
+    "hr:5034",
+    "hr:5112",
+    "hr:5114",
+    "finance:4068",
+    "finance:4079"
+  ],
+  "edits_proposed": [
+    {
+      "op": "add",
+      "index": null,
+      "text": "After gathering source data and policy context, immediately switch to executing state-changing actions: send emails, update sheets, create invoices. Do not keep searching once you have enough to act. An empty action set always fails more checks than over-researching.",
+      "why": "Tasks hr:5112, hr:5114, hr:5035, and finance:4079 all scored 0.0 because the agent searched extensively but made zero state changes. The pattern is getting stuck in research and never transitioning to execution."
+    },
+    {
+      "op": "add",
+      "index": null,
+      "text": "When instructed to preserve source data verbatim, copy exact text/numbers into emails, sheets, and messages character-for-character. Do not paraphrase, round, change currency formatting, or alter numeric separators. Re-read the source value before writing it.",
+      "why": "Tasks hr:5101 (missed $89,500), hr:5035 (missed verbatim names and link), finance:4028 (failed row writes), and finance:4068 (included forbidden '20,000') all show the agent mishandling source values instead of copying them exactly."
+    }
+  ],
+  "edits_refused": [
+    {
+      "edit": {
+        "op": "add",
+        "index": null,
+        "text": "After completing initial research (locating source data, policies, prior examples), shift to executing state-changing actions promptly: send required emails, update tracker/registry rows, and create invoices. Do not keep searching or reading more messages once you have enough information to act; an incomplete action set always fails more checks than over-researching. If initial searches return no results for a system, move on to alternative sources rather than retrying the same query.",
+        "why": "Tasks hr:5112, hr:5114, hr:5035, finance:4079 all scored 0.0 because the agent did extensive searching but made zero state changes (no emails, no sheet updates). The pattern is getting stuck in a research loop and never transitioning to execution."
+      },
+      "reason": "rule must be 1-400 characters"
+    },
+    {
+      "edit": {
+        "op": "add",
+        "index": null,
+        "text": "When the task instruction says to preserve values from source data verbatim, copy the exact text/numbers from the source document, email, or spreadsheet into your output (emails, sheets, messages) character-for-character. Do not paraphrase, reformat, round, add/remove currency symbols, abbreviate, or reformat numeric separators. Re-read the source value immediately before writing it to your output to avoid transcription drift.",
+        "why": "Tasks hr:5101 (missed $89,500), hr:5035 (missed verbatim names + recording link), finance:4028 (failed row writes), and finance:4068 (included forbidden '20,000') all show the agent paraphrasing or mishandling source data values. The task prompt explicitly warns about this in multiple cases."
+      },
+      "reason": "rule must be 1-400 characters"
+    }
+  ],
+  "gate_tasks": [
+    "finance:4001",
+    "finance:4002",
+    "finance:4003",
+    "finance:4005",
+    "finance:4007",
+    "finance:4008",
+    "finance:4016",
+    "finance:4021",
+    "finance:4025",
+    "finance:4032",
+    "finance:4036",
+    "finance:4039",
+    "finance:4042",
+    "finance:4061",
+    "finance:4063",
+    "finance:4072",
+    "finance:4076",
+    "finance:4080",
+    "finance:4084",
+    "finance:4088",
+    "finance:4090",
+    "hr:5010",
+    "hr:5023",
+    "hr:5028",
+    "hr:5029",
+    "hr:5031",
+    "hr:5039",
+    "hr:5044",
+    "hr:5048",
+    "hr:5049",
+    "hr:5062",
+    "hr:5063",
+    "hr:5066",
+    "hr:5069",
+    "hr:5078",
+    "hr:5079",
+    "hr:5088",
+    "hr:5103",
+    "hr:5104",
+    "hr:5122"
+  ],
+  "gate_current": {
+    "tasks": 40,
+    "mean_credit": 0.5217796092796092,
+    "pass_rate": 0.15,
+    "read_every_policy_email": "6/23",
+    "read_every_policy_email_rate": 0.2608695652173913,
+    "broken_must_not_per_run": 0.9,
+    "steps_per_run": 20.125,
+    "cost_per_run_usd": 0.054644514
+  },
+  "gate_candidates": [
+    {
+      "edit": {
+        "op": "add",
+        "index": null,
+        "text": "After gathering source data and policy context, immediately switch to executing state-changing actions: send emails, update sheets, create invoices. Do not keep searching once you have enough to act. An empty action set always fails more checks than over-researching.",
+        "why": "Tasks hr:5112, hr:5114, hr:5035, and finance:4079 all scored 0.0 because the agent searched extensively but made zero state changes. The pattern is getting stuck in research and never transitioning to execution."
+      },
+      "decision": {
+        "keep": false,
+        "mean_diff": 0.06679105616605617,
+        "p_value": 0.16890169781190834,
+        "better": 13,
+        "worse": 10,
+        "tasks": 40
+      },
+      "measures": {
+        "tasks": 40,
+        "mean_credit": 0.5885706654456654,
+        "pass_rate": 0.25,
+        "read_every_policy_email": "9/23",
+        "read_every_policy_email_rate": 0.391304347826087,
+        "broken_must_not_per_run": 0.6,
+        "steps_per_run": 19.525,
+        "cost_per_run_usd": 0.043656771
+      }
+    },
+    {
+      "edit": {
+        "op": "add",
+        "index": null,
+        "text": "When instructed to preserve source data verbatim, copy exact text/numbers into emails, sheets, and messages character-for-character. Do not paraphrase, round, change currency formatting, or alter numeric separators. Re-read the source value before writing it.",
+        "why": "Tasks hr:5101 (missed $89,500), hr:5035 (missed verbatim names and link), finance:4028 (failed row writes), and finance:4068 (included forbidden '20,000') all show the agent mishandling source values instead of copying them exactly."
+      },
+      "decision": {
+        "keep": false,
+        "mean_diff": 0.03679639804639805,
+        "p_value": 0.18155429231704795,
+        "better": 13,
+        "worse": 9,
+        "tasks": 40
+      },
+      "measures": {
+        "tasks": 40,
+        "mean_credit": 0.5585760073260073,
+        "pass_rate": 0.125,
+        "read_every_policy_email": "9/23",
+        "read_every_policy_email_rate": 0.391304347826087,
+        "broken_must_not_per_run": 0.7,
+        "steps_per_run": 19.15,
+        "cost_per_run_usd": 0.0456101775
+      }
+    }
+  ],
+  "kept": null,
+  "version_after": "v0",
+  "rules_after": [],
+  "pilot_spend_usd": 6.6017646600000015
+}
