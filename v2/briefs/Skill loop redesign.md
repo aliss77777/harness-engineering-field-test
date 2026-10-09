@@ -59,11 +59,11 @@ Built in `src/jevloop/skill_loop.py` with tests: every scored check recorded wit
 
 **What this means:** the redesign helps, but only if the editor names the right target, and at temperature 0.7 it is still underpowered for a gain this size. Temperature 0 should raise these numbers (they include run-to-run noise it removes); the temperature-0 re-checks measure by how much. If power is still low, the next levers are more gate tasks per round or two repeats per version.
 
-## Temperature-0 re-checks (2026-10-08, partial: stopped by an OpenRouter 402, out of credit)
+## Temperature-0 re-checks (2026-10-08, complete; $7.84)
 
 **Temperature 0 does not make MiniMax repeatable.** The same task run twice at temperature 0 gave **identical tool calls in 0 of 10 tasks**, identical scores in 3, and an average score difference of **0.26** (hr:5005 scored 0.83, then 0.00). The likely causes are the provider's batched inference and the model's own reasoning tokens. **Change 1's assumption fails:** noise has to be handled by repeats (several runs per task per version), not by temperature. This also explains more of the pilot: one run per task carries roughly ±0.26 of luck.
 
-Provisional comparison at temperature 0 (18 of 20 tasks; 2 Gemini runs missing): MiniMax 0.62 vs Gemini 0.73 credit (−0.11, just past the 10-point margin), 4 vs 6 passes, no failed MiniMax runs. Not final. Data: `phase0/temperature0_rechecks_partial.json`.
+**Comparison at temperature 0** (all 20 tasks; the run paused once on an OpenRouter 402 and resumed after a top-up): MiniMax 0.62 vs Gemini 0.70 credit, a difference of -0.07 (95% interval -0.21 to +0.06). **Still comparable** under the preregistered rule. Passes 4 vs 6; failed runs 0 vs 3; cost per run $0.057 vs $0.299. Data: `phase0/temperature0_rechecks.json`.
 
 ## What it costs
 

@@ -1,0 +1,108 @@
+{
+  "temperature": 0.0,
+  "repeatability": {
+    "tasks": 10,
+    "identical_credit": 3,
+    "identical_tool_calls": 0,
+    "mean_abs_credit_diff": 0.2592063492063492,
+    "per_task": {
+      "finance:4001": [
+        0.0,
+        0.4
+      ],
+      "finance:4009": [
+        0.2857142857142857,
+        0.3333333333333333
+      ],
+      "finance:4010": [
+        0.8333333333333334,
+        0.8333333333333334
+      ],
+      "finance:4011": [
+        0.6666666666666666,
+        0.6
+      ],
+      "finance:4012": [
+        0.0,
+        0.0
+      ],
+      "hr:5005": [
+        0.8333333333333334,
+        0.0
+      ],
+      "hr:5021": [
+        0.2,
+        0.4444444444444444
+      ],
+      "hr:5023": [
+        0.8,
+        0.0
+      ],
+      "hr:5028": [
+        0.8333333333333334,
+        0.8333333333333334
+      ],
+      "hr:5029": [
+        1.0,
+        0.8
+      ]
+    }
+  },
+  "comparison": {
+    "comparable": true,
+    "credit_ok": true,
+    "failures_ok": true,
+    "difference": -0.07196789321789322,
+    "interval_95": [
+      -0.210995670995671,
+      0.056940836940836945
+    ],
+    "reference": {
+      "agent": "gemini-t0",
+      "runs": 20,
+      "mean_credit": 0.6955339105339104,
+      "pass_rate": 0.3,
+      "failures": 3,
+      "failure_rate": 0.15,
+      "cost_per_run_usd": 0.29871685875,
+      "model_seconds_per_run": 226.31119999999996,
+      "steps_per_run": 31.55
+    },
+    "candidate": {
+      "agent": "minimax-t0",
+      "runs": 20,
+      "mean_credit": 0.6235660173160174,
+      "pass_rate": 0.2,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "cost_per_run_usd": 0.05675863799999999,
+      "model_seconds_per_run": 153.85845,
+      "steps_per_run": 20.55
+    }
+  },
+  "summaries": {
+    "minimax": {
+      "agent": "minimax-t0",
+      "runs": 20,
+      "mean_credit": 0.6235660173160174,
+      "pass_rate": 0.2,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "cost_per_run_usd": 0.05675863799999999,
+      "model_seconds_per_run": 153.85845,
+      "steps_per_run": 20.55
+    },
+    "gemini": {
+      "agent": "gemini-t0",
+      "runs": 20,
+      "mean_credit": 0.6955339105339104,
+      "pass_rate": 0.3,
+      "failures": 3,
+      "failure_rate": 0.15,
+      "cost_per_run_usd": 0.29871685875,
+      "model_seconds_per_run": 226.31119999999996,
+      "steps_per_run": 31.55
+    }
+  },
+  "spend_usd": 7.835640329999996
+}
