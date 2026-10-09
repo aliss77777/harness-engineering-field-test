@@ -30,6 +30,8 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 
 **What the "read the policies first" gate is:** a feature of our harness (`src/jevloop/monitor.py`), not of MiniMax or the benchmark. Before MiniMax changes any record, the gate checks whether it has opened every policy email; if not, the action is held and MiniMax is told which emails to read. After 3 holds it lets actions through and logs it. Every hold is shown to the skill loop as a near-miss, so MiniMax can learn the habit. The headline result is measured with the gate off.
 
+**Observation (Alexander, 2026-10-08; not yet a decision):** the "read the policies first" gate feels a little suspect for the comparison. If Gemini isn't given it, giving it to MiniMax risks cooking the books in favour of the cheaper model. *Context:* Gemini already reads the policies first on its own (in the replay the gate would never have fired on it), and the headline is measured with the gate off. The concern still applies to any result that pits MiniMax with the gate against Gemini without it. To revisit after V2-5a.
+
 **Not yet shown:** that anything makes MiniMax *better*. The gate's live test (V2-5a) is running; the skill loop hasn't run with its new test.
 
 ## Roadmap (as of 2026-10-08, evening)

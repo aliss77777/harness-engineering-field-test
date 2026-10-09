@@ -40,6 +40,8 @@ Dated log of every decision, deviation and fix (same discipline as [`../v1/PLAN.
 
 - 2026-10-08 (night): **Temperature-0 re-checks completed** after Alexander topped up OpenRouter: MiniMax vs Gemini at temperature 0 on 20 tasks, -0.07 credit (95% interval -0.21 to +0.06): still comparable. Re-checks total $7.84; spend to date $26.22.
 
+- 2026-10-08: **Observation (Alexander): the gate may cook the books.** Giving MiniMax a "read the policies first" gate that Gemini doesn't get could tilt the comparison toward the cheaper model. Context: Gemini already reads policies first unprompted, and the headline is gate-off; the concern applies to any gate-on MiniMax vs gate-off Gemini comparison. Logged as an observation; revisit after V2-5a.
+
 ## Open decisions (brief section 9)
 
 - [x] Repo: folder in this repo (2026-10-05).
