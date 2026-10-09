@@ -93,12 +93,49 @@ def state_diff(before: dict[str, Any], after: dict[str, Any]) -> list[str]:
     return lines
 
 
+TRIGGER_BUDGET = 1200  # characters for the request
+CHANGES_BUDGET = 3500  # characters for STATE CHANGES: the audit log Jev needs most, kept first
+
+
+def _is_write(call) -> bool:
+    return call.name == "api_fetch" and str(call.args.get("method", "GET")).upper() != "GET"
+
+
+def _fit(lines: list[str], budget: int) -> tuple[list[str], int]:
+    """Lines in order while they fit the budget; returns (kept, number dropped)."""
+    kept, used = [], 0
+    for line in lines:
+        if used + len(line) + 1 > budget:
+            break
+        kept.append(line)
+        used += len(line) + 1
+    return kept, len(lines) - len(kept)
+
+
 def summarize(task, calls, before: dict[str, Any], after: dict[str, Any]) -> str:
-    """`task` is a bench.PublicTask; `calls` the ToolBox's recorded calls."""
-    actions = [f"{i}. {_describe_call(c)}" for i, c in enumerate(calls, 1)] or ["(none)"]
+    """`task` is a bench.PublicTask; `calls` the ToolBox's recorded calls.
+
+    Each section has its own budget (A1, 2026-10-08): STATE CHANGES is kept first; record-changing
+    calls are always listed; read calls fill what is left. Anything dropped is marked."""
+    trigger = task.trigger.strip()
+    if len(trigger) > TRIGGER_BUDGET:
+        trigger = trigger[: TRIGGER_BUDGET - 14] + " [request cut]"
     changes = state_diff(before, after) or ["(no changes)"]
-    text = "\n".join(
-        ["TRIGGER", task.trigger.strip(), "", f"ACTIONS ({len(calls)} tool calls)", *actions,
-         "", "STATE CHANGES", *changes]
-    )
+    changes, dropped_changes = _fit(changes, CHANGES_BUDGET)
+    if dropped_changes:
+        changes.append(f"[{dropped_changes} more state changes omitted]")
+    numbered = [(i, c, f"{i}. {_describe_call(c)}") for i, c in enumerate(calls, 1)]
+    header = ["TRIGGER", trigger, "", f"ACTIONS ({len(calls)} tool calls)"]
+    footer = ["", "STATE CHANGES", *changes]
+    budget = MAX_CHARS - len("\n".join(header + footer)) - 60
+    writes = [line for _, c, line in numbered if _is_write(c)]
+    write_chars = sum(len(w) + 1 for w in writes)
+    reads_room = max(0, budget - write_chars)
+    keep_reads, _ = _fit([line for _, c, line in numbered if not _is_write(c)], reads_room)
+    kept = set(keep_reads) | set(writes)
+    actions = [line for _, _, line in numbered if line in kept] or ["(none)"]
+    omitted = len(numbered) - len([1 for _, _, line in numbered if line in kept])
+    if omitted:
+        actions.append(f"[{omitted} read calls omitted]")
+    text = "\n".join(header + actions + footer)
     return text if len(text) <= MAX_CHARS else text[: MAX_CHARS - 12] + "\n[truncated]"

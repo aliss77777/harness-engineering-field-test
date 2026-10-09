@@ -137,3 +137,16 @@ def test_skill_goes_into_the_system_prompt(tmp_path, task_3001):
     server = FakeServer(["done"])
     run_candidates([task_3001], LLMAgent("m", _client(tmp_path, server), skill=skill_text(("Rule one.",))), k=1)
     assert server.requests[0]["messages"][0]["content"].endswith("1. Rule one.")
+
+
+def test_read_policy_before_first_write_uses_call_order():
+    from jevloop.diagnostics import read_policy_before_first_write
+    task = next(t for t in bench.load_tasks(["finance"]) if t.task_id == "finance:4001")
+    from jevloop.diagnostics import policy_messages
+    policy = policy_messages(task)
+    assert policy, "finance:4001 has a collections/AP policy email"
+    read = [{"name": "api_fetch", "args": {"method": "GET", "url": f"https://gmail.googleapis.com/gmail/v1/users/me/messages/{m}"}} for m in policy]
+    write = {"name": "api_fetch", "args": {"method": "POST", "url": "https://sheets.example/append"}}
+    assert read_policy_before_first_write(task, read + [write]) is True
+    assert read_policy_before_first_write(task, [write] + read) is False
+    assert read_policy_before_first_write(task, read[:-1] + [write]) is (len(policy) == 0)

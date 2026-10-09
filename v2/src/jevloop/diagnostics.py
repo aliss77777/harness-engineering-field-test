@@ -24,11 +24,34 @@ def read_ids(calls: list[dict[str, Any]]) -> set[str]:
     return set(re.findall(r"[\w-]+", text))
 
 
+def is_write(call: dict[str, Any]) -> bool:
+    """A record-changing call: api_fetch with POST, PUT, PATCH or DELETE."""
+    return call["name"] == "api_fetch" and str(call["args"].get("method", "GET")).upper() in {"POST", "PUT", "PATCH", "DELETE"}
+
+
+def first_write_index(calls: list[dict[str, Any]]) -> int | None:
+    return next((i for i, c in enumerate(calls) if is_write(c)), None)
+
+
+def read_policy_before_first_write(task: bench.Task, calls: list[dict[str, Any]]) -> bool | None:
+    """Were all policy emails fetched before the first record-changing call? None if the task has none.
+    A run that never writes counts as True only if it read them all."""
+    policy = policy_messages(task)
+    if not policy:
+        return None
+    first = first_write_index(calls)
+    before = calls if first is None else calls[:first]
+    seen = read_ids(before)
+    return all(p in seen for p in policy)
+
+
 def behaviour(task: bench.Task, calls: list[dict[str, Any]], missed: list[dict[str, Any]]) -> dict[str, Any]:
     policy = policy_messages(task)
     seen = read_ids(calls)
     return {
         "policy_emails": len(policy),
         "read_all_policy_emails": all(p in seen for p in policy) if policy else None,
+        "read_policy_before_first_write": read_policy_before_first_write(task, calls),
+        "writes": sum(1 for c in calls if is_write(c)),
         "broken_must_not": sum(1 for m in missed if m.get("negative")),
     }

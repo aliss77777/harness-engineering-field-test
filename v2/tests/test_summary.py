@@ -95,3 +95,20 @@ def test_long_values_and_summaries_are_capped():
     text = summary.summarize(task, calls, {}, {})
     assert len(text) <= summary.MAX_CHARS
     assert "q" * (summary.MAX_VALUE_CHARS + 1) not in text
+
+
+def test_long_runs_keep_every_state_change_and_every_write():
+    """A1: a 50-call run with long arguments keeps STATE CHANGES and all record-changing calls."""
+    task = bench.PublicTask("x:1", "finance", ({"role": "user", "content": "Reconcile the ledger."},))
+    reads = [ToolCall("api_fetch", {"method": "GET", "url": f"https://api.example/items/{i}", "params": "p" * 400}, "{}")
+             for i in range(45)]
+    writes = [ToolCall("api_fetch", {"method": "PATCH", "url": f"https://api.example/rows/{i}", "body": '{"Status": "Done"}'}, "{}")
+              for i in range(5)]
+    before = {"sheets": {"rows": [{"id": i, "Status": "Open"} for i in range(30)]}}
+    after = {"sheets": {"rows": [{"id": i, "Status": "Done"} for i in range(30)]}}
+    text = summary.summarize(task, reads + writes, before, after)
+    assert len(text) <= summary.MAX_CHARS
+    assert "STATE CHANGES" in text
+    assert all(f"~ sheets.rows[{i}] Status: Open -> Done" in text for i in range(30))
+    assert all(f"PATCH https://api.example/rows/{i}" in text for i in range(5))
+    assert "read calls omitted]" in text and "[truncated]" not in text
