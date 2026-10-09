@@ -1,0 +1,24 @@
+{
+  "a4_target_selection": {
+    "sims": 2000,
+    "tasks": 60,
+    "nominal_level": 0.1,
+    "false_keep_rate": {
+      "by_past_failure": 0.7735,
+      "by_task_property": 0.101
+    }
+  },
+  "a5_power": {
+    "available": true,
+    "fix": "After gathering source data and policy context, immediately switch to executing state-changing actions: send emails, update sheets, create invoices. Do not keep searching once you have enough to act. An empty action set always fails more checks than over-researching.",
+    "tasks_reproduced_on_replay": "40 of 40",
+    "observed_credit_gain": 0.06679105616605617,
+    "keep_rate_by_target_kind": {
+      "action_missed": 0.033,
+      "rule_broken": 0.0,
+      "wrong_content": 0.4575
+    },
+    "pilot_rule_keep_rate": 0.384,
+    "note": "Bootstrap over tasks assuming fix A's observed effect is its true effect, at temperature 0.7 (noisier than the planned temperature 0), on 40 tasks (the redesign uses 60): conservative."
+  }
+}

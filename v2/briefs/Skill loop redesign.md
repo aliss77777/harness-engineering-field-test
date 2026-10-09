@@ -1,6 +1,6 @@
 # Skill loop redesign: multi-level telemetry for long, noisy workflows
 
-**Written:** 2026-10-08 · **Status:** draft for Alexander's review; nothing built or run · **Replaces, if approved:** the gate and editor inputs of the Agent skill loop in [`Phase 1 design.md`](Phase%201%20design.md). The rest of that design stands.
+**Written:** 2026-10-08 · **Status:** draft for Alexander's review; pieces built and measured for free on 2026-10-08 (see "Built and measured"); not yet run · **Replaces, if approved:** the gate and editor inputs of the Agent skill loop in [`Phase 1 design.md`](Phase%201%20design.md). The rest of that design stands.
 
 ## Why
 
@@ -43,6 +43,21 @@ This is a **credit assignment problem**, as in reinforcement learning: the score
 5. **Fix the length filter.** Allow rules up to 600 characters and ask the editor to shorten longer ones, instead of refusing them (4 of 5 refusals in the pilot were for length alone).
 
 Unchanged from the Phase 1 design: MiniMax is its own editor; it learns only from its own graded practice runs; one edit per candidate; rejected edits are remembered; the sealed set is used once.
+
+## Built and measured (2026-10-08, free)
+
+Built in `src/jevloop/skill_loop.py` with tests: every scored check recorded with its kind; the editor's failure profile, with each fix required to name its target kind; the three-part keep rule scored at the check level, with tasks as clusters; rules up to 600 characters, longer ones sent back to be shortened. Not yet wired into a run script (that is the v2 Phase 1 run).
+
+**A4: choosing the test tasks (decided: by task property).** In a simulation of a fix that does nothing (`scripts/gate_power.py`, 2,000 runs of 60 tasks), choosing target tasks by **past failure** "kept" the useless fix **77%** of the time against a nominal 10% (regression to the mean). Choosing them by a **task property** (the task defines a check of that kind) gave **10.1%**. A twist: in Finance and HR nearly every task defines every kind of check (190 of 200 have a "must not" check; 192 of 200 a content check), so the property selects almost the whole gate. **The targeting therefore happens at the check level:** the rule scores only the targeted kind's checks, on every gate task that has them. The regression set is usually empty, so guard (2) falls back to the whole gate.
+
+**A5: power** (from the pilot's real gate runs, version 0 vs fix A, replayed so every check's result is known; all 40 tasks reproduced exactly). Fix A's +6.7 points showed up mainly in **wrong-content** checks. How often the rule would keep it, by resampling tasks (temperature 0.7, as in the pilot):
+
+| Gate tasks | Redesigned rule, fix targeted at the right kind | Redesigned rule, wrong kind named | Pilot's rule |
+|---|---|---|---|
+| 40 | 46–47% | 0–3% | 38–39% |
+| 60 | 56% | — | 48% |
+
+**What this means:** the redesign helps, but only if the editor names the right target, and at temperature 0.7 it is still underpowered for a gain this size. Temperature 0 should raise these numbers (they include run-to-run noise it removes); the temperature-0 re-checks measure by how much. If power is still low, the next levers are more gate tasks per round or two repeats per version.
 
 ## What it costs
 

@@ -150,3 +150,47 @@ def test_read_policy_before_first_write_uses_call_order():
     assert read_policy_before_first_write(task, read + [write]) is True
     assert read_policy_before_first_write(task, [write] + read) is False
     assert read_policy_before_first_write(task, read[:-1] + [write]) is (len(policy) == 0)
+
+
+def _checks_run(task, credit, checks):
+    return CandidateRun(task, "finance", "m", 0, credit, credit == 1.0, len(checks), 1, 0.01, 1.0, "done", "",
+                        checks=[{"type": "x", "kind": k, "passed": ok} for k, ok in checks])
+
+
+def test_grade_records_every_scored_check_with_its_kind(task_3001):
+    (run,) = run_candidates([task_3001], DoNothingAgent(), k=1)
+    assert run.checks == [{"type": "salesforce_field_equals", "kind": "wrong_content", "passed": False}]
+
+
+def test_keep_rule_targets_checks_and_guards_credit():
+    from jevloop.skill_loop import keep_rule
+    tasks = [f"t{i}" for i in range(30)]
+    cur = {t: _checks_run(t, 0.5, [("rule_broken", False), ("action_missed", True)]) for t in tasks}
+    fixed = {t: _checks_run(t, 0.6 if i < 15 else 0.5, [("rule_broken", i < 15), ("action_missed", True)]) for i, t in enumerate(tasks)}
+    d = keep_rule(cur, fixed, kind="rule_broken", regression=[])
+    assert d.keep and d.targeted_tasks == 30 and d.targeted_diff == 0.5
+    costly = {t: _checks_run(t, 0.4, [("rule_broken", i < 15), ("action_missed", False)]) for i, t in enumerate(tasks)}
+    d2 = keep_rule(cur, costly, kind="rule_broken", regression=[])
+    assert d2.targeted_ok and not d2.net_ok and not d2.keep  # targeted checks improved but it cost credit
+    assert not keep_rule(cur, dict(cur), kind="rule_broken", regression=[]).keep
+
+
+def test_failure_profile_counts_kinds_and_steps():
+    from jevloop.skill_loop import failure_profile
+    runs = [_checks_run("a", 0.5, [("rule_broken", False), ("wrong_content", False)]), _checks_run("b", 1.0, [("rule_broken", True)])]
+    prof = failure_profile(runs, [{"read_policy_before_first_write": False}, {"read_policy_before_first_write": None}])
+    assert prof["missed_checks_by_kind"] == {"rule_broken": 1, "action_missed": 0, "wrong_content": 1}
+    assert prof["policy_emails_read_before_first_write"] == "0 of 1 runs with policy emails"
+
+
+def test_redesigned_editor_requires_a_target_and_sees_the_profile(tmp_path):
+    first = json.dumps({"edits": [{"op": "add", "index": None, "text": "Read every policy email before acting.", "why": ""},
+                                  {"op": "add", "index": None, "text": "Handle every item before you stop.", "why": "", "target": "action_missed"}]})
+    second = json.dumps({"edits": [{"op": "add", "index": None, "text": "Check exclusions before each email.", "why": "", "target": "rule_broken"}]})
+    server = FakeServer([first, second])
+    edits, refused = SkillEditor(_client(tmp_path, server)).propose((), [], [], n=2, round_number=1,
+                                                                   profile={"missed_checks_by_kind": {"rule_broken": 19}})
+    assert [e.target for e in edits] == ["action_missed", "rule_broken"]
+    assert "check kind" in refused[0]["reason"]
+    assert "FAILURE PROFILE" in server.requests[0]["messages"][1]["content"]
+    assert '"target"' in server.requests[0]["messages"][0]["content"]

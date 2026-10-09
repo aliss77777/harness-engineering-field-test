@@ -62,6 +62,9 @@ class Grade:
     # Scored checks the run did not meet: {"type", "params", "negative"}. For the Agent skill loop's
     # editor on practice tasks only; never part of the run summary Jev reads.
     missed: tuple[dict[str, Any], ...] = ()
+    # Every scored check: {"type", "kind", "passed"}. Kinds: rule_broken (a "must not" check),
+    # wrong_content (a check on values written), action_missed (any other required action).
+    checks: tuple[dict[str, Any], ...] = ()
 
 
 def domains() -> list[str]:
@@ -138,6 +141,27 @@ def call_tool(world: WorldState, name: str, args: dict[str, Any]) -> str:
     return result if isinstance(result, str) else json.dumps(result)
 
 
+CONTENT_PARAMS = frozenset({"body_contains", "body_not_contains", "cell_contains", "subject_contains", "text_contains",
+                            "text_not_contains", "value", "field_value", "contains"})
+
+
+def check_kind(check: dict[str, Any]) -> str:
+    """rule_broken | wrong_content | action_missed, from the check's definition (not its outcome)."""
+    if AssertionRegistry.is_negative(check["type"]):
+        return "rule_broken"
+    params = check.get("params", check)
+    return "wrong_content" if CONTENT_PARAMS & set(params) else "action_missed"
+
+
+def task_check_kinds(task: Task) -> dict[str, int]:
+    """How many checks of each kind a task defines: a task property, used to pick test tasks (A4)."""
+    out: dict[str, int] = {}
+    for a in task.assertions:
+        k = check_kind(a)
+        out[k] = out.get(k, 0) + 1
+    return out
+
+
 def grade(task: Task, world: WorldState) -> Grade:
     """AutomationBench's own grader: share of checks met, excluding ones true from the start."""
     state: dict[str, Any] = {
@@ -152,4 +176,6 @@ def grade(task: Task, world: WorldState) -> Grade:
         {"type": r["type"], "params": r.get("params", {}), "negative": AssertionRegistry.is_negative(r["type"])}
         for r in results if not r.get("excluded") and not r["passed"]
     )
-    return Grade(partial_credit=credit, passed=credit == 1.0, scored_checks=scored, missed=missed)
+    checks = tuple({"type": r["type"], "kind": check_kind({"type": r["type"], **r.get("params", {})}), "passed": bool(r["passed"])}
+                   for r in results if not r.get("excluded"))
+    return Grade(partial_credit=credit, passed=credit == 1.0, scored_checks=scored, missed=missed, checks=checks)

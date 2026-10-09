@@ -89,6 +89,7 @@ class CandidateRun:
     output_tokens: int = 0
     calls: list[dict[str, Any]] = field(default_factory=list, repr=False)
     missed_checks: list[dict[str, Any]] = field(default_factory=list, repr=False)  # editor-only, practice tasks
+    checks: list[dict[str, Any]] = field(default_factory=list, repr=False)  # every scored check: type, kind, passed
 
     @property
     def failed(self) -> bool:
@@ -133,6 +134,7 @@ def run_candidate(task: bench.Task, agent: Agent, candidate: int) -> CandidateRu
         input_tokens=result.input_tokens,
         output_tokens=result.output_tokens,
         missed_checks=[dict(m) for m in grade.missed],
+        checks=[dict(c) for c in grade.checks],
     )
 
 

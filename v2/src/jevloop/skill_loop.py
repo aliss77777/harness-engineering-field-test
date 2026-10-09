@@ -19,7 +19,7 @@ from scipy.stats import wilcoxon
 from jevloop.openrouter import ChatClient
 from jevloop.runs import CandidateRun
 
-MAX_RULE_CHARS = 400
+MAX_RULE_CHARS = 600  # was 400; 4 of 5 pilot refusals were for length alone (redesign change 5)
 NEAR_COPY = 0.85  # difflib ratio at or above which a proposed rule counts as a copy
 TRIGGER_CHARS = 700
 SUMMARY_CHARS = 2500
@@ -44,6 +44,7 @@ class Edit:
     index: int | None  # 1-based rule number for replace / remove
     text: str
     why: str = ""
+    target: str = ""  # redesign: the check kind this fix targets (rule_broken | action_missed | wrong_content)
 
     def record(self) -> dict[str, Any]:
         return asdict(self)
@@ -69,7 +70,7 @@ def check_edit(edit: Edit, rules: tuple[str, ...], rejected: list[Edit]) -> str 
     if edit.op != "remove":
         text = edit.text.strip()
         if not text or len(text) > MAX_RULE_CHARS:
-            return f"rule must be 1-{MAX_RULE_CHARS} characters"
+            return f"rule must be 1-{MAX_RULE_CHARS} characters: shorten it and resubmit"
         if "@" in text or "$" in text or re.search(r"\d{3,}", text):
             return "rule names a specific address, amount or ID; rules must be general"
         for old in [*rules, *(r.text for r in rejected)]:
@@ -168,8 +169,24 @@ def parse_edits(content: str) -> list[Edit]:
     for e in data.get("edits", []):
         index = e.get("index")
         out.append(Edit(op=str(e.get("op", "")).lower(), index=int(index) if index not in (None, "") else None,
-                        text=str(e.get("text") or ""), why=str(e.get("why") or "")))
+                        text=str(e.get("text") or ""), why=str(e.get("why") or ""), target=str(e.get("target") or "")))
     return out
+
+
+EDITOR_SYSTEM_V2 = EDITOR_SYSTEM.replace(
+    "Reply with JSON only",
+    "You also get a FAILURE PROFILE: counts of your missed checks by kind across all recent practice tasks, and how you "
+    "behaved (for example, whether you read the policy emails before your first write). Fix the biggest patterns first. "
+    "Each edit must include \"target\": the check kind it should reduce, one of rule_broken (you did something you "
+    "must not), action_missed (you failed to do something required), wrong_content (you did it with wrong or missing values). "
+    "Reply with JSON only").replace('"why": "<the mistake pattern it fixes>"}', '"why": "<the mistake pattern it fixes>", "target": "<check kind>"}')
+
+
+def editor_prompt_v2(rules: tuple[str, ...], profile: dict[str, Any], mistakes: list[dict[str, Any]], rejected: list[Edit], n: int) -> list[dict[str, str]]:
+    msgs = editor_prompt(rules, mistakes, rejected, n)
+    msgs[0] = {"role": "system", "content": EDITOR_SYSTEM_V2.format(n=n)}
+    msgs[1] = {"role": "user", "content": f"FAILURE PROFILE (all recent practice tasks):\n{json.dumps(profile, indent=1)}\n\n" + msgs[1]["content"]}
+    return msgs
 
 
 class SkillEditor:
@@ -180,8 +197,10 @@ class SkillEditor:
         self.client = client
 
     def propose(self, rules: tuple[str, ...], mistakes: list[dict[str, Any]], rejected: list[Edit], *,
-                n: int, round_number: int) -> tuple[list[Edit], list[dict[str, Any]]]:
-        messages = editor_prompt(rules, mistakes, rejected, n)
+                n: int, round_number: int, profile: dict[str, Any] | None = None) -> tuple[list[Edit], list[dict[str, Any]]]:
+        """With `profile` (the redesign), the editor sees the failure profile first and each fix must name
+        the check kind it targets; without it, the pilot's prompt is used unchanged."""
+        messages = editor_prompt_v2(rules, profile, mistakes, rejected, n) if profile is not None else editor_prompt(rules, mistakes, rejected, n)
         refused: list[dict[str, Any]] = []
         accepted: list[Edit] = []
         for attempt in range(2):
@@ -194,6 +213,8 @@ class SkillEditor:
                 proposals, refused = [], refused + [{"edit": content[:300], "reason": f"unparseable: {error}"}]
             for edit in proposals:
                 reason = check_edit(edit, rules, rejected + accepted)
+                if reason is None and profile is not None and edit.target not in CHECK_KINDS:
+                    reason = f"name the check kind the fix targets: one of {', '.join(CHECK_KINDS)}"
                 if reason:
                     refused.append({"edit": edit.record(), "reason": reason})
                 elif len(accepted) < n:
@@ -205,3 +226,84 @@ class SkillEditor:
                                     + json.dumps(refused[-5:], ensure_ascii=False)
                                     + f". Reply with JSON containing {n - len(accepted)} more valid, general, new edits."}]
         return accepted, refused
+
+
+# ================= Redesign (briefs/Skill loop redesign.md; built 2026-10-08) =================
+# Telemetry at three levels (task, check, step); fixes name the check kind they target; a three-part
+# keep rule scored at the check level, with tasks as clusters. Not yet used by a run script.
+
+CHECK_KINDS = ("rule_broken", "action_missed", "wrong_content")
+MAX_RULE_CHARS_V2 = 600
+
+
+def failure_profile(runs: list[CandidateRun], behaviours: list[dict[str, Any]]) -> dict[str, Any]:
+    """Counts across practice runs: missed checks by kind (with how many runs missed each kind)
+    and step measures. This is what the editor sees first, before a few examples."""
+    missed = {k: 0 for k in CHECK_KINDS}
+    runs_with = {k: 0 for k in CHECK_KINDS}
+    for r in runs:
+        kinds = [c["kind"] for c in r.checks if not c["passed"]]
+        for k in CHECK_KINDS:
+            missed[k] += kinds.count(k)
+            runs_with[k] += k in kinds
+    policy = [b["read_policy_before_first_write"] for b in behaviours if b.get("read_policy_before_first_write") is not None]
+    return {
+        "runs": len(runs),
+        "failed_runs": sum(not r.passed for r in runs),
+        "missed_checks_by_kind": missed,
+        "runs_missing_each_kind": runs_with,
+        "policy_emails_read_before_first_write": f"{sum(policy)} of {len(policy)} runs with policy emails",
+        "runs_hitting_step_cap": sum(r.stop_reason == "max_steps" for r in runs),
+        "mean_steps": round(sum(r.steps for r in runs) / max(1, len(runs)), 1),
+    }
+
+
+def targeted_pass_rates(runs: dict[str, CandidateRun], kind: str) -> dict[str, float]:
+    """Per task: the share of its scored checks of `kind` that passed (tasks with none are left out)."""
+    out = {}
+    for t, r in runs.items():
+        cs = [c for c in r.checks if c["kind"] == kind]
+        if cs:
+            out[t] = sum(c["passed"] for c in cs) / len(cs)
+    return out
+
+
+@dataclass(frozen=True)
+class KeepDecision:
+    keep: bool
+    targeted_ok: bool
+    guard_ok: bool
+    net_ok: bool
+    targeted_diff: float  # mean per-task change in the targeted checks' pass rate
+    targeted_p: float
+    targeted_tasks: int
+    guard_diff: float  # mean task-credit change on the regression set (or the whole gate if it is empty)
+    guard_tasks: int
+    net_diff: float  # mean task-credit change on the whole gate
+
+    def record(self) -> dict[str, Any]:
+        return asdict(self)
+
+
+def keep_rule(current: dict[str, CandidateRun], candidate: dict[str, CandidateRun], *, kind: str,
+              regression: list[str], p_threshold: float = 0.10, max_regression_drop: float = 0.03) -> KeepDecision:
+    """Keep a fix only if (1) the targeted checks improve: per-task pass rate of checks of `kind`,
+    paired by task (each task is one cluster), mean up and one-sided Wilcoxon p < p_threshold;
+    (2) the regression set's mean credit drops by at most `max_regression_drop` (the whole gate is
+    used when the regression set is empty); and (3) mean credit over the whole gate does not fall."""
+    if set(current) != set(candidate):
+        raise ValueError("both versions must run on the same gate tasks")
+    cur_t, cand_t = targeted_pass_rates(current, kind), targeted_pass_rates(candidate, kind)
+    shared = sorted(set(cur_t) & set(cand_t))
+    diffs = [cand_t[t] - cur_t[t] for t in shared]
+    nonzero = [d for d in diffs if d != 0]
+    p = float(wilcoxon(nonzero, alternative="greater").pvalue) if nonzero else 1.0
+    t_diff = sum(diffs) / len(diffs) if diffs else 0.0
+    guard_ids = [t for t in regression if t in current] or sorted(current)
+    g_diff = sum(candidate[t].partial_credit - current[t].partial_credit for t in guard_ids) / len(guard_ids)
+    n_diff = sum(candidate[t].partial_credit - current[t].partial_credit for t in current) / len(current)
+    targeted_ok = t_diff > 0 and p < p_threshold
+    guard_ok = g_diff >= -max_regression_drop
+    net_ok = n_diff >= 0
+    return KeepDecision(targeted_ok and guard_ok and net_ok, targeted_ok, guard_ok, net_ok, t_diff, p, len(shared),
+                        g_diff, len(guard_ids), n_diff)
