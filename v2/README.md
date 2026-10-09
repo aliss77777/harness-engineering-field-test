@@ -6,25 +6,27 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 
 **This page is the tracker** (status, plan, results, decisions). Details live in the linked documents; the dated log is [`PLAN.md`](PLAN.md).
 
-## Latest findings (2026-10-08)
+## Latest findings (as of 2026-10-08 21:21 MDT)
+
+*Step numbers refer to "Next steps" in the roadmap below.*
 
 **In plain words (ELI5).** We're teaching a cheap robot (MiniMax) to do office paperwork as well as an expensive one (Gemini).
-- **We fixed our measuring tools.** They had small bugs, like cutting off the most important part of each report.
-- **The robot is moody.** Give it the same job twice and it does it differently, even with the "be consistent" setting on. So we have to watch it do each job more than once before deciding it got better.
-- **The cheap robot is still nearly as good as the expensive one,** at about a fifth of the price.
-- **Its main bad habit: it starts sending emails before reading the rulebook.** In its old work, the jobs where it skipped the rulebook were the ones where it broke rules more often.
-- **We built a "read the rulebook first" bouncer** into the harness, and it is being tested live now. Our way of spotting which emails are "the rulebook" is still rough: it flags about twice as many emails as it should and misses about a quarter of the real ones.
+- **We fixed our measuring tools** *(step 1)*. They had small bugs, like cutting off the most important part of each report.
+- **The robot is moody** *(step 1)*. Give it the same job twice and it does it differently, even with the "be consistent" setting on. So we have to watch it do each job more than once before deciding it got better.
+- **The cheap robot is still nearly as good as the expensive one** *(v2 Phase 0 and step 1)*, at about a fifth of the price.
+- **Its main bad habit: it starts sending emails before reading the rulebook** *(v2 Phase 0; step 3)*. In its old work, the jobs where it skipped the rulebook were the ones where it broke rules more often.
+- **We built a "read the rulebook first" bouncer** *(step 3)* into the harness, and it is being tested live now. Our way of spotting which emails are "the rulebook" is still rough: it flags about twice as many emails as it should and misses about a quarter of the real ones.
 
 **The deeper summary.**
 
-| Finding | Evidence | Why it matters |
-|---|---|---|
-| **MiniMax stays comparable to Gemini** | Two separate tests: 0.58 vs 0.66 credit (Phase 0) and 0.62 vs 0.70 at temperature 0 (−0.07; 95% range −0.21 to +0.06), at ≈ $0.06 vs $0.30 per run, with 0 failed MiniMax runs against Gemini's 3 | The cheap-and-open-weight premise holds |
-| **Temperature 0 does not make MiniMax repeatable** | Same task twice: identical tool calls in 0 of 10, scores differ by 0.26 on average | Noise must be handled with repeats, not settings; it also explains why the pilot couldn't keep any fix |
-| **Choosing test tasks by past failure creates false wins** | Simulated useless fix "kept" 77% of the time this way, vs 10% when tasks are chosen by a task property | The skill loop's test now picks tasks by property and scores the targeted checks |
-| **The gate's target habit is real** | Replay of 236 MiniMax runs: runs that skipped the policy emails broke a rule 63% of the time vs 43% overall; the gate would have caught 44% of rule-breaking runs | Worth testing live (V2-5a, running now) |
-| **The gate targets one habit, not all rule-breaking** | Gemini always reads the policies first, yet still breaks a rule in 24% of runs | Other failure kinds need other fixes |
-| **The policy-email detector is rough** | Against 72 hand-labelled emails: precision 0.50, recall 0.73 ([results](action_masking/labels/RESULTS.md)) | The gate wastes some steps on irrelevant emails and misses some real rules; a better detector is a next step |
+| Finding | Step | Evidence | Why it matters |
+|---|---|---|---|
+| **MiniMax stays comparable to Gemini** | v2 Phase 0; step 1 (temperature-0 re-checks) | Two separate tests: 0.58 vs 0.66 credit (Phase 0) and 0.62 vs 0.70 at temperature 0 (−0.07; 95% range −0.21 to +0.06), at ≈ $0.06 vs $0.30 per run, with 0 failed MiniMax runs against Gemini's 3 | The cheap-and-open-weight premise holds |
+| **Temperature 0 does not make MiniMax repeatable** | step 1 (temperature-0 re-checks) | Same task twice: identical tool calls in 0 of 10, scores differ by 0.26 on average | Noise must be handled with repeats, not settings; it also explains why the pilot couldn't keep any fix |
+| **Choosing test tasks by past failure creates false wins** | step 1 (A4), used in step 2 | Simulated useless fix "kept" 77% of the time this way, vs 10% when tasks are chosen by a task property | The skill loop's test now picks tasks by property and scores the targeted checks |
+| **The gate's target habit is real** | step 3 (replay, B) | Replay of 236 MiniMax runs: runs that skipped the policy emails broke a rule 63% of the time vs 43% overall; the gate would have caught 44% of rule-breaking runs | Worth testing live (V2-5a, running now) |
+| **The gate targets one habit, not all rule-breaking** | step 3 (replay, B) | Gemini always reads the policies first, yet still breaks a rule in 24% of runs | Other failure kinds need other fixes |
+| **The policy-email detector is rough** | step 1 (A2), affects step 3 | Against 72 hand-labelled emails: precision 0.50, recall 0.73 ([results](action_masking/labels/RESULTS.md)) | The gate wastes some steps on irrelevant emails and misses some real rules; a better detector is a next step |
 
 **What the "read the policies first" gate is:** a feature of our harness (`src/jevloop/monitor.py`), not of MiniMax or the benchmark. Before MiniMax changes any record, the gate checks whether it has opened every policy email; if not, the action is held and MiniMax is told which emails to read. After 3 holds it lets actions through and logs it. Every hold is shown to the skill loop as a near-miss, so MiniMax can learn the habit. The headline result is measured with the gate off.
 
