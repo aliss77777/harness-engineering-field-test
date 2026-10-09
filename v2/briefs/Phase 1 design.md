@@ -68,6 +68,20 @@ Notes:
 - **Power is limited:** 80 sealed tasks can show differences of several points, not one or two. Stated up front.
 - A **pass-rate** comparison (all checks met) is reported next to partial credit for every verdict.
 
+## Built for the run (2026-10-08; not yet run)
+
+`scripts/phase1_run.py` runs v2 Phase 1 in five stages, each logged and resumable: **skill** (the Agent skill loop) → **jevdata** (MiniMax's final playbook on practice and the test bench) → **rubric** (the Jev rubric loop) → **tau** (the Router's threshold) → **sealed** (the final exam, once). Supporting code: the Jev client ported from v1 (`src/jevloop/jev.py`), the rubric and its loop (`rubric.py`), the cascade (`cascade.py`). An end-to-end dry run of all five stages against fake models passes (`tests/test_phase1_run_dry.py`).
+
+**Decisions built in (Alexander, 2026-10-08):**
+- **The checkpoint is on while MiniMax learns** (it is part of the harness); every hold reaches the editor as a near-miss.
+- **The sealed exam runs MiniMax's final playbook both ways:** checkpoint on (the harness as built) and checkpoint off (proves MiniMax itself learned; fair against Gemini, which has no checkpoint). The **V2-3 headline is the checkpoint-off cascade**; the checkpoint-on cascade and the checkpoint's own effect are reported beside it.
+- **Jev's starting rubric** is 8 generic yes/no questions fixed in code (`STARTING_RUBRIC`); MiniMax edits them. A run counts as good at partial credit ≥ 0.8.
+- **Try each test bench task once** per version (`runs_per_task: 1`), pending Alexander's confirmation.
+
+**Safety:** nothing paid runs until `run.approved: true` in `phase1/config_phase1.yaml`; the sealed stage also needs Alexander's `phase1/SEALED_RELEASE.md`; the spend cap is enforced in code.
+
+**An honest note on the V2-3 rule:** "within ±3 points of Gemini" is checked on the point estimate, with the paired 95% interval reported next to it. Given MiniMax's run-to-run noise, 80 sealed tasks give an interval of roughly ±6 points, so the experiment can show the cascade is *close* to Gemini but cannot *prove* equivalence within 3 points.
+
 ## Budget
 
 Costs per run from Phase 0: MiniMax $0.062, Gemini $0.32 (average of 20 business tasks). Rough.
@@ -82,4 +96,4 @@ Costs per run from Phase 0: MiniMax $0.062, Gemini $0.32 (average of 20 business
 | Jev scoring, editor and other small calls | — | ≈ $4 |
 | **Total** | | **≈ $90** (range ≈ $60–125) |
 
-**Proposed Phase 1 cap: $100, enforced in code**; stop and ask if a projection goes over.
+**Proposed Phase 1 cap: $110** (re-estimated 2026-10-08: skill loop ≈ $45 at one try per task, Jev data ≈ $7, sealed runs ≈ $50, Jev calls ≈ $1), **enforced in code**; stop and ask if a projection goes over.

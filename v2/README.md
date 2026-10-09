@@ -52,6 +52,7 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 | Step 3: replay (B) | **Go, narrowly**: the checkpoint would have caught runs that broke rules with 63% precision (base rate 43%), 44% recall ([report](action_masking/replay/REPORT.md)) | $0 |
 | Step 1: email labels for the detector (A2) | Labelled by Claude in two passes (71 of 72 agreed): detector precision 0.50, recall 0.73, stays "approximate" | $0 |
 | Step 3: checkpoint and near-miss hooks (C, D) | Built and tested (67 tests) | $0 |
+| Build for v2 Phase 1 | Done: Jev client ported from v1, rubric loop, cascade, the five-stage run script; dry run of all stages passes (78 tests) | $0 |
 | Step 3: **V2-5a, the checkpoint live (off vs on, 60 tasks)** | **Keep the checkpoint**: broken rules −0.22 per run, credit +0.08, holds 0.82/run; ranges just touch zero ([report](action_masking/v2_5a/REPORT.md)) | $5.90 |
 
 **What didn't work, and what we learned**
@@ -91,7 +92,7 @@ The core test (C) is 60 tasks, run once with and once without the checkpoint: 12
 
 ≈ $110–140 more to the end of the v2 Phase 1 experiments (depending on step 3).
 
-**Waiting on Alexander:** decisions before the go for the v2 Phase 1 experiments: how the keep-or-reject test handles run-to-run noise (tasks per round vs repeats, which sets the budget), whether the checkpoint is on during learning, and the Phase 1 cap. (The Jev checkpoint, E, is skipped; a second V2-5a run per arm is not planned.)
+**Waiting on Alexander: the go for the v2 Phase 1 experiments.** Three things: (1) confirm "try each test bench task once" (≈ $45 for the skill loop; twice ≈ $86); (2) the cap, proposed **$110**; (3) set `run.approved: true` (or tell me to). Releasing the sealed set comes later, before the final exam.
 
 ## The experiment in one picture
 

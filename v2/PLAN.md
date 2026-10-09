@@ -52,6 +52,8 @@ Dated log of every decision, deviation and fix (same discipline as [`../v1/PLAN.
 
 - 2026-10-08: **Jev checkpoint (work item E) marked optional and skipped (Alexander);** proceeding toward the main v2 Phase 1 experiments.
 
+- 2026-10-08: **Built for the v2 Phase 1 experiments (free; not run).** Jev client ported from v1 (`jev.py`); the rubric with B-plus weights, a MiniMax rubric editor and v1's McNemar keep-or-reject test (`rubric.py`); the cascade and its V2-3 verdict (`cascade.py`); `scripts/phase1_run.py` with five resumable stages (skill → jevdata → rubric → tau → sealed). Decisions built in: checkpoint on during learning; sealed exam both ways, headline checkpoint-off; 8 fixed starting questions; one try per test bench task (pending confirmation). Safety: refuses to run until approved; sealed needs a written release. End-to-end dry run passes; 78 tests. Proposed cap $110. Note: the V2-3 ±3-point rule is a point estimate; 80 tasks cannot prove equivalence that tight.
+
 ## Open decisions (brief section 9)
 
 - [x] Repo: folder in this repo (2026-10-05).
