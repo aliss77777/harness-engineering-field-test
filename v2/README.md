@@ -39,7 +39,17 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 | 6 | **Write-up**: results, story, insights | The claim, stated honestly | $0 |
 | 7 | **v2 Phase 2**: Magic Patterns UI and tutorial (Substack) | Show it | $0 in model calls |
 
-Step 3 is optional and doesn't block step 5; it can run before or after. **Minimum path to the full experiments:** steps 1, 2 and 4, ≈ $9.
+**How many tasks and runs action masking uses (step 3):**
+
+| Step | Tasks | Runs | Notes |
+|---|---|---|---|
+| B: replay | MiniMax's past runs | 0 new runs | Re-checks the ≈ 300 logged runs, $0 |
+| C: simple gate, off vs on | 60 gate tasks | 120 (60 off + 60 on) | MiniMax, starting prompt, temperature 0, one run each, paired by task. ≈ $5 (cap $10) |
+| D: near-miss hooks | — | 0 | Code only |
+| E: Jev gate (optional) | the same 60 gate tasks | mostly replay of logged runs, plus up to 60 new gate-on runs | Cap $20; only on Alexander's go |
+| *Pre-registered, not run:* final playbook, gate off vs on | 80 sealed tasks | 80 extra gate-on runs | Only if Alexander releases the sealed set |
+
+The core test (C) is 60 tasks, run once with and once without the gate: 120 runs, a mechanism test reported with paired intervals and no significance claim. Step 3 is optional and doesn't block step 5. The temperature-0 re-checks in step 1 are separate: 60 runs (20 repeatability, 40 MiniMax vs Gemini).
 
 ≈ $110–140 more to the end of the v2 Phase 1 experiments (depending on step 3).
 
