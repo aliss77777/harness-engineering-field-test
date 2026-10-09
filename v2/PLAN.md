@@ -44,6 +44,8 @@ Dated log of every decision, deviation and fix (same discipline as [`../v1/PLAN.
 
 - 2026-10-08: **Action masking is core, not optional (Alexander: "the most important part").** The roadmap and Phase 1 design are updated; its results are reported as their own cell beside the gate-off headline. The Jev version of the gate (work item E) still waits for Alexander's go.
 
+- 2026-10-08: **V2-5a done ($5.90): the gate is worth keeping by the preregistered rule.** 60 gate tasks, MiniMax temperature 0, off vs on: broken "must not" per run 0.88 → 0.67 (−0.22; 95% −0.45 to +0.02); credit 0.57 → 0.65 (+0.08; −0.02 to +0.17); pass 18% → 23%; holds 0.82/run; silent-wrong 82% → 42% (caught-wrong 35%, overstated by definition); cost +12%, steps +17%. Sanity check missed (75% read policies first vs 90% bar): in 7 of 9 shortfalls MiniMax ignored the hold 3 times and hit the cap. Promising mechanism result, not proof; a second run per arm would narrow the ranges. Report: `action_masking/v2_5a/REPORT.md`. Spend to date $32.12.
+
 ## Open decisions (brief section 9)
 
 - [x] Repo: folder in this repo (2026-10-05).
