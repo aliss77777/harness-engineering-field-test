@@ -68,7 +68,7 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 |---|---|---|---|
 | 1 | **General harness improvements**: fixes A1–A5, plus the temperature-0 re-checks | A trustworthy harness for v2 Phase 1 | $0 + ≈ $9 |
 | 2 | **Lock the skill loop redesign**: temperature 0, telemetry at task, check and step level, targeted tests | A test that can see real improvements | ≈ $0 |
-| 3 | **Action masking (V2-5), optional**: replay past runs ($0) → simple gate off vs on (≤ $10) → Jev as the gate (≤ $20, only on Alexander's go) | Does a check before each write cut broken rules? | $0–30 |
+| 3 | **Action masking (V2-5), core** (Alexander, 2026-10-08: "the most important part"): replay past runs ($0, done) → simple gate off vs on (V2-5a, ≤ $10, **running**) → Jev as the gate (≤ $20, on Alexander's go) | Does a check before each write cut broken rules? | $0–30 |
 | 4 | **Go/no-go for v2 Phase 1** and its cap (Alexander) | Whether to spend on the full experiments | — |
 | 5 | **v2 Phase 1 experiments**: skill loop → Jev rubric loop → the sealed test, once | Does MiniMax learn? Does Jev learn when to trust it? Does the cascade match Gemini for less? | ≈ $100 |
 | 6 | **Write-up**: results, story, insights | The claim, stated honestly | $0 |
@@ -84,7 +84,7 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 | E: Jev gate (optional) | the same 60 gate tasks | mostly replay of logged runs, plus up to 60 new gate-on runs | Cap $20; only on Alexander's go |
 | *Pre-registered, not run:* final playbook, gate off vs on | 80 sealed tasks | 80 extra gate-on runs | Only if Alexander releases the sealed set |
 
-The core test (C) is 60 tasks, run once with and once without the gate: 120 runs, a mechanism test reported with paired intervals and no significance claim. Step 3 is optional and doesn't block step 5. The temperature-0 re-checks in step 1 are separate: 60 runs (20 repeatability, 40 MiniMax vs Gemini).
+The core test (C) is 60 tasks, run once with and once without the gate: 120 runs, a mechanism test reported with paired intervals and no significance claim. Action masking is a core part of v2 (Alexander, 2026-10-08); its results are reported as their own cell next to the gate-off headline. The temperature-0 re-checks in step 1 are separate: 60 runs (20 repeatability, 40 MiniMax vs Gemini).
 
 ≈ $110–140 more to the end of the v2 Phase 1 experiments (depending on step 3).
 

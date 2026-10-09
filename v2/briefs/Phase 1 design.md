@@ -63,7 +63,7 @@ task ──► MiniMax M3 runs it once (with its learned skill file) ──► r
 | V2-4 Partial feedback | — | not run (out of budget) | — |
 
 Notes:
-- **The headline and the learning claim are gate-off** (2026-10-08). Gemini runs without a gate, so any action-masking gain (V2-5, [`BRIEF-v2-action-masking-v1.md`](BRIEF-v2-action-masking-v1.md)) is reported on its own.
+- **Action masking (V2-5) is a core experiment** (Alexander, 2026-10-08: "the most important part"), reported as its own cell. **The headline and the learning claim stay gate-off** (2026-10-08). Gemini runs without a gate, so any action-masking gain (V2-5, [`BRIEF-v2-action-masking-v1.md`](BRIEF-v2-action-masking-v1.md)) is reported on its own.
 - **Escalated tasks get fresh Gemini runs** (Alexander, 2026-10-07: no reuse of the baseline's runs).
 - **Power is limited:** 80 sealed tasks can show differences of several points, not one or two. Stated up front.
 - A **pass-rate** comparison (all checks met) is reported next to partial credit for every verdict.
