@@ -14,18 +14,18 @@
 | **Strong agent** | Gemini 3.8 Flash, v1's model (approved 2026-10-06; no frontier LLM). Baseline and fallback only; never an editor or teacher | New in v2. The baseline v2 must match ("as good as Gemini, for less") and the cascade's fallback: it does the task when Jev isn't confident in MiniMax's run |
 | **Jev** | The decision model from v1 (`typesafe/jev-1.13` via OpenRouter) | Answers the rubric's yes/no questions about each run's summary, so the runs can be scored. It never calls tools or does the task. |
 | **Router** | Code | **A cascade** (2026-10-07): MiniMax runs the task once; if Jev is confident the run is right, it is kept; otherwise Gemini does the task |
-| **Editor** | **MiniMax M3, editing its own playbook and Jev's rubric** (2026-10-07; in v1 the model edited its own instructions) | **Same role as in v1:** the learning step. After each practice round it reads the mistakes and proposes one edit, to the rubric (Jev rubric loop) or to the agent's skill file (Agent skill loop); the gate keeps or rejects it. Without it there is selection but no learning |
+| **Editor** | **MiniMax M3, editing its own playbook and Jev's rubric** (2026-10-07; in v1 the model edited its own instructions) | **Same role as in v1:** the learning step. After each practice round it reads the mistakes and proposes one edit, to the rubric (Jev rubric loop) or to the agent's skill file (Agent skill loop); the keep-or-reject test keeps or rejects it. Without it there is selection but no learning |
 
 Jev enters in Phase 1. Phase 0 only measured the agents.
 
 ### Does v1's improvement loop carry over?
 
-The mechanics carry over unchanged: practice → mistakes → one edit → held-out gate → keep or reject. Whether it still *learns* here is what V2-2 tests. What changes:
+The mechanics carry over unchanged: practice → mistakes → one edit → held-out keep-or-reject test → keep or reject. Whether it still *learns* here is what V2-2 tests. What changes:
 
 - **For the rubric, the hard part shrinks back to v1's problem.** Two runs of the same task, one passing and one failing, are a v1-style pair with a known winner. The editor compares their summaries, and the difference is visible (for example, one run emailed the customer on a payment plan). This is the strongest reason to expect the rubric loop to keep learning.
 - ~~**It only works when runs differ.**~~ *Superseded 2026-10-07: the cascade runs each task once, so this best-of-K condition no longer applies.*
-- **Credit assignment is harder for the agent's skill file.** A failed run is up to 50 steps, and the editor has to find the step that went wrong. Agent runs are also noisy, so a single run per gate task can mistake luck for improvement. In v2 the editor sees the exact missed checks, which helps, and behaviour measures (did it read the policy emails?) give a second signal.
-- **Lessons must transfer across workflows.** v1's items were all the same kind (headline pairs, response pairs). Here every task is a different workflow, so a kept edit has to be general ("Did it apply the policy it found in the inbox?") rather than specific. The held-out gate enforces this, but it may reject more edits, so learning could be slower.
+- **Credit assignment is harder for the agent's skill file.** A failed run is up to 50 steps, and the editor has to find the step that went wrong. Agent runs are also noisy, so a single run per test bench task can mistake luck for improvement. In v2 the editor sees the exact missed checks, which helps, and behaviour measures (did it read the policy emails?) give a second signal.
+- **Lessons must transfer across workflows.** v1's items were all the same kind (headline pairs, response pairs). Here every task is a different workflow, so a kept edit has to be general ("Did it apply the policy it found in the inbox?") rather than specific. The held-out keep-or-reject test enforces this, but it may reject more edits, so learning could be slower.
 - **Less data, richer signal.** About 200 tasks instead of thousands of pairs, so less statistical power; but partial credit is a much denser signal than v1's single right/wrong per item.
 
 
@@ -38,7 +38,7 @@ The mechanics carry over unchanged: practice → mistakes → one edit → held-
 
 ### What stays the same: the harness
 
-- **A policy written as text, learning in batches.** Each round runs practice, grading, and one edit at a time. A held-out gate decides whether an edit is kept. A sealed set is used once, at the end.
+- **A policy written as text, learning in batches.** Each round runs practice, grading, and one edit at a time. A held-out keep-or-reject test decides whether an edit is kept. A sealed set is used once, at the end.
 - **The Jev rubric loop**, with code-fitted weights.
 - **The Router.** Jev handles the confident cases; the more expensive model handles the hard ones.
 - **Every lesson from v1:** preregistration, single edits, memory of rejected edits, the spend cap, and the supervisor that resumes from cache (see [`../v1/RESULTS.md`](../v1/RESULTS.md), "What the harness taught us").
@@ -67,17 +67,17 @@ Two things learn, round by round.
 **1. The Jev rubric (the checker).** Same loop as v1:
 - **Practice:** Jev scores the agent's K runs on practice tasks, and we see which runs actually passed.
 - **Mistakes:** the editor sees the runs Jev ranked wrong and proposes one edit. For example, *add "Did it notify the account owner?"*, or drop or reword a question.
-- **Gate:** the edit is kept only if picks improve on held-out tasks.
+- **Keep-or-reject test:** the edit is kept only if picks improve on held-out tasks.
 - **Weights:** refit from the graders' partial credit, as in v1's B+.
 - **Over rounds:** the rubric learns what "done correctly" means in each business domain.
 
 **2. The agent's skill file (its playbook).** Mirrors v1's LLM loop:
 - **Failures:** the editor sees failed runs and which grading checks were missed. For example, *"forgot to update the ticket status."*
 - **Edit:** one targeted fix to the instructions. For example, *"Always close the ticket after replying."*
-- **Gate:** kept only if the pass rate improves on held-out tasks.
+- **Keep-or-reject test:** kept only if the pass rate improves on held-out tasks.
 - **Cost note:** this is the expensive part (every candidate edit re-runs the agent), so it is optional in the lean plan.
 
-**Same v1 rules throughout:** single edits, memory of rejected edits, fresh mistakes each round, the held-out gate, a sealed set used once, and preregistration.
+**Same v1 rules throughout:** single edits, memory of rejected edits, fresh mistakes each round, the held-out keep-or-reject test, a sealed set used once, and preregistration.
 
 **Net effect over time:**
 - The agent makes better attempts.

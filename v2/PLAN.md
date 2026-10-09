@@ -2,6 +2,8 @@
 
 Dated log of every decision, deviation and fix (same discipline as [`../v1/PLAN.md`](../v1/PLAN.md)). Design: [`briefs/Task Brief 7_V2_Business.md`](briefs/Task%20Brief%207_V2_Business.md).
 
+*Terminology (2026-10-08): entries before this date say "gate" for three things, now renamed in all current docs: the action-masking **checkpoint**; the **test bench** (the 60 held-out tasks; file `phase1/splits/gate.txt`); and the skill loop's **keep-or-reject test**. Past entries are left as written.*
+
 ## Log
 
 - 2026-10-05: **Repo restructured** into `v1/` (experiments 1–6, unchanged and still runnable from `v1/`) and `v2/` (this scaffold). Prior state tagged `v1-final`. **Decision (Alexander):** v2 lives as a folder in this repo rather than the new `jev-loop-v2` repo the brief recommended (brief section 9, decision 1). Scaffold follows brief section 4; no experiments, code or paid calls yet.
@@ -45,6 +47,8 @@ Dated log of every decision, deviation and fix (same discipline as [`../v1/PLAN.
 - 2026-10-08: **Action masking is core, not optional (Alexander: "the most important part").** The roadmap and Phase 1 design are updated; its results are reported as their own cell beside the gate-off headline. The Jev version of the gate (work item E) still waits for Alexander's go.
 
 - 2026-10-08: **V2-5a done ($5.90): the gate is worth keeping by the preregistered rule.** 60 gate tasks, MiniMax temperature 0, off vs on: broken "must not" per run 0.88 → 0.67 (−0.22; 95% −0.45 to +0.02); credit 0.57 → 0.65 (+0.08; −0.02 to +0.17); pass 18% → 23%; holds 0.82/run; silent-wrong 82% → 42% (caught-wrong 35%, overstated by definition); cost +12%, steps +17%. Sanity check missed (75% read policies first vs 90% bar): in 7 of 9 shortfalls MiniMax ignored the hold 3 times and hit the cap. Promising mechanism result, not proof; a second run per arm would narrow the ranges. Report: `action_masking/v2_5a/REPORT.md`. Spend to date $32.12.
+
+- 2026-10-08: **Renamed "gate" (Alexander).** It meant three things. Now: the action-masking **checkpoint**, the **test bench** (60 held-out tasks), and the skill loop's **keep-or-reject test**. Current docs updated; code identifiers and file names unchanged; past log entries left as written.
 
 ## Open decisions (brief section 9)
 

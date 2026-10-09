@@ -79,6 +79,6 @@ At $0.062 per MiniMax run, four runs plus escalating 40% of tasks to Gemini cost
 A cascade at half cost must keep MiniMax's result on ≈ 70% of tasks, more than its quality supports today. A checker can choose which runs to trust but can't make them better, so the **Agent skill loop** came back. Two decisions shaped it:
 
 - **No learning from Gemini.** A "Gemini as teacher" step was proposed and removed: MiniMax learns only from its own graded mistakes.
-- **MiniMax is the editor** in both loops, after weighing the pros and cons: a cleaner claim (the gains are the loop's, not a stronger model's), the closest match to v1's self-editing loop, and a deployment story where one open-weight model improves itself on the company's own infrastructure. The risk, weaker fixes, is bounded by the gate.
+- **MiniMax is the editor** in both loops, after weighing the pros and cons: a cleaner claim (the gains are the loop's, not a stronger model's), the closest match to v1's self-editing loop, and a deployment story where one open-weight model improves itself on the company's own infrastructure. The risk, weaker fixes, is bounded by the keep-or-reject test.
 
 The result is the [Phase 1 design](briefs/Phase%201%20design.md), now being piloted.

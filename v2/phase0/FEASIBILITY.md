@@ -78,7 +78,7 @@ MiniMax M3 meets the preregistered comparability rule; DeepSeek V4 Pro does not.
 | `nvidia/nemotron-3-super-120b-a12b` | Candidate | Yes | $0.08 / $0.45 (≈ 8–9× cheaper) |
 
 **Protocol (fixed before any paid run):**
-- **Tasks:** 50 business tasks, 25 Finance + 25 HR (the Phase 1 domains, adopted 2026-10-06; see `DOMAINS.md`), drawn with a fixed seed. The task IDs are committed to `phase0/comparability_task_ids.txt` before the run. These 50 tasks must not go into Phase 1's sealed set; they may go into practice or gate.
+- **Tasks:** 50 business tasks, 25 Finance + 25 HR (the Phase 1 domains, adopted 2026-10-06; see `DOMAINS.md`), drawn with a fixed seed. The task IDs are committed to `phase0/comparability_task_ids.txt` before the run. These 50 tasks must not go into Phase 1's sealed set; they may go into practice or the test bench.
 - **Runs:** one per model per task (100 in total). Both models get the same agent prompt (the bench's own system prompt), the same `api` tools, the same 50-step cap, and the same temperature (the value Phase 1 will use, proposed 0.7). Reasoning effort is fixed per model and recorded.
 - **Hosting:** Nemotron runs through one pinned OpenRouter provider (no fallbacks), and Gemini on Google AI Studio. v1's route check carries over: the run stops if a different model or host answers. The host is logged.
 - **Harness:** the free Phase 0 harness (`src/jevloop/`), with caching, logging and a spend cap in code.

@@ -24,17 +24,17 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 | **MiniMax stays comparable to Gemini** | v2 Phase 0; step 1 (temperature-0 re-checks) | Two separate tests: 0.58 vs 0.66 credit (Phase 0) and 0.62 vs 0.70 at temperature 0 (−0.07; 95% range −0.21 to +0.06), at ≈ $0.06 vs $0.30 per run, with 0 failed MiniMax runs against Gemini's 3 | The cheap-and-open-weight premise holds |
 | **Temperature 0 does not make MiniMax repeatable** | step 1 (temperature-0 re-checks) | Same task twice: identical tool calls in 0 of 10, scores differ by 0.26 on average | Noise must be handled with repeats, not settings; it also explains why the pilot couldn't keep any fix |
 | **Choosing test tasks by past failure creates false wins** | step 1 (A4), used in step 2 | Simulated useless fix "kept" 77% of the time this way, vs 10% when tasks are chosen by a task property | The skill loop's test now picks tasks by property and scores the targeted checks |
-| **The gate's target habit is real** | step 3 (replay, B) | Replay of 236 MiniMax runs: runs that skipped the policy emails broke a rule 63% of the time vs 43% overall; the gate would have caught 44% of rule-breaking runs | Worth testing live (V2-5a, running now) |
-| **The gate targets one habit, not all rule-breaking** | step 3 (replay, B) | Gemini always reads the policies first, yet still breaks a rule in 24% of runs | Other failure kinds need other fixes |
-| **The gate works, in a first live test** | step 3 (V2-5a) | 60 gate tasks, off vs on: broken "must not" rules 0.88 → 0.67 per run (−0.22; 95% range −0.45 to +0.02); credit 0.57 → 0.65 (+0.08; −0.02 to +0.17); silent-wrong 82% → 42%; +12% cost ([report](action_masking/v2_5a/REPORT.md)) | Preregistered rule says keep; both ranges just touch zero, so promising, not proof |
-| **Sometimes MiniMax ignores the gate** | step 3 (V2-5a) | 7 runs hit the 3-hold limit without reading the policies | Instructions alone don't fix the habit; the skill loop or a stricter gate may |
-| **The policy-email detector is rough** | step 1 (A2), affects step 3 | Against 72 hand-labelled emails: precision 0.50, recall 0.73 ([results](action_masking/labels/RESULTS.md)) | The gate wastes some steps on irrelevant emails and misses some real rules; a better detector is a next step |
+| **The checkpoint's target habit is real** | step 3 (replay, B) | Replay of 236 MiniMax runs: runs that skipped the policy emails broke a rule 63% of the time vs 43% overall; the checkpoint would have caught 44% of rule-breaking runs | Worth testing live (V2-5a, running now) |
+| **The checkpoint targets one habit, not all rule-breaking** | step 3 (replay, B) | Gemini always reads the policies first, yet still breaks a rule in 24% of runs | Other failure kinds need other fixes |
+| **The checkpoint works, in a first live test** | step 3 (V2-5a) | 60 test bench tasks, off vs on: broken "must not" rules 0.88 → 0.67 per run (−0.22; 95% range −0.45 to +0.02); credit 0.57 → 0.65 (+0.08; −0.02 to +0.17); silent-wrong 82% → 42%; +12% cost ([report](action_masking/v2_5a/REPORT.md)) | Preregistered rule says keep; both ranges just touch zero, so promising, not proof |
+| **Sometimes MiniMax ignores the checkpoint** | step 3 (V2-5a) | 7 runs hit the 3-hold limit without reading the policies | Instructions alone don't fix the habit; the skill loop or a stricter checkpoint may |
+| **The policy-email detector is rough** | step 1 (A2), affects step 3 | Against 72 hand-labelled emails: precision 0.50, recall 0.73 ([results](action_masking/labels/RESULTS.md)) | The checkpoint wastes some steps on irrelevant emails and misses some real rules; a better detector is a next step |
 
-**What the "read the policies first" gate is:** a feature of our harness (`src/jevloop/monitor.py`), not of MiniMax or the benchmark. Before MiniMax changes any record, the gate checks whether it has opened every policy email; if not, the action is held and MiniMax is told which emails to read. After 3 holds it lets actions through and logs it. Every hold is shown to the skill loop as a near-miss, so MiniMax can learn the habit. The headline result is measured with the gate off.
+**What the "read the policies first" checkpoint is:** a feature of our harness (`src/jevloop/monitor.py`), not of MiniMax or the benchmark. Before MiniMax changes any record, the checkpoint checks whether it has opened every policy email; if not, the action is held and MiniMax is told which emails to read. After 3 holds it lets actions through and logs it. Every hold is shown to the skill loop as a near-miss, so MiniMax can learn the habit. The headline result is measured with the checkpoint off.
 
-**Observation (Alexander, 2026-10-08; not yet a decision):** the "read the policies first" gate feels a little suspect for the comparison. If Gemini isn't given it, giving it to MiniMax risks cooking the books in favour of the cheaper model. *Context:* Gemini already reads the policies first on its own (in the replay the gate would never have fired on it), and the headline is measured with the gate off. The concern still applies to any result that pits MiniMax with the gate against Gemini without it. To revisit after V2-5a.
+**Observation (Alexander, 2026-10-08; not yet a decision):** the "read the policies first" checkpoint feels a little suspect for the comparison. If Gemini isn't given it, giving it to MiniMax risks cooking the books in favour of the cheaper model. *Context:* Gemini already reads the policies first on its own (in the replay the checkpoint would never have fired on it), and the headline is measured with the checkpoint off. The concern still applies to any result that pits MiniMax with the checkpoint against Gemini without it. To revisit after V2-5a.
 
-**Not yet shown:** that the skill loop makes MiniMax itself better (it hasn't run with its new test), and that the gate's gain survives more runs.
+**Not yet shown:** that the skill loop makes MiniMax itself better (it hasn't run with its new test), and that the checkpoint's gain survives more runs.
 
 ## Roadmap (as of 2026-10-08, evening)
 
@@ -49,10 +49,10 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 | Step 1: harness fixes A1–A5 | Done: summaries keep state changes; read-policy-before-first-write; check kinds; A4 (choosing test tasks by past failure keeps useless fixes 77% of the time); A5 power | $0 |
 | Step 1: temperature-0 re-checks | Done. **Temperature 0 is not repeatable** for MiniMax (0 of 10 identical runs). MiniMax still comparable to Gemini at temperature 0 (-0.07 credit) | $7.84 |
 | Step 2: skill loop redesign | Built and tested (not yet run) | $0 |
-| Step 3: replay (B) | **Go, narrowly**: the gate would have caught runs that broke rules with 63% precision (base rate 43%), 44% recall ([report](action_masking/replay/REPORT.md)) | $0 |
+| Step 3: replay (B) | **Go, narrowly**: the checkpoint would have caught runs that broke rules with 63% precision (base rate 43%), 44% recall ([report](action_masking/replay/REPORT.md)) | $0 |
 | Step 1: email labels for the detector (A2) | Labelled by Claude in two passes (71 of 72 agreed): detector precision 0.50, recall 0.73, stays "approximate" | $0 |
-| Step 3: gate and near-miss hooks (C, D) | Built and tested (67 tests) | $0 |
-| Step 3: **V2-5a, the gate live (off vs on, 60 tasks)** | **Keep the gate**: broken rules −0.22 per run, credit +0.08, holds 0.82/run; ranges just touch zero ([report](action_masking/v2_5a/REPORT.md)) | $5.90 |
+| Step 3: checkpoint and near-miss hooks (C, D) | Built and tested (67 tests) | $0 |
+| Step 3: **V2-5a, the checkpoint live (off vs on, 60 tasks)** | **Keep the checkpoint**: broken rules −0.22 per run, credit +0.08, holds 0.82/run; ranges just touch zero ([report](action_masking/v2_5a/REPORT.md)) | $5.90 |
 
 **What didn't work, and what we learned**
 
@@ -71,7 +71,7 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 |---|---|---|---|
 | 1 | **General harness improvements**: fixes A1–A5, plus the temperature-0 re-checks | A trustworthy harness for v2 Phase 1 | $0 + ≈ $9 |
 | 2 | **Lock the skill loop redesign**: temperature 0, telemetry at task, check and step level, targeted tests | A test that can see real improvements | ≈ $0 |
-| 3 | **Action masking (V2-5), core** (Alexander, 2026-10-08: "the most important part"): replay past runs ($0, done) → simple gate off vs on (V2-5a, ≤ $10, **running**) → Jev as the gate (≤ $20, on Alexander's go) | Does a check before each write cut broken rules? | $0–30 |
+| 3 | **Action masking (V2-5), core** (Alexander, 2026-10-08: "the most important part"): replay past runs ($0, done) → simple checkpoint off vs on (V2-5a, ≤ $10, **running**) → Jev as the checkpoint (≤ $20, on Alexander's go) | Does a check before each write cut broken rules? | $0–30 |
 | 4 | **Go/no-go for v2 Phase 1** and its cap (Alexander) | Whether to spend on the full experiments | — |
 | 5 | **v2 Phase 1 experiments**: skill loop → Jev rubric loop → the sealed test, once | Does MiniMax learn? Does Jev learn when to trust it? Does the cascade match Gemini for less? | ≈ $100 |
 | 6 | **Write-up**: results, story, insights | The claim, stated honestly | $0 |
@@ -82,16 +82,16 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 | Step | Tasks | Runs | Notes |
 |---|---|---|---|
 | B: replay | MiniMax's past runs | 0 new runs | Re-checks the ≈ 300 logged runs, $0 |
-| C: simple gate, off vs on | 60 gate tasks | 120 (60 off + 60 on) | MiniMax, starting prompt, temperature 0, one run each, paired by task. ≈ $5 (cap $10) |
+| C: simple checkpoint, off vs on | 60 test bench tasks | 120 (60 off + 60 on) | MiniMax, starting prompt, temperature 0, one run each, paired by task. ≈ $5 (cap $10) |
 | D: near-miss hooks | — | 0 | Code only |
-| E: Jev gate (optional) | the same 60 gate tasks | mostly replay of logged runs, plus up to 60 new gate-on runs | Cap $20; only on Alexander's go |
-| *Pre-registered, not run:* final playbook, gate off vs on | 80 sealed tasks | 80 extra gate-on runs | Only if Alexander releases the sealed set |
+| E: Jev checkpoint (optional) | the same 60 test bench tasks | mostly replay of logged runs, plus up to 60 new checkpoint on runs | Cap $20; only on Alexander's go |
+| *Pre-registered, not run:* final playbook, checkpoint off vs on | 80 sealed tasks | 80 extra checkpoint on runs | Only if Alexander releases the sealed set |
 
-The core test (C) is 60 tasks, run once with and once without the gate: 120 runs, a mechanism test reported with paired intervals and no significance claim. Action masking is a core part of v2 (Alexander, 2026-10-08); its results are reported as their own cell next to the gate-off headline. The temperature-0 re-checks in step 1 are separate: 60 runs (20 repeatability, 40 MiniMax vs Gemini).
+The core test (C) is 60 tasks, run once with and once without the checkpoint: 120 runs, a mechanism test reported with paired intervals and no significance claim. Action masking is a core part of v2 (Alexander, 2026-10-08); its results are reported as their own cell next to the checkpoint off headline. The temperature-0 re-checks in step 1 are separate: 60 runs (20 repeatability, 40 MiniMax vs Gemini).
 
 ≈ $110–140 more to the end of the v2 Phase 1 experiments (depending on step 3).
 
-**Waiting on Alexander:** a second run per arm for V2-5a to narrow the ranges (≈ $6; needs the V2-5a cap raised from $10 to ≈ $16)? · improve the policy-email detector? · the Jev version of the gate (E, ≤ $20)? · go/no-go for the v2 Phase 1 experiments.
+**Waiting on Alexander:** a second run per arm for V2-5a to narrow the ranges (≈ $6; needs the V2-5a cap raised from $10 to ≈ $16)? · improve the policy-email detector? · the Jev version of the checkpoint (E, ≤ $20)? · go/no-go for the v2 Phase 1 experiments.
 
 ## The experiment in one picture
 
@@ -103,7 +103,7 @@ task ──► MiniMax M3 runs it once ──► run summary ──► Jev score
                                 learns: Jev rubric loop ──────┘                              no ──► Gemini 3.8 Flash does the task
 ```
 
-- **The agent learns from its own mistakes.** MiniMax M3 (open weight) reads its graded failures on practice tasks and proposes one fix to its own playbook; a held-out gate keeps it only if it helps. No help from Gemini.
+- **The agent learns from its own mistakes.** MiniMax M3 (open weight) reads its graded failures on practice tasks and proposes one fix to its own playbook; a held-out keep-or-reject test keeps it only if it helps. No help from Gemini.
 - **The checker learns when to trust it.** Jev's rubric learns what a correct MiniMax run looks like; MiniMax writes the rubric edits too.
 - **Gemini 3.8 Flash is the bar and the fallback**, never a teacher or editor.
 - **The test:** on 80 sealed tasks, the cascade must match Gemini's partial credit (±3 points) at ≤ ½ its cost, and be faster.
@@ -123,17 +123,17 @@ Full design and preregistered verdicts: [`briefs/Phase 1 design.md`](briefs/Phas
 | Choose the cheap agent | ✅ | **MiniMax M3**. Nemotron 3 Super (rate-limited, 0/21 passes) and DeepSeek V4 Pro out ([JOURNEY](JOURNEY.md)) |
 | Diagnose the cheap agent's failures | ✅ | Systematic and teachable: skips policy emails, breaks "must not" rules |
 | Design Phase 1 | ✅ | Cascade + two learning loops ([design](briefs/Phase%201%20design.md)) |
-| Phase 1 pilot: 2 skill-loop rounds | ✅ | No fix kept; behaviour improved; gate underpowered ([report](phase1/pilot/README.md)) |
+| Phase 1 pilot: 2 skill-loop rounds | ✅ | No fix kept; behaviour improved; keep-or-reject test underpowered ([report](phase1/pilot/README.md)) |
 | Go/no-go | ⬜ | Recommendation so far: GO ([criteria](phase0/FEASIBILITY.md#gono-go-criteria)) |
 
-**Phase 1: experiments** (200 tasks: practice 60, gate 60, sealed 80)
+**Phase 1: experiments** (200 tasks: practice 60, test bench 60, sealed 80)
 
 | Experiment | Question | Status |
 |---|---|---|
 | V2-1 Controls | Where do we start? MiniMax vs Gemini on sealed | ⬜ |
 | V2-2a Agent skill loop | Does MiniMax learn from its own mistakes? | pilot done ([report](phase1/pilot/README.md)) |
 | V2-2b Jev rubric loop | Does Jev learn when to trust MiniMax? | ⬜ |
-| **V2-3 Router (headline)** | As good as Gemini, at ≤ ½ the cost, faster? (measured gate-off) | ⬜ |
+| **V2-3 Router (headline)** | As good as Gemini, at ≤ ½ the cost, faster? (measured checkpoint off) | ⬜ |
 | **V2-5 Action masking** | Does a check before each write cut broken rules without costing credit? | ▶️ starting ([brief](briefs/BRIEF-v2-action-masking-v1.md)) |
 
 **Phase 2: Magic Patterns UI and tutorial**: not started. The minimum bar is [`v1/ui-demo-2`](../v1/ui-demo-2/README.md); the scaffold is ready ([`story/`](story/insights.yaml), [`tutorial/`](tutorial/)).
@@ -152,7 +152,7 @@ Full design and preregistered verdicts: [`briefs/Phase 1 design.md`](briefs/Phas
 
 **Why MiniMax falls short:** it acts before reading the rules. It read every policy email in 4 of 13 runs (Gemini: 12 of 12) and broke about 3× as many "must not" rules. That is what the skill loop has to fix. Details: [`phase0/FEASIBILITY.md`](phase0/FEASIBILITY.md) · Phase 0 story: [`JOURNEY.md`](JOURNEY.md)
 
-**Phase 1 pilot (2 rounds, $8.97):** MiniMax's own fixes targeted its real failures, and all three cut broken "must not" checks (0.90 → 0.50–0.70 per run). The best fix raised credit by 6.7 points and pass rate from 15% to 25%, but **no fix passed the gate**: one run on each of 40 tasks can't confirm gains that size. Report: [`phase1/pilot/README.md`](phase1/pilot/README.md)
+**Phase 1 pilot (2 rounds, $8.97):** MiniMax's own fixes targeted its real failures, and all three cut broken "must not" checks (0.90 → 0.50–0.70 per run). The best fix raised credit by 6.7 points and pass rate from 15% to 25%, but **no fix passed the keep-or-reject test**: one run on each of 40 tasks can't confirm gains that size. Report: [`phase1/pilot/README.md`](phase1/pilot/README.md)
 
 ## Decisions
 
@@ -165,7 +165,7 @@ Full design and preregistered verdicts: [`briefs/Phase 1 design.md`](briefs/Phas
 | Router | A cascade (not best-of-K) |
 | Editor in both loops | MiniMax M3: no Gemini judgement inside the loops |
 | Agent skill loop | In; redesign drafted (multi-level telemetry), [review pending](briefs/Skill%20loop%20redesign.md) |
-| Action masking (V2-5) | ✅ In scope (2026-10-08). Gate may read company data, never grading checks or `meta`. Headline stays gate-off |
+| Action masking (V2-5) | ✅ In scope (2026-10-08). The checkpoint may read company data, never grading checks or `meta`. Headline stays checkpoint off |
 | Sealed set | Held: untouched until Alexander releases it |
 [line omitted from the public copy]
 
@@ -195,12 +195,12 @@ Caps are enforced in code: a run stops before it would pass its cap. Per-item es
 | **A5** | Estimate how often the redesigned test would keep a +6.7-point fix (from the pilot's logs) | $0 | ⬜ |
 | **B** | **Replay past runs:** would a "read the policies first" check have flagged the runs that broke rules? Go/stop thresholds set before looking | $0 | ⬜ |
 | Re-checks | Is temperature 0 repeatable? MiniMax vs Gemini again at temperature 0 | ≈ $9 | needs approval |
-| **C (V2-5a)** | Build the gate; MiniMax on the 60 gate tasks with the gate off vs on. Success = fewer broken rules, credit doesn't fall, few holds | ≤ $10 | needs approval |
+| **C (V2-5a)** | Build the checkpoint; MiniMax on the 60 test bench tasks with the checkpoint off vs on. Success = fewer broken rules, credit doesn't fall, few holds | ≤ $10 | needs approval |
 | **D** | Near-misses shown to the editor; holds per 100 runs by round | ≈ $0 | ⬜ |
-| E (optional) | Jev as the gate, with learned yes/no questions | ≤ $20 | only on Alexander's go |
+| E (optional) | Jev as the checkpoint, with learned yes/no questions | ≤ $20 | only on Alexander's go |
 | **Total** | | **≤ $40** (≈ $19 without E) | |
 
-The sealed set is not touched. The headline and the learning claim stay gate-off.
+The sealed set is not touched. The headline and the learning claim stay checkpoint off.
 
 ## Documents
 

@@ -47,7 +47,7 @@ task ──► fresh copy of its world ──► agent loop (≤ 50 steps: model
 |---|---|---|
 | **Run** (the atomic unit) | One agent attempt at one task in its own fresh world: (task, agent, candidate *k*) → partial credit, pass/fail, cost, time, run summary | Everything that gets measured |
 | **Task with K runs** | The K candidate runs of one task | The Jev rubric picks one or escalates; best-of-K; "mixed pass/fail" in the go/no-go |
-| **Set** | Practice, gate and sealed sets, split **by task**, never by run | Learning, keep-or-reject decisions, the final test |
+| **Set** | Practice, test bench and sealed sets, split **by task**, never by run | Learning, keep-or-reject decisions, the final test |
 | **Paired comparison** | Two systems on the same tasks | e.g. Nemotron vs Gemini; the Router vs the Strong agent |
 
 In v1 the atomic unit was a **pair**: two given texts and one human verdict. In v2 it is a **run**, and the decision is made across the K runs of a task.
@@ -134,8 +134,8 @@ The third example matters. The back-office tasks deliberately include instructio
 
 ## What changes in the plan if adopted
 
-1. **Phase 1 domains: Finance + HR** (brief section 9, decision 2). All 200 tasks across the two domains are used (60 practice, 60 gate, 80 sealed).
-2. **Comparability check: 25 Finance + 25 HR tasks**, fixed seed. They go into Phase 1's practice or gate sets, never sealed.
+1. **Phase 1 domains: Finance + HR** (brief section 9, decision 2). All 200 tasks across the two domains are used (60 practice, 60 test bench, 80 sealed).
+2. **Comparability check: 25 Finance + 25 HR tasks**, fixed seed. They go into Phase 1's practice or test bench sets, never sealed.
 3. **Operations (82 non-GTM tasks)** is the reserve: an extension if Phase 1 goes well, or a replacement domain if a Phase 0 measurement rules out Finance or HR (for example, a pass rate outside 20–80%).
 4. **Simple tasks** stay as the smoke test and tool-calling sanity check.
 
