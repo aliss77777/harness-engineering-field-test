@@ -118,20 +118,4 @@ This memo is the source of truth for the design and its words. It outranks any o
 
 ## Changes to make now
 
-Decision from Alexander (2026-10-09): the checkpoint is on for the final test as well as for learning. It is part of the system we are testing. This reverses the 2026-10-08 rule that the main comparison runs with the checkpoint off.
-
-Why: Jev's rubric and cutoff are learned on checkpoint-on runs, so grading them on checkpoint-off runs tests something they never practised on. The replay also found Gemini always reads the policy emails first, so a checkpoint would not change what it does.
-
-1. **Final-test results use the checkpoint on,** in `stage_sealed`:
-   - Main comparison (V2-3): the checkpoint-on router against Gemini alone. Update `results["headline"]` and the printed summary line.
-   - Did MiniMax learn (V2-2a) and the starting line (V2-1): starting playbook against final playbook, both with the checkpoint on. This needs one new run set, the starting playbook with the checkpoint on over the 80 sealed tasks (about 80 runs, est. $4 to $5).
-   - Did Jev learn (V2-2b): score the checkpoint-on runs with both rubrics.
-   - Keep the checkpoint-off runs as an extra column. V2-5 stays as is: final playbook, checkpoint off against on.
-2. **No refit** of Jev's rubric or the cutoff. They are already learned on checkpoint-on runs.
-3. **One run per task everywhere.** `skill_loop.runs_per_task` stays 1. Gemini stays as it comes: no playbook, no checkpoint.
-4. **Bring the written rules into line in the same commit:** `Phase 1 design.md` (the lines saying the headline and learning claim stay checkpoint off), `BRIEF-v2-action-masking-v1.md` (Revisions item 6, and the paragraph "Learning claim and headline stay checkpoint off"), config comments, and the README status table. Add a dated line to `PLAN.md`. Use the terms in "The words we use". Leave past log entries as written.
-5. **Cost goals and the spend cap are directional.** Report the measured numbers and say plainly how close they land; never phrase a miss as a failure. Recompute the total spend estimate and tell Alexander the number.
-6. **Do not start any paid stage.** `run.approved` stays false. Verify with the existing tests and an unpaid dry run of the final-test logic.
-7. **Report back** in plain language: what changed, what you verified, what surprised you, and at most 3 decisions for Alexander.
-
-When these are done, replace this section with one line: done, the date, the commit.
+Done, 2026-10-09, commit `fb265a4`.
