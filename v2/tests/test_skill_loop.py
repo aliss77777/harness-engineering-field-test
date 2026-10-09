@@ -194,3 +194,16 @@ def test_redesigned_editor_requires_a_target_and_sees_the_profile(tmp_path):
     assert "check kind" in refused[0]["reason"]
     assert "FAILURE PROFILE" in server.requests[0]["messages"][1]["content"]
     assert '"target"' in server.requests[0]["messages"][0]["content"]
+
+
+def test_near_misses_reach_the_editor():
+    passed_but_held = CandidateRun("finance:9", "finance", "m", 0, 1.0, True, 3, 2, 0.01, 1.0, "done",
+                                   "TRIGGER\nDo it\n\nACTIONS (1 tool calls)\n1. x\n\nSTATE CHANGES\n(no changes)", holds=1,
+                                   monitor_events=[{"verdict": "hold", "message": "read the policy first"}])
+    clean_pass = _run("finance:1", 1.0)
+    report = mistakes_report([passed_but_held, clean_pass], limit=5, rng=random.Random(0))
+    assert [r["task_id"] for r in report] == ["finance:9"]
+    assert report[0]["near_miss"] is True and report[0]["held_by_gate"] == ["read the policy first"]
+    from jevloop.skill_loop import failure_profile
+    prof = failure_profile([passed_but_held, clean_pass], [{}, {}])
+    assert prof["near_misses"] == 1 and prof["gate_holds_per_100_runs"] == 50.0

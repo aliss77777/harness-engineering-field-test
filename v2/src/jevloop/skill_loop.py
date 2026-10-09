@@ -120,8 +120,9 @@ def describe_check(check: dict[str, Any]) -> str:
 
 
 def mistakes_report(practice_runs: list[CandidateRun], *, limit: int, rng: random.Random) -> list[dict[str, Any]]:
-    """A fresh sample of failed practice runs: what the task asked, what the agent did, which checks it missed."""
-    failed = [r for r in practice_runs if not r.passed]
+    """A fresh sample of failed practice runs: what the task asked, what the agent did, which checks it missed.
+    Near-misses count as failures (V2-5, work item D): a run the gate had to stop, even if it then passed."""
+    failed = [r for r in practice_runs if not r.passed or getattr(r, "holds", 0) > 0]
     rng.shuffle(failed)
     report = []
     for r in failed[:limit]:
@@ -134,6 +135,8 @@ def mistakes_report(practice_runs: list[CandidateRun], *, limit: int, rng: rando
             "missed_checks": [describe_check(m) for m in r.missed_checks],
             "steps": r.steps,
             "stop_reason": r.stop_reason,
+            "near_miss": r.passed and getattr(r, "holds", 0) > 0,
+            "held_by_gate": [e["message"] for e in getattr(r, "monitor_events", []) if e["verdict"] == "hold"],
         })
     return report
 
@@ -254,6 +257,8 @@ def failure_profile(runs: list[CandidateRun], behaviours: list[dict[str, Any]]) 
         "runs_missing_each_kind": runs_with,
         "policy_emails_read_before_first_write": f"{sum(policy)} of {len(policy)} runs with policy emails",
         "runs_hitting_step_cap": sum(r.stop_reason == "max_steps" for r in runs),
+        "gate_holds_per_100_runs": round(100 * sum(getattr(r, "holds", 0) for r in runs) / max(1, len(runs)), 1),
+        "near_misses": sum(r.passed and getattr(r, "holds", 0) > 0 for r in runs),
         "mean_steps": round(sum(r.steps for r in runs) / max(1, len(runs)), 1),
     }
 

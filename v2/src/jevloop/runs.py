@@ -59,6 +59,9 @@ class AgentResult:
     steps: int = 0
     parse_errors: int = 0  # tool calls whose arguments could not be parsed
     model_seconds: float = 0.0  # summed model latency (original latency on cache replays)
+    holds: int = 0  # action masking: writes the monitor held
+    flags: int = 0
+    monitor_events: list[dict[str, Any]] = field(default_factory=list)
 
 
 class Agent(Protocol):
@@ -90,6 +93,14 @@ class CandidateRun:
     calls: list[dict[str, Any]] = field(default_factory=list, repr=False)
     missed_checks: list[dict[str, Any]] = field(default_factory=list, repr=False)  # editor-only, practice tasks
     checks: list[dict[str, Any]] = field(default_factory=list, repr=False)  # every scored check: type, kind, passed
+    holds: int = 0  # action masking (V2-5): writes the monitor held in this run
+    flags: int = 0
+    monitor_events: list[dict[str, Any]] = field(default_factory=list, repr=False)
+
+    @property
+    def flagged(self) -> bool:
+        """For the silent-wrong rate: at least one hold or flag logged by the gate."""
+        return self.holds > 0 or self.flags > 0
 
     @property
     def failed(self) -> bool:
@@ -135,6 +146,9 @@ def run_candidate(task: bench.Task, agent: Agent, candidate: int) -> CandidateRu
         output_tokens=result.output_tokens,
         missed_checks=[dict(m) for m in grade.missed],
         checks=[dict(c) for c in grade.checks],
+        holds=getattr(result, "holds", 0),
+        flags=getattr(result, "flags", 0),
+        monitor_events=list(getattr(result, "monitor_events", [])),
     )
 
 
