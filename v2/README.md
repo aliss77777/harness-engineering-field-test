@@ -31,16 +31,19 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 
 | # | Step | What it settles | Cost |
 |---|---|---|---|
-| 1 | **Action masking (V2-5)**: harness fixes, a replay of past runs, then the gate tested off vs on | Does a check before each write cut broken rules? | ≤ $40 |
-| 2 | **Lock the skill loop redesign**: temperature 0, telemetry at task, check and step level, targeted tests | A test that can see real improvements | ≈ $0 (built into step 4) |
-| 3 | **Go/no-go for v2 Phase 1** and its cap (Alexander) | Whether to spend on the full experiments | — |
-| 4 | **v2 Phase 1 experiments**: skill loop (4 rounds) → Jev rubric loop → the sealed test, once | Does MiniMax learn? Does Jev learn when to trust it? Does the cascade match Gemini for less? | ≈ $100 |
-| 5 | **Write-up**: results, story, insights | The claim, stated honestly | $0 |
-| 6 | **v2 Phase 2**: Magic Patterns UI and tutorial (Substack) | Show it | $0 in model calls |
+| 1 | **General harness improvements**: fixes A1–A5, plus the temperature-0 re-checks | A trustworthy harness for v2 Phase 1 | $0 + ≈ $9 |
+| 2 | **Lock the skill loop redesign**: temperature 0, telemetry at task, check and step level, targeted tests | A test that can see real improvements | ≈ $0 |
+| 3 | **Action masking (V2-5), optional**: replay past runs ($0) → simple gate off vs on (≤ $10) → Jev as the gate (≤ $20, only on Alexander's go) | Does a check before each write cut broken rules? | $0–30 |
+| 4 | **Go/no-go for v2 Phase 1** and its cap (Alexander) | Whether to spend on the full experiments | — |
+| 5 | **v2 Phase 1 experiments**: skill loop → Jev rubric loop → the sealed test, once | Does MiniMax learn? Does Jev learn when to trust it? Does the cascade match Gemini for less? | ≈ $100 |
+| 6 | **Write-up**: results, story, insights | The claim, stated honestly | $0 |
+| 7 | **v2 Phase 2**: Magic Patterns UI and tutorial (Substack) | Show it | $0 in model calls |
 
-≈ $140 more to the end of the v2 Phase 1 experiments.
+Step 3 is optional and doesn't block step 5; it can run before or after. **Minimum path to the full experiments:** steps 1, 2 and 4, ≈ $9.
 
-**Waiting on Alexander:** approve the V2-5 caps (≤ $40 total) · confirm the replay's go/stop thresholds before results · label emails on the A2 sheet when it's ready. Step-by-step V2-5 plan: [below](#v2-5-action-masking-plan-and-costs).
+≈ $110–140 more to the end of the v2 Phase 1 experiments (depending on step 3).
+
+**Waiting on Alexander:** approve the ≈ $9 temperature-0 re-checks and the optional action-masking caps (≤ $30) · confirm the replay's go/stop thresholds before results · label emails on the A2 sheet when it's ready. Step-by-step V2-5 plan: [below](#v2-5-action-masking-plan-and-costs).
 
 ## The experiment in one picture
 
