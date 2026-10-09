@@ -6,18 +6,6 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 
 **This page is the tracker** (status, plan, results, decisions). Details live in the linked documents; the dated log is [`PLAN.md`](PLAN.md).
 
-## Status at a glance
-
-*Updated 2026-10-08.*
-
-| | |
-|---|---|
-| **Phase** | 0 (feasibility) done · Phase 1 pilot done (not a GO) · **V2-5 action masking: brief approved, starting** |
-| **Latest** | Pilot: **no fix kept in 2 rounds, but every candidate moved behaviour the right way** (fewer broken rules; the best fix +6.7 credit points). The gate is underpowered at 40 tasks × 1 run ([pilot report](phase1/pilot/README.md)) |
-| **Next** | **V2-5 action masking** ([brief](briefs/BRIEF-v2-action-masking-v1.md)): a check before each write holds actions that break policies the agent hasn't read. Free work first (harness fixes A1–A5, then a replay of past runs), then paid steps on approval. Plan and costs: [below](#v2-5-action-masking-plan-and-costs) |
-| **Waiting on Alexander** | Approve the V2-5 caps (≤ $40 total) · confirm the replay's go/stop thresholds before results · label emails on the A2 sheet when it's ready |
-| **Spend** | **$18.38 so far** (Phase 0 $9.41 · pilot $8.97) |
-
 ## Roadmap (as of 2026-10-08)
 
 *Phases here are v2's own: **v2 Phase 0** = feasibility, **v2 Phase 1** = the experiments, **v2 Phase 2** = the UI and tutorial. (v1 is the finished experiments 1–6 in [`../v1/`](../v1/README.md).)*
@@ -51,6 +39,8 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 | 6 | **v2 Phase 2**: Magic Patterns UI and tutorial (Substack) | Show it | $0 in model calls |
 
 ≈ $140 more to the end of the v2 Phase 1 experiments.
+
+**Waiting on Alexander:** approve the V2-5 caps (≤ $40 total) · confirm the replay's go/stop thresholds before results · label emails on the A2 sheet when it's ready. Step-by-step V2-5 plan: [below](#v2-5-action-masking-plan-and-costs).
 
 ## The experiment in one picture
 
