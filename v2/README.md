@@ -18,6 +18,19 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 | **Waiting on Alexander** | Approve the V2-5 caps (≤ $40 total) · confirm the replay's go/stop thresholds before results · label emails on the A2 sheet when it's ready |
 | **Spend** | **$18.38 so far** (Phase 0 $9.41 · pilot $8.97) |
 
+## Roadmap from here
+
+| # | Step | What it settles | Cost |
+|---|---|---|---|
+| 1 | **Action masking (V2-5)**: harness fixes, replay of past runs, then the gate tested off vs on | Does a check before each write cut broken rules? | ≤ $40 |
+| 2 | **Lock the skill loop redesign**: temperature 0, telemetry at task, check and step level, targeted tests | A gate that can see real improvements | ≈ $0 (built into step 4) |
+| 3 | **Go/no-go for Phase 1** and its cap (Alexander) | Whether to spend on the full experiment | — |
+| 4 | **Phase 1**: skill loop (4 rounds) → Jev rubric loop → the sealed test, once | Does MiniMax learn? Does Jev learn when to trust it? Does the cascade match Gemini for less? | ≈ $100 |
+| 5 | **Write-up**: results, story, insights | The claim, stated honestly | $0 |
+| 6 | **Phase 2**: Magic Patterns UI and tutorial (Substack) | Show it | $0 in model calls |
+
+Spent so far $18.38; ≈ $140 more to the end of Phase 1.
+
 ## The experiment in one picture
 
 ```
