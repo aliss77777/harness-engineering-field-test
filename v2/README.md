@@ -18,18 +18,39 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 | **Waiting on Alexander** | Approve the V2-5 caps (≤ $40 total) · confirm the replay's go/stop thresholds before results · label emails on the A2 sheet when it's ready |
 | **Spend** | **$18.38 so far** (Phase 0 $9.41 · pilot $8.97) |
 
-## Roadmap from here
+## Roadmap (as of 2026-10-08)
+
+*Phases here are v2's own: **v2 Phase 0** = feasibility, **v2 Phase 1** = the experiments, **v2 Phase 2** = the UI and tutorial. (v1 is the finished experiments 1–6 in [`../v1/`](../v1/README.md).)*
+
+**Done so far: $18.38**
+
+| Step | Result | Spent |
+|---|---|---|
+| v2 Phase 0: feasibility | Finance + HR chosen; MiniMax M3 picked as the cheap agent; its failures diagnosed | $9.41 |
+| v2 Phase 1 pilot: 2 rounds of the skill loop | No fix kept, but every fix moved behaviour the right way | $8.97 |
+
+**What didn't work, and what we learned**
+
+| Didn't work | Lesson |
+|---|---|
+| Nemotron 3 Super: rate-limited at its host, 0 of 21 runs passed | Check a model's availability and basic competence on a few tasks before planning around it |
+| DeepSeek V4 Pro: wandered until the 50-step cap | Same lesson; out after 20 tasks |
+| Best-of-4 selection by Jev | Too expensive at MiniMax's price → a cascade (run once, keep or escalate) |
+| v1's keep-or-reject test on long, noisy workflows | Too blunt for 40 tasks × 1 noisy run → telemetry at task, check and step level; temperature 0 |
+| Harness bugs: empty replies scored as "done", cache replays, rules refused for length, summaries cut before "state changes" | Fixed, or fixing in V2-5 work item A |
+
+**Next steps**
 
 | # | Step | What it settles | Cost |
 |---|---|---|---|
-| 1 | **Action masking (V2-5)**: harness fixes, replay of past runs, then the gate tested off vs on | Does a check before each write cut broken rules? | ≤ $40 |
-| 2 | **Lock the skill loop redesign**: temperature 0, telemetry at task, check and step level, targeted tests | A gate that can see real improvements | ≈ $0 (built into step 4) |
-| 3 | **Go/no-go for Phase 1** and its cap (Alexander) | Whether to spend on the full experiment | — |
-| 4 | **Phase 1**: skill loop (4 rounds) → Jev rubric loop → the sealed test, once | Does MiniMax learn? Does Jev learn when to trust it? Does the cascade match Gemini for less? | ≈ $100 |
+| 1 | **Action masking (V2-5)**: harness fixes, a replay of past runs, then the gate tested off vs on | Does a check before each write cut broken rules? | ≤ $40 |
+| 2 | **Lock the skill loop redesign**: temperature 0, telemetry at task, check and step level, targeted tests | A test that can see real improvements | ≈ $0 (built into step 4) |
+| 3 | **Go/no-go for v2 Phase 1** and its cap (Alexander) | Whether to spend on the full experiments | — |
+| 4 | **v2 Phase 1 experiments**: skill loop (4 rounds) → Jev rubric loop → the sealed test, once | Does MiniMax learn? Does Jev learn when to trust it? Does the cascade match Gemini for less? | ≈ $100 |
 | 5 | **Write-up**: results, story, insights | The claim, stated honestly | $0 |
-| 6 | **Phase 2**: Magic Patterns UI and tutorial (Substack) | Show it | $0 in model calls |
+| 6 | **v2 Phase 2**: Magic Patterns UI and tutorial (Substack) | Show it | $0 in model calls |
 
-Spent so far $18.38; ≈ $140 more to the end of Phase 1.
+≈ $140 more to the end of the v2 Phase 1 experiments.
 
 ## The experiment in one picture
 
