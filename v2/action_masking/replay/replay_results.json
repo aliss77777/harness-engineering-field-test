@@ -1,0 +1,167 @@
+{
+  "runs_replayed": 298,
+  "runs_reproducing_their_score": 297,
+  "by_model": {
+    "deepseek": {
+      "runs": 20,
+      "coverage": 0.65,
+      "fire_rate": 0.4,
+      "broke_must_not": {
+        "runs": 20,
+        "fires": 8,
+        "outcome_runs": 9,
+        "precision": 0.375,
+        "recall": 0.3333333333333333,
+        "base_rate": 0.45
+      },
+      "credit_below_half": {
+        "runs": 20,
+        "fires": 8,
+        "outcome_runs": 16,
+        "precision": 0.75,
+        "recall": 0.375,
+        "base_rate": 0.8
+      },
+      "mean_credit_fired": 0.24424603174603174,
+      "mean_credit_not_fired": 0.19417989417989415
+    },
+    "gemini": {
+      "runs": 21,
+      "coverage": 0.6666666666666666,
+      "fire_rate": 0.0,
+      "broke_must_not": {
+        "runs": 21,
+        "fires": 0,
+        "outcome_runs": 5,
+        "precision": null,
+        "recall": 0.0,
+        "base_rate": 0.23809523809523808
+      },
+      "credit_below_half": {
+        "runs": 21,
+        "fires": 0,
+        "outcome_runs": 8,
+        "precision": null,
+        "recall": 0.0,
+        "base_rate": 0.38095238095238093
+      },
+      "mean_credit_fired": 0.0,
+      "mean_credit_not_fired": 0.6364117364117364
+    },
+    "minimax": {
+      "runs": 236,
+      "coverage": 0.576271186440678,
+      "fire_rate": 0.3050847457627119,
+      "broke_must_not": {
+        "runs": 236,
+        "fires": 72,
+        "outcome_runs": 102,
+        "precision": 0.625,
+        "recall": 0.4411764705882353,
+        "base_rate": 0.4322033898305085
+      },
+      "credit_below_half": {
+        "runs": 236,
+        "fires": 72,
+        "outcome_runs": 87,
+        "precision": 0.4305555555555556,
+        "recall": 0.3563218390804598,
+        "base_rate": 0.3686440677966102
+      },
+      "mean_credit_fired": 0.5170821462488129,
+      "mean_credit_not_fired": 0.56893265948144
+    },
+    "nemotron": {
+      "runs": 21,
+      "coverage": 1.0,
+      "fire_rate": 0.9523809523809523,
+      "broke_must_not": {
+        "runs": 21,
+        "fires": 20,
+        "outcome_runs": 8,
+        "precision": 0.4,
+        "recall": 1.0,
+        "base_rate": 0.38095238095238093
+      },
+      "credit_below_half": {
+        "runs": 21,
+        "fires": 20,
+        "outcome_runs": 18,
+        "precision": 0.85,
+        "recall": 0.9444444444444444,
+        "base_rate": 0.8571428571428571
+      },
+      "mean_credit_fired": 0.17857142857142855,
+      "mean_credit_not_fired": 0.0
+    }
+  },
+  "go": true,
+  "go_rule": "MiniMax: precision >= 0.6 and recall >= 0.25 for 'broke a must-not check'",
+  "label_mapping": {
+    "by_check_type": {
+      "airtable_action_not_exists": {
+        "broken": 3,
+        "tied_to_a_call": 0,
+        "share": 0.0
+      },
+      "asana_action_not_exists": {
+        "broken": 4,
+        "tied_to_a_call": 0,
+        "share": 0.0
+      },
+      "gmail_draft_not_exists_with_body_contains": {
+        "broken": 4,
+        "tied_to_a_call": 1,
+        "share": 0.25
+      },
+      "gmail_message_not_sent_to": {
+        "broken": 34,
+        "tied_to_a_call": 4,
+        "share": 0.11764705882352941
+      },
+      "gmail_message_not_sent_to_with_body_contains": {
+        "broken": 29,
+        "tied_to_a_call": 22,
+        "share": 0.7586206896551724
+      },
+      "gmail_message_sent_to_with_body_not_contains": {
+        "broken": 58,
+        "tied_to_a_call": 11,
+        "share": 0.1896551724137931
+      },
+      "google_sheets_row_not_exists": {
+        "broken": 10,
+        "tied_to_a_call": 10,
+        "share": 1.0
+      },
+      "google_sheets_row_not_updated": {
+        "broken": 28,
+        "tied_to_a_call": 28,
+        "share": 1.0
+      },
+      "monday_action_not_exists": {
+        "broken": 3,
+        "tied_to_a_call": 0,
+        "share": 0.0
+      },
+      "notion_action_not_exists": {
+        "broken": 2,
+        "tied_to_a_call": 0,
+        "share": 0.0
+      },
+      "quickbooks_customer_not_exists": {
+        "broken": 2,
+        "tied_to_a_call": 2,
+        "share": 1.0
+      },
+      "slack_message_not_exists": {
+        "broken": 17,
+        "tied_to_a_call": 17,
+        "share": 1.0
+      }
+    },
+    "overall_share": 0.4896907216494845,
+    "broken_checks": 194
+  },
+  "detector": "approximate (keyword-based; A2 labels pending)"
+}
