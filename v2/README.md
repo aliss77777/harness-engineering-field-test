@@ -6,6 +6,30 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 
 **This page is the tracker** (status, plan, results, decisions). Details live in the linked documents; the dated log is [`PLAN.md`](PLAN.md).
 
+## Latest findings (2026-10-08)
+
+**In plain words (ELI5).** We're teaching a cheap robot (MiniMax) to do office paperwork as well as an expensive one (Gemini).
+- **We fixed our measuring tools.** They had small bugs, like cutting off the most important part of each report.
+- **The robot is moody.** Give it the same job twice and it does it differently, even with the "be consistent" setting on. So we have to watch it do each job more than once before deciding it got better.
+- **The cheap robot is still nearly as good as the expensive one,** at about a fifth of the price.
+- **Its main bad habit: it starts sending emails before reading the rulebook.** In its old work, the jobs where it skipped the rulebook were the ones where it broke rules more often.
+- **We built a "read the rulebook first" bouncer** into the harness, and it is being tested live now. Our way of spotting which emails are "the rulebook" is still rough: it flags about twice as many emails as it should and misses about a quarter of the real ones.
+
+**The deeper summary.**
+
+| Finding | Evidence | Why it matters |
+|---|---|---|
+| **MiniMax stays comparable to Gemini** | Two separate tests: 0.58 vs 0.66 credit (Phase 0) and 0.62 vs 0.70 at temperature 0 (−0.07; 95% range −0.21 to +0.06), at ≈ $0.06 vs $0.30 per run, with 0 failed MiniMax runs against Gemini's 3 | The cheap-and-open-weight premise holds |
+| **Temperature 0 does not make MiniMax repeatable** | Same task twice: identical tool calls in 0 of 10, scores differ by 0.26 on average | Noise must be handled with repeats, not settings; it also explains why the pilot couldn't keep any fix |
+| **Choosing test tasks by past failure creates false wins** | Simulated useless fix "kept" 77% of the time this way, vs 10% when tasks are chosen by a task property | The skill loop's test now picks tasks by property and scores the targeted checks |
+| **The gate's target habit is real** | Replay of 236 MiniMax runs: runs that skipped the policy emails broke a rule 63% of the time vs 43% overall; the gate would have caught 44% of rule-breaking runs | Worth testing live (V2-5a, running now) |
+| **The gate targets one habit, not all rule-breaking** | Gemini always reads the policies first, yet still breaks a rule in 24% of runs | Other failure kinds need other fixes |
+| **The policy-email detector is rough** | Against 72 hand-labelled emails: precision 0.50, recall 0.73 ([results](action_masking/labels/RESULTS.md)) | The gate wastes some steps on irrelevant emails and misses some real rules; a better detector is a next step |
+
+**What the "read the policies first" gate is:** a feature of our harness (`src/jevloop/monitor.py`), not of MiniMax or the benchmark. Before MiniMax changes any record, the gate checks whether it has opened every policy email; if not, the action is held and MiniMax is told which emails to read. After 3 holds it lets actions through and logs it. Every hold is shown to the skill loop as a near-miss, so MiniMax can learn the habit. The headline result is measured with the gate off.
+
+**Not yet shown:** that anything makes MiniMax *better*. The gate's live test (V2-5a) is running; the skill loop hasn't run with its new test.
+
 ## Roadmap (as of 2026-10-08, evening)
 
 *Phases here are v2's own: **v2 Phase 0** = feasibility, **v2 Phase 1** = the experiments, **v2 Phase 2** = the UI and tutorial. (v1 is the finished experiments 1–6 in [`../v1/`](../v1/README.md).)*
@@ -20,7 +44,8 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 | Step 1: temperature-0 re-checks | Done. **Temperature 0 is not repeatable** for MiniMax (0 of 10 identical runs). MiniMax still comparable to Gemini at temperature 0 (-0.07 credit) | $7.84 |
 | Step 2: skill loop redesign | Built and tested (not yet run) | $0 |
 | Step 3: replay (B) | **Go, narrowly**: the gate would have caught runs that broke rules with 63% precision (base rate 43%), 44% recall ([report](action_masking/replay/REPORT.md)) | $0 |
-| Step 3: gate and near-miss hooks (C, D) | Built and tested (67 tests); the live test not yet run | $0 |
+| Step 1: email labels for the detector (A2) | Labelled by Claude in two passes (71 of 72 agreed): detector precision 0.50, recall 0.73, stays "approximate" | $0 |
+| Step 3: gate and near-miss hooks (C, D) | Built and tested (67 tests); **the live test (V2-5a) is running** (120 runs, ≈ $7, cap $10) | running |
 
 **What didn't work, and what we learned**
 
@@ -59,7 +84,7 @@ The core test (C) is 60 tasks, run once with and once without the gate: 120 runs
 
 ≈ $110–140 more to the end of the v2 Phase 1 experiments (depending on step 3).
 
-**Waiting on Alexander:** decide how to handle run-to-run noise now that temperature 0 doesn't remove it (repeats per task cost more) · whether to run V2-5a as planned (one run per arm, ≈ $5) or with 2 runs per arm (≈ $10) · label emails on the A2 sheet (`action_masking/labels/`).
+**Waiting on Alexander:** nothing until V2-5a reports; then whether to add a second run per arm (≈ $7 more) and whether to improve the policy-email detector.
 
 ## The experiment in one picture
 
