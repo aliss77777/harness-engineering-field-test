@@ -8,7 +8,7 @@
 3. **A2:** label **emails, not runs**, on tasks where the detector fires and where it doesn't, with an "unsure" option, so both precision and recall are measured.
 4. **V2-5a:** "≥ 90% read every policy email before the first write" is a **sanity check** (largely guaranteed by the checkpoint). The **primary outcome** is broken "must not" checks per run, checkpoint on versus off; credit and holds per run are guards; report the paired interval and claim no significance at this sample size (section 8).
 5. **Silent-wrong:** "flagged" means **at least one hold or flag logged by the checkpoint** in the run; final messages don't count yet; this overstates catching (section 8).
-6. **Headline stays checkpoint off:** V2-3 and the learning claim are measured without the checkpoint; the checkpoint's value is reported as a separate cell. `Phase 1 design.md` says so too.
+6. ~~Headline stays checkpoint off~~ **Superseded 2026-10-09** by [`V2 Phase 1 Canonical Experiment Design.md`](V2%20Phase%201%20Canonical%20Experiment%20Design.md): the checkpoint is on for the final test too; the main comparison is the checkpoint-on router against Gemini alone.
 Also: A3 may reuse the agent cache key's existing `candidate` field for repeats instead of adding a new one; the local logs and cache are confirmed present (section 9, item 5).
 
 ## In plain language: how this changes the way fixes are proposed and accepted
@@ -134,7 +134,7 @@ Found in review of `a14d11e`. Each has a test.
 - **"Flagged" means at least one hold or flag logged by the checkpoint in that run.** For now, only the checkpoint's own logged verdicts count; the agent's final message does not (it has no defined rule yet).
 - **Caveat to state wherever these are reported:** this overstates catching. A flagged run can still be wrong for a reason the checkpoint didn't catch, so "caught-wrong" means "wrong, and the checkpoint raised something", not "wrong, and the checkpoint found the error".
 
-**Learning claim and headline stay checkpoint off.** The learning claim stays what `Phase 1 design.md` says: final playbook versus v0 on sealed, checkpoint off. **The V2-3 headline (Router vs Gemini) is also checkpoint off**, because Gemini runs without a checkpoint. The checkpoint on cell shows the checkpoint's own value, reported separately; never blend it into the headline or the learning claim.
+**Superseded 2026-10-09** by [`V2 Phase 1 Canonical Experiment Design.md`](V2%20Phase%201%20Canonical%20Experiment%20Design.md): did MiniMax learn (final vs starting playbook), did Jev learn, and the main comparison (router vs Gemini alone) are all measured with the checkpoint on. The final playbook with the checkpoint off is run only to show what the checkpoint adds.
 
 **Honesty rules:** state the limits (80 sealed tasks resolve differences of several points, not one or two; the simulator gives free observability that production would pay for in audit logs or polling; step measures are diagnostics, not the objective).
 

@@ -100,8 +100,8 @@ def test_sealed_stage_runs_with_release(script, tmp_path, monkeypatch):
     script.RUN["sealed"]["release_file"] = str(release)  # an absolute path; the real file stays absent
     script.stage_sealed(types.SimpleNamespace(release_confirmed=True))
     out = json.loads((tmp_path / "out" / "sealed_results.json").read_text())
-    for key in ("V2-1_controls", "V2-2a_skill_loop", "V2-2b_rubric_loop", "V2-3_router_checkpoint_off",
-                "V2-3_router_checkpoint_on", "V2-5_checkpoint_final_playbook"):
+    for key in ("V2-1_starting_line", "V2-2a_did_minimax_learn", "V2-2b_did_jev_learn", "V2-3_main_comparison",
+                "V2-5_checkpoint_extra", "extra_column_final_playbook_checkpoint_off", "main_comparison"):
         assert key in out
 
 

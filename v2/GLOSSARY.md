@@ -1,5 +1,7 @@
 # Glossary
 
+> **The canonical words are in the table "The words we use" in [`briefs/V2 Phase 1 Canonical Experiment Design.md`](briefs/V2%20Phase%201%20Canonical%20Experiment%20Design.md)** (2026-10-09). It outranks this page.
+
 One name per concept. Use these exact names in docs, code comments and the UI; no synonyms. Each system gets one colour, the same everywhere (colours to be set in Phase 2).
 
 | Name | Meaning |

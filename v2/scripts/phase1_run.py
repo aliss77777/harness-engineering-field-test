@@ -298,53 +298,51 @@ def stage_sealed(args) -> None:
     q_final = tuple(Question(**q) for q in rb["questions"])
     q_v0 = tuple(Question(**q) for q in rb["v0"]["questions"])
     one = lambda d: {t: rs[0] for t, rs in d.items()}  # noqa: E731
-    v0_off = one(p.run_set(model="minimax", rules=(), checkpoint=False, task_ids=sealed, label="sealed"))
-    fin_off = one(p.run_set(model="minimax", rules=final, checkpoint=False, task_ids=sealed, label="sealed"))
+    # Canonical design (2026-10-09): the checkpoint is on for the final test too. Off runs exist only for question 4.
+    v0_on = one(p.run_set(model="minimax", rules=(), checkpoint=True, task_ids=sealed, label="sealed"))
     fin_on = one(p.run_set(model="minimax", rules=final, checkpoint=True, task_ids=sealed, label="sealed"))
+    fin_off = one(p.run_set(model="minimax", rules=final, checkpoint=False, task_ids=sealed, label="sealed"))
     gem = one(p.run_set(model="gemini", rules=(), checkpoint=False, task_ids=sealed, label="sealed"))
     as_rec = lambda r: {"credit": r.partial_credit, "cost_usd": r.cost_usd, "seconds": r.model_seconds}  # noqa: E731
+    mean = lambda runs: sum(r.partial_credit for r in runs.values()) / len(runs)  # noqa: E731
     results = {}
-    # V2-1: where we start
-    d1 = [v0_off[t].partial_credit - gem[t].partial_credit for t in sealed]
-    results["V2-1_controls"] = {"minimax_v0": sum(r.partial_credit for r in v0_off.values()) / len(sealed),
-                                "gemini": sum(r.partial_credit for r in gem.values()) / len(sealed),
-                                "diff": sum(d1) / len(d1), "interval_95": list(paired_bootstrap_interval(d1))}
-    # V2-2a: did MiniMax learn? (checkpoint off, so the gain is MiniMax's own)
-    d2 = [fin_off[t].partial_credit - v0_off[t].partial_credit for t in sealed]
+    # Starting line: starting playbook (checkpoint on) vs Gemini alone
+    d1 = [v0_on[t].partial_credit - gem[t].partial_credit for t in sealed]
+    results["V2-1_starting_line"] = {"minimax_starting_playbook": mean(v0_on), "gemini": mean(gem),
+                                     "diff": sum(d1) / len(d1), "interval_95": list(paired_bootstrap_interval(d1))}
+    # Question 2, did MiniMax learn? Final vs starting playbook, both checkpoint on
+    d2 = [fin_on[t].partial_credit - v0_on[t].partial_credit for t in sealed]
     nz = [x for x in d2 if x != 0]
     p2 = float(wilcoxon(nz, alternative="greater").pvalue) if nz else 1.0
-    results["V2-2a_skill_loop"] = {"diff": sum(d2) / len(d2), "interval_95": list(paired_bootstrap_interval(d2)), "p_one_sided": p2,
-                                   "learned": p2 < 0.05 and sum(d2) > 0}
-    # V2-2b: did Jev learn? (classifying the final playbook's checkpoint-off runs)
-    probs_fin = p.jev_probs(q_final, fin_off, "sealed-off")
-    probs_v0q = p.jev_probs(q_v0, fin_off, "sealed-off-v0rubric")
-    good = {t: is_good(fin_off[t].partial_credit) for t in sealed}
+    results["V2-2a_did_minimax_learn"] = {"starting": mean(v0_on), "final": mean(fin_on), "diff": sum(d2) / len(d2),
+                                          "interval_95": list(paired_bootstrap_interval(d2)), "p_one_sided": p2, "learned": p2 < 0.05 and sum(d2) > 0}
+    # Question 3, did Jev learn? Both rubrics on the final playbook's checkpoint-on runs
+    probs_fin = p.jev_probs(q_final, fin_on, "sealed-on")
+    probs_v0q = p.jev_probs(q_v0, fin_on, "sealed-on-starting-rubric")
+    good = {t: is_good(fin_on[t].partial_credit) for t in sealed}
     c_fin = [classify(probs_fin[t], q_final, rb["weights"], rb["intercept"]) == good[t] for t in sealed]
     c_v0 = [classify(probs_v0q[t], q_v0, rb["v0"]["weights"], rb["v0"]["intercept"]) == good[t] for t in sealed]
     g = keep_rubric_edit(c_v0, c_fin, p_threshold=0.05)
-    results["V2-2b_rubric_loop"] = {"accuracy_v0": sum(c_v0) / len(sealed), "accuracy_final": sum(c_fin) / len(sealed),
-                                    "better": g.b, "worse": g.c, "p": g.p_value, "learned": g.keep}
-    # V2-3: the Router (headline: checkpoint off; also reported: checkpoint on, the harness as built)
-    probs_on = p.jev_probs(q_final, fin_on, "sealed-on")
-    jev_cost = RUN["cost_estimate_per_run"]["jev_call"]
-    routers = {}
-    escalate = set()
-    for arm, runs, probs in (("checkpoint_off", fin_off, probs_fin), ("checkpoint_on", fin_on, probs_on)):
-        sc = {t: score(probs[t], q_final, rb["weights"]) + rb["intercept"] for t in sealed}
-        routers[arm] = sc
-        escalate |= {t for t in sealed if sc[t] < tau}
-    fresh = one(p.run_set(model="gemini", rules=(), checkpoint=False, task_ids=sorted(escalate), label="sealed-escalations", first_attempt=1)) if escalate else {}
-    for arm, runs in (("checkpoint_off", fin_off), ("checkpoint_on", fin_on)):
-        routed = route(sealed, routers[arm], tau, {t: as_rec(runs[t]) for t in sealed}, {t: as_rec(fresh[t]) for t in fresh},
-                       {t: jev_cost for t in sealed})
-        results[f"V2-3_router_{arm}"] = v2_3_verdict(routed, {t: as_rec(gem[t]) for t in sealed})
-    results["headline"] = "V2-3_router_checkpoint_off (Gemini has no checkpoint)"
-    # The checkpoint's own cell: the final playbook, checkpoint off vs on
+    results["V2-2b_did_jev_learn"] = {"accuracy_starting_rubric": sum(c_v0) / len(sealed), "accuracy_final_rubric": sum(c_fin) / len(sealed),
+                                      "better": g.b, "worse": g.c, "p": g.p_value, "learned": g.keep}
+    # Question 1, the main comparison: router (checkpoint on) vs Gemini alone
+    sc = {t: score(probs_fin[t], q_final, rb["weights"]) + rb["intercept"] for t in sealed}
+    escalate = sorted(t for t in sealed if sc[t] < tau)
+    fresh = one(p.run_set(model="gemini", rules=(), checkpoint=False, task_ids=escalate, label="sealed-redo", first_attempt=1)) if escalate else {}
+    routed = route(sealed, sc, tau, {t: as_rec(fin_on[t]) for t in sealed}, {t: as_rec(fresh[t]) for t in fresh},
+                   {t: RUN["cost_estimate_per_run"]["jev_call"] for t in sealed})
+    results["V2-3_main_comparison"] = v2_3_verdict(routed, {t: as_rec(gem[t]) for t in sealed})
+    results["main_comparison"] = "V2-3: router (checkpoint on) vs Gemini alone, sealed exam"
+    # Question 4, what does the checkpoint add? Final playbook, checkpoint off vs on (an extra)
     read_first = [behaviour(p.tasks[t], fin_on[t].calls, fin_on[t].missed_checks)["read_policy_before_first_write"] for t in sealed]
-    results["V2-5_checkpoint_final_playbook"] = checkpoint_verdict(fin_off, fin_on, [x for x in read_first if x is not None])
+    results["V2-5_checkpoint_extra"] = checkpoint_verdict(fin_off, fin_on, [x for x in read_first if x is not None])
+    results["extra_column_final_playbook_checkpoint_off"] = {"credit": mean(fin_off), "pass_rate": sum(r.passed for r in fin_off.values()) / len(sealed)}
     results["spend_usd"] = p.spend.total_usd
     save("sealed_results", results)
-    print(json.dumps({k: v for k, v in results.items() if not isinstance(v, dict)} | {"V2-3 headline chef's kiss": results["V2-3_router_checkpoint_off"]["chefs_kiss"]}, indent=1))
+    m = results["V2-3_main_comparison"]
+    print(f"main comparison (router, checkpoint on, vs Gemini alone): credit {m['credit']['router']:.3f} vs {m['credit']['gemini']:.3f} "
+          f"({m['credit']['diff']:+.3f}; 95% {m['credit']['interval_95'][0]:+.3f} to {m['credit']['interval_95'][1]:+.3f}); "
+          f"cost ratio {m['cost_per_task']['ratio']:.2f}; reference lines met: {m['chefs_kiss']}", flush=True)
 
 
 def main() -> None:

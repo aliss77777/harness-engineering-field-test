@@ -1,0 +1,137 @@
+# V2 Phase 1: Canonical Experiment Design
+
+Oct 9, 2026 · @Alexander Liss
+
+## The question
+
+Phase 1 tests whether a cheap open-weight model, working inside a harness we built, can come close to a premium model's score on real business workflows for about half the cost.
+
+**Where v1 left us.** On a simple task (which of two answers would people prefer?), Jev, a small checker, learned from its mistakes, and Gemini's own instructions barely improved. Routing through Jev matched Gemini's accuracy (76.2% vs 76.3%) at about half the cost.
+
+**What v2 changes.** The task is now AutomationBench: 200 Finance and HR workflows where an agent takes many steps and must follow rules hidden in policy emails. MiniMax M3 does the work and learns by rewriting its own playbook. Jev learns to check finished runs. Gemini redoes the runs Jev doubts. We compare that whole system with Gemini doing every task alone.
+
+**Hypothesis.** MiniMax learns kind of like an RL model learning a policy, but without updating its weights. Jev's routing toggles between MiniMax and Gemini. Together, the harness and the Jev router deliver gains in speed and cost without a loss of quality, as we showed in v1.
+
+## How the harness learns
+
+Every learner here runs the same loop: try, study the mistakes, propose a change, and keep the change only if a fair test says it helped. No model is retrained: what changes is written text, a playbook for MiniMax and a rubric for Jev.
+
+**In v1** the task was one decision repeated over and over: which of two answers would people prefer? An editor studied the mistakes and proposed a change, either to Gemini's instructions or to Jev's rubric. The change was tried on 1,000 to 1,500 held-out pairs and kept only if it scored clearly better. It worked because every pair gave a clean right or wrong. Jev's rubric learned; Gemini's instructions barely moved.
+
+**In v2** the unit is a whole workflow: many steps, scored hidden check by hidden check, and every task is different. So the loop changes in four ways.
+
+1. **Learn patterns across tasks, not one task repeated.** The playbook holds rules that carry from task to task, such as "read every policy email before changing a record." Each failure is labeled by kind: broke a "must not" rule, skipped a required action, or wrote the wrong content.
+2. **Aim each proposed rule at one kind of failure.** MiniMax studies its failure profile on the practice tasks and proposes a rule that names the kind it targets. Rules over 600 characters, or too specific, are refused.
+3. **Keep a rule only if it fixes what it claims at no cost.** On the 60 test-bench tasks, the targeted failure kind must clearly drop and overall credit must not fall.
+4. **Jev's rubric learns the same way,** from finished runs. A change to its yes/no questions is kept only if the rubric then separates good runs from bad ones better on the test bench.
+
+**The checkpoint is the part that does not learn.** It is a fixed rule in the harness, called action masking in reinforcement learning. Before MiniMax changes any record, it must have read every policy email. If not, the action is held (at most 3 times per run) and MiniMax is told what to read. It is a shield, not a teacher: it blocks one known mistake as it happens and logs each hold as a near-miss. The playbook editor sees those near-misses, so learning effort goes to the mistakes the checkpoint cannot catch.
+
+## The pipeline
+
+Five steps, with the checkpoint on in every one, learning and final exam alike. Gemini never learns.
+
+1. **Sort the 200 tasks.** Practice 60, test bench 60, sealed exam 80. The sealed exam stays locked until the end.
+2. **Teach MiniMax.** Four rounds. In each, MiniMax does 30 of the practice tasks, studies its mistakes, and proposes 2 candidate rules. Each candidate runs on all 60 test-bench tasks and is kept only if it passes the keep-or-reject test. The best kept rule joins the playbook, and the next round starts from it. Each task is run once.
+3. **Teach Jev.** Jev's rubric, a list of yes/no questions about a finished run, is edited the same way. A change is kept only if the rubric then separates good runs from bad ones better on the test bench.
+4. **Set the cutoff.** Jev scores every test-bench run. The cutoff is placed so the lowest-scoring 30% would go to Gemini, then frozen.
+5. **Sit the sealed exam.** MiniMax does each of the 80 tasks once and Jev scores the finished run. At or above the cutoff, MiniMax's run stands. Below it, Gemini redoes the task from scratch. We compare this router with Gemini doing all 80 alone.
+
+## The words we use
+
+Each term means one thing everywhere. The last column lists code names and retired words.
+
+| Word | Means | Code name / retired |
+| --- | --- | --- |
+| MiniMax M3 | Cheap open-weight agent. The only model that learns. |  |
+| Gemini Flash | Premium yardstick and backup. Never learns. |  |
+| Jev | The checker. Scores a finished run with its rubric. Also learns. |  |
+| Grader | AutomationBench's hidden end-state checks, run in code. Produces the credit. | Not Gemini, not Jev |
+| Harness | The code around the models: both learning loops, checkpoint, keep-or-reject test, router. |  |
+| Playbook | Written rules MiniMax edits for itself. | Code: skill |
+| Rubric | Jev's yes/no questions about a finished run. |  |
+| Checkpoint | Holds record-changing actions until the policy emails are read; max 3 holds per run. RL name: action masking. | Retired: gate, prevention layer |
+| Router | MiniMax does the task, Jev checks it, Gemini redoes what Jev doubts. | Code: cascade |
+| Cutoff | Jev score below which a task goes to Gemini; 30% of test-bench runs fall below it. | Code: tau (τ) |
+| Practice / test bench / sealed exam | 60 / 60 / 80 tasks. Learn on practice; keep-or-reject and cutoff on the test bench; sealed exam opened once. | Files named gate = test bench |
+| Keep-or-reject test | Decides whether a playbook or rubric change stays. | Retired: gate |
+| Credit | The grader's partial score for one run, 0 to 1. |  |
+| Main comparison | Router vs Gemini alone on the sealed exam, checkpoint on. | Retired: headline |
+
+## What we measure
+
+The main comparison comes first. All four are measured on the 80 sealed tasks, one run per task, checkpoint on unless stated.
+
+| Question | What is compared | How we read it |
+| --- | --- | --- |
+| 1. Does the router come close to Gemini for less? (main comparison) | Router vs Gemini alone: credit and cost per task | Reference lines: within 3 points of Gemini's credit, at most half its cost. Directional; we report the numbers and how close they land. |
+| 2. Did MiniMax learn? | Final playbook vs starting playbook (no rules) | A real gain on unseen tasks. The starting playbook against Gemini is the starting line. |
+| 3. Did Jev learn? | Final rubric vs starting rubric | Better at telling good runs from bad ones, on the sealed exam runs. |
+| 4. What does the checkpoint add? | Final playbook, checkpoint off vs on | Reported on its own, as an extra. The off runs exist only for this. |
+
+## What Phase 0 already showed
+
+These findings stand whatever Phase 1 shows: a cheap open-weight model can come close to Gemini on real workflows, the gap is one identifiable habit, and a simple checkpoint appears to narrow it. The big bet, that the harness can teach the model, is still open.
+
+**Known from Phase 0 and the first checkpoint test:**
+
+- **Open-weight models are not interchangeable.** Nemotron 3 Super and DeepSeek V4 Pro fell far short of Gemini (credit about 0.2 against 0.6 to 0.7; 0% and 5% of tasks fully passed). MiniMax M3 came close: on 20 tasks, 0.62 credit against Gemini's 0.70 (range −0.21 to +0.06), at about $0.057 a run against $0.299.
+- **MiniMax's gap is one habit: acting before reading the policy emails.** It read every policy email in 4 of 13 diagnosed runs, Gemini in 12 of 12. Across 236 runs, MiniMax broke a "must not" rule in 63% of runs that acted before reading, against 43% overall.
+- **A simple checkpoint appears to help.** With it on, on the 60 test-bench tasks, broken rules fell from 0.88 to 0.67 per run and credit rose from 0.57 to 0.65. Both ranges just touch zero: promising, not proof.
+- **The pilot's three candidate rules all cut rule-breaking** (from 0.90 to between 0.50 and 0.70 per run), but none passed a test too small to see a few points. That is why the learning loop was redesigned.
+- **Runs are noisy.** Even at temperature 0 the same task shifts about 0.26 in credit between repeats.
+
+**Unproven, and what Phase 1 exists to test:**
+
+- That MiniMax's playbook improves on unseen tasks.
+- That Jev's rubric improves on this kind of task.
+- That the router comes close to Gemini's score at about half the cost.
+
+## What could go wrong
+
+Phase 1 is far bigger than v1: more moving parts, noisier scores, and roughly $110 of planned spend ($32 spent to date). Watch for:
+
+- **Too little signal.** 60 test-bench tasks with one run each is thin. A real gain can be missed and a lucky rule can be kept. "No gain" would mean not detected at this size.
+- **MiniMax may ignore the checkpoint.** In the first test only 75% of runs read the policies before writing (bar: 90%). In most shortfalls it ignored three holds in a row and was let through.
+- **The policy-email detector is rough.** Half of what it flags is not policy, and it misses about a quarter of the real policy emails.
+- **Jev sees a summary, not the whole run,** so it can miss what the summary leaves out.
+- **The cost win is thin.** With 30% of tasks going to Gemini, cost lands near half of Gemini's, and a cutoff set on 60 tasks has to hold on the sealed 80.
+- **The sealed exam is small.** 80 tasks give about six points of wiggle: enough to show "close", not "within 3 points".
+
+## Fixed rules of the run
+
+- **One run per task,** in learning, on the test bench and on the sealed exam, as in v1.
+- **The sealed exam opens once,** only after Alexander signs the release note. Nothing is tuned on it afterwards.
+- **No peeking.** MiniMax may read a task's company data, never the grader's checks or any detail derived from them.
+- **Gemini runs as it comes:** no playbook, no checkpoint, no learning.
+- **Paid runs wait for `run.approved: true`.** The spend cap is a safety stop Alexander sets. Cost goals are directional.
+
+## Standing rule for the coding agent
+
+This memo is the source of truth for the design and its words. It outranks any older brief, README line or config comment.
+
+1. **Use the terms in "The words we use" exactly,** in docs, reports, comments and commit messages. Code names stay as they are; writing uses the plain word.
+2. **Do not rename, merge or invent terms.** If you need a new one, stop and ask Alexander, then add it to the table in the same commit.
+3. **Do not change the design in passing.** A design change goes into this memo first, with Alexander's OK, and gets a dated line in PLAN.md.
+4. **Nothing in the pipeline is optional.** Anything outside it needs a one-line scope note and Alexander's OK before work starts.
+5. **Keep one status table,** updated in the same commit as the work it describes.
+
+## Changes to make now
+
+Decision from Alexander (2026-10-09): the checkpoint is on for the final test as well as for learning. It is part of the system we are testing. This reverses the 2026-10-08 rule that the main comparison runs with the checkpoint off.
+
+Why: Jev's rubric and cutoff are learned on checkpoint-on runs, so grading them on checkpoint-off runs tests something they never practised on. The replay also found Gemini always reads the policy emails first, so a checkpoint would not change what it does.
+
+1. **Final-test results use the checkpoint on,** in `stage_sealed`:
+   - Main comparison (V2-3): the checkpoint-on router against Gemini alone. Update `results["headline"]` and the printed summary line.
+   - Did MiniMax learn (V2-2a) and the starting line (V2-1): starting playbook against final playbook, both with the checkpoint on. This needs one new run set, the starting playbook with the checkpoint on over the 80 sealed tasks (about 80 runs, est. $4 to $5).
+   - Did Jev learn (V2-2b): score the checkpoint-on runs with both rubrics.
+   - Keep the checkpoint-off runs as an extra column. V2-5 stays as is: final playbook, checkpoint off against on.
+2. **No refit** of Jev's rubric or the cutoff. They are already learned on checkpoint-on runs.
+3. **One run per task everywhere.** `skill_loop.runs_per_task` stays 1. Gemini stays as it comes: no playbook, no checkpoint.
+4. **Bring the written rules into line in the same commit:** `Phase 1 design.md` (the lines saying the headline and learning claim stay checkpoint off), `BRIEF-v2-action-masking-v1.md` (Revisions item 6, and the paragraph "Learning claim and headline stay checkpoint off"), config comments, and the README status table. Add a dated line to `PLAN.md`. Use the terms in "The words we use". Leave past log entries as written.
+5. **Cost goals and the spend cap are directional.** Report the measured numbers and say plainly how close they land; never phrase a miss as a failure. Recompute the total spend estimate and tell Alexander the number.
+6. **Do not start any paid stage.** `run.approved` stays false. Verify with the existing tests and an unpaid dry run of the final-test logic.
+7. **Report back** in plain language: what changed, what you verified, what surprised you, and at most 3 decisions for Alexander.
+
+When these are done, replace this section with one line: done, the date, the commit.

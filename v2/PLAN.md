@@ -54,6 +54,8 @@ Dated log of every decision, deviation and fix (same discipline as [`../v1/PLAN.
 
 - 2026-10-08: **Built for the v2 Phase 1 experiments (free; not run).** Jev client ported from v1 (`jev.py`); the rubric with B-plus weights, a MiniMax rubric editor and v1's McNemar keep-or-reject test (`rubric.py`); the cascade and its V2-3 verdict (`cascade.py`); `scripts/phase1_run.py` with five resumable stages (skill → jevdata → rubric → tau → sealed). Decisions built in: checkpoint on during learning; sealed exam both ways, headline checkpoint-off; 8 fixed starting questions; one try per test bench task (pending confirmation). Safety: refuses to run until approved; sealed needs a written release. End-to-end dry run passes; 78 tests. Proposed cap $110. Note: the V2-3 ±3-point rule is a point estimate; 80 tasks cannot prove equivalence that tight.
 
+- 2026-10-09: **Canonical design adopted (Alexander):** `briefs/V2 Phase 1 Canonical Experiment Design.md` is the source of truth for the design and its words. **The checkpoint is on for the final test too** (reverses the 2026-10-08 checkpoint-off rule): the starting line, did MiniMax learn, did Jev learn and the main comparison (router vs Gemini alone) all use checkpoint-on runs; the final playbook with the checkpoint off runs only to show what the checkpoint adds. `stage_sealed` updated (new run set: starting playbook, checkpoint on; dropped: starting playbook checkpoint off and the checkpoint-off router). No refit of Jev or the cutoff. One run per task everywhere. Tests and an unpaid dry run of the final test pass; nothing paid ran. Estimate ≈ $100 more.
+
 ## Open decisions (brief section 9)
 
 - [x] Repo: folder in this repo (2026-10-05).

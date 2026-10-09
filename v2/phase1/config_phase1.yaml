@@ -21,16 +21,16 @@ agent_model: minimax
 # ---- The v2 Phase 1 experiments (scripts/phase1_run.py). Written 2026-10-08; NOT yet approved to run. ----
 run:
   approved: false            # set to true only on Alexander's go; paid stages refuse to run otherwise
-  spend_cap_usd: 110.0       # proposed cap (pending approval)
+  spend_cap_usd: 110.0       # safety stop Alexander sets; cost goals are directional (pending approval)
   agent_temperature: 0.0     # agents (MiniMax, Gemini); not fully repeatable, but steadier
   editor_temperature: 0.7    # MiniMax as editor (both loops)
   workers: 8
-  checkpoint_during_learning: true   # Alexander, 2026-10-08: the checkpoint is part of the harness
+  checkpoint_during_learning: true   # checkpoint on for learning AND the final test (canonical design, 2026-10-09)
   skill_loop:
     rounds: 4
     practice_per_round: 30   # fresh seeded sample of the 60 practice tasks each round
     test_bench_tasks: 60     # all of them
-    runs_per_task: 1         # "try each task once" (pending Alexander's confirmation)
+    runs_per_task: 1         # one run per task everywhere (canonical design, 2026-10-09)
     candidates_per_round: 2
     mistakes_shown: 8
     p_threshold: 0.10        # keep-or-reject test on the targeted checks

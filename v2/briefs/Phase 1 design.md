@@ -1,5 +1,7 @@
 # Phase 1 design: MiniMax M3 + Jev vs Gemini 3.8 Flash on back-office tasks
 
+> **The source of truth is now [`V2 Phase 1 Canonical Experiment Design.md`](V2%20Phase%201%20Canonical%20Experiment%20Design.md)** (2026-10-09). Where this page differs, the canonical design wins.
+
 **Written:** 2026-10-07 · **Approved in outline:** Alexander, 2026-10-07 · **Status:** design; the verdict rules go into code with tests and are committed before any Phase 1 paid run · **Pending revision:** after the pilot, the skill loop's keep-or-reject test and editor inputs are being redesigned ([`Skill loop redesign.md`](Skill%20loop%20redesign.md), draft) · **Supersedes:** the best-of-K Router and the Phase 1 experiment table in `Task Brief 7_V2_Business.md` (sections 2–3); the rest of that brief stands.
 
 ## The core question (revised 2026-10-07)
@@ -59,11 +61,11 @@ task ──► MiniMax M3 runs it once (with its learned skill file) ──► r
 | **V2-1 Controls** | Where do we start? | Sealed: MiniMax v0 skill, Gemini, 1 run each | — sets the frame (the starting gap) |
 | **V2-2a Agent skill loop** | Does MiniMax learn its playbook? | 4 rounds: 30 practice runs, then the current version and 2 candidate edits on the same 40 test bench tasks per round; final skill vs v0 on sealed | **Learned** if final beats v0 on sealed partial credit, paired one-sided Wilcoxon, p < 0.05 |
 | **V2-2b Jev rubric loop** | Does the checker learn what a correct run is? | Rubric learned on MiniMax runs from practice and test bench (labels: run "good" = partial credit ≥ 0.8) | **Learned** if the final rubric classifies sealed runs as good / not good better than the starting rubric, paired McNemar, p < 0.05 |
-| **V2-3 Router (headline)** | As good as Gemini, cheaper and faster? **Measured checkpoint off**: action masking (V2-5) is reported as a separate cell, never blended in | Sealed: MiniMax (final skill) once → Jev (final rubric) → keep, or Gemini does it. τ is the Jev score that escalates **30%** of test bench runs, frozen before sealed | **Chef's kiss** if Router mean partial credit is within **±3 points** of Gemini alone (paired 95% interval) **and** cost per task ≤ **½** Gemini's; time per task reported |
+| **V2-3 Router (main comparison)** | As good as Gemini, cheaper and faster? **Main comparison, checkpoint on** (canonical design, 2026-10-09) | Sealed: MiniMax (final skill) once → Jev (final rubric) → keep, or Gemini does it. τ is the Jev score that escalates **30%** of test bench runs, frozen before sealed | **Chef's kiss** if Router mean partial credit is within **±3 points** of Gemini alone (paired 95% interval) **and** cost per task ≤ **½** Gemini's; time per task reported |
 | V2-4 Partial feedback | — | not run (out of budget) | — |
 
 Notes:
-- **Action masking (V2-5) is a core experiment** (Alexander, 2026-10-08: "the most important part"), reported as its own cell. **The headline and the learning claim stay checkpoint off** (2026-10-08). Gemini runs without a checkpoint, so any action-masking gain (V2-5, [`BRIEF-v2-action-masking-v1.md`](BRIEF-v2-action-masking-v1.md)) is reported on its own.
+- **Action masking (V2-5) is a core experiment** (Alexander, 2026-10-08). **The checkpoint is on for learning and for the final test, including the main comparison** (canonical design, 2026-10-09; reverses the 2026-10-08 checkpoint-off rule). Final-playbook checkpoint-off runs exist only to show what the checkpoint adds.
 - **Escalated tasks get fresh Gemini runs** (Alexander, 2026-10-07: no reuse of the baseline's runs).
 - **Power is limited:** 80 sealed tasks can show differences of several points, not one or two. Stated up front.
 - A **pass-rate** comparison (all checks met) is reported next to partial credit for every verdict.
@@ -74,7 +76,7 @@ Notes:
 
 **Decisions built in (Alexander, 2026-10-08):**
 - **The checkpoint is on while MiniMax learns** (it is part of the harness); every hold reaches the editor as a near-miss.
-- **The sealed exam runs MiniMax's final playbook both ways:** checkpoint on (the harness as built) and checkpoint off (proves MiniMax itself learned; fair against Gemini, which has no checkpoint). The **V2-3 headline is the checkpoint-off cascade**; the checkpoint-on cascade and the checkpoint's own effect are reported beside it.
+- **The sealed exam (canonical design, 2026-10-09):** starting playbook and final playbook, both with the checkpoint on; the main comparison is the checkpoint-on router against Gemini alone; final playbook with the checkpoint off only for question 4 (what the checkpoint adds).
 - **Jev's starting rubric** is 8 generic yes/no questions fixed in code (`STARTING_RUBRIC`); MiniMax edits them. A run counts as good at partial credit ≥ 0.8.
 - **Try each test bench task once** per version (`runs_per_task: 1`), pending Alexander's confirmation.
 

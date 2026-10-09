@@ -92,7 +92,7 @@ The core test (C) is 60 tasks, run once with and once without the checkpoint: 12
 
 ≈ $110–140 more to the end of the v2 Phase 1 experiments (depending on step 3).
 
-**Waiting on Alexander: the go for the v2 Phase 1 experiments.** Three things: (1) confirm "try each test bench task once" (≈ $45 for the skill loop; twice ≈ $86); (2) the cap, proposed **$110**; (3) set `run.approved: true` (or tell me to). Releasing the sealed set comes later, before the final exam.
+**Design source of truth: [`briefs/V2 Phase 1 Canonical Experiment Design.md`](briefs/V2%20Phase%201%20Canonical%20Experiment%20Design.md)** (2026-10-09; checkpoint on for the final test too). **Waiting on Alexander:** the go for the v2 Phase 1 experiments (`run.approved: true`) and the spend cap (a safety stop; proposed $110; estimate ≈ $100 more). Releasing the sealed exam comes later.
 
 ## The experiment in one picture
 
@@ -134,7 +134,7 @@ Full design and preregistered verdicts: [`briefs/Phase 1 design.md`](briefs/Phas
 | V2-1 Controls | Where do we start? MiniMax vs Gemini on sealed | ⬜ |
 | V2-2a Agent skill loop | Does MiniMax learn from its own mistakes? | pilot done ([report](phase1/pilot/README.md)) |
 | V2-2b Jev rubric loop | Does Jev learn when to trust MiniMax? | ⬜ |
-| **V2-3 Router (headline)** | As good as Gemini, at ≤ ½ the cost, faster? (measured checkpoint off) | ⬜ |
+| **V2-3 Router (main comparison)** | Router (checkpoint on) vs Gemini alone: close on credit, about half the cost, faster? | ⬜ |
 | **V2-5 Action masking** | Does a check before each write cut broken rules without costing credit? | ▶️ starting ([brief](briefs/BRIEF-v2-action-masking-v1.md)) |
 
 **Phase 2: Magic Patterns UI and tutorial**: not started. The minimum bar is [`v1/ui-demo-2`](../v1/ui-demo-2/README.md); the scaffold is ready ([`story/`](story/insights.yaml), [`tutorial/`](tutorial/)).
@@ -166,7 +166,7 @@ Full design and preregistered verdicts: [`briefs/Phase 1 design.md`](briefs/Phas
 | Router | A cascade (not best-of-K) |
 | Editor in both loops | MiniMax M3: no Gemini judgement inside the loops |
 | Agent skill loop | In; redesign drafted (multi-level telemetry), [review pending](briefs/Skill%20loop%20redesign.md) |
-| Action masking (V2-5) | ✅ In scope (2026-10-08). The checkpoint may read company data, never grading checks or `meta`. Headline stays checkpoint off |
+| Action masking (V2-5) | ✅ In scope (2026-10-08). The checkpoint may read company data, never grading checks or `meta`. Checkpoint on for learning and the final test (canonical design, 2026-10-09) |
 | Sealed set | Held: untouched until Alexander releases it |
 [line omitted from the public copy]
 
@@ -201,12 +201,13 @@ Caps are enforced in code: a run stops before it would pass its cap. Per-item es
 | E (optional) | Jev as the checkpoint, with learned yes/no questions | ≤ $20 | skipped (Alexander, 2026-10-08) |
 | **Total** | | **≤ $40** (≈ $19 without E) | |
 
-The sealed set is not touched. The headline and the learning claim stay checkpoint off.
+The sealed set is not touched. The checkpoint is on for learning and the final test; checkpoint-off runs only show what it adds (canonical design, 2026-10-09).
 
 ## Documents
 
 | Document | What it holds |
 |---|---|
+| [`briefs/V2 Phase 1 Canonical Experiment Design.md`](briefs/V2%20Phase%201%20Canonical%20Experiment%20Design.md) | **The source of truth** for the design and its words (2026-10-09) |
 | [`briefs/Phase 1 design.md`](briefs/Phase%201%20design.md) | The current design: claim, loops, data, experiments, verdict rules, budget |
 | [`briefs/Skill loop redesign.md`](briefs/Skill%20loop%20redesign.md) | Draft after the pilot: multi-level telemetry and a new keep rule for long, noisy workflows |
 | [`briefs/BRIEF-v2-action-masking-v1.md`](briefs/BRIEF-v2-action-masking-v1.md) | V2-5: a check before each write (action masking), plus the harness fixes it depends on |
