@@ -50,6 +50,8 @@ Dated log of every decision, deviation and fix (same discipline as [`../v1/PLAN.
 
 - 2026-10-08: **Renamed "gate" (Alexander).** It meant three things. Now: the action-masking **checkpoint**, the **test bench** (60 held-out tasks), and the skill loop's **keep-or-reject test**. Current docs updated; code identifiers and file names unchanged; past log entries left as written.
 
+- 2026-10-08: **Jev checkpoint (work item E) marked optional and skipped (Alexander);** proceeding toward the main v2 Phase 1 experiments.
+
 ## Open decisions (brief section 9)
 
 - [x] Repo: folder in this repo (2026-10-05).

@@ -71,7 +71,7 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 |---|---|---|---|
 | 1 | **General harness improvements**: fixes A1–A5, plus the temperature-0 re-checks | A trustworthy harness for v2 Phase 1 | $0 + ≈ $9 |
 | 2 | **Lock the skill loop redesign**: temperature 0, telemetry at task, check and step level, targeted tests | A test that can see real improvements | ≈ $0 |
-| 3 | **Action masking (V2-5), core** (Alexander, 2026-10-08: "the most important part"): replay past runs ($0, done) → simple checkpoint off vs on (V2-5a, ≤ $10, **running**) → Jev as the checkpoint (≤ $20, on Alexander's go) | Does a check before each write cut broken rules? | $0–30 |
+| 3 | **Action masking (V2-5), core** (Alexander, 2026-10-08: "the most important part"): replay past runs ($0, done) → simple checkpoint off vs on (V2-5a, ≤ $10, **running**) → Jev as the checkpoint (≤ $20; **optional, skipped** by Alexander 2026-10-08) | Does a check before each write cut broken rules? | $0–30 |
 | 4 | **Go/no-go for v2 Phase 1** and its cap (Alexander) | Whether to spend on the full experiments | — |
 | 5 | **v2 Phase 1 experiments**: skill loop → Jev rubric loop → the sealed test, once | Does MiniMax learn? Does Jev learn when to trust it? Does the cascade match Gemini for less? | ≈ $100 |
 | 6 | **Write-up**: results, story, insights | The claim, stated honestly | $0 |
@@ -84,14 +84,14 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 | B: replay | MiniMax's past runs | 0 new runs | Re-checks the ≈ 300 logged runs, $0 |
 | C: simple checkpoint, off vs on | 60 test bench tasks | 120 (60 off + 60 on) | MiniMax, starting prompt, temperature 0, one run each, paired by task. ≈ $5 (cap $10) |
 | D: near-miss hooks | — | 0 | Code only |
-| E: Jev checkpoint (optional) | the same 60 test bench tasks | mostly replay of logged runs, plus up to 60 new checkpoint on runs | Cap $20; only on Alexander's go |
+| E: Jev checkpoint (optional; skipped) | the same 60 test bench tasks | mostly replay of logged runs, plus up to 60 new checkpoint on runs | Cap $20; only on Alexander's go |
 | *Pre-registered, not run:* final playbook, checkpoint off vs on | 80 sealed tasks | 80 extra checkpoint on runs | Only if Alexander releases the sealed set |
 
 The core test (C) is 60 tasks, run once with and once without the checkpoint: 120 runs, a mechanism test reported with paired intervals and no significance claim. Action masking is a core part of v2 (Alexander, 2026-10-08); its results are reported as their own cell next to the checkpoint off headline. The temperature-0 re-checks in step 1 are separate: 60 runs (20 repeatability, 40 MiniMax vs Gemini).
 
 ≈ $110–140 more to the end of the v2 Phase 1 experiments (depending on step 3).
 
-**Waiting on Alexander:** a second run per arm for V2-5a to narrow the ranges (≈ $6; needs the V2-5a cap raised from $10 to ≈ $16)? · improve the policy-email detector? · the Jev version of the checkpoint (E, ≤ $20)? · go/no-go for the v2 Phase 1 experiments.
+**Waiting on Alexander:** decisions before the go for the v2 Phase 1 experiments: how the keep-or-reject test handles run-to-run noise (tasks per round vs repeats, which sets the budget), whether the checkpoint is on during learning, and the Phase 1 cap. (The Jev checkpoint, E, is skipped; a second V2-5a run per arm is not planned.)
 
 ## The experiment in one picture
 
@@ -197,7 +197,7 @@ Caps are enforced in code: a run stops before it would pass its cap. Per-item es
 | Re-checks | Is temperature 0 repeatable? MiniMax vs Gemini again at temperature 0 | ≈ $9 | needs approval |
 | **C (V2-5a)** | Build the checkpoint; MiniMax on the 60 test bench tasks with the checkpoint off vs on. Success = fewer broken rules, credit doesn't fall, few holds | ≤ $10 | needs approval |
 | **D** | Near-misses shown to the editor; holds per 100 runs by round | ≈ $0 | ⬜ |
-| E (optional) | Jev as the checkpoint, with learned yes/no questions | ≤ $20 | only on Alexander's go |
+| E (optional) | Jev as the checkpoint, with learned yes/no questions | ≤ $20 | skipped (Alexander, 2026-10-08) |
 | **Total** | | **≤ $40** (≈ $19 without E) | |
 
 The sealed set is not touched. The headline and the learning claim stay checkpoint off.
