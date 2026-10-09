@@ -5,3 +5,5 @@ pyyaml
 scipy
 pytest
 pytest-asyncio
+numpy
+scikit-learn
