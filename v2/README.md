@@ -6,16 +6,21 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 
 **This page is the tracker** (status, plan, results, decisions). Details live in the linked documents; the dated log is [`PLAN.md`](PLAN.md).
 
-## Roadmap (as of 2026-10-08)
+## Roadmap (as of 2026-10-08, evening)
 
 *Phases here are v2's own: **v2 Phase 0** = feasibility, **v2 Phase 1** = the experiments, **v2 Phase 2** = the UI and tutorial. (v1 is the finished experiments 1–6 in [`../v1/`](../v1/README.md).)*
 
-**Done so far: $18.38**
+**Done so far: $26.01**
 
 | Step | Result | Spent |
 |---|---|---|
 | v2 Phase 0: feasibility | Finance + HR chosen; MiniMax M3 picked as the cheap agent; its failures diagnosed | $9.41 |
 | v2 Phase 1 pilot: 2 rounds of the skill loop | No fix kept, but every fix moved behaviour the right way | $8.97 |
+| Step 1: harness fixes A1–A5 | Done: summaries keep state changes; read-policy-before-first-write; check kinds; A4 (choosing test tasks by past failure keeps useless fixes 77% of the time); A5 power | $0 |
+| Step 1: temperature-0 re-checks | **Partial** (48 of 50 runs; stopped: OpenRouter out of credit). **Temperature 0 is not repeatable** for MiniMax | $7.63 |
+| Step 2: skill loop redesign | Built and tested (not yet run) | $0 |
+| Step 3: replay (B) | **Go, narrowly**: the gate would have caught runs that broke rules with 63% precision (base rate 43%), 44% recall ([report](action_masking/replay/REPORT.md)) | $0 |
+| Step 3: gate and near-miss hooks (C, D) | Built and tested (67 tests); the live test not yet run | $0 |
 
 **What didn't work, and what we learned**
 
@@ -25,7 +30,8 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 | DeepSeek V4 Pro: wandered until the 50-step cap | Same lesson; out after 20 tasks |
 | Best-of-4 selection by Jev | Too expensive at MiniMax's price → a cascade (run once, keep or escalate) |
 | v1's keep-or-reject test on long, noisy workflows | Too blunt for 40 tasks × 1 noisy run → telemetry at task, check and step level; temperature 0 |
-| Harness bugs: empty replies scored as "done", cache replays, rules refused for length, summaries cut before "state changes" | Fixed, or fixing in V2-5 work item A |
+| Harness bugs: empty replies scored as "done", cache replays, rules refused for length, summaries cut before "state changes" | Fixed |
+| Temperature 0 to remove noise | Not repeatable through OpenRouter (0 of 10 identical runs; scores differ by 0.26 on average) → handle noise with repeats, not temperature |
 
 **Next steps**
 
@@ -53,7 +59,7 @@ The core test (C) is 60 tasks, run once with and once without the gate: 120 runs
 
 ≈ $110–140 more to the end of the v2 Phase 1 experiments (depending on step 3).
 
-**Waiting on Alexander:** approve the ≈ $9 temperature-0 re-checks and the optional action-masking caps (≤ $30) · confirm the replay's go/stop thresholds before results · label emails on the A2 sheet when it's ready. Step-by-step V2-5 plan: [below](#v2-5-action-masking-plan-and-costs).
+**Waiting on Alexander:** ⚠️ **add OpenRouter credit** (all paid work stopped on a 402) · decide how to handle run-to-run noise now that temperature 0 doesn't remove it (repeats per task cost more) · whether to run V2-5a as planned (one run per arm) or with repeats · label emails on the A2 sheet (`action_masking/labels/`).
 
 ## The experiment in one picture
 
