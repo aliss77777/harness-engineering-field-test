@@ -59,10 +59,11 @@ task ──► MiniMax M3 runs it once (with its learned skill file) ──► r
 | **V2-1 Controls** | Where do we start? | Sealed: MiniMax v0 skill, Gemini, 1 run each | — sets the frame (the starting gap) |
 | **V2-2a Agent skill loop** | Does MiniMax learn its playbook? | 4 rounds: 30 practice runs, then the current version and 2 candidate edits on the same 40 gate tasks per round; final skill vs v0 on sealed | **Learned** if final beats v0 on sealed partial credit, paired one-sided Wilcoxon, p < 0.05 |
 | **V2-2b Jev rubric loop** | Does the checker learn what a correct run is? | Rubric learned on MiniMax runs from practice and gate (labels: run "good" = partial credit ≥ 0.8) | **Learned** if the final rubric classifies sealed runs as good / not good better than the starting rubric, paired McNemar, p < 0.05 |
-| **V2-3 Router (headline)** | As good as Gemini, cheaper and faster? | Sealed: MiniMax (final skill) once → Jev (final rubric) → keep, or Gemini does it. τ is the Jev score that escalates **30%** of gate runs, frozen before sealed | **Chef's kiss** if Router mean partial credit is within **±3 points** of Gemini alone (paired 95% interval) **and** cost per task ≤ **½** Gemini's; time per task reported |
+| **V2-3 Router (headline)** | As good as Gemini, cheaper and faster? **Measured gate-off**: action masking (V2-5) is reported as a separate cell, never blended in | Sealed: MiniMax (final skill) once → Jev (final rubric) → keep, or Gemini does it. τ is the Jev score that escalates **30%** of gate runs, frozen before sealed | **Chef's kiss** if Router mean partial credit is within **±3 points** of Gemini alone (paired 95% interval) **and** cost per task ≤ **½** Gemini's; time per task reported |
 | V2-4 Partial feedback | — | not run (out of budget) | — |
 
 Notes:
+- **The headline and the learning claim are gate-off** (2026-10-08). Gemini runs without a gate, so any action-masking gain (V2-5, [`BRIEF-v2-action-masking-v1.md`](BRIEF-v2-action-masking-v1.md)) is reported on its own.
 - **Escalated tasks get fresh Gemini runs** (Alexander, 2026-10-07: no reuse of the baseline's runs).
 - **Power is limited:** 80 sealed tasks can show differences of several points, not one or two. Stated up front.
 - A **pass-rate** comparison (all checks met) is reported next to partial credit for every verdict.

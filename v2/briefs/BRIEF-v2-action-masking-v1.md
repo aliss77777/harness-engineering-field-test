@@ -1,6 +1,15 @@
 # Brief: action masking for the v2 harness (V2-5), plus the skill-loop fixes it depends on
 
-**For:** the coding agent · **Written:** 2026-10-08 · **Repo state this was written against:** `aliss77777/jev-test-poc`, commit `a14d11e` · **Status:** draft, pending Alexander's approval of scope and caps (see section 9)
+**For:** the coding agent · **Written:** 2026-10-08 · **Repo state this was written against:** `aliss77777/jev-test-poc`, commit `a14d11e` · **Status:** revised 2026-10-08 after review; fixes 1–6 approved by Alexander; caps and thresholds still to confirm (section 9)
+
+**Revisions (2026-10-08, approved by Alexander):**
+1. **Leak rule:** the monitor may read the company's data at the start of the task (the world's initial state, read-only) but **never the world's `meta` field** (`meta.allowed_services` is computed from the grading checks) and never grading checks or expected state. A test enforces it; the production-access assumption is stated (section 2).
+2. **A4** (choose target tasks by a task property) agreed as written.
+3. **A2:** label **emails, not runs**, on tasks where the detector fires and where it doesn't, with an "unsure" option, so both precision and recall are measured.
+4. **V2-5a:** "≥ 90% read every policy email before the first write" is a **sanity check** (largely guaranteed by the gate). The **primary outcome** is broken "must not" checks per run, gate on versus off; credit and holds per run are guards; report the paired interval and claim no significance at this sample size (section 8).
+5. **Silent-wrong:** "flagged" means **at least one hold or flag logged by the gate** in the run; final messages don't count yet; this overstates catching (section 8).
+6. **Headline stays gate-off:** V2-3 and the learning claim are measured without the gate; the gate's value is reported as a separate cell. `Phase 1 design.md` says so too.
+Also: A3 may reuse the agent cache key's existing `candidate` field for repeats instead of adding a new one; the local logs and cache are confirmed present (section 9, item 5).
 
 ## In plain language: how this changes the way fixes are proposed and accepted
 
@@ -44,7 +53,8 @@ Do not edit anything under `v1/`. Files ported from v1 keep the repo's conventio
 ## 2. Hard rules
 
 - **`monitor=None` must leave behaviour byte-identical** to today. A test proves it with a fake model client; existing tests (53 at last count) still pass; existing cache keys unchanged.
-- **No leak.** The monitor sees only: the public task, the calls so far with results, the world diff since the start, and the text of policy-like documents the agent itself fetched. It never sees grading checks or expected state. Add a test like `tests/test_summary.py`'s that fails if grading data reaches the monitor's context type.
+- **No leak.** The monitor sees only: the public task; the calls so far with their results; the world diff since the start; and the **company's data at the start of the task** (the world's initial state, read-only, so it can tell which policy documents exist, including ones the agent never opened). It must **exclude the world's `meta` field**: `meta.allowed_services` is computed from the grading checks, so it would leak which services are graded. It never sees grading checks or expected state. Add tests like `tests/test_summary.py`'s that fail if grading checks, expected state or `meta` reach the monitor's context type.
+- **Production-access assumption (state it in the docs):** a real deployment's pre-write check could read the company's own systems (the mailbox, the shared sheets) with read-only access. It could not read an answer key, because none exists in production. The monitor's access mirrors that.
 - **The sealed set is not touched** by anything in this brief until Alexander says so in writing (section 9, item 6).
 - **Caps in code.** Every paid script takes a spend cap and stops before passing it (reuse `spend.py`). Free steps make no model calls.
 - **Preregister.** Verdict rules (section 8) go into code with tests, committed before any paid run. Never change them after seeing numbers.
@@ -58,9 +68,9 @@ Found in review of `a14d11e`. Each has a test.
 | # | Fix | Done when |
 |---|---|---|
 | A1 | **`summary.py` truncation drops STATE CHANGES.** `summarize()` cuts from the end at 8,000 characters, and state changes come last, so long runs lose the audit-log part Jev needs. Give each section its own budget and keep state changes. | A test with a synthetic 50-call run keeps every state-change line within budget and marks what it dropped. |
-| A2 | **Step measures are thin and loose.** `diagnostics.py` has two measures; the policy-email detector keys on generic words ("update", "process", "rule", "hold"). Add `read_policy_before_first_write` (needs call order). Measure the detector's precision and recall on at least 20 runs labelled by Alexander (ask for the labels; do not guess them). | Fixture tests pass; precision and recall are reported; the detector stays marked "approximate" if either is below 0.8. |
-| A3 | **Determinism test must bypass the cache.** The cache key hashes the full request, so reruns replay (the pilot's 15 of 16 identical scores were replays). Add a `repeat` field to the agent's `cache_key`. | A test shows two repeats get different cache entries; the default path is unchanged. |
-| A4 | **Target-set selection bias** (redesign change 3). Choosing "gate tasks where the current version missed the targeted check kind" selects on the outcome and biases the test toward improvement; the regression set is biased the opposite way. Select target tasks by a **task property** (for example, the task has a policy email, or its definition contains a check of that kind), or re-run the current version for a fresh baseline on the target set. | The redesign doc is updated with the choice and the reason; a simulation under a null fix shows the false-keep rate near the nominal level. |
+| A2 | **Step measures are thin and loose.** `diagnostics.py` has two measures; the policy-email detector keys on generic words ("update", "process", "rule", "hold"). Add `read_policy_before_first_write` (needs call order). Measure the detector's precision and recall against Alexander's labels. **The labelling unit is the email, not the run**: whether a run read an email is mechanical; which emails count as policy is the judgement. Prepare a sheet of every email in about 20 tasks (sender, subject, first lines), drawn from tasks where the detector fires **and** tasks where it doesn't, so recall is measured as well as precision. Options: **policy / not policy / unsure**; report unsure separately. Do not guess the labels. | Fixture tests pass; precision and recall are reported (unsure excluded and counted); the detector stays marked "approximate" if either is below 0.8. |
+| A3 | **Determinism test must bypass the cache.** The cache key hashes the full request, so reruns replay (the pilot's 15 of 16 identical scores were replays). Give repeats distinct cache keys: reuse the agent cache key's existing `candidate` field (or add a `repeat` field). | A test shows two repeats get different cache entries; the default path is unchanged. |
+| A4 | **Target-set selection bias** (redesign change 3). Choosing "gate tasks where the current version missed the targeted check kind" selects on the outcome and biases the test toward improvement; the regression set is biased the opposite way. Select target tasks by a **task property** (for example, the task has a policy email, or its definition contains a check of that kind), or re-run the current version for a fresh baseline on the target set. *(Agreed 2026-10-08: select by task property.)* | The redesign doc is updated with the choice and the reason; a simulation under a null fix shows the false-keep rate near the nominal level. |
 | A5 | **Power estimate** from the pilot's per-task gate scores, if the local logs have them (section 4). Estimate how often the redesigned keep rule would keep a +6.7-point targeted fix. | A short note with the number and the method. If the logs are missing, say so and stop this item. |
 
 ## 4. Work item B: free replay (the first real experiment, $0)
@@ -72,7 +82,7 @@ Found in review of `a14d11e`. Each has a test.
 **Build** `v2/scripts/replay_masking.py` (no model calls):
 
 1. For each logged run, list record-changing calls in order (`api_fetch` with POST, PATCH, PUT, or DELETE; confirm the exact argument names against `llm_agent.py` and `summary.py`).
-2. Apply Checkpoint 0 (rule only): at the first write, were all policy-like documents in the task's inbox already read? Use the A2 detector.
+2. Apply Checkpoint 0 (rule only): at the first write, were all policy-like documents in the task's inbox already read? (The inbox comes from the initial state, as the leak rule allows; never from `meta`.) Use the A2 detector.
 3. Report, per rule: coverage (share of runs with policy emails), how often it fires, and precision and recall against two outcomes: "at least one broken must-not check" and "credit below 0.5".
 4. **Label-mapping feasibility.** For every missed negative check across the logged runs, count how many can be tied to a specific call by a simple matcher (email recipient, record field and value). Report the share by check type. Do not build the full mapper.
 
@@ -84,7 +94,7 @@ Found in review of `a14d11e`. Each has a test.
 
 **Code**, small and with clean seams:
 
-- `v2/src/jevloop/monitor.py`: a `Monitor` protocol with `before_write(ctx) -> Verdict` and `before_finish(ctx) -> Verdict`. `Verdict` is `allow | hold | flag` plus a message and evidence. `MonitorContext` holds only the fields listed in section 2.
+- `v2/src/jevloop/monitor.py`: a `Monitor` protocol with `before_write(ctx) -> Verdict` and `before_finish(ctx) -> Verdict`. `Verdict` is `allow | hold | flag` plus a message and evidence. `MonitorContext` holds only the fields listed in section 2 (initial state read-only, `meta` excluded).
 - One optional `monitor` parameter on `LLMAgent`. Before executing a tool call classified as a write, call the monitor. On `hold`: do not execute, append a tool message with the held reason, count it. Cap **3 holds per run**; after that, allow and log.
 - Log a `monitor_verdict` event per check (step, verdict, evidence, whether the next call changed). Add intervention counts and flags to `AgentResult` and `CandidateRun.record()` with defaults, so old records still load.
 - The first monitor is **rule-based**: Checkpoint 0 from section 4. No Jev, no ledger, no new agent tool (the agent's three tools stay as the bench defines them, so Gemini remains comparable).
@@ -112,11 +122,19 @@ Found in review of `a14d11e`. Each has a test.
 
 ## 8. Verdict rules (proposed; Alexander confirms; code and tests before paid runs)
 
-**V2-5a, hard gate on gate tasks.** The gate is **worth keeping** if (a) the share of runs that read every policy email before the first write rises to at least 90%, (b) mean credit on the whole gate does not fall, and (c) holds per run are at most 2 on average. If (a) holds but (b) fails, report "the gate changes behaviour but costs credit" and diagnose from the logs; do not tune thresholds.
+**V2-5a, hard gate on gate tasks.** Gate on versus gate off, one run each, paired by task.
+- **Sanity check (not a success criterion):** the share of runs that read every policy email before the first write rises to at least 90%. The gate largely guarantees this, so it only shows the mechanism works.
+- **Primary outcome:** broken "must not" checks per run **fall** with the gate on versus off.
+- **Guards:** (a) mean credit on the whole gate does not fall; (b) holds per run average at most 2.
+- **Worth keeping** if the primary outcome falls and both guards hold.
+- **Report** the mean paired difference with a 95% paired interval for the primary outcome and the guards. **Claim no statistical significance** at this sample size; this is a mechanism test.
+- If the primary outcome falls but credit falls too, report "the gate changes behaviour but costs credit" and diagnose from the logs; do not tune thresholds.
 
-**Silent-wrong rate** (new, business-facing): runs with credit below 1 and no flag, divided by all runs. **Caught-wrong:** below 1 with a flag. Report both next to partial credit and pass rate for every comparison. Only the run's final message and the monitor's flags count as a flag.
+**Silent-wrong rate** (new, business-facing): runs with credit below 1 and not flagged, divided by all runs. **Caught-wrong:** credit below 1 and flagged. Report both next to partial credit and pass rate for every comparison.
+- **"Flagged" means at least one hold or flag logged by the gate in that run.** For now, only the gate's own logged verdicts count; the agent's final message does not (it has no defined rule yet).
+- **Caveat to state wherever these are reported:** this overstates catching. A flagged run can still be wrong for a reason the gate didn't catch, so "caught-wrong" means "wrong, and the gate raised something", not "wrong, and the gate found the error".
 
-**Learning claim** stays what `Phase 1 design.md` says: final playbook versus v0 on sealed, gate off. The gate-on cell shows the gate's own value; do not blend the two.
+**Learning claim and headline stay gate-off.** The learning claim stays what `Phase 1 design.md` says: final playbook versus v0 on sealed, gate off. **The V2-3 headline (Router vs Gemini) is also gate-off**, because Gemini runs without a gate. The gate-on cell shows the gate's own value, reported separately; never blend it into the headline or the learning claim.
 
 **Honesty rules:** state the limits (80 sealed tasks resolve differences of several points, not one or two; the simulator gives free observability that production would pay for in audit logs or polling; step measures are diagnostics, not the objective).
 
@@ -125,8 +143,8 @@ Found in review of `a14d11e`. Each has a test.
 1. Approve the section 0 reading summary and these caps: free steps $0; V2-5a up to $10; determinism and temperature-0 re-checks about $9 (as in the redesign); optional Jev monitor up to $20; this brief's total not above **$40** without a new approval.
 2. Confirm the go or stop thresholds in sections 4 and 8.
 3. The redesign's four open questions (temperature 0, keep-rule numbers, 60 gate tasks, extra step measures).
-4. Provide the hand labels for A2 (at least 20 runs).
-5. Confirm where the local `v2/logs` and `v2/cache` are.
+4. Provide the A2 email labels (policy / not policy / unsure) on the sheet the coding agent prepares (about 20 tasks).
+5. ~~Confirm where the local `v2/logs` and `v2/cache` are.~~ Confirmed 2026-10-08: present (306 recorded runs with full traces; the pilot's per-task gate scores).
 6. Release or hold the sealed set for the final-playbook gate cell.
 
 ## 10. Reporting contract and tracking

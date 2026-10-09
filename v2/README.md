@@ -8,14 +8,15 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 
 ## Status at a glance
 
-*Updated 2026-10-07.*
+*Updated 2026-10-08.*
 
 | | |
 |---|---|
-| **Phase** | 0 (feasibility) done · **Phase 1 pilot done** (not a GO) |
+| **Phase** | 0 (feasibility) done · Phase 1 pilot done (not a GO) · **V2-5 action masking: brief approved, starting** |
 | **Latest** | Pilot: **no fix kept in 2 rounds, but every candidate moved behaviour the right way** (fewer broken rules; the best fix +6.7 credit points). The gate is underpowered at 40 tasks × 1 run ([pilot report](phase1/pilot/README.md)) |
-| **Next** | Alexander reviews the **[skill loop redesign](briefs/Skill%20loop%20redesign.md)** (multi-level telemetry: task, check, step; temperature 0; targeted tests + regression set), then the go/no-go for Phase 1 |
-| **Spend** | Phase 0: $9.41 (cap $25) · Pilot: $8.97 (cap $20) |
+| **Next** | **V2-5 action masking** ([brief](briefs/BRIEF-v2-action-masking-v1.md)): a check before each write holds actions that break policies the agent hasn't read. Free work first (harness fixes A1–A5, then a replay of past runs), then paid steps on approval. Plan and costs: [below](#v2-5-action-masking-plan-and-costs) |
+| **Waiting on Alexander** | Approve the V2-5 caps (≤ $40 total) · confirm the replay's go/stop thresholds before results · label emails on the A2 sheet when it's ready |
+| **Spend** | **$18.38 so far** (Phase 0 $9.41 · pilot $8.97) |
 
 ## The experiment in one picture
 
@@ -57,7 +58,8 @@ Full design and preregistered verdicts: [`briefs/Phase 1 design.md`](briefs/Phas
 | V2-1 Controls | Where do we start? MiniMax vs Gemini on sealed | ⬜ |
 | V2-2a Agent skill loop | Does MiniMax learn from its own mistakes? | pilot done ([report](phase1/pilot/README.md)) |
 | V2-2b Jev rubric loop | Does Jev learn when to trust MiniMax? | ⬜ |
-| **V2-3 Router (headline)** | As good as Gemini, at ≤ ½ the cost, faster? | ⬜ |
+| **V2-3 Router (headline)** | As good as Gemini, at ≤ ½ the cost, faster? (measured gate-off) | ⬜ |
+| **V2-5 Action masking** | Does a check before each write cut broken rules without costing credit? | ▶️ starting ([brief](briefs/BRIEF-v2-action-masking-v1.md)) |
 
 **Phase 2: Magic Patterns UI and tutorial**: not started. The minimum bar is [`v1/ui-demo-2`](../v1/ui-demo-2/README.md); the scaffold is ready ([`story/`](story/insights.yaml), [`tutorial/`](tutorial/)).
 
@@ -87,7 +89,9 @@ Full design and preregistered verdicts: [`briefs/Phase 1 design.md`](briefs/Phas
 | Checker | Jev 1.13 (v1's model) |
 | Router | A cascade (not best-of-K) |
 | Editor in both loops | MiniMax M3: no Gemini judgement inside the loops |
-| Agent skill loop | In, lean version (piloted; gate power to be decided) |
+| Agent skill loop | In; redesign drafted (multi-level telemetry), [review pending](briefs/Skill%20loop%20redesign.md) |
+| Action masking (V2-5) | ✅ In scope (2026-10-08). Gate may read company data, never grading checks or `meta`. Headline stays gate-off |
+| Sealed set | Held: untouched until Alexander releases it |
 [line omitted from the public copy]
 
 How each decision was reached: [`JOURNEY.md`](JOURNEY.md); dates and detail: [`PLAN.md`](PLAN.md).
@@ -98,9 +102,30 @@ How each decision was reached: [`JOURNEY.md`](JOURNEY.md); dates and detail: [`P
 |---|---|---|
 | Phase 0 | spent **$9.41** | $25 |
 | Phase 1 pilot (2 skill-loop rounds) | spent **$8.97** | $20 |
-| Phase 1, full design | ≈ $90 (range ≈ $60–125) | to be set at go/no-go |
+| **V2-5 action masking** (plan below) | ≤ **$40** | $40, pending approval |
+| Phase 1, full design (incl. redesigned skill loop) | ≈ $100 (range ≈ $60–125) | to be set at go/no-go |
 
 Caps are enforced in code: a run stops before it would pass its cap. Per-item estimates: [`briefs/Phase 1 design.md`](briefs/Phase%201%20design.md#budget).
+
+## V2-5 action masking: plan and costs
+
+*From [`briefs/BRIEF-v2-action-masking-v1.md`](briefs/BRIEF-v2-action-masking-v1.md), revised 2026-10-08. Each step is reported before the next starts.*
+
+| Step | What it does | Cost | Status |
+|---|---|---|---|
+| **A1** | Keep the "state changes" section when long run summaries are trimmed (today it is cut first) | $0 | next |
+| **A2** | Better behaviour measures: "read the policy before the first write"; check the policy-email detector against Alexander's email labels | $0 (+ ≈ 20 min of labelling) | ⬜ |
+| **A3** | Let repeated runs bypass the cache, so repeats are independent | $0 | ⬜ |
+| **A4** | Pick each fix's test tasks by a task property, not by past failure | $0 | ⬜ |
+| **A5** | Estimate how often the redesigned test would keep a +6.7-point fix (from the pilot's logs) | $0 | ⬜ |
+| **B** | **Replay past runs:** would a "read the policies first" check have flagged the runs that broke rules? Go/stop thresholds set before looking | $0 | ⬜ |
+| Re-checks | Is temperature 0 repeatable? MiniMax vs Gemini again at temperature 0 | ≈ $9 | needs approval |
+| **C (V2-5a)** | Build the gate; MiniMax on the 60 gate tasks with the gate off vs on. Success = fewer broken rules, credit doesn't fall, few holds | ≤ $10 | needs approval |
+| **D** | Near-misses shown to the editor; holds per 100 runs by round | ≈ $0 | ⬜ |
+| E (optional) | Jev as the gate, with learned yes/no questions | ≤ $20 | only on Alexander's go |
+| **Total** | | **≤ $40** (≈ $19 without E) | |
+
+The sealed set is not touched. The headline and the learning claim stay gate-off.
 
 ## Documents
 
@@ -108,6 +133,7 @@ Caps are enforced in code: a run stops before it would pass its cap. Per-item es
 |---|---|
 | [`briefs/Phase 1 design.md`](briefs/Phase%201%20design.md) | The current design: claim, loops, data, experiments, verdict rules, budget |
 | [`briefs/Skill loop redesign.md`](briefs/Skill%20loop%20redesign.md) | Draft after the pilot: multi-level telemetry and a new keep rule for long, noisy workflows |
+| [`briefs/BRIEF-v2-action-masking-v1.md`](briefs/BRIEF-v2-action-masking-v1.md) | V2-5: a check before each write (action masking), plus the harness fixes it depends on |
 | [`JOURNEY.md`](JOURNEY.md) | The initial plan and the setbacks (including Nemotron), and how the design changed |
 | [`METHODOLOGY.md`](METHODOLOGY.md) | What changes from v1 and why; who does what |
 | [`phase0/FEASIBILITY.md`](phase0/FEASIBILITY.md) | Phase 0 measurements and the go/no-go |
