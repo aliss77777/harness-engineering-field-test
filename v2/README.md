@@ -416,7 +416,8 @@ The sealed set is not touched. The checkpoint is on for learning and the final t
 | [`PLAN.md`](PLAN.md) | Dated log of every decision, deviation and fix |
 | [`GLOSSARY.md`](GLOSSARY.md) | One name per concept |
 | [`briefs/Task Brief 7_V2_Business.md`](briefs/Task%20Brief%207_V2_Business.md) | The original v2 brief (partly superseded by the Phase 1 design) |
-| [`STORY.md`](STORY.md), [`story/insights.yaml`](story/insights.yaml), [`RESULTS.md`](RESULTS.md) | The story and results pages, filled after Phase 1 |
+| [`RESULTS.md`](RESULTS.md) | The sealed exam results, the Jev designs and their sources: a standalone mirror of the canonical design's results (synced 2026-10-10) |
+| [`STORY.md`](STORY.md), [`story/insights.yaml`](story/insights.yaml) | The story page and its insight sentences, still to fill |
 | [`experiments/`](experiments/), [`ui-data/`](ui-data/), [`tutorial/`](tutorial/) | Experiment packages, UI data (generated), tutorial chapters |
 
 ## How to run

@@ -1,0 +1,138 @@
+{
+  "sealed": {
+    "arms": {
+      "starting_playbook_checkpoint_on": {
+        "credit": 0.5728571428571428,
+        "fully_passed": 23,
+        "cost_per_run": 0.044351073,
+        "holds_per_run": 0.825,
+        "reads_all_policies_first": {
+          "yes": 36,
+          "n": 56,
+          "share": 0.6428571428571429
+        }
+      },
+      "final_playbook_checkpoint_on": {
+        "credit": 0.7549233405483405,
+        "fully_passed": 33,
+        "cost_per_run": 0.0417227565,
+        "holds_per_run": 0.1875,
+        "reads_all_policies_first": {
+          "yes": 55,
+          "n": 56,
+          "share": 0.9821428571428571
+        }
+      },
+      "final_playbook_checkpoint_off": {
+        "credit": 0.7749494949494949,
+        "fully_passed": 30,
+        "cost_per_run": 0.0368173245,
+        "holds_per_run": 0,
+        "reads_all_policies_first": {
+          "yes": 47,
+          "n": 56,
+          "share": 0.8392857142857143
+        }
+      },
+      "gemini_alone": {
+        "credit": 0.8106200396825397,
+        "fully_passed": 47,
+        "cost_per_run": 0.2734581740625,
+        "holds_per_run": 0,
+        "reads_all_policies_first": {
+          "yes": 54,
+          "n": 56,
+          "share": 0.9642857142857143
+        }
+      }
+    },
+    "cutoff": 0.7563166666666667,
+    "escalated": 36,
+    "escalated_share": 0.45,
+    "minimax_credit_escalated": 0.7153549382716049,
+    "minimax_credit_kept": 0.7872974878656697,
+    "gemini_redo_credit_escalated": 0.8243937389770724,
+    "gemini_alone_credit_escalated": 0.7947310405643739,
+    "router_credit": 0.8039908008658009,
+    "router_fully_passed": 42,
+    "random_escalation_expected_credit": 0.7799868551587301,
+    "router_minus_random_escalation": {
+      "mean": 0.024003945707070706,
+      "interval_95": [
+        -0.020511904761904766,
+        0.0706701388888889
+      ]
+    },
+    "review_queue": {
+      "0.2": {
+        "reviewed": 16,
+        "poor_found": 9,
+        "poor_total": 35
+      },
+      "0.3": {
+        "reviewed": 24,
+        "poor_found": 10,
+        "poor_total": 35
+      },
+      "0.45": {
+        "reviewed": 36,
+        "poor_found": 16,
+        "poor_total": 35
+      },
+      "0.6": {
+        "reviewed": 48,
+        "poor_found": 22,
+        "poor_total": 35
+      }
+    }
+  },
+  "test_bench": {
+    "starting_playbook": {
+      "credit": 0.6204833129833129,
+      "fully_passed": 11
+    },
+    "R1a": {
+      "credit": 0.6747413697413698,
+      "fully_passed": 14
+    },
+    "R1a_R2x_final": {
+      "credit": 0.7779954304954305,
+      "fully_passed": 21
+    },
+    "seven_neighbour_playbooks": {
+      "mean": 0.764069548176691,
+      "sd": 0.020375584494691252,
+      "min": 0.7457498057498058,
+      "max": 0.7916095941095941
+    }
+  },
+  "practice_cross_check": {
+    "n_tasks": 45,
+    "starting": 0.632962962962963,
+    "final": 0.755983645983646,
+    "diff": 0.12302068302068302,
+    "interval_95": [
+      0.0082411415744749,
+      0.23968253968253966
+    ]
+  },
+  "ceiling_extras": {
+    "failed_tasks": 54,
+    "minimax_first_run_on_failed": 0.5284224520335631,
+    "minimax_fresh_draws_on_failed": 0.6281038662983107,
+    "gemini_on_failed": 0.695644992867215,
+    "perfect_router_vs_fresh_baseline": 0.030393506956006955,
+    "rerun_when_first_run_failed": 0.0448566364191364,
+    "ceiling_json": {
+      "minimax_alone": 0.7525114237614238,
+      "perfect_router_escalating_all_failures": {
+        "share": 0.45,
+        "credit": 0.8277615671365671
+      },
+      "perfect_router_escalating_worst_30pct": {
+        "share": 0.3,
+        "credit": 0.8198030904280904
+      }
+    }
+  }
+}
