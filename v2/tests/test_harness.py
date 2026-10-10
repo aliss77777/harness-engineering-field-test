@@ -139,3 +139,31 @@ def test_export_ui_data_reads_insights_and_front_matter(tmp_path):
     (exp / "README.md").write_text("---\nid: v2-1\ninsights: [I7]\n---\n")
     with pytest.raises(ValueError):
         module.build(tmp_path)
+
+
+def test_in_flight_402_is_retried_but_a_real_402_is_fatal(tmp_path):
+    import json as _json
+
+    import httpx
+
+    from jevloop.cache import DiskCache
+    from jevloop.log import JsonlLogger
+    from jevloop.openrouter import ChatClient, OutOfCreditsError
+
+    in_flight = {"error": {"message": "This request would exceed your available credits given your current in-flight requests.",
+                           "code": 402, "metadata": {"reason": "in_flight_budget_exhausted"}}}
+    ok = {"model": "m", "provider": "P", "choices": [{"message": {"role": "assistant", "content": "done"}, "finish_reason": "stop"}],
+          "usage": {"prompt_tokens": 5, "completion_tokens": 1, "cost": 0.0}}
+
+    def client(responses):
+        calls = iter(responses)
+        transport = httpx.MockTransport(lambda req: next(calls))
+        return ChatClient(model="m", provider="P", provider_tag="p", expected_model="m", api_key="k", cache=DiskCache(tmp_path / f"c{len(responses)}"),
+                          logger=JsonlLogger(tmp_path / "log.jsonl"), spend=None, temperature=0.0, reasoning_effort=None, retries=3,
+                          http_client=httpx.Client(transport=transport), sleep=lambda s: None)
+
+    c = client([httpx.Response(402, json=in_flight), httpx.Response(200, json=ok)])
+    assert c.complete([{"role": "user", "content": "x"}], [], cache_key={"k": 1}, event={})["message"]["content"] == "done"
+    c2 = client([httpx.Response(402, json={"error": {"message": "Insufficient credits", "code": 402}})])
+    with __import__("pytest").raises(OutOfCreditsError):
+        c2.complete([{"role": "user", "content": "x"}], [], cache_key={"k": 2}, event={})

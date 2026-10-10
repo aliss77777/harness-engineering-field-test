@@ -15,7 +15,7 @@ import httpx
 
 from jevloop.cache import DiskCache
 from jevloop.log import JsonlLogger
-from jevloop.openrouter import IncompleteResponseError, OutOfCreditsError, RouteMismatchError
+from jevloop.openrouter import IncompleteResponseError, OutOfCreditsError, RouteMismatchError, is_in_flight_limit
 from jevloop.spend import SpendTracker
 
 DECISIONS_URL = "https://openrouter.ai/api/alpha/decisions"
@@ -55,6 +55,8 @@ class JevClient:
                 response = self.http.post(DECISIONS_URL, json=payload, headers={
                     "Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json", "X-Title": "Jev Learning Loop v2"})
                 if response.status_code == 402:
+                    if is_in_flight_limit(response.text):
+                        raise IncompleteResponseError(f"HTTP 402 in-flight budget exhausted: {response.text[:200]}")
                     raise OutOfCreditsError("OpenRouter returned 402 Payment Required: add credit, then rerun (finished calls are cached)")
                 if response.status_code in (408, 409, 425, 429, 500, 502, 503, 504, 520, 522, 524, 529):
                     raise IncompleteResponseError(f"HTTP {response.status_code}: {response.text[:300]}")

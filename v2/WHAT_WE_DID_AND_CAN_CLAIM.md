@@ -50,6 +50,9 @@ Rounds 3 and 4: the same again.    Final playbook = all kept rules together.
 
 ## 4. What we can claim
 
+**Update, sealed exam (2026-10-10):** the rows below marked "sealed" are measured on 80 unseen tasks, one run each.
+
+
 | Claim | Supported now? | Needs |
 |---|---|---|
 | "MiniMax's candidate rules moved the test bench by 2 to 5 points in rounds 1 and 2" | Yes, as a test bench observation with caveats 2 to 4 | — |
@@ -64,6 +67,10 @@ Rounds 3 and 4: the same again.    Final playbook = all kept rules together.
 | "A perfect failure detector would be worth about +7 points of credit" | **Yes, as measured:** Gemini 0.696 vs MiniMax 0.528 on the 54 tasks MiniMax failed (120 tasks, one run each); perfect router 0.820 to 0.828 vs 0.753 for MiniMax alone. Part of the gap is regression to the mean (to be measured with fresh runs) | Fresh MiniMax draws on the same tasks |
 | "The redesigned Jev (second attempt) separates good runs from bad on the final playbook" | **Yes against the pre-registered bar, with a caveat.** AUC 0.666 [0.55, 0.78], gap 0.194 on 120 fresh test bench runs, opened once. The same design scored 0.48 and 0.61 on the final playbook's other runs, so about 0.6 to 0.65 is the fair level; variant 3 added only 0.003 over variant 1 | The sealed exam, with the frozen cutoff 0.756 |
 | "Jev learned on v2's task" | **Not shown.** Jev became useful through a redesign (what it sees, per-task questions), not through learning from outcomes; the original rubric and the refit did not transfer, and learned instructions added +0.027 AUC on development and +0.048 on 120 fresh runs (interval −0.03 to +0.13, so not distinguishable from zero) | A design with enough runs to test learning on held-out data |
+| "MiniMax learned on unseen tasks" (sealed) | **Yes.** 0.573 to 0.755, +0.182 [0.095, 0.272], p < 0.001; fully passed 23 to 33 | Held up |
+| "The router matches Gemini's credit for less" (sealed) | **Credit yes, cost partly.** 0.804 vs 0.811 (−0.007 [−0.06, +0.05]) at 62% of Gemini's cost per task; not at half | The cost reference line was missed |
+| "Jev's choices made the router work" (sealed) | **No.** Router vs random escalation at the same 45% share: +0.024 (−0.02 to +0.07); Jev AUC 0.566 on the exam (bar 0.65) | The credit came from the share sent to Gemini |
+| "The checkpoint is worth keeping with the learned playbook" (sealed) | **No.** Off 0.775 vs on 0.755; broken rules 0.69 vs 0.80 | The playbook absorbed the habit |
 | "The cutoff separates good runs from bad" | **No** on the test bench (below tau 0.783 credit, at or above 0.776) | Same |
 | "The router comes close to Gemini for about half the cost" (question 1) | **No** | Sealed exam; reported as directional numbers and how close they land |
 | "The checkpoint adds X" (question 4) | **No** (V2-5a's earlier result stands as a promising mechanism test only) | Sealed exam, final playbook checkpoint off vs on |
@@ -71,6 +78,7 @@ Rounds 3 and 4: the same again.    Final playbook = all kept rules together.
 
 ## 5. Change log
 
+- 2026-10-10 (22:45 UTC): sealed exam done. MiniMax learned; router matched Gemini's credit at 62% of the cost but not via Jev's selection; Jev AUC 0.566 on the exam; checkpoint not worth keeping. Claim rows added.
 - 2026-10-10 (16:45 UTC): Jev redesign, second attempt, tested once on fresh runs: bar met (AUC 0.666); caveat that variants added little over the first attempt and earlier scores on the final playbook were lower. Cutoff frozen at 0.756; sealed not yet wired to it.
 - 2026-10-10 (15:50 UTC): Gemini ceiling check done: perfect router +7 points over MiniMax alone; supersedes the 20-task indication. Claim row added.
 - 2026-10-10 (15:25 UTC): Jev verifier (option D) built and validated once; bar missed (0.612 vs 0.65), clear improvement over the generic rubric, no discrimination on the final playbook; claim row added; test bench validation now used up.

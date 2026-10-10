@@ -39,6 +39,12 @@ class ContentBlockedError(RuntimeError):
     """The provider refused the request under its content policy. Not retried; cached."""
 
 
+def is_in_flight_limit(response_text: str) -> bool:
+    """OpenRouter reserves each in-flight request's worst-case cost against the balance; when many requests run
+    at once a 402 with this reason means "retry after in-flight requests settle", not "out of credit"."""
+    return "in_flight_budget_exhausted" in response_text or "in-flight requests" in response_text
+
+
 def is_content_block(body: dict[str, Any]) -> bool:
     error = body.get("error") or {}
     metadata = error.get("metadata") or {}
@@ -129,6 +135,8 @@ class ChatClient:
                     json=body,
                 )
                 if response.status_code == 402:
+                    if is_in_flight_limit(response.text):  # waits for other requests to settle; not a missing balance
+                        raise IncompleteResponseError(f"HTTP 402 in-flight budget exhausted: {response.text[:200]}")
                     raise OutOfCreditsError("OpenRouter returned 402 Payment Required: add credit, then rerun (finished calls are cached)")
                 if response.status_code in RETRYABLE_STATUS:
                     raise IncompleteResponseError(f"HTTP {response.status_code}: {response.text[:300]}")

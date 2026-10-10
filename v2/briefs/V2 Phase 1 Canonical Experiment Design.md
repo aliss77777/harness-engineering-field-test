@@ -1,6 +1,6 @@
 # V2 Phase 1: Canonical Experiment Design
 
-Oct 9, 2026 · @Alexander Liss · rewritten Oct 10, 2026 to carry what Take 1 and Take 2 taught us. The sealed exam opened Oct 10, 18:25 UTC; its results are not in this memo yet.
+Oct 9, 2026 · @Alexander Liss · rewritten Oct 10, 2026 to carry what Take 1 and Take 2 taught us. The sealed exam opened Oct 10, 18:25 UTC and finished 22:42 UTC; results are in "What the sealed exam showed".
 
 ## The question
 
@@ -84,6 +84,20 @@ Cite "Take N, round M" and name the keep test. Bars were fixed before each resul
 | Jev refit, 1,052 runs, 5-fold by task | AUC 0.65 (lower bound above 0.5), lowest 30% at least 0.10 below the rest | **0.525** [0.42, 0.63]; missed |
 | Redesign, first attempt, 840 test bench runs of 14 playbooks, opened once | same | **0.612** [0.51, 0.72], gap 0.166; missed. Final playbook alone 0.48 |
 | Redesign, second attempt, variant 3 chosen on development, 120 fresh test bench runs, opened once | same | **0.666** [0.55, 0.78], gap 0.194; **met** |
+
+## What the sealed exam showed (opened once, Oct 10; 80 tasks, one run each)
+
+| Question | Result |
+| --- | --- |
+| 2. Did MiniMax learn? | **Yes.** 0.573 to 0.755 credit, +0.182 (95% interval +0.095 to +0.272); fully passed 23 to 33. |
+| MiniMax final vs Gemini alone | 0.755 vs 0.811 (−0.056, interval −0.131 to +0.020); fully passed 33 vs 47; cost 15% of Gemini's. |
+| 1. Router vs Gemini alone (main comparison) | Credit 0.804 vs 0.811 (−0.007, interval −0.061 to +0.053): **within 3 points**. Cost 62% of Gemini's: **not at most half**. 45% of tasks escalated. |
+| 3. Is Jev a good checker? | **No on the exam.** Same-playbook AUC 0.566 [0.44, 0.70] against a bar of 0.65; gap 0.06 against 0.10. Original rubric also 0.567. |
+| 4. What does the checkpoint add? | **Nothing visible with the learned playbook.** Off 0.775 vs on 0.755. |
+
+The router reached Gemini's credit because 45% of tasks went to Gemini; against random escalation at the same share it gained +0.024 (interval −0.021 to +0.071). Jev's AUC on validation (0.666) did not replicate on the exam, so the honest level of the redesigned Jev is lower than the 0.60 to 0.65 estimated before.
+
+**The defensible story after the exam:** an open-weight model, with a harness that taught it from its own mistakes, got within about 6 points of a premium model's credit on unseen tasks at 15% of the cost. The checker did not show value as a router on this task; as a router, a fixed share sent to the premium model buys credit in proportion.
 
 ## What we measure
 

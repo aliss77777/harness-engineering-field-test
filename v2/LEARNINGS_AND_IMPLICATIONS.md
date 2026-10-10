@@ -215,3 +215,22 @@ As pre-registered: two fresh independent runs of the final playbook on every pra
 
 The Jev became useful through **redesign** (what it sees, per-task questions), not through learning from outcomes. The learned part is one kept edit to the question writer's instructions. A direct check on the same 120 fresh runs: starting instructions AUC 0.615 [0.49, 0.75], learned 0.663 [0.54, 0.79], a difference of +0.048 (95% interval −0.027 to +0.129; lowest-30% gap 0.185 against 0.173). That is a small step in the right direction that cannot be told from zero. Honest wording: "Jev's usefulness on v2 came from design; learning from outcomes added at most a small, uncertain amount." Cost $0.105.
 
+## Part C: the sealed exam (2026-10-10)
+
+80 unseen tasks, one run each. Full table: README, "Sealed exam results".
+
+**What held up.**
+1. **The playbook learned and it generalized.** +0.182 credit (p < 0.001), 33 fully passed against 23. This is the clean result of Phase 1, on tasks nobody tuned on.
+2. **MiniMax alone is close to Gemini on credit and far cheaper.** 0.755 vs 0.811 (interval −0.13 to +0.02) at 15% of the cost, but it fully passes 33 tasks to Gemini's 47.
+
+**What did not hold up.**
+3. **Jev did not discriminate on the exam.** Same-playbook AUC 0.566 (bar 0.65), against 0.666 on validation. The validation estimate was optimistic: it had been picked on the test bench tasks, which had also shaped the variants. The original rubric scored 0.567 on the same runs. A reviewer using Jev's lowest-scoring 45% would find 46% of poor runs, which is chance.
+4. **The router's credit came from the share, not the choosing.** 45% of tasks went to Gemini; at that share random escalation would score 0.780; the router scored 0.804 (+0.024, interval −0.02 to +0.07). The cutoff, set for 30%, produced 45% because sealed runs scored lower than the calibration runs.
+5. **The checkpoint no longer paid.** With the learned playbook (read-the-policies-first rule), the checkpoint on arm was no better than off (and slightly worse on broken rules). It was a scaffold for the unlearned model.
+
+**Implications.**
+- **The defensible claim is the first half of the story:** an open-weight model, taught by a harness from its own mistakes, reached 0.755 against a premium model's 0.811 on unseen tasks at 15% of the cost. The router half is not shown.
+- **If you route, route by share:** a fixed escalation share with a weak checker buys credit roughly in proportion to the share, at proportionate cost. The router's Pareto line between 0.755 (15% cost) and 0.811 (100%) is what Jev's quality would have to beat.
+- **For deployment:** human review of drafts, with the checker as a rough ordering tool at best. The checker should not be trusted to hide runs from reviewers.
+- **For what next:** a checker that verifies values against source (a per-field check), more labelled final-playbook runs, and the cross-domain run if you want a second live test.
+

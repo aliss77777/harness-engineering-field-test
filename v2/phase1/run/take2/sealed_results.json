@@ -1,0 +1,176 @@
+{
+  "V2-1_starting_line": {
+    "minimax_starting_playbook": 0.5728571428571428,
+    "gemini": 0.8106200396825397,
+    "diff": -0.2377628968253968,
+    "interval_95": [
+      -0.34120535714285716,
+      -0.13248015873015873
+    ]
+  },
+  "V2-2a_did_minimax_learn": {
+    "starting": 0.5728571428571428,
+    "final": 0.7549233405483405,
+    "diff": 0.1820661976911977,
+    "interval_95": [
+      0.09520111832611833,
+      0.2722253787878788
+    ],
+    "p_one_sided": 8.892987054156477e-05,
+    "learned": true
+  },
+  "V2-2b_did_jev_learn": {
+    "accuracy_starting_rubric": 0.6,
+    "accuracy_final_rubric": 0.625,
+    "better": 4,
+    "worse": 2,
+    "p": 0.34375,
+    "learned": false
+  },
+  "V2-3_main_comparison": {
+    "tasks": 80,
+    "kept_share": 0.55,
+    "credit": {
+      "router": 0.8039908008658008,
+      "gemini": 0.8106200396825397,
+      "diff": -0.006629238816738818,
+      "interval_95": [
+        -0.06143849206349207,
+        0.05257981601731602
+      ],
+      "within_3_points": true
+    },
+    "cost_per_task": {
+      "router": 0.17012271743750002,
+      "gemini": 0.2734581740625,
+      "ratio": 0.6221160439644337,
+      "half_or_less": false
+    },
+    "seconds_per_task": {
+      "router": 166.17435,
+      "gemini": 177.3443125
+    },
+    "chefs_kiss": false,
+    "note": "Point-estimate rule with the paired 95% interval reported; at 80 tasks the interval cannot prove ±3-point equivalence."
+  },
+  "main_comparison": "V2-3: router (checkpoint on) vs Gemini alone, sealed exam",
+  "router_jev": {
+    "design": "Jev redesign, second attempt, variant 3",
+    "cutoff": 0.7563166666666667,
+    "escalated": 36,
+    "escalated_share": 0.45,
+    "original_rubric_cutoff_unused": 0.018978616965942496
+  },
+  "jev_on_sealed": {
+    "redesign_second_attempt": {
+      "n_runs": 80,
+      "n_tasks": 80,
+      "auc_within_playbook": 0.5663492063492064,
+      "auc_ci95": [
+        0.435546875,
+        0.6964285714285714
+      ],
+      "auc_within_task": NaN,
+      "auc_pooled": 0.5663492063492064,
+      "credit_low": 0.7125992063492064,
+      "credit_rest": 0.7730622552051123,
+      "gap": 0.06046304885590592,
+      "n_low": 24,
+      "gap_ci95": [
+        -0.0788548752834467,
+        0.2626204648526077
+      ]
+    },
+    "original_rubric": {
+      "n_runs": 80,
+      "n_tasks": 80,
+      "auc_within_playbook": 0.566984126984127,
+      "auc_ci95": [
+        0.44042132982225146,
+        0.6931818181818182
+      ],
+      "auc_within_task": NaN,
+      "auc_pooled": 0.566984126984127,
+      "credit_low": 0.6082431457431458,
+      "credit_rest": 0.8177862811791383,
+      "gap": 0.20954313543599257,
+      "n_low": 24,
+      "gap_ci95": [
+        0.06541756854256853,
+        0.3902475005153576
+      ]
+    },
+    "bar": {
+      "auc": 0.65,
+      "auc_ci95_lower_above": 0.5,
+      "gap": 0.1
+    }
+  },
+  "minimax_final_vs_gemini_alone": {
+    "minimax_credit": 0.7549233405483405,
+    "gemini_credit": 0.8106200396825397,
+    "diff": -0.05569669913419913,
+    "interval_95": [
+      -0.1308482142857143,
+      0.019908459595959594
+    ],
+    "minimax_cost_per_task": 0.0417227565,
+    "gemini_cost_per_task": 0.2734581740625
+  },
+  "V2-5_checkpoint_extra": {
+    "tasks": 80,
+    "sanity_read_policies_before_first_write": {
+      "value": 0.9821428571428571,
+      "bar": 0.9,
+      "ok": true
+    },
+    "primary_broken_must_not_per_run": {
+      "off": 0.6875,
+      "on": 0.8,
+      "diff": 0.1125,
+      "interval_95": [
+        -0.05,
+        0.2875
+      ],
+      "falls": false
+    },
+    "guard_credit": {
+      "off": 0.7749494949494949,
+      "on": 0.7549233405483405,
+      "diff": -0.020026154401154402,
+      "interval_95": [
+        -0.07483089826839827,
+        0.03279626623376623
+      ],
+      "does_not_fall": false
+    },
+    "guard_holds_per_run": {
+      "mean": 0.1875,
+      "bar": 2.0,
+      "ok": true
+    },
+    "pass_rate": {
+      "off": 0.375,
+      "on": 0.4125
+    },
+    "silent_and_caught_wrong": {
+      "off": {
+        "silent_wrong": 0.625,
+        "caught_wrong": 0.0
+      },
+      "on": {
+        "silent_wrong": 0.525,
+        "caught_wrong": 0.0625
+      },
+      "caveat": "flagged = at least one gate hold or flag; overstates catching"
+    },
+    "worth_keeping": false,
+    "outcome_label": "gate not worth keeping",
+    "note": "Mechanism test on the gate set; no statistical significance claimed at this sample size."
+  },
+  "extra_column_final_playbook_checkpoint_off": {
+    "credit": 0.7749494949494949,
+    "pass_rate": 0.375
+  },
+  "spend_usd": 117.74106243400018
+}

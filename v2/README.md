@@ -38,6 +38,18 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 
 **The story so far.** (1) The original rubric learned on practice runs but did not carry over to new ones (AUC 0.475 on the test bench). (2) The refit gave more data and still did not help (0.525; bar 0.65). (3) The redesign, first attempt, gave Jev what it needs to verify and roughly doubled the signal (0.612; bar 0.65 not met). (4) The second attempt is being tested on fresh runs now. Cutoff and the sealed exam wait on that result.
 
+### Sealed exam results (opened once, 2026-10-10; 80 tasks, one run each)
+
+| Question | Result |
+|---|---|
+| **2. Did MiniMax learn?** | **Yes.** Final playbook 0.755 vs starting 0.573: **+0.182** (95% interval +0.095 to +0.272, p < 0.001); fully passed 33 vs 23 |
+| **MiniMax final vs Gemini alone** | 0.755 vs 0.811: **−0.056** (interval −0.131 to +0.020); fully passed 33 vs 47; cost **$0.042 vs $0.273 per task (15%)** |
+| **1. Router vs Gemini alone** (main comparison) | Credit **0.804 vs 0.811: −0.007** (interval −0.061 to +0.053), within 3 points ✓; cost **$0.170 vs $0.273 = 62%**, at most half ✗; time 166 s vs 177 s; fully passed 42 vs 47. 36 of 80 tasks (45%) escalated at the frozen cutoff 0.756 |
+| **3. Is Jev a good checker?** | **Not on the sealed exam.** Redesigned Jev same-playbook AUC **0.566** [0.44, 0.70] against a bar of 0.65; lowest 30% averaged 0.713 vs 0.773 (gap 0.06; bar 0.10). The original rubric, also frozen: AUC 0.567, gap 0.21 [0.07, 0.39]. Neither learned: starting vs final rubric accuracy 0.600 vs 0.625 (p 0.34) |
+| **4. What does the checkpoint add?** | **Nothing visible, not worth keeping with the learned playbook.** Off arm 0.775 vs on 0.755 (credit −0.02 on, interval −0.07 to +0.03); broken "must not" rules per run 0.69 off vs 0.80 on; holds 0.19 per run; read-policies-first 98% |
+
+**The honest reading of the router.** It reached Gemini's credit because 45% of tasks went to Gemini, not because Jev chose well. Escalated tasks had MiniMax credit 0.715 vs 0.787 for kept ones (a 7-point difference), and a person reviewing Jev's lowest 45% of runs would find 46% of the poor runs, no better than random (45%). Against **random escalation at the same 45% share** (expected 0.780), the router gained **+0.024** (interval −0.021 to +0.071): not distinguishable from zero. Jev's AUC on validation (0.666) did not replicate on the sealed exam (0.566), so the fair level of the redesigned Jev is lower than the 0.60 to 0.65 we estimated.
+
 ### The story we can defend (Alexander and Claude, 2026-10-10, before the sealed exam)
 
 > An open-weight model, with a harness that taught it from its own mistakes, got close to a premium model for a fraction of the cost, and a redesigned checker can find some of its failures. The router is the part that may or may not add value on top.
@@ -75,7 +87,7 @@ In v1 Jev learned from outcomes (the rubric changed, weights were fitted) becaus
 | 4 | **tau** | Set the cutoff (τ): lowest 30% of test bench runs would go to Gemini; then freeze it | 0 (60 Jev calls) | ≈ $0 | ✅ τ = 0.019 |
 | 5 | **sealed** | The final exam, once: starting playbook, final playbook (checkpoint on and off), Gemini alone, the router, 80 tasks | 240 MiniMax + 80 Gemini + ≈ 24 Gemini redos | ≈ $45 | 🔒 held until the release note |
 
-**Active now (18:30 UTC, 10 Oct): the sealed exam is running (released by Alexander, started 18:25 UTC).** Order: starting playbook (checkpoint on), final playbook (checkpoint on), final playbook (checkpoint off), Gemini alone, then Jev scores the final playbook's runs with variant 3 against the frozen cutoff 0.756, and Gemini redoes the runs below it. Estimate about $43 (range $39 to $48) and 1.5 to 2 hours; spend $75.7 of the $130 cap at the start. It opens once and resumes without repaying if it stops. Results land in `phase1/run/take2/sealed_results.json`; log in `logs/phase1_run/sealed.stdout`. The canonical design was rewritten for concision with all learnings (Take 1 and Take 2).
+**Active now (22:45 UTC, 10 Oct): the sealed exam is complete (finished 22:42 UTC; spend $117.7 of the $130 cap).** Nothing is running. Results are in the next section and in `phase1/run/take2/sealed_results.json`. In one line: **MiniMax learned (+0.18); the router matched Gemini's credit (−0.007) at 62% of its cost, but the credit comes from sending 45% of tasks to Gemini, not from Jev picking well; the checkpoint was not worth keeping.**
 
 | Item | Status |
 |---|---|
@@ -84,9 +96,10 @@ In v1 Jev learned from outcomes (the rubric changed, weights were fitted) becaus
 | Second attempt: choose a variant (development) | ✅ variant 3, AUC 0.648 |
 | Second attempt: test once (fresh test bench runs) | ✅ bar met, AUC 0.666 |
 | Wire variant 3 and the cutoff into the sealed stage | ✅ done and tested (93 tests; matches validated scores exactly) |
-| Sealed exam: starting playbook, final playbook, final playbook with checkpoint off, Gemini alone, Jev scoring, Gemini redos | ▶️ running since 18:25 UTC |
+| Sealed exam: MiniMax arms (3 x 80 runs) | ✅ done |
+| Sealed exam: Gemini alone (80), Jev scoring, Gemini redos (36) | ✅ done 22:42 UTC |
 | Raise the spend cap to cover the sealed exam | ✅ $130 (Alexander) |
-| Sealed exam results written up | ⬜ after the run |
+| Sealed exam results written up | ✅ README, memo, claims page, LEARNINGS, PLAN |
 
 Code: `scripts/phase1_run.py` stages `ceiling` and `fresh`, `scripts/jev_verifier_d2.py` (the second attempt), `src/jevloop/verifier.py`. Full write-up: [`LEARNINGS_AND_IMPLICATIONS.md`](LEARNINGS_AND_IMPLICATIONS.md) Part B.
 
