@@ -1,0 +1,8 @@
+{
+  "rules": [
+    "After you have located the source-of-truth data and identified each required deliverable, execute every required write action (each sheet row that needs updating, each invoice that needs creating, each email that needs sending) before declaring the task done. Do not stop after a single representative write or after partial completion — each distinct required deliverable needs its own successful write call. Excessive searching or re-verification between writes causes total task failure when deliverables are left unexecuted.",
+    "Before performing any write action that updates records, sheets, statuses, or sends external communication (email, Slack, invoices), first retrieve and read the most recent policy, guideline, and override emails in the inbox. Apply any instructions, extensions, or reversals found there — they frequently override or modify defaults found in Drive/Notion documents or in the task brief. Skipping this step causes gates to hold every subsequent write and leaves required deliverables unexecuted."
+  ],
+  "version": "s78766c8a",
+  "checkpoint_during_learning": true
+}

@@ -29,13 +29,13 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 
 | # | Stage | What it does in plain words | MiniMax runs (max) | Cost (est.) | Status |
 |---|---|---|---|---|---|
-| 1 | **skill** | MiniMax learns. 4 rounds: do 30 practice tasks, study its mistakes, propose 2 rules, test each on the 60 test bench tasks, keep the best one that passes the keep test | 660 (Take 2: round 1 reused, so ≈ 450 new) | ≈ $14 more | ▶️ Take 2, rounds 3 and 4 running (playbook has 2 rules going in) |
+| 1 | **skill** | MiniMax learns. 4 rounds: do 30 practice tasks, study its mistakes, propose 2 rules, test each on the 60 test bench tasks, keep the best one that passes the keep test | 660 (Take 2: round 1 reused, so ≈ 450 new) | $34.19 total ($10.45 in rounds 3 and 4) | ✅ Take 2 done: final playbook [R1a, R2x] |
 | 2 | **jevdata** | Run the final playbook on all 60 practice tasks: the examples Jev learns from | 60 | ≈ $3 | ⬜ |
 | 3 | **rubric** | Jev learns. MiniMax edits Jev's yes/no questions over 3 rounds (McNemar test, unchanged) | 0 (about 840 Jev calls) | < $1 | ⬜ |
 | 4 | **tau** | Set the cutoff (τ): lowest 30% of test bench runs would go to Gemini; then freeze it | 0 (60 Jev calls) | ≈ $0 | ⬜ |
 | 5 | **sealed** | The final exam, once: starting playbook, final playbook (checkpoint on and off), Gemini alone, the router, 80 tasks | 240 MiniMax + 80 Gemini + ≈ 24 Gemini redos | ≈ $45 | 🔒 held until the release note |
 
-**Active now (02:25 UTC, 10 Oct): Take 2, skill stage, round 3 of 4.** Resumed after the review pause (rounds 1 and 2 reloaded at $0). Round 3 starts from the 2-rule playbook [R1a, R2x]. **Alexander's plan:** run rounds 3 and 4 only, then stop and review before jevdata, rubric and tau; the sealed exam stays locked. Two optional checks are written up as proposals in [`WIP_NOTES.md`](WIP_NOTES.md): does R2x need R1a (≈ $3), and how much of the test bench score is luck (≈ $3). Neither is approved.
+**Active now (04:25 UTC, 10 Oct): Take 2 skill stage is done; nothing is running.** Final playbook: **[R1a, R2x], 2 rules** (version `s78766c8a`). Round 4 kept nothing. Next is up to Alexander: jevdata → rubric → tau, then (on a written release) the sealed exam. Two optional checks are written up as proposals in [`WIP_NOTES.md`](WIP_NOTES.md), not approved.
 
 **Take 1 results (rounds 1 and 2, p-value keep test, none kept).** Every candidate was tested against the starting playbook (no rules, checkpoint on): **0.62** credit, 11 of 60 passes on the test bench.
 
@@ -57,8 +57,11 @@ Caveat: the same starting playbook and checkpoint scored 0.65 on these 60 tasks 
 | 1 | R1b: copy values exactly as in the source | wrong content | 0.641 | 17 | +2.1 points, +6 passes | kept, not the winner |
 | 2 | **R2x:** before any write, read the latest policy and override emails | skipped action | **0.778** | **21** | **+10.3 vs R1a**, +7 passes | **kept** |
 | 2 | R2y: summary emails get totals only, no names or per-record amounts | rule broken | 0.652 | 15 | −2.3 vs R1a, +1 pass | rejected: targeted +0.125 (p 0.125) but credit fell |
+| 3 | R3a: a per-row flag (Include / Do Not Include) is binding for all outputs | wrong content | 0.751 | 23 | −2.7 vs [R1a, R2x], +2 passes | rejected: targeted −0.038, credit fell |
+| 3 | R3b: enumerate every deliverable before a batch of writes, check the count before stopping | skipped action | 0.791 | 26 | +1.3 vs [R1a, R2x], **+5 passes** | rejected: targeted +0.022 but credit +1.3 is under the +0.02 margin |
+| 4 | R4a: define deliverable scope only from sources that explicitly authorize each write; when ambiguous, do not write | rule broken | 0.746 | 22 | −3.2 vs [R1a, R2x], +1 pass | rejected: targeted +0.060 (p 0.25) but credit fell |
 
-Baselines: round 1 against the starting playbook, round 2 against R1a (0.675, 14 passes). **Playbook after round 2: [R1a, R2x], 0.778 credit and 21 of 60 passes on the test bench, against 0.620 and 11 for the starting playbook (+15.8 points).** That number is optimistic: both rules were picked on the same 60 tasks, each as the better of two candidates; a rough allowance for luck is about 4 points, so about +10 is a fairer reading. Only the sealed exam settles it.
+Baselines: round 1 against the starting playbook, round 2 against R1a (0.675, 14 passes), round 3 against [R1a, R2x] (0.778, 21 passes). **Rounds 3 and 4 kept nothing:** the playbook stays at 2 rules. ⚠️ But 5 proposals in rounds 3 and 4 were refused for length (over 600 characters), 3 of them aimed at wrong content, the largest remaining miss; round 4 tested only 1 candidate. So "nothing more to learn" is not shown; see caveat 9 in [`WHAT_WE_DID_AND_CAN_CLAIM.md`](WHAT_WE_DID_AND_CAN_CLAIM.md). R3b is the near miss (+5 passes, +1.3 points, inside the noise). **Playbook after round 2: [R1a, R2x], 0.778 credit and 21 of 60 passes on the test bench, against 0.620 and 11 for the starting playbook (+15.8 points).** That number is optimistic: both rules were picked on the same 60 tasks, each as the better of two candidates; a rough allowance for luck is about 4 points, so about +10 is a fairer reading. Only the sealed exam settles it.
 
 **Take 1 vs Take 2, rounds 1 and 2:**
 

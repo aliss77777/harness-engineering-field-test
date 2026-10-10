@@ -76,6 +76,10 @@ Dated log of every decision, deviation and fix (same discipline as [`../v1/PLAN.
 
 - 2026-10-10 (02:25 UTC): **Rounds 3 and 4 of Take 2 started (Alexander); WIP notes written.** Plan: skill stage only, then stop and review before jevdata, rubric, tau; sealed locked. `WIP_NOTES.md` holds two unapproved proposals (R2x alone on the test bench ≈ $3; a second draw of the final playbook on the test bench ≈ $3). Alexander: generalization and cost efficiency against Gemini are the real test; take it slow and steady.
 
+- 2026-10-10 (03:32 UTC): **Take 2 round 3: nothing kept; playbook stays [R1a, R2x].** R3a (per-row flag is binding; wrong content) 0.751, 23 passes, targeted −0.038, rejected. R3b (enumerate every deliverable, check the count; skipped action) 0.791, 26 passes, targeted +0.022, credit +1.3 points under the +0.02 margin, rejected. Baseline 0.778 and 21 passes. Round 4 running; spend $31.27.
+
+- 2026-10-10 (04:30 UTC): **Take 2 skill stage done ($34.19 total); final playbook [R1a, R2x] (`s78766c8a`).** Round 4: R4a (scope only from authorizing sources; rule broken) 0.746, 22 passes, targeted +0.060 p 0.25, credit −3.2 vs 0.778, rejected; only 1 candidate tested because 3 proposals were refused for length. Across rounds 3 and 4, five proposals (886, 927, 946, 1,073, 627 characters) hit the 600-character limit; three were aimed at wrong content, the largest remaining miss. Flagged to Alexander; no change made (a design change goes in the memo first).
+
 ## Open decisions (brief section 9)
 
 - [x] Repo: folder in this repo (2026-10-05).

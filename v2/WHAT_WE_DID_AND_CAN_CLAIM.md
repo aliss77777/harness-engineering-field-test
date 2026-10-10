@@ -46,6 +46,7 @@ Rounds 3 and 4: the same again.    Final playbook = all kept rules together.
 6. **Rules may interact.** Each rule is tested only against the playbook as it stood. The final combined playbook is first tested together on the sealed exam.
 7. **The checkpoint is part of the harness for MiniMax and Gemini gets none.** The main comparison is router (checkpoint on) against Gemini as it comes. That is a harness-vs-model comparison, and should be described as one.
 8. **Small samples.** 80 sealed tasks give about ±6 points, enough to show "close", not "within 3 points".
+9. **The 600-character rule limit refused five proposals in rounds 3 and 4** (886, 927, 946, 1,073 and 627 characters), including three aimed at wrong content, the largest remaining failure kind. Round 3 tested 2 candidates and round 4 only 1. So "rounds 3 and 4 kept nothing" is partly "the best proposals never got tested", and the plateau at two rules is not established. The refusal message says "shorten it and resubmit", but the loop does not resubmit. Any change is a design change for the memo.
 
 ## 4. What we can claim
 
@@ -63,6 +64,7 @@ Rounds 3 and 4: the same again.    Final playbook = all kept rules together.
 
 ## 5. Change log
 
+- 2026-10-10 (04:30 UTC): Take 2 skill stage done; final playbook [R1a, R2x], rounds 3 and 4 kept nothing. Added caveat 9 (five proposals refused for length in rounds 3 and 4, three of them on wrong content).
 - 2026-10-10 (02:25 UTC): two optional checks (does R2x need R1a; how much of the test bench score is luck) written up as proposals in [`WIP_NOTES.md`](WIP_NOTES.md), not approved or run. Rounds 3 and 4 started.
 - 2026-10-10 (02:12 UTC): Take 2 rounds 1 and 2 done: R1a and R2x kept; R1b passed but was the runner-up; R2y rejected. Added the claim rows for the 2-rule playbook and the checkpoint-habit observation. Caveat 3 now applies twice: two rules selected on the same test bench.
 - 2026-10-10: page created, after Take 2 round 1 kept R1a.
