@@ -1,0 +1,889 @@
+{
+  "metrics": {
+    "starting": {
+      "n_runs": 120,
+      "n_tasks": 60,
+      "auc_within_playbook": 0.6150319533203668,
+      "auc_ci95": [
+        0.49142857142857144,
+        0.7449494949494949
+      ],
+      "auc_within_task": 0.45454545454545453,
+      "auc_pooled": 0.6150319533203668,
+      "credit_low": 0.5925925925925926,
+      "credit_rest": 0.7780385619671334,
+      "gap": 0.18544596937454083,
+      "n_low": 36,
+      "gap_ci95": [
+        0.04376404019261171,
+        0.32526455026455026
+      ]
+    },
+    "learned": {
+      "n_runs": 120,
+      "n_tasks": 60,
+      "auc_within_playbook": 0.6631008613503752,
+      "auc_ci95": [
+        0.5441381230854915,
+        0.7875816993464052
+      ],
+      "auc_within_task": 0.5,
+      "auc_pooled": 0.6631008613503752,
+      "credit_low": 0.6015262515262515,
+      "credit_rest": 0.7742098509955653,
+      "gap": 0.17268359946931378,
+      "n_low": 36,
+      "gap_ci95": [
+        0.04148629148629157,
+        0.326302269159412
+      ]
+    }
+  },
+  "auc_difference": 0.048068908030008406,
+  "auc_difference_ci95": [
+    -0.026696329254727424,
+    0.12949039264828738
+  ],
+  "rows": [
+    {
+      "task": "finance:4002",
+      "group": "s78766c8a",
+      "credit": 0.5,
+      "starting": 0.8225,
+      "learned": 0.8822222222222221
+    },
+    {
+      "task": "finance:4001",
+      "group": "s78766c8a",
+      "credit": 0.16666666666666666,
+      "starting": 0.41111111111111115,
+      "learned": 0.41555555555555557
+    },
+    {
+      "task": "finance:4002",
+      "group": "s78766c8a",
+      "credit": 0.5,
+      "starting": 0.90625,
+      "learned": 0.931111111111111
+    },
+    {
+      "task": "finance:4005",
+      "group": "s78766c8a",
+      "credit": 0.5,
+      "starting": 0.9175,
+      "learned": 0.9257142857142856
+    },
+    {
+      "task": "finance:4003",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.8887499999999999,
+      "learned": 0.917
+    },
+    {
+      "task": "finance:4003",
+      "group": "s78766c8a",
+      "credit": 0.8333333333333334,
+      "starting": 0.8412499999999999,
+      "learned": 0.901
+    },
+    {
+      "task": "finance:4007",
+      "group": "s78766c8a",
+      "credit": 0.5,
+      "starting": 0.87875,
+      "learned": 0.8157142857142857
+    },
+    {
+      "task": "finance:4005",
+      "group": "s78766c8a",
+      "credit": 0.5,
+      "starting": 0.91875,
+      "learned": 0.9185714285714285
+    },
+    {
+      "task": "finance:4001",
+      "group": "s78766c8a",
+      "credit": 0.2857142857142857,
+      "starting": 0.6311111111111111,
+      "learned": 0.6577777777777778
+    },
+    {
+      "task": "finance:4007",
+      "group": "s78766c8a",
+      "credit": 0.5,
+      "starting": 0.82125,
+      "learned": 0.7699999999999999
+    },
+    {
+      "task": "finance:4009",
+      "group": "s78766c8a",
+      "credit": 0.8,
+      "starting": 0.588,
+      "learned": 0.6577777777777778
+    },
+    {
+      "task": "finance:4008",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.9011111111111111,
+      "learned": 0.8375
+    },
+    {
+      "task": "finance:4008",
+      "group": "s78766c8a",
+      "credit": 0.6,
+      "starting": 0.8966666666666667,
+      "learned": 0.8175
+    },
+    {
+      "task": "finance:4016",
+      "group": "s78766c8a",
+      "credit": 0.7142857142857143,
+      "starting": 0.8999999999999999,
+      "learned": 0.9119999999999999
+    },
+    {
+      "task": "finance:4016",
+      "group": "s78766c8a",
+      "credit": 0.8333333333333334,
+      "starting": 0.9055555555555556,
+      "learned": 0.9119999999999999
+    },
+    {
+      "task": "finance:4010",
+      "group": "s78766c8a",
+      "credit": 0.8333333333333334,
+      "starting": 0.82875,
+      "learned": 0.9490000000000001
+    },
+    {
+      "task": "finance:4009",
+      "group": "s78766c8a",
+      "credit": 0.42857142857142855,
+      "starting": 0.762,
+      "learned": 0.798888888888889
+    },
+    {
+      "task": "finance:4025",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.81375,
+      "learned": 0.92625
+    },
+    {
+      "task": "finance:4034",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.9388888888888888,
+      "learned": 0.9244444444444445
+    },
+    {
+      "task": "finance:4025",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.80375,
+      "learned": 0.9325
+    },
+    {
+      "task": "finance:4021",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.6950000000000001,
+      "learned": 0.6679999999999999
+    },
+    {
+      "task": "finance:4010",
+      "group": "s78766c8a",
+      "credit": 0.8333333333333334,
+      "starting": 0.815,
+      "learned": 0.9269999999999999
+    },
+    {
+      "task": "finance:4036",
+      "group": "s78766c8a",
+      "credit": 0.16666666666666666,
+      "starting": 0.6910000000000001,
+      "learned": 0.76
+    },
+    {
+      "task": "finance:4036",
+      "group": "s78766c8a",
+      "credit": 0.3333333333333333,
+      "starting": 0.504,
+      "learned": 0.632
+    },
+    {
+      "task": "finance:4032",
+      "group": "s78766c8a",
+      "credit": 0.6666666666666666,
+      "starting": 0.7,
+      "learned": 0.64
+    },
+    {
+      "task": "finance:4021",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.601,
+      "learned": 0.583
+    },
+    {
+      "task": "finance:4034",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.9422222222222223,
+      "learned": 0.9177777777777778
+    },
+    {
+      "task": "finance:4037",
+      "group": "s78766c8a",
+      "credit": 0.7777777777777778,
+      "starting": 0.8711111111111111,
+      "learned": 0.8960000000000001
+    },
+    {
+      "task": "finance:4037",
+      "group": "s78766c8a",
+      "credit": 0.7777777777777778,
+      "starting": 0.8833333333333333,
+      "learned": 0.9179999999999999
+    },
+    {
+      "task": "finance:4039",
+      "group": "s78766c8a",
+      "credit": 0.42857142857142855,
+      "starting": 0.6233333333333333,
+      "learned": 0.69375
+    },
+    {
+      "task": "finance:4042",
+      "group": "s78766c8a",
+      "credit": 0.6666666666666666,
+      "starting": 0.8877777777777778,
+      "learned": 0.7999999999999999
+    },
+    {
+      "task": "finance:4042",
+      "group": "s78766c8a",
+      "credit": 0.6666666666666666,
+      "starting": 0.82,
+      "learned": 0.7942857142857143
+    },
+    {
+      "task": "finance:4039",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.8755555555555555,
+      "learned": 0.93375
+    },
+    {
+      "task": "finance:4069",
+      "group": "s78766c8a",
+      "credit": 0.9090909090909091,
+      "starting": 0.792,
+      "learned": 0.8049999999999999
+    },
+    {
+      "task": "finance:4054",
+      "group": "s78766c8a",
+      "credit": 0.6666666666666666,
+      "starting": 0.6277777777777778,
+      "learned": 0.7288888888888889
+    },
+    {
+      "task": "finance:4063",
+      "group": "s78766c8a",
+      "credit": 0.75,
+      "starting": 0.837,
+      "learned": 0.8150000000000001
+    },
+    {
+      "task": "finance:4063",
+      "group": "s78766c8a",
+      "credit": 0.75,
+      "starting": 0.8109999999999999,
+      "learned": 0.7875
+    },
+    {
+      "task": "finance:4070",
+      "group": "s78766c8a",
+      "credit": 0.6,
+      "starting": 0.76625,
+      "learned": 0.69625
+    },
+    {
+      "task": "finance:4032",
+      "group": "s78766c8a",
+      "credit": 0.6666666666666666,
+      "starting": 0.65625,
+      "learned": 0.651
+    },
+    {
+      "task": "finance:4061",
+      "group": "s78766c8a",
+      "credit": 0.4,
+      "starting": 0.553,
+      "learned": 0.58625
+    },
+    {
+      "task": "finance:4072",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.933,
+      "learned": 0.9488888888888888
+    },
+    {
+      "task": "finance:4069",
+      "group": "s78766c8a",
+      "credit": 0.9090909090909091,
+      "starting": 0.8789999999999999,
+      "learned": 0.901
+    },
+    {
+      "task": "finance:4080",
+      "group": "s78766c8a",
+      "credit": 0.8,
+      "starting": 0.8480000000000001,
+      "learned": 0.8455555555555556
+    },
+    {
+      "task": "finance:4054",
+      "group": "s78766c8a",
+      "credit": 0.6666666666666666,
+      "starting": 0.7511111111111111,
+      "learned": 0.8322222222222222
+    },
+    {
+      "task": "finance:4072",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.851,
+      "learned": 0.9011111111111111
+    },
+    {
+      "task": "finance:4080",
+      "group": "s78766c8a",
+      "credit": 0.8,
+      "starting": 0.8310000000000001,
+      "learned": 0.8144444444444444
+    },
+    {
+      "task": "finance:4070",
+      "group": "s78766c8a",
+      "credit": 0.6,
+      "starting": 0.61875,
+      "learned": 0.64625
+    },
+    {
+      "task": "finance:4076",
+      "group": "s78766c8a",
+      "credit": 0.5,
+      "starting": 0.9369999999999999,
+      "learned": 0.9455555555555555
+    },
+    {
+      "task": "finance:4076",
+      "group": "s78766c8a",
+      "credit": 0.6666666666666666,
+      "starting": 0.86,
+      "learned": 0.8999999999999999
+    },
+    {
+      "task": "finance:4087",
+      "group": "s78766c8a",
+      "credit": 0.6666666666666666,
+      "starting": 0.729,
+      "learned": 0.8011111111111111
+    },
+    {
+      "task": "finance:4061",
+      "group": "s78766c8a",
+      "credit": 0.8,
+      "starting": 0.7070000000000001,
+      "learned": 0.6825
+    },
+    {
+      "task": "finance:4087",
+      "group": "s78766c8a",
+      "credit": 0.6666666666666666,
+      "starting": 0.7230000000000001,
+      "learned": 0.7688888888888888
+    },
+    {
+      "task": "finance:4090",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.8271428571428572,
+      "learned": 0.8014285714285715
+    },
+    {
+      "task": "finance:4084",
+      "group": "s78766c8a",
+      "credit": 0.3333333333333333,
+      "starting": 0.6699999999999999,
+      "learned": 0.6428571428571429
+    },
+    {
+      "task": "finance:4088",
+      "group": "s78766c8a",
+      "credit": 0.75,
+      "starting": 0.84,
+      "learned": 0.8
+    },
+    {
+      "task": "finance:4084",
+      "group": "s78766c8a",
+      "credit": 0.6666666666666666,
+      "starting": 0.73375,
+      "learned": 0.7328571428571429
+    },
+    {
+      "task": "finance:4090",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.8985714285714286,
+      "learned": 0.9
+    },
+    {
+      "task": "hr:5007",
+      "group": "s78766c8a",
+      "credit": 0.75,
+      "starting": 0.7928571428571428,
+      "learned": 0.81
+    },
+    {
+      "task": "hr:5007",
+      "group": "s78766c8a",
+      "credit": 0.75,
+      "starting": 0.7757142857142857,
+      "learned": 0.7733333333333334
+    },
+    {
+      "task": "hr:5010",
+      "group": "s78766c8a",
+      "credit": 0.7142857142857143,
+      "starting": 0.8477777777777777,
+      "learned": 0.81375
+    },
+    {
+      "task": "hr:5010",
+      "group": "s78766c8a",
+      "credit": 0.8571428571428571,
+      "starting": 0.8111111111111111,
+      "learned": 0.9412499999999999
+    },
+    {
+      "task": "finance:4093",
+      "group": "s78766c8a",
+      "credit": 0.0,
+      "starting": 0.15666666666666665,
+      "learned": 0.1688888888888889
+    },
+    {
+      "task": "hr:5023",
+      "group": "s78766c8a",
+      "credit": 0.8,
+      "starting": 0.882,
+      "learned": 0.874
+    },
+    {
+      "task": "hr:5023",
+      "group": "s78766c8a",
+      "credit": 0.8,
+      "starting": 0.915,
+      "learned": 0.908
+    },
+    {
+      "task": "hr:5029",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.9257142857142856,
+      "learned": 0.9625
+    },
+    {
+      "task": "hr:5029",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.9314285714285714,
+      "learned": 0.97625
+    },
+    {
+      "task": "hr:5036",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.82375,
+      "learned": 0.86
+    },
+    {
+      "task": "finance:4093",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.1388888888888889,
+      "learned": 0.12666666666666668
+    },
+    {
+      "task": "hr:5036",
+      "group": "s78766c8a",
+      "credit": 0.8333333333333334,
+      "starting": 0.80875,
+      "learned": 0.87625
+    },
+    {
+      "task": "hr:5031",
+      "group": "s78766c8a",
+      "credit": 0.5,
+      "starting": 0.72,
+      "learned": 0.755
+    },
+    {
+      "task": "hr:5031",
+      "group": "s78766c8a",
+      "credit": 0.5714285714285714,
+      "starting": 0.68375,
+      "learned": 0.701
+    },
+    {
+      "task": "hr:5028",
+      "group": "s78766c8a",
+      "credit": 0.0,
+      "starting": 0.785,
+      "learned": 0.8474999999999999
+    },
+    {
+      "task": "hr:5043",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.9650000000000001,
+      "learned": 0.9425
+    },
+    {
+      "task": "hr:5043",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.952,
+      "learned": 0.9325
+    },
+    {
+      "task": "hr:5037",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.76625,
+      "learned": 0.875
+    },
+    {
+      "task": "hr:5039",
+      "group": "s78766c8a",
+      "credit": 0.8333333333333334,
+      "starting": 0.8211111111111111,
+      "learned": 0.88625
+    },
+    {
+      "task": "hr:5039",
+      "group": "s78766c8a",
+      "credit": 0.8333333333333334,
+      "starting": 0.8077777777777777,
+      "learned": 0.84
+    },
+    {
+      "task": "hr:5048",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.8475,
+      "learned": 0.96
+    },
+    {
+      "task": "hr:5048",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.8375,
+      "learned": 0.95875
+    },
+    {
+      "task": "hr:5037",
+      "group": "s78766c8a",
+      "credit": 0.2,
+      "starting": 0.76875,
+      "learned": 0.88
+    },
+    {
+      "task": "hr:5028",
+      "group": "s78766c8a",
+      "credit": 0.8,
+      "starting": 0.78,
+      "learned": 0.755
+    },
+    {
+      "task": "hr:5054",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.791,
+      "learned": 0.7933333333333333
+    },
+    {
+      "task": "hr:5044",
+      "group": "s78766c8a",
+      "credit": 0.0,
+      "starting": 0.33888888888888885,
+      "learned": 0.298
+    },
+    {
+      "task": "hr:5049",
+      "group": "s78766c8a",
+      "credit": 0.6,
+      "starting": 0.8560000000000001,
+      "learned": 0.9466666666666667
+    },
+    {
+      "task": "finance:4088",
+      "group": "s78766c8a",
+      "credit": 0.5,
+      "starting": 0.7675,
+      "learned": 0.69875
+    },
+    {
+      "task": "hr:5054",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.835,
+      "learned": 0.8033333333333332
+    },
+    {
+      "task": "hr:5062",
+      "group": "s78766c8a",
+      "credit": 0.8,
+      "starting": 0.55,
+      "learned": 0.7474999999999999
+    },
+    {
+      "task": "hr:5062",
+      "group": "s78766c8a",
+      "credit": 0.5,
+      "starting": 0.48100000000000004,
+      "learned": 0.70625
+    },
+    {
+      "task": "hr:5063",
+      "group": "s78766c8a",
+      "credit": 0.6,
+      "starting": 0.35555555555555557,
+      "learned": 0.48125
+    },
+    {
+      "task": "hr:5063",
+      "group": "s78766c8a",
+      "credit": 0.7142857142857143,
+      "starting": 0.6511111111111112,
+      "learned": 0.83375
+    },
+    {
+      "task": "hr:5066",
+      "group": "s78766c8a",
+      "credit": 0.5384615384615384,
+      "starting": 0.7925,
+      "learned": 0.7939999999999999
+    },
+    {
+      "task": "hr:5069",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.637,
+      "learned": 0.9109999999999999
+    },
+    {
+      "task": "hr:5049",
+      "group": "s78766c8a",
+      "credit": 0.0,
+      "starting": 0.34199999999999997,
+      "learned": 0.3
+    },
+    {
+      "task": "hr:5069",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.646,
+      "learned": 0.8789999999999999
+    },
+    {
+      "task": "hr:5079",
+      "group": "s78766c8a",
+      "credit": 0.6,
+      "starting": 0.845,
+      "learned": 0.7685714285714286
+    },
+    {
+      "task": "hr:5066",
+      "group": "s78766c8a",
+      "credit": 0.7692307692307693,
+      "starting": 0.7025,
+      "learned": 0.633
+    },
+    {
+      "task": "hr:5078",
+      "group": "s78766c8a",
+      "credit": 0.8333333333333334,
+      "starting": 0.6377777777777778,
+      "learned": 0.5871428571428572
+    },
+    {
+      "task": "hr:5079",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.7809999999999999,
+      "learned": 0.7214285714285714
+    },
+    {
+      "task": "hr:5044",
+      "group": "s78766c8a",
+      "credit": 0.6666666666666666,
+      "starting": 0.5677777777777778,
+      "learned": 0.49399999999999994
+    },
+    {
+      "task": "hr:5085",
+      "group": "s78766c8a",
+      "credit": 0.5714285714285714,
+      "starting": 0.9269999999999999,
+      "learned": 0.938
+    },
+    {
+      "task": "hr:5094",
+      "group": "s78766c8a",
+      "credit": 0.75,
+      "starting": 0.6325,
+      "learned": 0.722
+    },
+    {
+      "task": "hr:5085",
+      "group": "s78766c8a",
+      "credit": 0.5714285714285714,
+      "starting": 0.8859999999999999,
+      "learned": 0.8470000000000001
+    },
+    {
+      "task": "hr:5093",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.6033333333333333,
+      "learned": 0.56
+    },
+    {
+      "task": "hr:5093",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.5855555555555555,
+      "learned": 0.5633333333333334
+    },
+    {
+      "task": "hr:5094",
+      "group": "s78766c8a",
+      "credit": 0.75,
+      "starting": 0.63,
+      "learned": 0.7150000000000001
+    },
+    {
+      "task": "hr:5088",
+      "group": "s78766c8a",
+      "credit": 0.5555555555555556,
+      "starting": 0.7925,
+      "learned": 0.8433333333333333
+    },
+    {
+      "task": "hr:5103",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.9125,
+      "learned": 0.7725
+    },
+    {
+      "task": "hr:5096",
+      "group": "s78766c8a",
+      "credit": 0.8333333333333334,
+      "starting": 0.768,
+      "learned": 0.7944444444444445
+    },
+    {
+      "task": "hr:5096",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.74,
+      "learned": 0.8133333333333334
+    },
+    {
+      "task": "hr:5088",
+      "group": "s78766c8a",
+      "credit": 0.4444444444444444,
+      "starting": 0.77625,
+      "learned": 0.8122222222222222
+    },
+    {
+      "task": "hr:5103",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.81125,
+      "learned": 0.66
+    },
+    {
+      "task": "hr:5104",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.48888888888888893,
+      "learned": 0.57125
+    },
+    {
+      "task": "hr:5122",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.8514285714285714,
+      "learned": 0.81125
+    },
+    {
+      "task": "hr:5078",
+      "group": "s78766c8a",
+      "credit": 0.8333333333333334,
+      "starting": 0.44999999999999996,
+      "learned": 0.4257142857142857
+    },
+    {
+      "task": "hr:5117",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.758,
+      "learned": 0.874
+    },
+    {
+      "task": "hr:5122",
+      "group": "s78766c8a",
+      "credit": 1.0,
+      "starting": 0.8171428571428571,
+      "learned": 0.77125
+    },
+    {
+      "task": "hr:5117",
+      "group": "s78766c8a",
+      "credit": 0.8333333333333334,
+      "starting": 0.728,
+      "learned": 0.836
+    },
+    {
+      "task": "hr:5104",
+      "group": "s78766c8a",
+      "credit": 0.8,
+      "starting": 0.5711111111111111,
+      "learned": 0.5775
+    },
+    {
+      "task": "hr:5131",
+      "group": "s78766c8a",
+      "credit": 0.0,
+      "starting": 0.59625,
+      "learned": 0.52875
+    },
+    {
+      "task": "hr:5131",
+      "group": "s78766c8a",
+      "credit": 0.0,
+      "starting": 0.56875,
+      "learned": 0.47375
+    }
+  ]
+}

@@ -211,3 +211,7 @@ As pre-registered: two fresh independent runs of the final playbook on every pra
 
 **What it implies for the router.** The cutoff is frozen at 0.756 (the 30th percentile of variant 3's scores on these 120 runs). The 36 runs below it averaged 0.587 MiniMax credit against 0.722 overall. From the ceiling check, Gemini averaged 0.696 on tasks MiniMax failed. A rough estimate, not a measurement: escalating that lowest 30% to Gemini would gain about 0.3 x (0.70 - 0.587), roughly **+3 points of credit**, at about $0.13 per task against $0.28 for Gemini alone. The sealed exam is what measures it.
 
+### Did Jev learn in v2? (2026-10-10, 17:00 UTC)
+
+The Jev became useful through **redesign** (what it sees, per-task questions), not through learning from outcomes. The learned part is one kept edit to the question writer's instructions. A direct check on the same 120 fresh runs: starting instructions AUC 0.615 [0.49, 0.75], learned 0.663 [0.54, 0.79], a difference of +0.048 (95% interval −0.027 to +0.129; lowest-30% gap 0.185 against 0.173). That is a small step in the right direction that cannot be told from zero. Honest wording: "Jev's usefulness on v2 came from design; learning from outcomes added at most a small, uncertain amount." Cost $0.105.
+

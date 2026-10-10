@@ -38,6 +38,18 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 
 **The story so far.** (1) The original rubric learned on practice runs but did not carry over to new ones (AUC 0.475 on the test bench). (2) The refit gave more data and still did not help (0.525; bar 0.65). (3) The redesign, first attempt, gave Jev what it needs to verify and roughly doubled the signal (0.612; bar 0.65 not met). (4) The second attempt is being tested on fresh runs now. Cutoff and the sealed exam wait on that result.
 
+### Did Jev learn in v2? (plain answer, 2026-10-10)
+
+**Short answer: we made Jev useful on v2's task; we have not shown that it learned.**
+
+| Question | Answer | Evidence |
+|---|---|---|
+| Can Jev tell good runs from poor ones on the final playbook? | **Yes, once it sees the right things**, at about 0.6 to 0.65 AUC | second attempt met its bar on 120 fresh runs (0.666) |
+| Did that come from Jev learning from outcomes? | **Mostly no.** The original rubric and the refit, which are the learning versions, did not carry over; the gain came from what Jev sees and how questions are written | AUC 0.475 and 0.525 against 0.612 and 0.666 |
+| Did learning add anything on top? | **A small, uncertain step in the right direction** | learned question-writer instructions: +0.027 on development; on the 120 fresh runs +0.048 AUC (95% interval −0.03 to +0.13), so not distinguishable from zero |
+
+In v1 Jev learned from outcomes (the rubric changed, weights were fitted) because the task was one clean decision. In v2 the learning that worked is MiniMax's playbook; Jev improved mainly through **design**: richer input and per-task questions. **The direct check (`scripts/jev_instructions_check.py`, $0.11):** the starting and the learned question-writer instructions on the same 120 fresh runs, same scoring. Starting AUC 0.615 [0.49, 0.75], learned 0.663 [0.54, 0.79]: **+0.048 (95% interval −0.027 to +0.129)**. The lowest-30% gap was 0.185 for the starting instructions and 0.173 for the learned ones. So the learned instructions are a little better on AUC and not on the gap, and neither difference can be told from zero. That is "suggestive, not shown".
+
 **Approved by Alexander:** `run.approved: true`, spend cap **$110**, cumulative across takes ($16.15 spent in Take 1). The sealed exam stays locked until Alexander writes the release note.
 
 ✅ done · ▶️ running now · ⬜ waiting · 🔒 held for Alexander
@@ -63,45 +75,6 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 | Sealed exam | 🔒 held for Alexander's written release |
 
 Code: `scripts/phase1_run.py` stages `ceiling` and `fresh`, `scripts/jev_verifier_d2.py` (the second attempt), `src/jevloop/verifier.py`. Full write-up: [`LEARNINGS_AND_IMPLICATIONS.md`](LEARNINGS_AND_IMPLICATIONS.md) Part B.
-
-### Jev: the story and the terms, in plain words
-
-| Term | Plain meaning |
-|---|---|
-| **Jev rubric (the original)** | A checklist of 8 generic yes/no questions that Jev answers about a short summary of a finished run; the answers are combined into a score. |
-| **Cutoff** (τ, code `tau`) | The Jev score below which a task goes to Gemini. |
-| **Jev refit** | Keeping the same 8 questions but re-estimating how much each counts, using about 1,050 labelled runs instead of 60. |
-| **Jev redesign, first attempt** | Jev changed from a generic checklist over a summary to a checker that sees the source data, the policy emails and everything the agent wrote, with 6 to 10 questions written for each task. |
-| **Jev redesign, second attempt** | The same idea with three tested improvements (variants 1 to 4: average several question sets, add questions about rules that must not be broken, check each write on its own), tried on fresh runs. |
-| **AUC** | Of all pairs of one good run and one poor run, the share where the good run scored higher. 0.5 is chance, 1.0 is perfect. Good = credit of 0.8 or more. |
-| **Same-playbook comparison** | AUC computed only between runs made with the same playbook version, so Jev is not credited for telling playbooks apart. |
-| **Opened once** | A set of runs we score a single time, after every design choice is frozen. |
-
-**The story so far.** (1) The original rubric learned on practice runs but did not carry over to new ones (AUC 0.475 on the test bench). (2) The refit gave more data and still did not help (0.525; bar 0.65). (3) The redesign, first attempt, gave Jev what it needs to verify and roughly doubled the signal (0.612; bar 0.65 not met). (4) The second attempt is being tested on fresh runs now. Cutoff and the sealed exam wait on that result.
-
-**Approved by Alexander:** `run.approved: true`, spend cap **$110**, cumulative across takes ($16.15 spent in Take 1). The sealed exam stays locked until Alexander writes the release note.
-
-✅ done · ▶️ running now · ⬜ waiting · 🔒 held for Alexander
-
-| # | Stage | What it does in plain words | MiniMax runs (max) | Cost (est.) | Status |
-|---|---|---|---|---|---|
-| 1 | **skill** | MiniMax learns. 4 rounds: do 30 practice tasks, study its mistakes, propose 2 rules, test each on the 60 test bench tasks, keep the best one that passes the keep test | 660 (Take 2: round 1 reused, so ≈ 450 new) | $34.19 total ($10.45 in rounds 3 and 4) | ✅ Take 2 done: final playbook [R1a, R2x] |
-| 2 | **jevdata** | Run the final playbook on all 60 practice tasks: the examples Jev learns from | 60 | ≈ $3 | ✅ |
-| 3 | **rubric** | Jev learns. MiniMax edits Jev's yes/no questions over 3 rounds (McNemar test, unchanged) | 0 (about 840 Jev calls) | < $1 | ✅ 1 of 6 edits kept |
-| 4 | **tau** | Set the cutoff (τ): lowest 30% of test bench runs would go to Gemini; then freeze it | 0 (60 Jev calls) | ≈ $0 | ✅ τ = 0.019 |
-| 5 | **sealed** | The final exam, once: starting playbook, final playbook (checkpoint on and off), Gemini alone, the router, 80 tasks | 240 MiniMax + 80 Gemini + ≈ 24 Gemini redos | ≈ $45 | 🔒 held until the release note |
-
-**Active now (15:35 UTC, 10 Oct): two runs in parallel, pre-registered in the canonical design.** Committed and pushed (`077c926`).
-
-| Item | What | Size | Status |
-|---|---|---|---|
-| **Gemini ceiling check** | Gemini, as it comes, on practice and test bench tasks where the final playbook scored under 0.8 | 54 tasks, $15.30 | ✅ done: on the 54 failed tasks MiniMax 0.528, Gemini 0.696; a perfect router would reach 0.82 to 0.83 against 0.753 for MiniMax alone (+7 points) |
-| **Fresh runs for the Jev second attempt** | 2 more independent draws of the final playbook on all 120 practice and test bench tasks | 240 runs, ≈ $11 | ▶️ running |
-| **Second attempt: choose a variant** | Variants 1 to 4 (variant 1 the first attempt; 2 adds an average over 3 question sets; 3 adds compliance questions; 4 adds a per-write check) scored on development runs; one variant chosen on development only | ≈ $1 in Jev calls | ⬜ after the fresh runs |
-| **Second attempt: test it once** | Chosen variant on the fresh test bench runs, opened once; bar AUC ≥ 0.65 (lower bound > 0.5) and gap ≥ 0.10 | ≈ $1 | ⬜ |
-| Sealed exam | | | 🔒 held for Alexander |
-
-Spend before these: $47.11 of $110 (two processes use separate spend files; total = $47.11 plus both increments). Code: `scripts/phase1_run.py` stages `ceiling` and `fresh`, `scripts/jev_verifier_d2.py`, `src/jevloop/verifier.py`. Verifier D result so far (validated once): within-playbook AUC 0.612 against the 0.65 bar; no discrimination on the final playbook (0.48); see [`LEARNINGS_AND_IMPLICATIONS.md`](LEARNINGS_AND_IMPLICATIONS.md) Part B.
 
 **Overnight plan (Alexander, 2026-10-10):** `scripts/overnight_phase1.py` waits for the replay, then adopts a replay winner **only if** it passed the margin keep test with test bench credit **+0.07 or more** and passes not lower (otherwise the playbook stays [R1a, R2x]), then runs **jevdata → rubric → tau** and stops. **It never runs the sealed exam;** that waits for Alexander's written release in the morning. It checks the OpenRouter balance before each stage and waits rather than failing halfway. Log: `logs/phase1_run/overnight.log`; the decision is saved as `phase1/run/take2/replay_decision.json`.
 
