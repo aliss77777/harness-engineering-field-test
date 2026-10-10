@@ -1,0 +1,110 @@
+{
+  "questions": [
+    {
+      "question_id": "read_policies",
+      "text": "Before changing any records, did the agent read the policy, guideline or rule emails in the inbox?",
+      "direction": "helps"
+    },
+    {
+      "question_id": "every_item",
+      "text": "Did the agent handle every item the request asked for, rather than stopping partway?",
+      "direction": "helps"
+    },
+    {
+      "question_id": "excluded_contacted",
+      "text": "Did the agent send a message to, or process a record for, someone or something that a policy or the request said to exclude, skip or hold?",
+      "direction": "hurts"
+    },
+    {
+      "question_id": "values_verbatim",
+      "text": "Where the agent wrote amounts, IDs or names into emails or records, do they appear to be copied exactly from the source data?",
+      "direction": "helps"
+    },
+    {
+      "question_id": "tracker_updated",
+      "text": "If the request asked for a tracker, sheet or record to be updated, did the state changes show that update?",
+      "direction": "helps"
+    },
+    {
+      "question_id": "notified",
+      "text": "If the request asked for an email, message or summary to be sent, did the agent send it to the stated recipient?",
+      "direction": "helps"
+    },
+    {
+      "question_id": "unrequested_actions",
+      "text": "Did the agent change records or send messages that the request did not ask for?",
+      "direction": "hurts"
+    },
+    {
+      "question_id": "errors_ignored",
+      "text": "Did tool errors actually prevent the agent from completing required actions (rather than being transient errors that were retried or worked around)?",
+      "direction": "hurts"
+    }
+  ],
+  "weights": {
+    "read_policies": -0.0572,
+    "every_item": 0.6908,
+    "excluded_contacted": -0.6037,
+    "values_verbatim": 0.0004,
+    "tracker_updated": 0.766,
+    "notified": 0.7095,
+    "unrequested_actions": -0.467,
+    "errors_ignored": 0.7513
+  },
+  "intercept": -1.1949023830340575,
+  "v0": {
+    "questions": [
+      {
+        "question_id": "read_policies",
+        "text": "Before changing any records, did the agent read the policy, guideline or rule emails in the inbox?",
+        "direction": "helps"
+      },
+      {
+        "question_id": "every_item",
+        "text": "Did the agent handle every item the request asked for, rather than stopping partway?",
+        "direction": "helps"
+      },
+      {
+        "question_id": "excluded_contacted",
+        "text": "Did the agent send a message to, or process a record for, someone or something that a policy or the request said to exclude, skip or hold?",
+        "direction": "hurts"
+      },
+      {
+        "question_id": "values_verbatim",
+        "text": "Where the agent wrote amounts, IDs or names into emails or records, do they appear to be copied exactly from the source data?",
+        "direction": "helps"
+      },
+      {
+        "question_id": "tracker_updated",
+        "text": "If the request asked for a tracker, sheet or record to be updated, did the state changes show that update?",
+        "direction": "helps"
+      },
+      {
+        "question_id": "notified",
+        "text": "If the request asked for an email, message or summary to be sent, did the agent send it to the stated recipient?",
+        "direction": "helps"
+      },
+      {
+        "question_id": "unrequested_actions",
+        "text": "Did the agent change records or send messages that the request did not ask for?",
+        "direction": "hurts"
+      },
+      {
+        "question_id": "errors_ignored",
+        "text": "Did several of the agent's tool calls fail with errors that it did not recover from?",
+        "direction": "hurts"
+      }
+    ],
+    "weights": {
+      "read_policies": -0.0733,
+      "every_item": 0.5783,
+      "excluded_contacted": -0.6547,
+      "values_verbatim": -0.0073,
+      "tracker_updated": 0.7073,
+      "notified": 0.7402,
+      "unrequested_actions": -0.4645,
+      "errors_ignored": 0.9222
+    },
+    "intercept": -1.03472422943932
+  }
+}

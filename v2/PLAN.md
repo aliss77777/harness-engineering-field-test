@@ -90,6 +90,10 @@ Dated log of every decision, deviation and fix (same discipline as [`../v1/PLAN.
 
 - 2026-10-10 (05:45 UTC): **Driver balance bar lowered to $1** (Alexander: auto top-up fires at $2 balance). A bar above $2 could wait forever, because nothing spends and so nothing triggers the top-up. The running replay was not interrupted.
 
+- 2026-10-10 (06:20 UTC): **Replay finished: none of four length-refused rules kept; playbook stays [R1a, R2x].** Rule results vs 0.778 / 21: 927-char enumerate 0.751 / 20; 886-char flag 0.748 / 19; 946-char scope 0.770 / 23 (targeted +0.057, p 0.25); 1,073-char verbatim checklist 0.792 / 22 (+1.4, under the +0.02 margin). No candidate met the adoption rule. Seven [R1a, R2x]+one-rule playbooks: mean 0.764, SD 0.020, so the plateau is consistent with noise and a measured noise level of about 0.02 on a 60-task mean. Spend $44.77. Write-up in `LEARNINGS_AND_IMPLICATIONS.md` Part A. Driver proceeds to jevdata → rubric → tau.
+
+- 2026-10-10 (06:55 UTC): **jevdata, rubric and tau done; Jev shows no held-out skill.** jevdata: final playbook on 60 practice tasks 0.727 credit, 19 passes (and +12.3 points over the starting playbook on 45 shared practice tasks). Rubric loop: 3 rounds, 6 candidate edits, 1 kept (replace "errors ignored"; 7 better, 2 worse, p 0.09). tau = 0.019, frozen. AUC (good vs bad, 0.5 = chance): practice 0.74 / 0.73 (starting / final rubric); test bench 0.42 / 0.475; 992 logged runs of other playbooks 0.56 / 0.55. Below tau on the test bench: 18 runs, mean credit 0.783; at or above: 42, 0.776. A $0.20 diagnostic on the logged runs was run outside the pipeline's stages (read-only analysis). Spend $46.55 of $110. **Sealed exam not run; decision with Alexander** (options in `LEARNINGS_AND_IMPLICATIONS.md` Part B: run now / refit Jev on the ~990 logged runs first / narrow to MiniMax vs Gemini).
+
 ## Open decisions (brief section 9)
 
 - [x] Repo: folder in this repo (2026-10-05).

@@ -55,15 +55,19 @@ Rounds 3 and 4: the same again.    Final playbook = all kept rules together.
 | "MiniMax's candidate rules moved the test bench by 2 to 5 points in rounds 1 and 2" | Yes, as a test bench observation with caveats 2 to 4 | — |
 | "The p-value keep test kept nothing at this size" | Yes (Take 1, four candidates) | — |
 | "The playbook with R1a and R2x is better than the starting playbook" | **No.** Both rules were selected on the test bench (0.620 → 0.778, optimistic by about 4 points by a rough allowance). A side look at R1a on 30 practice tasks it was not selected on showed +8 points | The sealed exam |
+| "On practice tasks the rules were not selected on, the final playbook scored higher than the starting one" | **As an observation, with caveats.** 45 tasks, 0.633 → 0.756 (+12.3; 95% interval +1.4 to +23.3), one run each; the editor saw mistakes on these tasks, so it is a softer hold-out than the sealed exam | The sealed exam |
 | "MiniMax learned the checkpoint's habit" | **Partly, as an observation.** R2x (read policy emails before any write) cut checkpoint holds from 0.75 to 0.15 per run on the test bench | Sealed exam, final playbook checkpoint off vs on |
 | "MiniMax learned" (question 2) | **No** | Sealed exam: final vs starting playbook, paired, checkpoint on |
-| "Jev learned" (question 3) | **No** | Rubric stage, then the sealed exam |
+| "Jev learned" (question 3) | **No.** The rubric fits its practice runs (AUC 0.73) but showed no skill on test bench runs (AUC 0.475, n = 60) | A refit on more data with a held-out check, then the sealed exam |
+| "The cutoff separates good runs from bad" | **No** on the test bench (below tau 0.783 credit, at or above 0.776) | Same |
 | "The router comes close to Gemini for about half the cost" (question 1) | **No** | Sealed exam; reported as directional numbers and how close they land |
 | "The checkpoint adds X" (question 4) | **No** (V2-5a's earlier result stands as a promising mechanism test only) | Sealed exam, final playbook checkpoint off vs on |
 | "The margin keep test is better than the p-value keep test" | **No.** Nothing here compares them on unseen tasks | A design that holds both out |
 
 ## 5. Change log
 
+- 2026-10-10 (06:55 UTC): Jev stage ran; Jev has not shown held-out skill. Claim rows for question 3 and the cutoff updated; see [`LEARNINGS_AND_IMPLICATIONS.md`](LEARNINGS_AND_IMPLICATIONS.md) Part B.
+- 2026-10-10 (06:25 UTC): replay finished, none kept; see section 6 and [`LEARNINGS_AND_IMPLICATIONS.md`](LEARNINGS_AND_IMPLICATIONS.md). Caveat 3 still applies; the replay's near-identical playbooks suggest the selection luck on the last step was about 1.4 points.
 - 2026-10-10 (04:32 UTC): caveat 9 corrected: only one idea was actually blocked, not three. Limit raised to 1,200 characters; replay of the length-refused rules added (section 6).
 - 2026-10-10 (04:30 UTC): Take 2 skill stage done; final playbook [R1a, R2x], rounds 3 and 4 kept nothing. Added caveat 9 (five proposals refused for length in rounds 3 and 4, three of them on wrong content).
 - 2026-10-10 (02:25 UTC): two optional checks (does R2x need R1a; how much of the test bench score is luck) written up as proposals in [`WIP_NOTES.md`](WIP_NOTES.md), not approved or run. Rounds 3 and 4 started.
@@ -74,4 +78,5 @@ Rounds 3 and 4: the same again.    Final playbook = all kept rules together.
 
 - **What:** four rules the loop refused for length in Take 2's rounds 3 and 4, tested as the editor wrote them (886 to 1,073 characters) against the final playbook [R1a, R2x] (0.778, 21 passes), one run per test bench task, with the margin keep test.
 - **Why it is weaker evidence than a normal round:** four candidates are tried on the same 60 tasks against one baseline, so the best of four noise draws already looks about +4 points better by luck (one run's standard error is about 3.5 points). A candidate that merely clears the +0.02 margin is a "possible", not a finding.
+- **Result (2026-10-10 06:20 UTC): none of the four was kept.** Credit 0.751, 0.748, 0.770, 0.792 vs 0.778; passes 20, 19, 23, 22 vs 21. The playbook stays [R1a, R2x]. The reading rule below was not triggered.
 - **Reading rule, written before the results:** a gain of +7 points or more with passes not lower counts as a clear signal on the test bench; +2 to +7 is "possible"; nothing changes in the playbook without Alexander's OK; the sealed exam is still the judge.

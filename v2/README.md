@@ -30,12 +30,12 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 | # | Stage | What it does in plain words | MiniMax runs (max) | Cost (est.) | Status |
 |---|---|---|---|---|---|
 | 1 | **skill** | MiniMax learns. 4 rounds: do 30 practice tasks, study its mistakes, propose 2 rules, test each on the 60 test bench tasks, keep the best one that passes the keep test | 660 (Take 2: round 1 reused, so ≈ 450 new) | $34.19 total ($10.45 in rounds 3 and 4) | ✅ Take 2 done: final playbook [R1a, R2x] |
-| 2 | **jevdata** | Run the final playbook on all 60 practice tasks: the examples Jev learns from | 60 | ≈ $3 | ⬜ |
-| 3 | **rubric** | Jev learns. MiniMax edits Jev's yes/no questions over 3 rounds (McNemar test, unchanged) | 0 (about 840 Jev calls) | < $1 | ⬜ |
-| 4 | **tau** | Set the cutoff (τ): lowest 30% of test bench runs would go to Gemini; then freeze it | 0 (60 Jev calls) | ≈ $0 | ⬜ |
+| 2 | **jevdata** | Run the final playbook on all 60 practice tasks: the examples Jev learns from | 60 | ≈ $3 | ✅ |
+| 3 | **rubric** | Jev learns. MiniMax edits Jev's yes/no questions over 3 rounds (McNemar test, unchanged) | 0 (about 840 Jev calls) | < $1 | ✅ 1 of 6 edits kept |
+| 4 | **tau** | Set the cutoff (τ): lowest 30% of test bench runs would go to Gemini; then freeze it | 0 (60 Jev calls) | ≈ $0 | ✅ τ = 0.019 |
 | 5 | **sealed** | The final exam, once: starting playbook, final playbook (checkpoint on and off), Gemini alone, the router, 80 tasks | 240 MiniMax + 80 Gemini + ≈ 24 Gemini redos | ≈ $45 | 🔒 held until the release note |
 
-**Active now (05:45 UTC, 10 Oct): resumed.** The OpenRouter key limit was raised to $300 (Alexander) and the overnight driver restarted: the replay is running again from rule 3 (27 of 60 runs reloaded, 33 to go), then rule 4 (60 runs), then the driver applies the adoption rule and runs jevdata → rubric → tau. The driver now proceeds with a $1 working balance and retries a stage that stops on credit (account credit was $4.96; auto top-up fires at a $2 balance, as credit is used). The Take 2 skill stage is done: final playbook **[R1a, R2x]** (`s78766c8a`). Replay so far: rule 1 (927 characters, skipped action) 0.751, 20 passes, rejected; rule 2 (886 characters, wrong content) 0.748, 19 passes, rejected. ETA: replay ≈ 06:05 UTC; jevdata, rubric and tau ≈ 06:45 UTC.
+**Active now (06:55 UTC, 10 Oct): everything up to the sealed exam has run; nothing is running. Waiting on Alexander's call.** Replay: none of the four length-refused rules kept, playbook stays [R1a, R2x]. jevdata, rubric and tau finished. **Jev finding:** the learned rubric fits the practice runs (AUC 0.73) but shows no skill on the test bench (AUC 0.475; 18 runs below tau average 0.783 credit, 42 above average 0.776), so the 30% cutoff acts like random escalation. About 990 logged labelled runs went unused and could train it. Full write-up and options (run sealed now / improve Jev first / narrow the exam): [`LEARNINGS_AND_IMPLICATIONS.md`](LEARNINGS_AND_IMPLICATIONS.md) Part B. The sealed exam has not been run and is held for Alexander's release.
 
 **Overnight plan (Alexander, 2026-10-10):** `scripts/overnight_phase1.py` waits for the replay, then adopts a replay winner **only if** it passed the margin keep test with test bench credit **+0.07 or more** and passes not lower (otherwise the playbook stays [R1a, R2x]), then runs **jevdata → rubric → tau** and stops. **It never runs the sealed exam;** that waits for Alexander's written release in the morning. It checks the OpenRouter balance before each stage and waits rather than failing halfway. Log: `logs/phase1_run/overnight.log`; the decision is saved as `phase1/run/take2/replay_decision.json`.
 
@@ -43,11 +43,11 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 
 | Overnight step | Status |
 |---|---|
-| Replay of length-refused rules (4 candidates) | ▶️ 2 of 4 decided; rule 3 resumed (27 of 60 reloaded) |
-| Adopt a winner only if +0.07 credit and passes not lower | ⬜ |
-| jevdata: final playbook on all 60 practice tasks | ⬜ |
-| rubric: Jev learns (3 rounds) | ⬜ |
-| tau: cutoff set and frozen | ⬜ |
+| Replay of length-refused rules (4 candidates) | ✅ none kept; playbook stays [R1a, R2x] |
+| Adopt a winner only if +0.07 credit and passes not lower | ✅ none qualified |
+| jevdata: final playbook on all 60 practice tasks | ✅ 0.727 credit, 19 passes |
+| rubric: Jev learns (3 rounds) | ✅ 1 of 6 edits kept; no held-out skill (see above) |
+| tau: cutoff set and frozen | ✅ tau = 0.019 (does not separate good from bad on the test bench) |
 | Sealed exam | 🔒 held for Alexander's release |
 
 **Take 1 results (rounds 1 and 2, p-value keep test, none kept).** Every candidate was tested against the starting playbook (no rules, checkpoint on): **0.62** credit, 11 of 60 passes on the test bench.
@@ -237,12 +237,18 @@ Full design and preregistered verdicts: [`briefs/Phase 1 design.md`](briefs/Phas
 | Round 1 | + R1a (do every required write before declaring done) | 0.675 | 14 |
 | Round 2 | + R2x (read the latest policy and override emails before any write) | **0.778** | **21** |
 | Rounds 3 and 4 | nothing kept (best near miss R3b: 0.791, 26 passes, +1.3 points, under the +0.02 margin) | | |
-| Replay of length-refused rules (limit now 1,200 characters), 2 of 4 decided | rule 1: 0.751, 20 passes; rule 2: 0.748, 19 passes; both rejected. Rule 3 stopped partway (27 of 60 runs: 0.762 vs 0.735 for the baseline on the same tasks); rule 4 not run | | |
+| Replay of the four length-refused rules (limit now 1,200 characters): **none kept** | 0.751 / 20 passes, 0.748 / 19, 0.770 / 23, 0.792 / 22 (all against 0.778 / 21) | | |
 
 **Evidence beyond the test bench.**
 - On the same 30 practice tasks, R1a (not selected on them) vs no rules: credit 0.58 to 0.66; missed checks 74 to 57 (wrong content 40 to 32, skipped actions 14 to 11, rules broken 20 to 14).
 - R2x cut checkpoint holds from 0.75 to 0.15 per run: MiniMax now reads the policies before writing on its own, the habit Phase 0 diagnosed.
 - Both rules match the failure habits found before any learning ran.
+
+**A second cross-check (jevdata, 06:35 UTC).** The final playbook ran on all 60 practice tasks (0.727 credit, 19 passes). On the 45 practice tasks the starting playbook also ran, credit rose from 0.633 to 0.756 (+12.3 points, 95% interval +1.4 to +23.3; 19 better, 8 worse, 18 equal). The rules were never chosen on these tasks, but the editor saw mistakes on them, so it is a softer hold-out than the sealed exam.
+
+**What the replay added.** Seven near-identical playbooks ([R1a, R2x] plus one extra rule) scored 0.746 to 0.792 (mean 0.764, spread 0.020), which is about what noise gives. So two rules look like a plateau, the length limit was not what held it back, and a fairer size for the gain is about +13 points on the test bench. Details: [`LEARNINGS_AND_IMPLICATIONS.md`](LEARNINGS_AND_IMPLICATIONS.md).
+
+**What the Jev stage showed (06:55 UTC).** The rubric was fitted on 60 practice runs and tested on the 60 test bench runs: AUC 0.73 on practice, 0.475 on the test bench (chance is 0.5; standard error about 0.07), accuracy 0.567 vs 0.533 for always guessing the majority. So Jev has not yet shown it can tell good from bad runs on held-out data; it is data-starved (60 runs; about 990 logged runs unused). Part B of [`LEARNINGS_AND_IMPLICATIONS.md`](LEARNINGS_AND_IMPLICATIONS.md).
 
 **Not shown yet.**
 
@@ -326,6 +332,7 @@ The sealed set is not touched. The checkpoint is on for learning and the final t
 
 | Document | What it holds |
 |---|---|
+| [`LEARNINGS_AND_IMPLICATIONS.md`](LEARNINGS_AND_IMPLICATIONS.md) | What we learned and what follows from it: Part A the playbook, Part B Jev and the cutoff (living) |
 | [`WIP_NOTES.md`](WIP_NOTES.md) | Work-in-progress ideas and scope notes; nothing approved or run (Alexander, 2026-10-10) |
 | ⭐ [`WHAT_WE_DID_AND_CAN_CLAIM.md`](WHAT_WE_DID_AND_CAN_CLAIM.md) | How learning cascades, what was reused or changed after the fact, what each result can and cannot support (living) |
 | [`briefs/V2 Phase 1 Canonical Experiment Design.md`](briefs/V2%20Phase%201%20Canonical%20Experiment%20Design.md) | **The source of truth** for the design and its words (2026-10-09) |

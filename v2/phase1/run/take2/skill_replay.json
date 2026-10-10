@@ -1,0 +1,122 @@
+{
+  "baseline_version": "s78766c8a",
+  "baseline_credit": 0.7779954304954305,
+  "baseline_passes": 21,
+  "max_rule_chars": 1200,
+  "results": [
+    {
+      "edit": {
+        "op": "add",
+        "index": null,
+        "text": "Before initiating any set of write actions (email sends, sheet row updates, system-of-record writes, channel posts), explicitly enumerate the full set of distinct entities that require an action by walking the source dataset against the task requirements — every affected employee, every qualifying vendor, every flagged candidate, every expiring agreement, every row slated for a status change, every distinct recipient. Build this list up front and then execute one action per checklist item. Verify the count of successful writes matches the size of the pre-built checklist before declaring the task complete. Do not stop writing after a successful first action, after a partial batch, when interrupted by an API error on one item, or once 'done' feels reached — continue iterating through every checklist item, varying endpoints or arguments to recover from per-item failures, and only stop when the checklist is exhausted.",
+        "why": "Recurring pattern of partial execution: tasks requiring many parallel writes (reorg directory updates for multiple employees, contractor renewals for multiple contractors, referral-bonus notifications for multiple referrers, multi-vendor 1099 outreach, multi-candidate offer tracker updates, multi-employee onboarding) consistently deliver only a subset of the required writes and then declare done. The model exhausts its step budget on exploration or treats the first successful write as evidence of completion rather than confirming the full enumerated set was acted on. Pre-enumeration forces the full set into scope before any execution begins, and count-matching provides a concrete completion check.",
+        "target": "action_missed"
+      },
+      "length": 927,
+      "credit": 0.7507665945165946,
+      "passes": 20,
+      "decision": {
+        "keep": false,
+        "targeted_ok": false,
+        "guard_ok": true,
+        "net_ok": false,
+        "targeted_diff": -0.04656862745098039,
+        "targeted_p": 0.78125,
+        "targeted_tasks": 34,
+        "guard_diff": -0.02722883597883598,
+        "guard_tasks": 60,
+        "net_diff": -0.02722883597883598,
+        "passes_ok": false,
+        "passes_diff": -1
+      },
+      "holds_per_run": 0.23333333333333334
+    },
+    {
+      "edit": {
+        "op": "add",
+        "index": null,
+        "text": "When a source dataset contains an explicit inclusion, eligibility, or status flag on each row (such as a Status column with values like 'Include' or 'Do Not Include', an Eligible/Ineligible marker, an Active/Inactive indicator, a flagged/not-flagged marker, or any approve/reject indicator defined in the task spec or source schema), treat that flag as binding for every downstream deliverable. Rows flagged for exclusion MUST NOT appear in any email body, aggregate, summary, sheet update, downstream calculation, or notification — regardless of other heuristics like outstanding balances, recent dates, or domain keywords. Rows flagged for inclusion MUST NOT be omitted. Always cross-reference each row against its explicit flag before including it anywhere in the output, and apply the flag consistently across every channel (emails, sheets, system-of-record entries, channel posts).",
+        "why": "Recurring pattern: tasks with explicit 'Include/Do Not Include' status columns or eligibility flags routinely leak excluded rows into aggregate outputs and downstream computations (cash flow forecasts include rows like 'Dispute Holdings' and 'Cancelled Lease' that were marked for exclusion; tax/1099 summary emails enumerate individual vendor and employee names that belong only in targeted individual emails). The model appears to treat inclusion heuristics as advisory and overrides the explicit row-level flag rather than treating it as the source of truth.",
+        "target": "wrong_content"
+      },
+      "length": 886,
+      "credit": 0.7480147630147631,
+      "passes": 19,
+      "decision": {
+        "keep": false,
+        "targeted_ok": false,
+        "guard_ok": true,
+        "net_ok": false,
+        "targeted_diff": -0.03036758563074352,
+        "targeted_p": 0.7438541006476497,
+        "targeted_tasks": 57,
+        "guard_diff": -0.02998066748066748,
+        "guard_tasks": 60,
+        "net_diff": -0.02998066748066748,
+        "passes_ok": false,
+        "passes_diff": -2
+      },
+      "holds_per_run": 0.11666666666666667
+    },
+    {
+      "edit": {
+        "op": "add",
+        "index": null,
+        "text": "Build your deliverable scope strictly from sources that explicitly authorize each write: rows the source marks as decided / completed / included / active / eligible (NOT 'Tabled', 'For Discussion', 'Not Decided', 'Pending Review', 'Excluded'); recipients explicitly named in the task brief or source data; outputs the source rows clearly map to. Do not invent extra deliverables from heuristics — an item the meeting notes tabled does not become a Notion decision page, a manager not named for that employee does not receive a probation email, an SKU or account the policy designates to exclude does not appear in a leadership summary. If the source, the task brief, or a policy instruction explicitly excludes something, that item is deny-listed and gets no write of any kind. When ambiguous, default to NOT writing a deliverable. Spurious extra writes fail 'MUST NOT' checks just as surely as missing writes, and gate holds compound the damage.",
+        "why": "Most rule_broken failures come from creating or sending things the source did not authorize — a Notion page for an item the notes explicitly tabled, an email to a recipient the task did not name, content flagged as excluded appearing in leadership emails, individual SKUs included in a controller variance report. A conservative, source-authorized scope default catches these before the write fires.",
+        "target": "rule_broken"
+      },
+      "length": 946,
+      "credit": 0.7700131350131351,
+      "passes": 23,
+      "decision": {
+        "keep": false,
+        "targeted_ok": true,
+        "guard_ok": true,
+        "net_ok": false,
+        "targeted_diff": 0.056818181818181816,
+        "targeted_p": 0.25,
+        "targeted_tasks": 22,
+        "guard_diff": -0.007982295482295483,
+        "guard_tasks": 60,
+        "net_diff": -0.007982295482295483,
+        "passes_ok": true,
+        "passes_diff": 2
+      },
+      "holds_per_run": 0.21666666666666667
+    },
+    {
+      "edit": {
+        "op": "add",
+        "index": null,
+        "text": "Whenever the task brief contains phrases like 'Include the relevant amounts from the source data', 'preserve them verbatim', 'do not paraphrase or round', or specifies numeric formatting such as 'comma thousands separators (for example, 1,234)', treat it as a hard precondition. Before composing each message body, first extract from the relevant source row(s) every required value (amounts with their source formatting including thousands separators and currency symbols, dates, employee/vendor names, record IDs, counts, totals) and write them into a per-message checklist with the exact source text. Compose the body so every checklist entry appears verbatim — no rounding, no abbreviation, no reformatting, no dropping of names or record IDs. Before sending each message, re-read the body and tick off each checklist entry in turn; if any is missing, paraphrased, reformatted, or truncated, edit the body and resend before moving to the next message. Do not declare the task complete until every per-message checklist is fully satisfied across every required recipient.",
+        "why": "wrong_content failures repeatedly involve missing or reformatted source values in messages — $5,000 reduced to 5000, 3,040 becoming 3040, dates truncated, employee names or record IDs dropped entirely. A prior 'embed verbatim' rule was rejected as not changing behavior; coupling an explicit extraction checklist with a mandatory pre-send verification pass makes the rule a procedure rather than a slogan, so each value is actually cross-checked before the message goes out.",
+        "target": "wrong_content"
+      },
+      "length": 1073,
+      "credit": 0.7916095941095942,
+      "passes": 22,
+      "decision": {
+        "keep": false,
+        "targeted_ok": true,
+        "guard_ok": true,
+        "net_ok": false,
+        "targeted_diff": 0.017000835421888058,
+        "targeted_p": 0.304931640625,
+        "targeted_tasks": 57,
+        "guard_diff": 0.013614163614163613,
+        "guard_tasks": 60,
+        "net_diff": 0.013614163614163613,
+        "passes_ok": true,
+        "passes_diff": 1
+      },
+      "holds_per_run": 0.31666666666666665
+    }
+  ],
+  "winner": null,
+  "proposed_rules": [
+    "After you have located the source-of-truth data and identified each required deliverable, execute every required write action (each sheet row that needs updating, each invoice that needs creating, each email that needs sending) before declaring the task done. Do not stop after a single representative write or after partial completion — each distinct required deliverable needs its own successful write call. Excessive searching or re-verification between writes causes total task failure when deliverables are left unexecuted.",
+    "Before performing any write action that updates records, sheets, statuses, or sends external communication (email, Slack, invoices), first retrieve and read the most recent policy, guideline, and override emails in the inbox. Apply any instructions, extensions, or reversals found there — they frequently override or modify defaults found in Drive/Notion documents or in the task brief. Skipping this step causes gates to hold every subsequent write and leaves required deliverables unexecuted."
+  ],
+  "spend_usd": 44.767619280000005
+}

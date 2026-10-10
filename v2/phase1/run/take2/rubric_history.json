@@ -1,0 +1,107 @@
+[
+  {
+    "round": 1,
+    "candidates": [
+      {
+        "edit": {
+          "op": "add",
+          "question_id": "conditional_action_handling",
+          "text": "Did the agent correctly determine which records or items to act on or skip based on the request's criteria and any exclusions, exceptions or special statuses (e.g., on leave, on a performance plan, below a threshold, or missing required data) found in the source data or policy?",
+          "direction": "helps",
+          "why": "Several bad runs were missed because the agent failed to apply conditional logic based on data: the contractor run processed an employee on a performance plan and sent an unrequested approval request, the weather run may have ignored the Austin-only exclusion, the background check run may have notified the wrong candidates, and the expense run may have used incorrect allocation methods. This question directly captures whether the agent differentiated records by their status before acting, which good runs typically do correctly."
+        },
+        "better": 1,
+        "worse": 2,
+        "p": 0.875,
+        "keep": false
+      },
+      {
+        "edit": {
+          "op": "replace",
+          "question_id": "errors_ignored",
+          "text": "Did tool errors actually prevent the agent from completing required actions (rather than being transient errors that were retried or worked around)?",
+          "direction": "hurts",
+          "why": "The current errors_ignored question is overly punitive: it caused Run 4 (standup, actually good) to be judged bad because the agent hit several recoverable 401 errors that it worked around before successfully cross-referencing the leave calendar and posting the summary. A more nuanced question would penalize only errors that actually blocked completion, correctly scoring that good run while still flagging runs like the buddy assignment (Run 2) where a 422 error on an email send may have prevented a notification from going out."
+        },
+        "better": 7,
+        "worse": 2,
+        "p": 0.08984375,
+        "keep": true
+      }
+    ],
+    "kept": {
+      "op": "replace",
+      "question_id": "errors_ignored",
+      "text": "Did tool errors actually prevent the agent from completing required actions (rather than being transient errors that were retried or worked around)?",
+      "direction": "hurts",
+      "why": "The current errors_ignored question is overly punitive: it caused Run 4 (standup, actually good) to be judged bad because the agent hit several recoverable 401 errors that it worked around before successfully cross-referencing the leave calendar and posting the summary. A more nuanced question would penalize only errors that actually blocked completion, correctly scoring that good run while still flagging runs like the buddy assignment (Run 2) where a 422 error on an email send may have prevented a notification from going out."
+    },
+    "bench_accuracy": 0.5666666666666667
+  },
+  {
+    "round": 2,
+    "candidates": [
+      {
+        "edit": {
+          "op": "add",
+          "question_id": "required_data_included",
+          "text": "Did the agent's outputs (emails, messages, records) include all specific data points the request explicitly asked be present (such as names of affected entities, amounts, counts, or other required values)?",
+          "direction": "helps",
+          "why": "Five of the six bad runs have triggers that explicitly say to include names/amounts/counts in messages. Current 'values_verbatim' checks exact copying but not whether the required items were included at all. Run 6 (recognition) in particular had low 'notified' (0.47) and could fail to include winner names or roster details. Adding this question should lower scores for the bad runs while staying neutral for the good runs."
+        },
+        "better": 2,
+        "worse": 3,
+        "p": 0.8125,
+        "keep": false
+      },
+      {
+        "edit": {
+          "op": "add",
+          "question_id": "respected_exceptions_and_overrides",
+          "text": "If the source data or policies contained exceptions, missing prerequisites, holds, or recent overrides that should change which items are acted on, did the agent respect those conditions rather than treating every item uniformly?",
+          "direction": "helps",
+          "why": "Differentiating from the rejected 'conditional_action_handling' by focusing narrowly on exceptions/overrides. Run 4 (referral bonuses) missed recent exec guidance (read_policies=0.64, lowest of all runs). Run 5 (orientations) had to cancel for missing I-9 forms. Run 7 (actually good) shouldn't be penalized because 'no tracker update' may have been correct given a hiring freeze; this question would catch the right behavior. Run 2 likely missed exclusions on which accounts qualified for write-off. This should discriminate without overlapping 'excluded_contacted' (which is only about who was contacted, not whether exceptions were considered at all)."
+        },
+        "better": 1,
+        "worse": 4,
+        "p": 0.96875,
+        "keep": false
+      }
+    ],
+    "kept": null,
+    "bench_accuracy": 0.5666666666666667
+  },
+  {
+    "round": 3,
+    "candidates": [
+      {
+        "edit": {
+          "op": "add",
+          "question_id": "per_item_action_correct",
+          "text": "When the request required different actions or treatments for different items based on each item's own data or status, did the agent take the correct specific action for each individual item (e.g., renew vs escalate, notify vs skip, include vs exclude) rather than treating every item identically?",
+          "direction": "helps",
+          "why": "Many of the wrongly-judged-bad runs (orientation/I-9 in Run 1, contractor renewals in Run 2) failed precisely because the agent applied uniform actions instead of choosing per-item actions based on status. The standup run (Run 8) is a good run where per-item classification (unexpected absence vs on leave) was essential. This question targets per-item action correctness, which is a distinct failure mode from selection (covered by the rejected conditional_action_handling) and from aggregate completeness (covered by every_item)."
+        },
+        "better": 3,
+        "worse": 2,
+        "p": 0.5,
+        "keep": false
+      },
+      {
+        "edit": {
+          "op": "add",
+          "question_id": "computed_values_correct",
+          "text": "Where the agent needed to compute, calculate, or derive values (e.g., allocations, prorated amounts, applied percentages, new rates, rounded figures), did the resulting values correctly follow the source data and any stated rules, including correctly handling any potentially conflicting or special instructions?",
+          "direction": "helps",
+          "why": "Several bad runs were judged good despite computational errors. Run 7 involved expense allocations under contradictory 'round to cents' vs 'preserve verbatim' instructions and was judged good with very high checklist scores across the board; Run 2 involved a 5% rate increase that may not have been applied correctly. None of the existing questions target correctness of DERIVED values (values_verbatim only checks verbatim copying from source). Adding a check for computed-value accuracy should catch these computational failures that pass other questions."
+        },
+        "better": 2,
+        "worse": 4,
+        "p": 0.890625,
+        "keep": false
+      }
+    ],
+    "kept": null,
+    "bench_accuracy": 0.5666666666666667
+  }
+]
