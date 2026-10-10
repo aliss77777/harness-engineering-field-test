@@ -18,10 +18,11 @@ pilot:
 # Agent and editor: MiniMax M3, same settings and pinned host as Phase 0 (phase0/config_phase0.yaml).
 agent_model: minimax
 
-# ---- The v2 Phase 1 experiments (scripts/phase1_run.py). Written 2026-10-08; NOT yet approved to run. ----
+# ---- The v2 Phase 1 experiments (scripts/phase1_run.py). Written 2026-10-08; approved to run 2026-10-09 (sealed stage still held). ----
 run:
-  approved: false            # set to true only on Alexander's go; paid stages refuse to run otherwise
-  spend_cap_usd: 110.0       # safety stop Alexander sets; cost goals are directional (pending approval)
+  take: 2                 # Take 1: p-value keep test (stopped after round 2, nothing kept); Take 2: margin keep test (Alexander, 2026-10-10)
+  approved: true             # Alexander's go, 2026-10-09; paid stages (not sealed) may run. Sealed also needs SEALED_RELEASE.md
+  spend_cap_usd: 110.0       # safety stop, set by Alexander 2026-10-09; cost goals are directional
   agent_temperature: 0.0     # agents (MiniMax, Gemini); not fully repeatable, but steadier
   editor_temperature: 0.7    # MiniMax as editor (both loops)
   workers: 8
@@ -33,7 +34,9 @@ run:
     runs_per_task: 1         # one run per task everywhere (canonical design, 2026-10-09)
     candidates_per_round: 2
     mistakes_shown: 8
-    p_threshold: 0.10        # keep-or-reject test on the targeted checks
+    keep_test: margin        # Take 1 used p_value; Take 2 uses margin (targeted change > 0, credit up by min_credit_gain, passes not lower)
+    min_credit_gain: 0.02    # margin test: whole test bench mean credit must rise by at least this
+    p_threshold: 0.10        # p_value test only (Take 1)
     max_regression_drop: 0.03
   rubric_loop:
     rounds: 3

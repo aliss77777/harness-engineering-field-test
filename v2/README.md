@@ -6,6 +6,76 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 
 **This page is the tracker** (status, plan, results, decisions). Details live in the linked documents; the dated log is [`PLAN.md`](PLAN.md).
 
+⭐ **Read before quoting any result: [`WHAT_WE_DID_AND_CAN_CLAIM.md`](WHAT_WE_DID_AND_CAN_CLAIM.md)**: how learning cascades, what was reused or changed after the fact, and what each result can and cannot support.
+
+## Live status: v2 Phase 1, Take 2 is running
+
+**Takes.** Phase 1 runs in numbered takes so results never get mixed up (terms in the [canonical design](briefs/V2%20Phase%201%20Canonical%20Experiment%20Design.md#takes)). Always cite "Take N, round M" and the keep test.
+
+| | **Take 1** | **Take 2** (now) |
+|---|---|---|
+| Started | 2026-10-09 23:22 UTC | 2026-10-10 01:15 UTC |
+| Playbook keep test | **P-value keep test**: targeted failure kind clearly drops (p < 0.10) and credit does not fall | **Margin keep test**: targeted failure kind improves, credit up by at least 0.02, fully passed tasks not lower; no p-value |
+| Status | Stopped after round 2; **no rule kept**; $16.15 | ▶️ round 2 of 4; stops after round 2 for a comparison |
+| Files | `phase1/run/take1/`, `logs/phase1_run/take1/` | `phase1/run/take2/` |
+
+⭐ **How learning cascades, what was reused, and what we can claim: [`WHAT_WE_DID_AND_CAN_CLAIM.md`](WHAT_WE_DID_AND_CAN_CLAIM.md).**
+
+**Why Take 2.** At 60 tasks and one run each, one run moves about 3 points by itself, so the p-value keep test could not see the 2 to 5 point gains Take 1's candidates showed. The change was adopted *after seeing* Take 1's rounds 1 and 2 (Alexander, 2026-10-10) and is recorded that way. The sealed exam, final vs starting playbook, is the judge either way. The Jev rubric test is unchanged.
+
+**Approved by Alexander:** `run.approved: true`, spend cap **$110**, cumulative across takes ($16.15 spent in Take 1). The sealed exam stays locked until Alexander writes the release note.
+
+✅ done · ▶️ running now · ⬜ waiting · 🔒 held for Alexander
+
+| # | Stage | What it does in plain words | MiniMax runs (max) | Cost (est.) | Status |
+|---|---|---|---|---|---|
+| 1 | **skill** | MiniMax learns. 4 rounds: do 30 practice tasks, study its mistakes, propose 2 rules, test each on the 60 test bench tasks, keep the best one that passes the keep test | 660 (Take 2: round 1 reused, so ≈ 450 new) | ≈ $14 more | ▶️ Take 2, rounds 3 and 4 running (playbook has 2 rules going in) |
+| 2 | **jevdata** | Run the final playbook on all 60 practice tasks: the examples Jev learns from | 60 | ≈ $3 | ⬜ |
+| 3 | **rubric** | Jev learns. MiniMax edits Jev's yes/no questions over 3 rounds (McNemar test, unchanged) | 0 (about 840 Jev calls) | < $1 | ⬜ |
+| 4 | **tau** | Set the cutoff (τ): lowest 30% of test bench runs would go to Gemini; then freeze it | 0 (60 Jev calls) | ≈ $0 | ⬜ |
+| 5 | **sealed** | The final exam, once: starting playbook, final playbook (checkpoint on and off), Gemini alone, the router, 80 tasks | 240 MiniMax + 80 Gemini + ≈ 24 Gemini redos | ≈ $45 | 🔒 held until the release note |
+
+**Active now (02:25 UTC, 10 Oct): Take 2, skill stage, round 3 of 4.** Resumed after the review pause (rounds 1 and 2 reloaded at $0). Round 3 starts from the 2-rule playbook [R1a, R2x]. **Alexander's plan:** run rounds 3 and 4 only, then stop and review before jevdata, rubric and tau; the sealed exam stays locked. Two optional checks are written up as proposals in [`WIP_NOTES.md`](WIP_NOTES.md): does R2x need R1a (≈ $3), and how much of the test bench score is luck (≈ $3). Neither is approved.
+
+**Take 1 results (rounds 1 and 2, p-value keep test, none kept).** Every candidate was tested against the starting playbook (no rules, checkpoint on): **0.62** credit, 11 of 60 passes on the test bench.
+
+| Round | Candidate rule (short) | Targets | Credit | Passes | Targeted checks | P-value keep test | Margin keep test |
+|---|---|---|---|---|---|---|---|
+| 1 | R1a: do every required write action before declaring done | skipped action | 0.675 (+5.4) | 14 | +0.035, p 0.36 | rejected | **kept** (round 1 winner) |
+| 1 | R1b: copy values exactly as in the source | wrong content | 0.641 (+2.1) | 17 | +0.022, p 0.34 | rejected | kept (not the winner) |
+| 2 | R2a: when held, read the policies, then finish every queued write | skipped action | 0.659 (+3.9) | 17 | +0.032, p 0.31 | rejected | would keep (vs the starting playbook) |
+| 2 | R2b: enumerate every named recipient | skipped action | 0.619 (−0.2) | 14 | −0.024, p 0.67 | rejected | rejected |
+
+Caveat: the same starting playbook and checkpoint scored 0.65 on these 60 tasks in V2-5a, so one run's noise is about 3 points; gains of 2 to 5 points are close to that. Take 1 round 2's candidates were proposed against the starting playbook; Take 2's round 2 candidates are new, proposed against R1a.
+
+**Take 2 results, rounds 1 and 2 (margin keep test).** Spend: $23.74 in total, $7.59 of it in Take 2.
+
+| Round | Candidate rule (short) | Targets | Test bench credit | Passes | vs its baseline | Margin keep test |
+|---|---|---|---|---|---|---|
+| (baseline) | Starting playbook, no rules | | 0.620 | 11 | | |
+| 1 | **R1a:** do every required write action before declaring done | skipped action | 0.675 | 14 | +5.4 points, +3 passes | **kept** |
+| 1 | R1b: copy values exactly as in the source | wrong content | 0.641 | 17 | +2.1 points, +6 passes | kept, not the winner |
+| 2 | **R2x:** before any write, read the latest policy and override emails | skipped action | **0.778** | **21** | **+10.3 vs R1a**, +7 passes | **kept** |
+| 2 | R2y: summary emails get totals only, no names or per-record amounts | rule broken | 0.652 | 15 | −2.3 vs R1a, +1 pass | rejected: targeted +0.125 (p 0.125) but credit fell |
+
+Baselines: round 1 against the starting playbook, round 2 against R1a (0.675, 14 passes). **Playbook after round 2: [R1a, R2x], 0.778 credit and 21 of 60 passes on the test bench, against 0.620 and 11 for the starting playbook (+15.8 points).** That number is optimistic: both rules were picked on the same 60 tasks, each as the better of two candidates; a rough allowance for luck is about 4 points, so about +10 is a fairer reading. Only the sealed exam settles it.
+
+**Take 1 vs Take 2, rounds 1 and 2:**
+
+| | Take 1 (p-value keep test) | Take 2 (margin keep test) |
+|---|---|---|
+| Rules kept | 0 of 4 candidates | 2 of 4 (R1a, R2x) |
+| Playbook after round 2 | empty | R1a + R2x |
+| Test bench credit of the playbook | 0.620 (the starting playbook) | 0.778 (optimistic: selected on the test bench) |
+| Fully passed | 11 of 60 | 21 of 60 |
+| Spend | $16.15 | $7.59 more (round 1 reused) |
+
+**Two things to note.** (1) R2x is the habit the checkpoint enforces ("read the policy emails before writing"): checkpoint holds fell from 0.75 to 0.15 per run, so MiniMax now does by itself what the checkpoint was holding it to. Question 4 (what the checkpoint adds) may come out small for that reason, which would be partly learning, not a failed checkpoint. (2) R2y shows the margin keep test still rejects rules that lower credit.
+
+*Side observation, not a claim:* R1a on the same 30 practice tasks Take 1 used in round 2 (R1a was not selected on them): credit 0.664 vs 0.582 (+8.2 points), 11 vs 8 passes, 12 tasks better, 6 worse. 30 tasks, one run each, about 3 points of noise per run.
+
+**How we follow it.** Take 2 output: `logs/phase1_run/take2-skill.stdout`; results as JSON in `phase1/run/take2/` (`skill_history.json`); spend in `results/phase1_run/spend.json`. A stop resumes without paying twice.
+
 ## Latest findings (as of 2026-10-08 22:00 MDT)
 
 *Step numbers refer to "Next steps" in the roadmap below.*
@@ -73,8 +143,8 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 | 1 | **General harness improvements**: fixes A1–A5, plus the temperature-0 re-checks | A trustworthy harness for v2 Phase 1 | $0 + ≈ $9 |
 | 2 | **Lock the skill loop redesign**: temperature 0, telemetry at task, check and step level, targeted tests | A test that can see real improvements | ≈ $0 |
 | 3 | **Action masking (V2-5), core** (Alexander, 2026-10-08: "the most important part"): replay past runs ($0, done) → simple checkpoint off vs on (V2-5a, ≤ $10, **running**) → Jev as the checkpoint (≤ $20; **optional, skipped** by Alexander 2026-10-08) | Does a check before each write cut broken rules? | $0–30 |
-| 4 | **Go/no-go for v2 Phase 1** and its cap (Alexander) | Whether to spend on the full experiments | — |
-| 5 | **v2 Phase 1 experiments**: skill loop → Jev rubric loop → the sealed test, once | Does MiniMax learn? Does Jev learn when to trust it? Does the cascade match Gemini for less? | ≈ $100 |
+| 4 | **Go/no-go for v2 Phase 1** and its cap (Alexander) | **Go, 2026-10-09; cap $110** | — |
+| 5 | **v2 Phase 1 experiments**: skill loop → Jev rubric loop → the sealed test, once. **▶️ running** (see Live status) | Does MiniMax learn? Does Jev learn when to trust it? Does the cascade match Gemini for less? | ≈ $94 |
 | 6 | **Write-up**: results, story, insights | The claim, stated honestly | $0 |
 | 7 | **v2 Phase 2**: Magic Patterns UI and tutorial (Substack) | Show it | $0 in model calls |
 
@@ -92,7 +162,7 @@ The core test (C) is 60 tasks, run once with and once without the checkpoint: 12
 
 ≈ $110–140 more to the end of the v2 Phase 1 experiments (depending on step 3).
 
-**Design source of truth: [`briefs/V2 Phase 1 Canonical Experiment Design.md`](briefs/V2%20Phase%201%20Canonical%20Experiment%20Design.md)** (2026-10-09; checkpoint on for the final test too). **Waiting on Alexander:** the go for the v2 Phase 1 experiments (`run.approved: true`) and the spend cap (a safety stop; proposed $110; estimate ≈ $100 more). Releasing the sealed exam comes later.
+**Design source of truth: [`briefs/V2 Phase 1 Canonical Experiment Design.md`](briefs/V2%20Phase%201%20Canonical%20Experiment%20Design.md)** (2026-10-09; checkpoint on for the final test too). Spend cap set: **$110**, a safety stop (Alexander, 2026-10-09); estimate ≈ $94 more. **Go given 2026-10-09:** the experiments are running (see Live status). **Waiting on Alexander:** the release note for the sealed exam, later.
 
 ## The experiment in one picture
 
@@ -132,7 +202,7 @@ Full design and preregistered verdicts: [`briefs/Phase 1 design.md`](briefs/Phas
 | Experiment | Question | Status |
 |---|---|---|
 | V2-1 Controls | Where do we start? MiniMax vs Gemini on sealed | ⬜ |
-| V2-2a Agent skill loop | Does MiniMax learn from its own mistakes? | pilot done ([report](phase1/pilot/README.md)) |
+| V2-2a Agent skill loop | Does MiniMax learn from its own mistakes? | pilot done ([report](phase1/pilot/README.md)); full run ▶️ started 2026-10-09 |
 | V2-2b Jev rubric loop | Does Jev learn when to trust MiniMax? | ⬜ |
 | **V2-3 Router (main comparison)** | Router (checkpoint on) vs Gemini alone: close on credit, about half the cost, faster? | ⬜ |
 | **V2-5 Action masking** | Does a check before each write cut broken rules without costing credit? | ▶️ starting ([brief](briefs/BRIEF-v2-action-masking-v1.md)) |
@@ -168,7 +238,10 @@ Full design and preregistered verdicts: [`briefs/Phase 1 design.md`](briefs/Phas
 | Agent skill loop | In; redesign drafted (multi-level telemetry), [review pending](briefs/Skill%20loop%20redesign.md) |
 | Action masking (V2-5) | ✅ In scope (2026-10-08). The checkpoint may read company data, never grading checks or `meta`. Checkpoint on for learning and the final test (canonical design, 2026-10-09) |
 | Sealed set | Held: untouched until Alexander releases it |
+| Spend cap | **$110** for v2 Phase 1, a safety stop (Alexander, 2026-10-09) |
 [line omitted from the public copy]
+
+**Keep test changed (2026-10-10, Alexander): Take 2 uses the margin keep test.** Take 1's p-value keep test rejected every candidate in rounds 1 and 2, although three of four raised credit by 2 to 5 points; at 60 tasks and one run each it could not see gains that size. Adopted after seeing those results, and recorded that way. Details: [Live status](#live-status-v2-phase-1-take-2-is-running) and the canonical design's Takes section.
 
 How each decision was reached: [`JOURNEY.md`](JOURNEY.md); dates and detail: [`PLAN.md`](PLAN.md).
 
@@ -179,7 +252,7 @@ How each decision was reached: [`JOURNEY.md`](JOURNEY.md); dates and detail: [`P
 | Phase 0 | spent **$9.41** | $25 |
 | Phase 1 pilot (2 skill-loop rounds) | spent **$8.97** | $20 |
 | **V2-5 action masking** (plan below) | ≤ **$40** | $40, pending approval |
-| Phase 1, full design (incl. redesigned skill loop) | ≈ $100 (range ≈ $60–125) | to be set at go/no-go |
+| Phase 1, full design (incl. redesigned skill loop) | ≈ $94 (range ≈ $60–110) | **$110** (Alexander, 2026-10-09) |
 
 Caps are enforced in code: a run stops before it would pass its cap. Per-item estimates: [`briefs/Phase 1 design.md`](briefs/Phase%201%20design.md#budget).
 
@@ -207,6 +280,8 @@ The sealed set is not touched. The checkpoint is on for learning and the final t
 
 | Document | What it holds |
 |---|---|
+| [`WIP_NOTES.md`](WIP_NOTES.md) | Work-in-progress ideas and scope notes; nothing approved or run (Alexander, 2026-10-10) |
+| ⭐ [`WHAT_WE_DID_AND_CAN_CLAIM.md`](WHAT_WE_DID_AND_CAN_CLAIM.md) | How learning cascades, what was reused or changed after the fact, what each result can and cannot support (living) |
 | [`briefs/V2 Phase 1 Canonical Experiment Design.md`](briefs/V2%20Phase%201%20Canonical%20Experiment%20Design.md) | **The source of truth** for the design and its words (2026-10-09) |
 | [`briefs/Phase 1 design.md`](briefs/Phase%201%20design.md) | The current design: claim, loops, data, experiments, verdict rules, budget |
 | [`briefs/Skill loop redesign.md`](briefs/Skill%20loop%20redesign.md) | Draft after the pilot: multi-level telemetry and a new keep rule for long, noisy workflows |

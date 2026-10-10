@@ -175,6 +175,40 @@ def test_keep_rule_targets_checks_and_guards_credit():
     assert not keep_rule(cur, dict(cur), kind="rule_broken", regression=[]).keep
 
 
+def test_margin_keep_test_needs_targeted_gain_credit_margin_and_no_lost_passes():
+    from jevloop.skill_loop import keep_rule
+    tasks = [f"t{i}" for i in range(30)]
+    cur = {t: _checks_run(t, 0.5, [("action_missed", False), ("wrong_content", True)]) for t in tasks}
+
+    def cand(credit, fixed, passed_tasks=0):
+        out = {}
+        for i, t in enumerate(tasks):
+            c = credit if i < 15 else 0.5
+            out[t] = _checks_run(t, 1.0 if i < passed_tasks else c, [("action_missed", i < fixed), ("wrong_content", True)])
+        return out
+    kw = dict(kind="action_missed", regression=[], test="margin", min_credit_gain=0.02)
+    # a gain the p-value test would call noise (small targeted change) is kept under the margin test
+    good = cand(0.6, fixed=6)  # credit +0.05 on average; targeted +0.2
+    d = keep_rule(cur, good, **kw)
+    assert d.keep and d.targeted_ok and d.net_ok and d.passes_ok
+    assert d.net_diff == pytest.approx(0.05)
+    # credit up by less than the margin: rejected
+    assert not keep_rule(cur, cand(0.53, fixed=6), **kw).keep
+    # targeted change not above 0: rejected even though credit rose
+    d_t = keep_rule(cur, cand(0.6, fixed=0), **kw)
+    assert not d_t.keep and not d_t.targeted_ok and d_t.net_ok
+    # credit up but fewer fully passed tasks: rejected
+    cur_pass = dict(cur)
+    for t in tasks[:5]:
+        cur_pass[t] = _checks_run(t, 1.0, [("action_missed", False), ("wrong_content", True)])
+    d_p = keep_rule(cur_pass, cand(0.9, fixed=6), **kw)
+    assert d_p.net_ok and d_p.targeted_ok and not d_p.passes_ok and not d_p.keep and d_p.passes_diff == -5
+    # the p-value test is still the default
+    assert not keep_rule(cur, cand(0.53, fixed=1), kind="action_missed", regression=[]).targeted_ok
+    with pytest.raises(ValueError):
+        keep_rule(cur, good, kind="action_missed", regression=[], test="nope")
+
+
 def test_failure_profile_counts_kinds_and_steps():
     from jevloop.skill_loop import failure_profile
     runs = [_checks_run("a", 0.5, [("rule_broken", False), ("wrong_content", False)]), _checks_run("b", 1.0, [("rule_broken", True)])]

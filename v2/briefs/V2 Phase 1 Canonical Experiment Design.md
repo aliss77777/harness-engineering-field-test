@@ -1,6 +1,6 @@
 # V2 Phase 1: Canonical Experiment Design
 
-Oct 9, 2026 · @Alexander Liss
+Oct 9, 2026 · @Alexander Liss · updated Oct 10, 2026: Take 2, margin keep test (see Takes)
 
 ## The question
 
@@ -22,7 +22,7 @@ Every learner here runs the same loop: try, study the mistakes, propose a change
 
 1. **Learn patterns across tasks, not one task repeated.** The playbook holds rules that carry from task to task, such as "read every policy email before changing a record." Each failure is labeled by kind: broke a "must not" rule, skipped a required action, or wrote the wrong content.
 2. **Aim each proposed rule at one kind of failure.** MiniMax studies its failure profile on the practice tasks and proposes a rule that names the kind it targets. Rules over 600 characters, or too specific, are refused.
-3. **Keep a rule only if it fixes what it claims at no cost.** On the 60 test-bench tasks, the targeted failure kind must clearly drop and overall credit must not fall.
+3. **Keep a rule only if it helps what it claims, by a margin, at no cost.** On the 60 test-bench tasks, the targeted failure kind must improve, overall credit must rise by at least 0.02, and the rule must not lose fully passed tasks. This is the margin keep test (Take 2). Take 1 asked for a clear drop in the targeted failure kind (p < 0.10) and no fall in credit, and kept nothing in two rounds; 60 tasks at one run each could not show that.
 4. **Jev's rubric learns the same way,** from finished runs. A change to its yes/no questions is kept only if the rubric then separates good runs from bad ones better on the test bench.
 
 **The checkpoint is the part that does not learn.** It is a fixed rule in the harness, called action masking in reinforcement learning. Before MiniMax changes any record, it must have read every policy email. If not, the action is held (at most 3 times per run) and MiniMax is told what to read. It is a shield, not a teacher: it blocks one known mistake as it happens and logs each hold as a near-miss. The playbook editor sees those near-misses, so learning effort goes to the mistakes the checkpoint cannot catch.
@@ -54,9 +54,26 @@ Each term means one thing everywhere. The last column lists code names and retir
 | Router | MiniMax does the task, Jev checks it, Gemini redoes what Jev doubts. | Code: cascade |
 | Cutoff | Jev score below which a task goes to Gemini; 30% of test-bench runs fall below it. | Code: tau (τ) |
 | Practice / test bench / sealed exam | 60 / 60 / 80 tasks. Learn on practice; keep-or-reject and cutoff on the test bench; sealed exam opened once. | Files named gate = test bench |
-| Keep-or-reject test | Decides whether a playbook or rubric change stays. | Retired: gate |
+| Keep-or-reject test | Decides whether a playbook or rubric change stays. For the playbook it is the margin keep test in Take 2 and the p-value keep test in Take 1. | Retired: gate |
+| Take 1 / Take 2 | An attempt at Phase 1. Take 1: 2026-10-09, p-value keep test, stopped after round 2, no rule kept ($16.15). Take 2: 2026-10-10, margin keep test, starting from round 1. | Not "run" (a run is one task execution) |
+| P-value keep test | Take 1's playbook test: targeted failure kind clearly drops (p < 0.10) and overall credit does not fall. | Code: `keep_test: p_value` |
+| Margin keep test | Take 2's playbook test: targeted failure kind improves, overall credit up by at least 0.02, fully passed tasks not lower; no p-value. | Code: `keep_test: margin` |
 | Credit | The grader's partial score for one run, 0 to 1. |  |
 | Main comparison | Router vs Gemini alone on the sealed exam, checkpoint on. | Retired: headline |
+
+## Takes
+
+Phase 1 is run in numbered takes so results are never mixed up. Always cite "Take N, round M" and name the keep test.
+
+| | Take 1 | Take 2 |
+| --- | --- | --- |
+| Started | 2026-10-09 | 2026-10-10 |
+| Playbook keep test | P-value keep test | Margin keep test |
+| Rubric keep test | McNemar, p < 0.10 | Unchanged |
+| Rounds 1 and 2 | Four candidate rules, none kept; starting playbook 0.62 credit on the test bench | Round 1 reuses Take 1's logged runs (same runs, new test); round 2 onward starts from the playbook Take 2 keeps |
+| Files | `phase1/run/take1/`, `logs/phase1_run/take1/` | `phase1/run/take2/` |
+
+Why Take 2: the p-value keep test could not see 2 to 5 point gains at 60 tasks and one run each (one run moves about 3 points on its own). The change was adopted after seeing Take 1's rounds 1 and 2, with Alexander's OK, and is recorded that way in PLAN.md. The sealed exam is the judge either way: final vs starting playbook.
 
 ## What we measure
 
@@ -98,6 +115,12 @@ Phase 1 is far bigger than v1: more moving parts, noisier scores, and roughly $1
 - **The cost win is thin.** With 30% of tasks going to Gemini, cost lands near half of Gemini's, and a cutoff set on 60 tasks has to hold on the sealed 80.
 - **The sealed exam is small.** 80 tasks give about six points of wiggle: enough to show "close", not "within 3 points".
 
+## Ideas for later (noted, not adopted)
+
+Each of these is a design change: it goes into this memo with Alexander's OK before any code.
+
+- **Stack more than one passing rule per round.** Today only the best rule that passes the keep test joins the playbook. A rule that passes but is not the best (Take 2, round 1: R1b, +2.1 points, 17 vs 11 passes) is shown to the editor as rejected and does not come back. Stacking passing rules, or letting the runner-up retry against the new playbook in the next round, would capture more of what was learned. Noted 2026-10-10 (Alexander).
+
 ## Fixed rules of the run
 
 - **One run per task,** in learning, on the test bench and on the sealed exam, as in v1.
@@ -119,3 +142,5 @@ This memo is the source of truth for the design and its words. It outranks any o
 ## Changes to make now
 
 Done, 2026-10-09, commit `fb265a4`.
+
+Done, 2026-10-10: Takes and the margin keep test added (this memo, config, `keep_rule`, tests, PLAN.md).

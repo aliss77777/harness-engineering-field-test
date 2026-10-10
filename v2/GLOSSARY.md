@@ -17,5 +17,8 @@ One name per concept. Use these exact names in docs, code comments and the UI; n
 | **Checkpoint** | The action-masking check built into the harness: before the agent changes any record, it confirms the agent has read every policy email; if not, the action is held and the agent is told which emails to read. (Formerly "the gate"; renamed 2026-10-08.) |
 | **Test bench** | The 60 held-out tasks used to try each proposed fix before keeping it (file: `phase1/splits/gate.txt`). The other sets are practice (60) and sealed (80). (Formerly "the gate set"; renamed 2026-10-08.) |
 | **Keep-or-reject test** | The rule that decides whether a proposed fix is kept, by comparing it with the current version on the test bench. (Formerly "the gate"; renamed 2026-10-08.) |
+| **Take 1 / Take 2** | An attempt at Phase 1 (not "run": a run is one task execution). Take 1: 2026-10-09, p-value keep test, stopped after round 2, nothing kept. Take 2: 2026-10-10, margin keep test. |
+| **P-value keep test** | Take 1's playbook test: targeted failure kind clearly drops (p < 0.10) and overall credit does not fall. |
+| **Margin keep test** | Take 2's playbook test: targeted failure kind improves, overall credit up by at least 0.02, fully passed tasks not lower; no p-value. |
 | **Sealed set** | Tasks held out from all learning and tuning, scored once at the end. |
 | **Learned?** | The final version beats its own starting version on the Sealed set (preregistered test, p < 0.05). |

@@ -1,6 +1,7 @@
 """The v2 Phase 1 experiments (briefs/Phase 1 design.md; briefs/Skill loop redesign.md).
 
     .venv/bin/python scripts/phase1_run.py skill    # Agent skill loop: MiniMax edits its own playbook (checkpoint on)
+    .venv/bin/python scripts/phase1_run.py skill --stop-after-round 2   # same, but stop (resumably) once round 2 is saved
     .venv/bin/python scripts/phase1_run.py jevdata  # MiniMax's final playbook on practice + test bench (Jev's learning data)
     .venv/bin/python scripts/phase1_run.py rubric   # Jev rubric loop: MiniMax edits Jev's questions; v1's McNemar test
     .venv/bin/python scripts/phase1_run.py tau      # the Router's threshold, frozen on the test bench
@@ -8,7 +9,8 @@
 
 Safety: every paid stage refuses to run unless phase1/config_phase1.yaml has run.approved: true; the spend
 cap is enforced in code; the sealed stage needs phase1/SEALED_RELEASE.md; every run is logged and reloaded,
-so a stop resumes without paying twice. Outputs go to phase1/run/.
+so a stop resumes without paying twice. Outputs go to phase1/run/take<N>/ (N = run.take in the config; Take 1 used
+the p-value keep test, Take 2 the margin keep test); run logs are shared across takes, so identical runs are reused.
 """
 import argparse
 import json
@@ -45,7 +47,7 @@ from jevloop.spend import SpendTracker  # noqa: E402
 CFG1 = yaml.safe_load((ROOT / "phase1" / "config_phase1.yaml").read_text())
 CFG0 = yaml.safe_load((ROOT / "phase0" / "config_phase0.yaml").read_text())
 RUN = CFG1["run"]
-OUT = ROOT / "phase1" / "run"
+OUT = ROOT / "phase1" / "run" / f"take{RUN.get('take', 1)}"
 LOGS = ROOT / "logs" / "phase1_run"
 SPLITS = ROOT / "phase1" / "splits"
 
@@ -155,7 +157,7 @@ class Phase1:
 
 # ---------------- stage 1: the Agent skill loop (checkpoint on during learning) ----------------
 
-def stage_skill(_args) -> None:
+def stage_skill(args) -> None:
     p = Phase1()
     s = RUN["skill_loop"]
     cp = RUN["checkpoint_during_learning"]
@@ -178,9 +180,11 @@ def stage_skill(_args) -> None:
         for e in edits:
             cand = {t: merged(rs) for t, rs in p.run_set(model="minimax", rules=apply_edit(rules, e), checkpoint=cp, task_ids=bench_ids,
                                                           label="bench", runs_per_task=s["runs_per_task"]).items()}
-            d = keep_rule(current, cand, kind=e.target, regression=[], p_threshold=s["p_threshold"], max_regression_drop=s["max_regression_drop"])
+            d = keep_rule(current, cand, kind=e.target, regression=[], p_threshold=s["p_threshold"], max_regression_drop=s["max_regression_drop"],
+                          test=s.get("keep_test", "p_value"), min_credit_gain=s.get("min_credit_gain", 0.02))
             decisions.append((e, d))
-            print(f"    {e.target:13} {d.targeted_diff:+.3f} p {d.targeted_p:.3f} net {d.net_diff:+.3f} -> {'KEEP' if d.keep else 'reject'}: {e.text[:70]}", flush=True)
+            print(f"    {e.target:13} {d.targeted_diff:+.3f} p {d.targeted_p:.3f} net {d.net_diff:+.3f} passes {d.passes_diff:+d} "
+                  f"-> {'KEEP' if d.keep else 'reject'} ({s.get('keep_test', 'p_value')} test): {e.text[:70]}", flush=True)
         kept = [(e, d) for e, d in decisions if d.keep]
         winner = max(kept, key=lambda ed: ed[1].targeted_diff)[0] if kept else None
         rejected += [e for e, _ in decisions if e is not winner]
@@ -191,6 +195,10 @@ def stage_skill(_args) -> None:
                         "refused": refused, "decisions": [{"edit": e.record(), "decision": d.record()} for e, d in decisions],
                         "kept": winner.record() if winner else None, "rules_after": list(rules), "spend_usd": p.spend.total_usd})
         save("skill_history", history)
+        stop_at = getattr(args, "stop_after_round", None)
+        if stop_at and rnd == stop_at and rnd < s["rounds"]:
+            print(f"STOPPED after round {rnd} as asked (Take {RUN.get('take', 1)}); run `skill` again to resume (finished runs are reloaded).", flush=True)
+            return
     save("skill_final", {"rules": list(rules), "version": version_id(rules), "checkpoint_during_learning": cp})
     print(f"final playbook {version_id(rules)}: {len(rules)} rules; spend ${p.spend.total_usd:.2f}", flush=True)
 
@@ -348,7 +356,10 @@ def stage_sealed(args) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser()
     sub = parser.add_subparsers(dest="cmd", required=True)
-    for name, fn in (("skill", stage_skill), ("jevdata", stage_jevdata), ("rubric", stage_rubric), ("tau", stage_tau)):
+    sk = sub.add_parser("skill")
+    sk.add_argument("--stop-after-round", type=int, default=None, help="stop once this round's decisions are saved (resumable)")
+    sk.set_defaults(fn=stage_skill)
+    for name, fn in (("jevdata", stage_jevdata), ("rubric", stage_rubric), ("tau", stage_tau)):
         sub.add_parser(name).set_defaults(fn=fn)
     s = sub.add_parser("sealed")
     s.add_argument("--release-confirmed", action="store_true")

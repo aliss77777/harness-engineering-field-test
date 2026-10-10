@@ -1,8 +1,10 @@
 # Phase 1 design: MiniMax M3 + Jev vs Gemini 3.8 Flash on back-office tasks
 
 > **The source of truth is now [`V2 Phase 1 Canonical Experiment Design.md`](V2%20Phase%201%20Canonical%20Experiment%20Design.md)** (2026-10-09). Where this page differs, the canonical design wins.
+>
+> **Takes (2026-10-10):** Take 1 used the p-value keep test; Take 2 uses the margin keep test (targeted change > 0, credit up by at least 0.02, passes not lower). Wherever this page says "keep-or-reject test" for the playbook, the canonical design's Takes section says which applies.
 
-**Written:** 2026-10-07 · **Approved in outline:** Alexander, 2026-10-07 · **Status:** design; the verdict rules go into code with tests and are committed before any Phase 1 paid run · **Pending revision:** after the pilot, the skill loop's keep-or-reject test and editor inputs are being redesigned ([`Skill loop redesign.md`](Skill%20loop%20redesign.md), draft) · **Supersedes:** the best-of-K Router and the Phase 1 experiment table in `Task Brief 7_V2_Business.md` (sections 2–3); the rest of that brief stands.
+**Written:** 2026-10-07 · **Approved in outline:** Alexander, 2026-10-07 · **Status:** built and tested (78 tests); not yet run; waiting on `run.approved: true` · **Skill loop:** the post-pilot redesign ([`Skill loop redesign.md`](Skill%20loop%20redesign.md)) is built into `scripts/phase1_run.py` · **Supersedes:** the best-of-K Router and the Phase 1 experiment table in `Task Brief 7_V2_Business.md` (sections 2–3); the rest of that brief stands.
 
 ## The core question (revised 2026-10-07)
 
@@ -51,17 +53,17 @@ task ──► MiniMax M3 runs it once (with its learned skill file) ──► r
 | **Editor (both loops)** | MiniMax M3, same pinned host |
 | **Strong agent** | Gemini 3.8 Flash, Google AI Studio standard tier: the baseline and the cascade's fallback only |
 | **Checker** | Jev 1.13 (`typesafe/jev-1.13`, TypeSafe), as in v1 |
-| **Agent settings** | As Phase 0: temperature 0.7, reasoning effort medium, 50-step cap, the `api` toolset |
+| **Agent settings** | As Phase 0 except temperature: agents (MiniMax, Gemini) at 0; the editor (MiniMax) at 0.7. Reasoning effort medium, 50-step cap, the `api` toolset |
 | **Leak rule** | Jev reads only the run summary (no grading checks). The skill-loop editor may see missed checks, **on practice tasks only**. |
 
 ## Experiments and preregistered verdicts
 
 | Exp | Question | What runs | "Learned" / verdict rule |
 |---|---|---|---|
-| **V2-1 Controls** | Where do we start? | Sealed: MiniMax v0 skill, Gemini, 1 run each | — sets the frame (the starting gap) |
-| **V2-2a Agent skill loop** | Does MiniMax learn its playbook? | 4 rounds: 30 practice runs, then the current version and 2 candidate edits on the same 40 test bench tasks per round; final skill vs v0 on sealed | **Learned** if final beats v0 on sealed partial credit, paired one-sided Wilcoxon, p < 0.05 |
+| **V2-1 Controls** | Where do we start? | Sealed: MiniMax starting playbook (checkpoint on) and Gemini alone, 1 run each | — sets the starting line |
+| **V2-2a Agent skill loop** | Does MiniMax learn its playbook? | 4 rounds: 30 practice runs, then the current version and 2 candidate rules on all 60 test bench tasks per round; final skill vs v0 on sealed | **Learned** if final beats v0 on sealed partial credit, paired one-sided Wilcoxon, p < 0.05 |
 | **V2-2b Jev rubric loop** | Does the checker learn what a correct run is? | Rubric learned on MiniMax runs from practice and test bench (labels: run "good" = partial credit ≥ 0.8) | **Learned** if the final rubric classifies sealed runs as good / not good better than the starting rubric, paired McNemar, p < 0.05 |
-| **V2-3 Router (main comparison)** | As good as Gemini, cheaper and faster? **Main comparison, checkpoint on** (canonical design, 2026-10-09) | Sealed: MiniMax (final skill) once → Jev (final rubric) → keep, or Gemini does it. τ is the Jev score that escalates **30%** of test bench runs, frozen before sealed | **Chef's kiss** if Router mean partial credit is within **±3 points** of Gemini alone (paired 95% interval) **and** cost per task ≤ **½** Gemini's; time per task reported |
+| **V2-3 Router (main comparison)** | As good as Gemini, cheaper and faster? **Main comparison, checkpoint on** (canonical design, 2026-10-09) | Sealed: MiniMax (final skill) once → Jev (final rubric) → keep, or Gemini does it. τ is the Jev score that escalates **30%** of test bench runs, frozen before sealed | **Reference lines (directional, not a pass/fail verdict):** router credit within **3 points** of Gemini alone and cost per task at most **½** Gemini's. We report the numbers, the paired 95% interval and how close they land; time per task reported |
 | V2-4 Partial feedback | — | not run (out of budget) | — |
 
 Notes:
@@ -78,7 +80,7 @@ Notes:
 - **The checkpoint is on while MiniMax learns** (it is part of the harness); every hold reaches the editor as a near-miss.
 - **The sealed exam (canonical design, 2026-10-09):** starting playbook and final playbook, both with the checkpoint on; the main comparison is the checkpoint-on router against Gemini alone; final playbook with the checkpoint off only for question 4 (what the checkpoint adds).
 - **Jev's starting rubric** is 8 generic yes/no questions fixed in code (`STARTING_RUBRIC`); MiniMax edits them. A run counts as good at partial credit ≥ 0.8.
-- **Try each test bench task once** per version (`runs_per_task: 1`), pending Alexander's confirmation.
+- **One run per task** everywhere (`runs_per_task: 1`; canonical design, 2026-10-09).
 
 **Safety:** nothing paid runs until `run.approved: true` in `phase1/config_phase1.yaml`; the sealed stage also needs Alexander's `phase1/SEALED_RELEASE.md`; the spend cap is enforced in code.
 
@@ -86,16 +88,16 @@ Notes:
 
 ## Budget
 
-Costs per run from Phase 0: MiniMax $0.062, Gemini $0.32 (average of 20 business tasks). Rough.
+Costs per run from Phase 0: MiniMax $0.062, Gemini $0.32 (average of 20 business tasks). Rough. Run counts below are from `scripts/phase1_run.py` (re-counted 2026-10-09): the current version's test bench runs are reloaded from the previous round, not paid twice.
 
 | Item | Runs | Cost |
 |---|---|---|
-| Agent skill loop (MiniMax): practice, current version on the test bench, 2 candidates on the test bench | 4 × (30 + 40 + 2 × 40) = 600 | ≈ $37 |
-| Jev learning data: MiniMax (final skill) on practice + test bench (plus the skill loop's runs) | 120 | ≈ $7 |
-| Sealed: MiniMax v0 + MiniMax final skill | 160 | ≈ $10 |
-| Sealed: Gemini baseline | 80 | ≈ $26 |
-| Sealed: fresh Gemini runs for escalated tasks (≈ 30%) | ≈ 24 | ≈ $8 |
-| Jev scoring, editor and other small calls | — | ≈ $4 |
-| **Total** | | **≈ $90** (range ≈ $60–125) |
+| Agent skill loop (MiniMax, checkpoint on): practice 30 per round, 2 candidates on all 60 test bench tasks per round, plus the starting playbook on the test bench once | 4 × (30 + 2 × 60) + 60 = 660 | ≈ $40 |
+| Jev learning data: final playbook on all 60 practice tasks (test bench runs are reloaded) | 60 | ≈ $4 |
+| Sealed: MiniMax starting playbook (checkpoint on), final playbook (checkpoint on), final playbook (checkpoint off) | 240 | ≈ $14 |
+| Sealed: Gemini alone | 80 | ≈ $26 |
+| Sealed: Gemini redoes the tasks Jev doubts (≈ 30%) | ≈ 24 | ≈ $8 |
+| Jev scoring, editor and other small calls | — | ≈ $2 |
+| **Total** | | **≈ $94** (range ≈ $60–110) |
 
-**Proposed Phase 1 cap: $110** (re-estimated 2026-10-08: skill loop ≈ $45 at one try per task, Jev data ≈ $7, sealed runs ≈ $50, Jev calls ≈ $1), **enforced in code**; stop and ask if a projection goes over.
+**Spend cap: $110** (Alexander, 2026-10-09), **enforced in code**; the run stops before a stage would pass it and asks.

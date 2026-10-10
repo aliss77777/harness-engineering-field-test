@@ -1,0 +1,203 @@
+[
+  {
+    "round": 1,
+    "rules_before": [],
+    "profile": {
+      "runs": 30,
+      "failed_runs": 20,
+      "missed_checks_by_kind": {
+        "rule_broken": 10,
+        "action_missed": 10,
+        "wrong_content": 38
+      },
+      "runs_missing_each_kind": {
+        "rule_broken": 8,
+        "action_missed": 5,
+        "wrong_content": 12
+      },
+      "policy_emails_read_before_first_write": "17 of 20 runs with policy emails",
+      "runs_hitting_step_cap": 0,
+      "gate_holds_per_100_runs": 43.3,
+      "near_misses": 4,
+      "mean_steps": 18.6
+    },
+    "edits": [
+      {
+        "op": "add",
+        "index": null,
+        "text": "After you have located the source-of-truth data and identified each required deliverable, execute every required write action (each sheet row that needs updating, each invoice that needs creating, each email that needs sending) before declaring the task done. Do not stop after a single representative write or after partial completion — each distinct required deliverable needs its own successful write call. Excessive searching or re-verification between writes causes total task failure when deliverables are left unexecuted.",
+        "why": "Multiple recent tasks (finance:4014, hr:5125, hr:5035) scored 0.0 because after extensive research the agent never executed the required sheet updates, invoice creations, or follow-up emails — it stopped before doing the writes. This is the dominant action_missed pattern.",
+        "target": "action_missed"
+      },
+      {
+        "op": "add",
+        "index": null,
+        "text": "When source data contains specific values (amounts, names of entities, links, record IDs, totals formatted with thousands separators) that the task or downstream checks require in an output, embed them EXACTLY as they appear in the source — do not round, paraphrase, compute a different number, abbreviate, or omit. Required values (e.g., exact invoice totals in message bodies, employee names in notifications, recording/policy links in follow-up emails) must appear verbatim or the output check fails.",
+        "why": "wrong_content is the most frequent miss (38 across recent runs). Examples: invoice body missing the required total formatted with comma separators, follow-up emails missing the recording link, notification emails missing the verbatim employee names, computed totals substituting for verbatim source totals.",
+        "target": "wrong_content"
+      }
+    ],
+    "refused": [],
+    "decisions": [
+      {
+        "edit": {
+          "op": "add",
+          "index": null,
+          "text": "After you have located the source-of-truth data and identified each required deliverable, execute every required write action (each sheet row that needs updating, each invoice that needs creating, each email that needs sending) before declaring the task done. Do not stop after a single representative write or after partial completion — each distinct required deliverable needs its own successful write call. Excessive searching or re-verification between writes causes total task failure when deliverables are left unexecuted.",
+          "why": "Multiple recent tasks (finance:4014, hr:5125, hr:5035) scored 0.0 because after extensive research the agent never executed the required sheet updates, invoice creations, or follow-up emails — it stopped before doing the writes. This is the dominant action_missed pattern.",
+          "target": "action_missed"
+        },
+        "decision": {
+          "keep": true,
+          "targeted_ok": true,
+          "guard_ok": true,
+          "net_ok": true,
+          "targeted_diff": 0.03480392156862745,
+          "targeted_p": 0.36328125,
+          "targeted_tasks": 34,
+          "guard_diff": 0.054258056758056755,
+          "guard_tasks": 60,
+          "net_diff": 0.054258056758056755,
+          "passes_ok": true,
+          "passes_diff": 3
+        }
+      },
+      {
+        "edit": {
+          "op": "add",
+          "index": null,
+          "text": "When source data contains specific values (amounts, names of entities, links, record IDs, totals formatted with thousands separators) that the task or downstream checks require in an output, embed them EXACTLY as they appear in the source — do not round, paraphrase, compute a different number, abbreviate, or omit. Required values (e.g., exact invoice totals in message bodies, employee names in notifications, recording/policy links in follow-up emails) must appear verbatim or the output check fails.",
+          "why": "wrong_content is the most frequent miss (38 across recent runs). Examples: invoice body missing the required total formatted with comma separators, follow-up emails missing the recording link, notification emails missing the verbatim employee names, computed totals substituting for verbatim source totals.",
+          "target": "wrong_content"
+        },
+        "decision": {
+          "keep": true,
+          "targeted_ok": true,
+          "guard_ok": true,
+          "net_ok": true,
+          "targeted_diff": 0.021720969089390144,
+          "targeted_p": 0.34351749363846273,
+          "targeted_tasks": 57,
+          "guard_diff": 0.020845959595959595,
+          "guard_tasks": 60,
+          "net_diff": 0.020845959595959595,
+          "passes_ok": true,
+          "passes_diff": 6
+        }
+      }
+    ],
+    "kept": {
+      "op": "add",
+      "index": null,
+      "text": "After you have located the source-of-truth data and identified each required deliverable, execute every required write action (each sheet row that needs updating, each invoice that needs creating, each email that needs sending) before declaring the task done. Do not stop after a single representative write or after partial completion — each distinct required deliverable needs its own successful write call. Excessive searching or re-verification between writes causes total task failure when deliverables are left unexecuted.",
+      "why": "Multiple recent tasks (finance:4014, hr:5125, hr:5035) scored 0.0 because after extensive research the agent never executed the required sheet updates, invoice creations, or follow-up emails — it stopped before doing the writes. This is the dominant action_missed pattern.",
+      "target": "action_missed"
+    },
+    "rules_after": [
+      "After you have located the source-of-truth data and identified each required deliverable, execute every required write action (each sheet row that needs updating, each invoice that needs creating, each email that needs sending) before declaring the task done. Do not stop after a single representative write or after partial completion — each distinct required deliverable needs its own successful write call. Excessive searching or re-verification between writes causes total task failure when deliverables are left unexecuted."
+    ],
+    "spend_usd": 23.739263100000105
+  },
+  {
+    "round": 2,
+    "rules_before": [
+      "After you have located the source-of-truth data and identified each required deliverable, execute every required write action (each sheet row that needs updating, each invoice that needs creating, each email that needs sending) before declaring the task done. Do not stop after a single representative write or after partial completion — each distinct required deliverable needs its own successful write call. Excessive searching or re-verification between writes causes total task failure when deliverables are left unexecuted."
+    ],
+    "profile": {
+      "runs": 30,
+      "failed_runs": 19,
+      "missed_checks_by_kind": {
+        "rule_broken": 14,
+        "action_missed": 11,
+        "wrong_content": 32
+      },
+      "runs_missing_each_kind": {
+        "rule_broken": 9,
+        "action_missed": 6,
+        "wrong_content": 14
+      },
+      "policy_emails_read_before_first_write": "15 of 18 runs with policy emails",
+      "runs_hitting_step_cap": 0,
+      "gate_holds_per_100_runs": 63.3,
+      "near_misses": 3,
+      "mean_steps": 19.8
+    },
+    "edits": [
+      {
+        "op": "add",
+        "index": null,
+        "text": "Before performing any write action that updates records, sheets, statuses, or sends external communication (email, Slack, invoices), first retrieve and read the most recent policy, guideline, and override emails in the inbox. Apply any instructions, extensions, or reversals found there — they frequently override or modify defaults found in Drive/Notion documents or in the task brief. Skipping this step causes gates to hold every subsequent write and leaves required deliverables unexecuted.",
+        "why": "Multiple recent tasks (hr:5101, finance:4047, finance:4048) had gates repeatedly holding writes with the message 'Before changing any records, read the policy and guideline emails in the inbox and follow them.' Failure to read the inbox first cascaded into missing required row updates and emails.",
+        "target": "action_missed"
+      },
+      {
+        "op": "add",
+        "index": null,
+        "text": "When sending an aggregate, summary, or leadership/compliance/tax/finance-team notification email, include only aggregate values: totals, counts, status tallies, dates, and policy statements. Do NOT enumerate individual entity names, vendor names, employee names, record IDs, or per-record amounts in these summary emails — those details belong only in targeted individual emails to the specific recipient. Summary recipients get the rollup; individuals get their own specifics.",
+        "why": "finance:4060 and finance:4068 both failed with 'body_not_contains' (MUST NOT broken) violations because per-vendor, per-entity, or per-record detail strings were incorrectly included in aggregate summary emails sent to shared mailboxes such as tax@. Partitioning content by recipient type prevents these rule_broken violations.",
+        "target": "rule_broken"
+      }
+    ],
+    "refused": [],
+    "decisions": [
+      {
+        "edit": {
+          "op": "add",
+          "index": null,
+          "text": "Before performing any write action that updates records, sheets, statuses, or sends external communication (email, Slack, invoices), first retrieve and read the most recent policy, guideline, and override emails in the inbox. Apply any instructions, extensions, or reversals found there — they frequently override or modify defaults found in Drive/Notion documents or in the task brief. Skipping this step causes gates to hold every subsequent write and leaves required deliverables unexecuted.",
+          "why": "Multiple recent tasks (hr:5101, finance:4047, finance:4048) had gates repeatedly holding writes with the message 'Before changing any records, read the policy and guideline emails in the inbox and follow them.' Failure to read the inbox first cascaded into missing required row updates and emails.",
+          "target": "action_missed"
+        },
+        "decision": {
+          "keep": true,
+          "targeted_ok": true,
+          "guard_ok": true,
+          "net_ok": true,
+          "targeted_diff": 0.06715686274509804,
+          "targeted_p": 0.125,
+          "targeted_tasks": 34,
+          "guard_diff": 0.10325406075406077,
+          "guard_tasks": 60,
+          "net_diff": 0.10325406075406077,
+          "passes_ok": true,
+          "passes_diff": 7
+        }
+      },
+      {
+        "edit": {
+          "op": "add",
+          "index": null,
+          "text": "When sending an aggregate, summary, or leadership/compliance/tax/finance-team notification email, include only aggregate values: totals, counts, status tallies, dates, and policy statements. Do NOT enumerate individual entity names, vendor names, employee names, record IDs, or per-record amounts in these summary emails — those details belong only in targeted individual emails to the specific recipient. Summary recipients get the rollup; individuals get their own specifics.",
+          "why": "finance:4060 and finance:4068 both failed with 'body_not_contains' (MUST NOT broken) violations because per-vendor, per-entity, or per-record detail strings were incorrectly included in aggregate summary emails sent to shared mailboxes such as tax@. Partitioning content by recipient type prevents these rule_broken violations.",
+          "target": "rule_broken"
+        },
+        "decision": {
+          "keep": false,
+          "targeted_ok": true,
+          "guard_ok": true,
+          "net_ok": false,
+          "targeted_diff": 0.125,
+          "targeted_p": 0.125,
+          "targeted_tasks": 24,
+          "guard_diff": -0.02296236171236172,
+          "guard_tasks": 60,
+          "net_diff": -0.02296236171236172,
+          "passes_ok": true,
+          "passes_diff": 1
+        }
+      }
+    ],
+    "kept": {
+      "op": "add",
+      "index": null,
+      "text": "Before performing any write action that updates records, sheets, statuses, or sends external communication (email, Slack, invoices), first retrieve and read the most recent policy, guideline, and override emails in the inbox. Apply any instructions, extensions, or reversals found there — they frequently override or modify defaults found in Drive/Notion documents or in the task brief. Skipping this step causes gates to hold every subsequent write and leaves required deliverables unexecuted.",
+      "why": "Multiple recent tasks (hr:5101, finance:4047, finance:4048) had gates repeatedly holding writes with the message 'Before changing any records, read the policy and guideline emails in the inbox and follow them.' Failure to read the inbox first cascaded into missing required row updates and emails.",
+      "target": "action_missed"
+    },
+    "rules_after": [
+      "After you have located the source-of-truth data and identified each required deliverable, execute every required write action (each sheet row that needs updating, each invoice that needs creating, each email that needs sending) before declaring the task done. Do not stop after a single representative write or after partial completion — each distinct required deliverable needs its own successful write call. Excessive searching or re-verification between writes causes total task failure when deliverables are left unexecuted.",
+      "Before performing any write action that updates records, sheets, statuses, or sends external communication (email, Slack, invoices), first retrieve and read the most recent policy, guideline, and override emails in the inbox. Apply any instructions, extensions, or reversals found there — they frequently override or modify defaults found in Drive/Notion documents or in the task brief. Skipping this step causes gates to hold every subsequent write and leaves required deliverables unexecuted."
+    ],
+    "spend_usd": 23.739263100000105
+  }
+]

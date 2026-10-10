@@ -285,17 +285,28 @@ class KeepDecision:
     guard_diff: float  # mean task-credit change on the regression set (or the whole gate if it is empty)
     guard_tasks: int
     net_diff: float  # mean task-credit change on the whole gate
+    passes_ok: bool = True  # margin keep test only: the candidate fully passes at least as many tasks as the current version
+    passes_diff: int = 0  # candidate's fully passed tasks minus the current version's
 
     def record(self) -> dict[str, Any]:
         return asdict(self)
 
 
 def keep_rule(current: dict[str, CandidateRun], candidate: dict[str, CandidateRun], *, kind: str,
-              regression: list[str], p_threshold: float = 0.10, max_regression_drop: float = 0.03) -> KeepDecision:
-    """Keep a fix only if (1) the targeted checks improve: per-task pass rate of checks of `kind`,
-    paired by task (each task is one cluster), mean up and one-sided Wilcoxon p < p_threshold;
-    (2) the regression set's mean credit drops by at most `max_regression_drop` (the whole gate is
-    used when the regression set is empty); and (3) mean credit over the whole gate does not fall."""
+              regression: list[str], p_threshold: float = 0.10, max_regression_drop: float = 0.03,
+              test: str = "p_value", min_credit_gain: float = 0.02) -> KeepDecision:
+    """Keep a fix only if it passes the keep-or-reject test named by `test`.
+
+    "p_value" (Take 1): (1) the targeted checks improve: per-task pass rate of checks of `kind`, paired by task
+    (each task is one cluster), mean up and one-sided Wilcoxon p < p_threshold; (2) the regression set's mean
+    credit drops by at most `max_regression_drop` (the whole gate is used when the regression set is empty);
+    and (3) mean credit over the whole gate does not fall.
+
+    "margin" (Take 2, 2026-10-10): (1) the targeted checks' mean pass rate rises (no p-value); (2) mean credit over
+    the whole gate rises by at least `min_credit_gain`; (3) the candidate fully passes at least as many tasks as
+    the current version; and the same regression guard as above."""
+    if test not in ("p_value", "margin"):
+        raise ValueError(f"unknown keep test {test!r}")
     if set(current) != set(candidate):
         raise ValueError("both versions must run on the same gate tasks")
     cur_t, cand_t = targeted_pass_rates(current, kind), targeted_pass_rates(candidate, kind)
@@ -307,8 +318,15 @@ def keep_rule(current: dict[str, CandidateRun], candidate: dict[str, CandidateRu
     guard_ids = [t for t in regression if t in current] or sorted(current)
     g_diff = sum(candidate[t].partial_credit - current[t].partial_credit for t in guard_ids) / len(guard_ids)
     n_diff = sum(candidate[t].partial_credit - current[t].partial_credit for t in current) / len(current)
-    targeted_ok = t_diff > 0 and p < p_threshold
+    passes_diff = sum(r.passed for r in candidate.values()) - sum(r.passed for r in current.values())
     guard_ok = g_diff >= -max_regression_drop
-    net_ok = n_diff >= 0
-    return KeepDecision(targeted_ok and guard_ok and net_ok, targeted_ok, guard_ok, net_ok, t_diff, p, len(shared),
-                        g_diff, len(guard_ids), n_diff)
+    if test == "margin":
+        targeted_ok = t_diff > 0
+        net_ok = n_diff >= min_credit_gain - 1e-9
+        passes_ok = passes_diff >= 0
+    else:
+        targeted_ok = t_diff > 0 and p < p_threshold
+        net_ok = n_diff >= 0
+        passes_ok = True
+    return KeepDecision(targeted_ok and guard_ok and net_ok and passes_ok, targeted_ok, guard_ok, net_ok, t_diff, p, len(shared),
+                        g_diff, len(guard_ids), n_diff, passes_ok, passes_diff)
