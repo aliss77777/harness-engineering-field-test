@@ -23,6 +23,21 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 
 **Why Take 2.** At 60 tasks and one run each, one run moves about 3 points by itself, so the p-value keep test could not see the 2 to 5 point gains Take 1's candidates showed. The change was adopted *after seeing* Take 1's rounds 1 and 2 (Alexander, 2026-10-10) and is recorded that way. The sealed exam, final vs starting playbook, is the judge either way. The Jev rubric test is unchanged.
 
+### Jev: the story and the terms, in plain words
+
+| Term | Plain meaning |
+|---|---|
+| **Jev rubric (the original)** | A checklist of 8 generic yes/no questions that Jev answers about a short summary of a finished run; the answers are combined into a score. |
+| **Cutoff** (τ, code `tau`) | The Jev score below which a task goes to Gemini. |
+| **Jev refit** | Keeping the same 8 questions but re-estimating how much each counts, using about 1,050 labelled runs instead of 60. |
+| **Jev redesign, first attempt** | Jev changed from a generic checklist over a summary to a checker that sees the source data, the policy emails and everything the agent wrote, with 6 to 10 questions written for each task. |
+| **Jev redesign, second attempt** | The same idea with three tested improvements (variants 1 to 4: average several question sets, add questions about rules that must not be broken, check each write on its own), tried on fresh runs. |
+| **AUC** | Of all pairs of one good run and one poor run, the share where the good run scored higher. 0.5 is chance, 1.0 is perfect. Good = credit of 0.8 or more. |
+| **Same-playbook comparison** | AUC computed only between runs made with the same playbook version, so Jev is not credited for telling playbooks apart. |
+| **Opened once** | A set of runs we score a single time, after every design choice is frozen. |
+
+**The story so far.** (1) The original rubric learned on practice runs but did not carry over to new ones (AUC 0.475 on the test bench). (2) The refit gave more data and still did not help (0.525; bar 0.65). (3) The redesign, first attempt, gave Jev what it needs to verify and roughly doubled the signal (0.612; bar 0.65 not met). (4) The second attempt is being tested on fresh runs now. Cutoff and the sealed exam wait on that result.
+
 **Approved by Alexander:** `run.approved: true`, spend cap **$110**, cumulative across takes ($16.15 spent in Take 1). The sealed exam stays locked until Alexander writes the release note.
 
 ✅ done · ▶️ running now · ⬜ waiting · 🔒 held for Alexander
@@ -35,7 +50,58 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 | 4 | **tau** | Set the cutoff (τ): lowest 30% of test bench runs would go to Gemini; then freeze it | 0 (60 Jev calls) | ≈ $0 | ✅ τ = 0.019 |
 | 5 | **sealed** | The final exam, once: starting playbook, final playbook (checkpoint on and off), Gemini alone, the router, 80 tasks | 240 MiniMax + 80 Gemini + ≈ 24 Gemini redos | ≈ $45 | 🔒 held until the release note |
 
-**Active now (15:25 UTC, 10 Oct): nothing is running; the Jev verifier (option D) was built and validated once. Waiting on Alexander.** The redesigned Jev (richer input, per-task questions written from the request and policy emails, learned question-writer instructions) reached within-playbook AUC **0.612** [0.51, 0.72] on 840 test bench runs against a pre-registered bar of 0.65: **not met**, but a clear improvement on the generic rubric (0.51); lowest-30% credit gap 0.166 (needs 0.10, met). On the final playbook's own 60 runs it shows no discrimination (0.48). It flags skipped actions (0.67) and wrong content (0.66), not broken rules (0.48). Details and next options: [`LEARNINGS_AND_IMPLICATIONS.md`](LEARNINGS_AND_IMPLICATIONS.md) Part B. **Follow-up noted in the memo: the Gemini ceiling check (≈ $17; needs Alexander's go).** The sealed exam has not been run. Uncommitted: the verifier code, tests and docs.
+**Active now (16:50 UTC, 10 Oct): the Jev redesign, second attempt, met its bar. Nothing is running. Waiting on Alexander.** Tested once on 120 fresh test bench runs of the final playbook (variant 3, chosen on development): **AUC 0.666 [0.55, 0.78]** against a bar of 0.65, and the lowest 30% averaged **0.587 against 0.781** for the rest (bar: gap of 0.10). **Caveat:** variant 3 beat variant 1 (the first attempt) by only 0.003; on the final playbook's other runs the first attempt scored 0.48 and 0.61, so about 0.6 to 0.65 is the fair level. The cutoff is frozen at 0.756 (30th percentile of variant 3 scores on those runs). A rough router estimate, not a measurement: about **+3 points of credit** over MiniMax alone, at about $0.13 per task against $0.28 for Gemini. **The sealed stage is not yet wired to use variant 3 and the frozen cutoff,** and the sealed exam is held for Alexander's release. Gemini ceiling check ✅ (a perfect detector: +7 points per run, +3 against fresh MiniMax draws; re-running MiniMax on failures recovers +4.5 at $0.045). Spend: ≈ $74.5 of $110; the sealed exam needs ≈ $41, so the cap needs raising to about $120.
+
+| Item | Status |
+|---|---|
+| Ceiling check, 54 tasks | ✅ MiniMax 0.528 vs Gemini 0.696 on the failed tasks; perfect router 0.82 to 0.83 vs 0.753 |
+| Fresh runs for the second attempt, 240 | ✅ $11.11 |
+| Second attempt: choose a variant (development) | ✅ variant 3, AUC 0.648 |
+| Second attempt: test once (fresh test bench runs) | ✅ bar met, AUC 0.666 |
+| Wire variant 3 and the cutoff into the sealed stage | ⬜ next, needs Alexander's go |
+| Raise the spend cap to cover the sealed exam | ⬜ Alexander |
+| Sealed exam | 🔒 held for Alexander's written release |
+
+Code: `scripts/phase1_run.py` stages `ceiling` and `fresh`, `scripts/jev_verifier_d2.py` (the second attempt), `src/jevloop/verifier.py`. Full write-up: [`LEARNINGS_AND_IMPLICATIONS.md`](LEARNINGS_AND_IMPLICATIONS.md) Part B.
+
+### Jev: the story and the terms, in plain words
+
+| Term | Plain meaning |
+|---|---|
+| **Jev rubric (the original)** | A checklist of 8 generic yes/no questions that Jev answers about a short summary of a finished run; the answers are combined into a score. |
+| **Cutoff** (τ, code `tau`) | The Jev score below which a task goes to Gemini. |
+| **Jev refit** | Keeping the same 8 questions but re-estimating how much each counts, using about 1,050 labelled runs instead of 60. |
+| **Jev redesign, first attempt** | Jev changed from a generic checklist over a summary to a checker that sees the source data, the policy emails and everything the agent wrote, with 6 to 10 questions written for each task. |
+| **Jev redesign, second attempt** | The same idea with three tested improvements (variants 1 to 4: average several question sets, add questions about rules that must not be broken, check each write on its own), tried on fresh runs. |
+| **AUC** | Of all pairs of one good run and one poor run, the share where the good run scored higher. 0.5 is chance, 1.0 is perfect. Good = credit of 0.8 or more. |
+| **Same-playbook comparison** | AUC computed only between runs made with the same playbook version, so Jev is not credited for telling playbooks apart. |
+| **Opened once** | A set of runs we score a single time, after every design choice is frozen. |
+
+**The story so far.** (1) The original rubric learned on practice runs but did not carry over to new ones (AUC 0.475 on the test bench). (2) The refit gave more data and still did not help (0.525; bar 0.65). (3) The redesign, first attempt, gave Jev what it needs to verify and roughly doubled the signal (0.612; bar 0.65 not met). (4) The second attempt is being tested on fresh runs now. Cutoff and the sealed exam wait on that result.
+
+**Approved by Alexander:** `run.approved: true`, spend cap **$110**, cumulative across takes ($16.15 spent in Take 1). The sealed exam stays locked until Alexander writes the release note.
+
+✅ done · ▶️ running now · ⬜ waiting · 🔒 held for Alexander
+
+| # | Stage | What it does in plain words | MiniMax runs (max) | Cost (est.) | Status |
+|---|---|---|---|---|---|
+| 1 | **skill** | MiniMax learns. 4 rounds: do 30 practice tasks, study its mistakes, propose 2 rules, test each on the 60 test bench tasks, keep the best one that passes the keep test | 660 (Take 2: round 1 reused, so ≈ 450 new) | $34.19 total ($10.45 in rounds 3 and 4) | ✅ Take 2 done: final playbook [R1a, R2x] |
+| 2 | **jevdata** | Run the final playbook on all 60 practice tasks: the examples Jev learns from | 60 | ≈ $3 | ✅ |
+| 3 | **rubric** | Jev learns. MiniMax edits Jev's yes/no questions over 3 rounds (McNemar test, unchanged) | 0 (about 840 Jev calls) | < $1 | ✅ 1 of 6 edits kept |
+| 4 | **tau** | Set the cutoff (τ): lowest 30% of test bench runs would go to Gemini; then freeze it | 0 (60 Jev calls) | ≈ $0 | ✅ τ = 0.019 |
+| 5 | **sealed** | The final exam, once: starting playbook, final playbook (checkpoint on and off), Gemini alone, the router, 80 tasks | 240 MiniMax + 80 Gemini + ≈ 24 Gemini redos | ≈ $45 | 🔒 held until the release note |
+
+**Active now (15:35 UTC, 10 Oct): two runs in parallel, pre-registered in the canonical design.** Committed and pushed (`077c926`).
+
+| Item | What | Size | Status |
+|---|---|---|---|
+| **Gemini ceiling check** | Gemini, as it comes, on practice and test bench tasks where the final playbook scored under 0.8 | 54 tasks, $15.30 | ✅ done: on the 54 failed tasks MiniMax 0.528, Gemini 0.696; a perfect router would reach 0.82 to 0.83 against 0.753 for MiniMax alone (+7 points) |
+| **Fresh runs for the Jev second attempt** | 2 more independent draws of the final playbook on all 120 practice and test bench tasks | 240 runs, ≈ $11 | ▶️ running |
+| **Second attempt: choose a variant** | Variants 1 to 4 (variant 1 the first attempt; 2 adds an average over 3 question sets; 3 adds compliance questions; 4 adds a per-write check) scored on development runs; one variant chosen on development only | ≈ $1 in Jev calls | ⬜ after the fresh runs |
+| **Second attempt: test it once** | Chosen variant on the fresh test bench runs, opened once; bar AUC ≥ 0.65 (lower bound > 0.5) and gap ≥ 0.10 | ≈ $1 | ⬜ |
+| Sealed exam | | | 🔒 held for Alexander |
+
+Spend before these: $47.11 of $110 (two processes use separate spend files; total = $47.11 plus both increments). Code: `scripts/phase1_run.py` stages `ceiling` and `fresh`, `scripts/jev_verifier_d2.py`, `src/jevloop/verifier.py`. Verifier D result so far (validated once): within-playbook AUC 0.612 against the 0.65 bar; no discrimination on the final playbook (0.48); see [`LEARNINGS_AND_IMPLICATIONS.md`](LEARNINGS_AND_IMPLICATIONS.md) Part B.
 
 **Overnight plan (Alexander, 2026-10-10):** `scripts/overnight_phase1.py` waits for the replay, then adopts a replay winner **only if** it passed the margin keep test with test bench credit **+0.07 or more** and passes not lower (otherwise the playbook stays [R1a, R2x]), then runs **jevdata → rubric → tau** and stops. **It never runs the sealed exam;** that waits for Alexander's written release in the morning. It checks the OpenRouter balance before each stage and waits rather than failing halfway. Log: `logs/phase1_run/overnight.log`; the decision is saved as `phase1/run/take2/replay_decision.json`.
 
@@ -248,7 +314,7 @@ Full design and preregistered verdicts: [`briefs/Phase 1 design.md`](briefs/Phas
 
 **What the replay added.** Seven near-identical playbooks ([R1a, R2x] plus one extra rule) scored 0.746 to 0.792 (mean 0.764, spread 0.020), which is about what noise gives. So two rules look like a plateau, the length limit was not what held it back, and a fairer size for the gain is about +13 points on the test bench. Details: [`LEARNINGS_AND_IMPLICATIONS.md`](LEARNINGS_AND_IMPLICATIONS.md).
 
-**What the Jev verifier showed (15:25 UTC).** Pre-registered, validated once: within-playbook AUC 0.612 [0.51, 0.72] on 840 test bench runs (bar 0.65, not met); generic rubric on the same runs 0.51; lowest-30% credit gap 0.166 vs 0.06. It fades as the agent improves (0.70 for the starting playbook, 0.48 for the final one) and flags skipped actions and wrong content, not broken rules.
+**What the Jev redesign, first attempt, showed (15:25 UTC).** Pre-registered, validated once: within-playbook AUC 0.612 [0.51, 0.72] on 840 test bench runs (bar 0.65, not met); generic rubric on the same runs 0.51; lowest-30% credit gap 0.166 vs 0.06. It fades as the agent improves (0.70 for the starting playbook, 0.48 for the final one) and flags skipped actions and wrong content, not broken rules.
 
 **What the Jev refit showed (14:50 UTC).** With 17 times more labelled runs (1,052, validated grouped by task), Jev's held-out AUC on the final playbook's runs is 0.525 [0.42, 0.63] against a pre-registered bar of 0.65: not met. Telemetry alone gives 0.51; per failure kind Jev's score predicts rules broken 0.49, skipped actions 0.58, wrong content 0.54. The checker does not see what is wrong inside the outputs.
 

@@ -1,0 +1,20 @@
+{
+  "n_tasks": 120,
+  "n_failed": 54,
+  "minimax_alone": 0.7525114237614238,
+  "on_failed_tasks": {
+    "minimax": 0.5284224520335632,
+    "gemini": 0.695644992867215,
+    "gemini_passed": 20
+  },
+  "perfect_router_escalating_all_failures": {
+    "share": 0.45,
+    "credit": 0.8277615671365671
+  },
+  "perfect_router_escalating_worst_30pct": {
+    "share": 0.3,
+    "credit": 0.8198030904280904
+  },
+  "gemini_cost_per_run": 0.27822959583333334,
+  "spend_usd": 62.41485485100007
+}

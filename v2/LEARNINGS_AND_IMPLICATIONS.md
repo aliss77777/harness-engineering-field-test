@@ -46,7 +46,7 @@ A living write-up (Alexander asked for it, 2026-10-10). **Part A** covers the pl
 
 ## Part B: Jev, the rubric and the cutoff
 
-*Written 2026-10-10 06:55 UTC, after jevdata, rubric and tau ran (spend $46.55 of $110; the sealed exam is untouched).*
+*Terms: "Jev refit", "Jev redesign (first / second attempt)", "AUC" and "same-playbook comparison" are explained in the README's Jev section and the memo's words table. Written 2026-10-10 06:55 UTC, after jevdata, rubric and tau ran (spend $46.55 of $110; the sealed exam is untouched).*
 
 ### What happened
 
@@ -93,7 +93,7 @@ A living write-up (Alexander asked for it, 2026-10-10). **Part A** covers the pl
 
 My recommendation is B: it is cheap, the data already exists, and the exam can only be opened once.
 
-### Stage B1, the refit (2026-10-10, 14:50 UTC): the bar was not met
+### The Jev refit (2026-10-10, 14:50 UTC): the bar was not met
 
 Pre-registered in the canonical design before running: refit the weights of the final 8-question rubric on all 1,052 labelled runs (120 tasks), 5-fold cross-validation grouped by task, test on the final playbook's run on each held-out task (120 runs). Bar: AUC at least 0.65 with a 95% lower bound above 0.5, and the lowest 30% averaging at least 0.10 credit below the rest.
 
@@ -122,13 +122,13 @@ Pre-registered in the canonical design before running: refit the weights of the 
 | Option | What | Cost | Notes |
 |---|---|---|---|
 | A. Run the sealed exam now | As designed, with the frozen rubric and cutoff | about $45 | Router half will be close to random escalation; the MiniMax vs Gemini and learning questions are answered honestly |
-| B2. Question edits on the pooled data | MiniMax proposes new questions, scored by cross-validation | about $1 to $3 | Low odds: the problem is not the weights, and generic questions share the blind spot |
+| Edit the questions on the pooled data (the refit's second option) | MiniMax proposes new questions, scored by cross-validation | about $1 to $3 | Low odds: the problem is not the weights, and generic questions share the blind spot |
 | **C. Run the sealed exam narrowed** | Report MiniMax final vs starting vs Gemini, router reported as "Jev as built shows no skill; cutoff acts like random escalation" | about $45 | Cleanest honest result for this phase |
-| **D. Redesign Jev's input, then decide** | Give Jev what it needs to verify: the request, source data, policy emails and the run's writes; questions that check values against source; pre-registered AUC bar on held-out tasks; may need new MiniMax runs for labels | about $5 to $15 to try, plus design time | The real fix; a bigger design change needing the memo first. Sealed exam waits |
+| **Redesign Jev's input, then decide (the redesign)** | Give Jev what it needs to verify: the request, source data, policy emails and the run's writes; questions that check values against source; pre-registered AUC bar on held-out tasks; may need new MiniMax runs for labels | about $5 to $15 to try, plus design time | The real fix; a bigger design change needing the memo first. Sealed exam waits |
 
 My recommendation: C now or D first, depending on how you weigh the one-shot exam. C closes Phase 1 cleanly and keeps D as the headline of what comes next. D is the better use of the exam if you want the router half to be meaningful, at the cost of a delay.
 
-### A check on how much a better Jev could be worth (2026-10-10, 15:10 UTC; free, from logged runs)
+### A check on how much a better Jev could be worth (2026-10-10, 15:10 UTC; free, from logged runs) [superseded by the larger ceiling check below]
 
 On the 20 practice and test bench tasks that have Gemini runs from Phase 0 and the temperature-0 re-checks (about 2 Gemini runs per task, averaged) and the final playbook's MiniMax run:
 
@@ -143,7 +143,7 @@ On the 20 practice and test bench tasks that have Gemini runs from Phase 0 and t
 
 So on this small sample, **MiniMax is already at or above Gemini, and where MiniMax fails Gemini does only about 3 points better**: the hard tasks are hard for both. Even a perfect failure detector would not lift the router above MiniMax alone (0.699 vs 0.713; n = 20, one MiniMax run each, so treat as indicative). If that holds on the sealed exam, a better Jev has little quality to buy by routing to Gemini, and a router costs more than MiniMax alone. Jev's value would then be as a **guardrail** (flag runs for human review) rather than a router. The sealed exam's head-to-head, MiniMax final vs Gemini alone on 80 tasks, will show which world we are in.
 
-### Stage D, the verifier (2026-10-10, 15:25 UTC): a real improvement, still short of the bar
+### Jev redesign, first attempt (2026-10-10, 15:25 UTC): a real improvement, still short of the bar
 
 Built as pre-registered: Jev reads the request, the policy emails, the source records the run read, the writes in full and the diff; per-task yes/no questions are written by MiniMax from the request and policy emails; a run's score is the mean probability of yes; the question writer's instructions are learned on development tasks; validation (test bench runs) is opened once. Total spend under $0.50 for Jev and question writing.
 
@@ -156,7 +156,7 @@ Built as pre-registered: Jev reads the request, the policy emails, the source re
 
 **Bar met: no** (AUC 0.612 against 0.65; the gap clears 0.10 and the lower bound clears 0.5). Development went 0.650 (starting instructions) to 0.677 (one kept edit; two further rounds kept nothing), so most of the gain came from the design, not from learning the instructions.
 
-### Learnings from the verifier
+### Learnings from the first attempt
 
 1. **Giving Jev what it needs to verify roughly doubled its useful signal.** The generic rubric sat at chance (0.51); the verifier, with no fitted weights, is at 0.61, and the runs it scores lowest are 17 points of credit worse than the rest (against 6). The diagnosis was right: the checker could not see the source.
 2. **It works best where the agent is weakest, and fades as the agent improves.** Within-playbook AUC by version runs from 0.70 (starting playbook) down through 0.65 (R1a) to 0.48 for the final playbook (n = 60, interval 0.33 to 0.64). The failures left in the best playbook are the subtle ones. That is exactly where a router would be used, so the deployment case is not yet met.
@@ -169,4 +169,45 @@ Built as pre-registered: Jev reads the request, the policy emails, the source re
 - **Per the pre-registration, the router claim is not supported:** Jev as a verifier has not met the bar on validation, and on the final playbook it shows no discrimination (n = 60, wide interval). The sealed exam would report MiniMax against Gemini without a router claim.
 - **The direction is right and worth continuing,** which is your point that Jev needs a redesign as large as the harness got. The next gains likely come from: several independent question sets averaged (the questions are one sample from one model); a policy-compliance question set aimed at rules broken; checking each write separately and taking the worst; and more labelled runs of the final playbook, which are the ones that matter.
 - **The test bench validation is now used up.** More design work needs fresh labelled runs, for example two or three more draws of the final playbook on the practice and test bench tasks (about 240 runs, about $11), then a second pre-registered validation. The Gemini ceiling check (about $17) still decides how much a better Jev is worth.
+
+### The Gemini ceiling check (2026-10-10, 15:50 UTC; $15.30): a better Jev is worth real credit
+
+Gemini (as it comes: no playbook, no checkpoint) on the 54 of 120 practice and test bench tasks where the final playbook's MiniMax run scored under 0.8. This **supersedes the earlier 20-task indication**, which suggested almost no upside; with 54 failed tasks the picture is clear.
+
+| 120 practice and test bench tasks, one run each | Credit |
+|---|---|
+| MiniMax, final playbook, all tasks | 0.753 |
+| On the 54 tasks MiniMax failed: MiniMax | 0.528 |
+| On the same 54: Gemini (20 fully passed) | **0.696** |
+| **Perfect failure detector, escalating all 54 failures (45%)** | **0.828** (+7.5 points) |
+| Perfect failure detector, escalating the worst 30% | **0.820** (+6.7 points) |
+
+**What it means.**
+1. **Where MiniMax fails, Gemini is clearly better (+17 points on those tasks),** so a router has real room: up to about +7 points over MiniMax alone, at roughly 30% more cost than MiniMax alone (Gemini about $0.28 a run on the escalated 30%).
+2. **The value is entirely in how well Jev finds the failures.** The gain from escalating a set of runs is about (Gemini's credit on them minus MiniMax's credit on them) x their share. Escalating a random 30%, or a set whose MiniMax credit is 0.735 (what the first verifier's lowest 30% achieved on the final playbook), buys about nothing, because Gemini is not better than MiniMax on tasks MiniMax already does well (0.735 against about 0.70). To gain 4 points the escalated 30% must average about 0.55 MiniMax credit. A perfect detector's worst 30% averages near 0.35.
+3. **Part of the 0.528 is bad luck.** Failed runs include unlucky draws, so a fresh MiniMax run on the same tasks would score above 0.528. The fresh runs in progress will measure this (and whether simply re-running MiniMax, at $0.045, is a cheaper fallback than Gemini at $0.28).
+4. **The business reading is the one you suggested:** with a perfect detector the lift is about +7 points of credit; even capturing a third of it is +2 to +3 points. That is the prize Jev's redesign is chasing, and it justifies D2.
+
+### Jev redesign, second attempt (2026-10-10, 16:45 UTC): bar met, with a caveat
+
+As pre-registered: two fresh independent runs of the final playbook on every practice and test bench task (240 runs, $11.11); variants 1 to 4 scored on the practice-task runs (development, 180 runs); the best variant chosen there; then scored once on the fresh test bench runs (120 runs, 60 tasks).
+
+| Fresh test bench runs of the final playbook (opened once) | AUC [95%] | Lowest 30% vs rest | Gap |
+|---|---|---|---|
+| Variant 1 (the first attempt as frozen) | 0.663 [0.54, 0.79] | 0.602 vs 0.774 | 0.173 |
+| Variant 2 (average of 3 question sets) | 0.655 [0.53, 0.78] | 0.600 vs 0.775 | 0.175 |
+| **Variant 3 (variant 2 + compliance questions), chosen on development** | **0.666 [0.55, 0.78]** | **0.587 vs 0.781** | **0.194** [0.07, 0.33] |
+| Variant 4 (variant 3 + worst single write) | 0.588 [0.48, 0.70] | 0.637 vs 0.759 | 0.122 |
+| Bar (fixed in advance) | 0.65, lower bound above 0.5 | | 0.10 |
+
+**Bar met: yes** (0.666 and a lower bound of 0.548; gap 0.194). Development scores for the same variants were 0.608, 0.596, 0.648 and 0.602.
+
+**Learnings.**
+1. **The redesign works on the playbook we will deploy,** at about 0.67 AUC on fresh runs, and the runs it scores lowest are 19 points of credit worse than the rest.
+2. **Most of the gain came from the first attempt's design, not from the variants.** Variant 3 beats variant 1 by 0.003 on validation and by 0.04 on development. The first attempt scored 0.48 on the final playbook's original 60 runs, 0.61 on 180 development runs and 0.66 on the fresh 120. These differ by more than the sample sizes would explain, so I would put the true level around 0.60 to 0.65. The pre-registered bar is met, and the honest claim is "about 0.6 to 0.65".
+3. **A per-write worst-case check hurt** (variant 4, 0.588). One bad-looking write is not a good signal of a failed run on its own.
+4. **It flags wrong content best (0.72), skipped actions next (0.61) and rules broken barely (0.53).** Broken rules remain the blind spot.
+5. **The test bench tasks were seen by the first attempt's validation** (their fresh runs were not), and the variants were motivated by that result. Both were recorded in advance.
+
+**What it implies for the router.** The cutoff is frozen at 0.756 (the 30th percentile of variant 3's scores on these 120 runs). The 36 runs below it averaged 0.587 MiniMax credit against 0.722 overall. From the ceiling check, Gemini averaged 0.696 on tasks MiniMax failed. A rough estimate, not a measurement: escalating that lowest 30% to Gemini would gain about 0.3 x (0.70 - 0.587), roughly **+3 points of credit**, at about $0.13 per task against $0.28 for Gemini alone. The sealed exam is what measures it.
 

@@ -59,3 +59,24 @@ def test_gap_and_bar():
     assert g["n_low"] == 3 and g["gap"] > 0.4
     m = {"auc_within_playbook": 0.7, "auc_ci95": [0.6, 0.8], "gap": 0.12}
     assert evalstats.bar_met(m) and not evalstats.bar_met({**m, "auc_ci95": [0.45, 0.8]})
+
+
+def test_write_state_has_exactly_one_write_and_the_context():
+    from jevloop.verifier import WRITE_CHECK_QUESTIONS, build_write_state, write_calls
+    calls = CALLS + [{"name": "api_fetch", "args": {"method": "POST", "url": "https://x/second"}, "result": '{"ok": true}'}]
+    assert len(write_calls(calls)) == 2
+    s = build_write_state("Pay vendors.", INITIAL, calls, 1)
+    assert "https://x/second" in s and "https://x/send" not in s
+    assert "AP policy update" in s and "Acme (hold)" in s and "secret-from-grader" not in s
+    assert len(WRITE_CHECK_QUESTIONS) == 3
+
+
+def test_d2_choice_needs_a_margin_over_v1():
+    import importlib.util
+    from pathlib import Path
+    spec = importlib.util.spec_from_file_location("d2", Path(__file__).resolve().parent.parent / "scripts" / "jev_verifier_d2.py")
+    d2 = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(d2)
+    m = lambda a: {"auc_within_playbook": a}  # noqa: E731
+    assert d2.choose({"V1": m(0.60), "V2": m(0.61), "V3": m(0.615), "V4": m(0.60)}) == "V1"  # under +0.02: V1 stays
+    assert d2.choose({"V1": m(0.60), "V2": m(0.62), "V3": m(0.64), "V4": m(0.63)}) == "V3"

@@ -20,5 +20,9 @@ One name per concept. Use these exact names in docs, code comments and the UI; n
 | **Take 1 / Take 2** | An attempt at Phase 1 (not "run": a run is one task execution). Take 1: 2026-10-09, p-value keep test, stopped after round 2, nothing kept. Take 2: 2026-10-10, margin keep test. |
 | **P-value keep test** | Take 1's playbook test: targeted failure kind clearly drops (p < 0.10) and overall credit does not fall. |
 | **Margin keep test** | Take 2's playbook test: targeted failure kind improves, overall credit up by at least 0.02, fully passed tasks not lower; no p-value. |
+| **Jev refit** | Re-estimating how much each rubric question counts, on about 1,050 labelled runs, tested on tasks held out of fitting. |
+| **Jev redesign, first / second attempt** | Jev as a checker that sees the source data, policy emails and the agent's writes, with questions written per task. Second attempt adds variants 1 to 4 (more question sets, a compliance set, a per-write check), chosen on development tasks and tested once on fresh runs. |
+| **AUC** | Of all good-run / poor-run pairs, the share where the good run scored higher; 0.5 is chance, 1.0 perfect. |
+| **Same-playbook comparison** | AUC computed only between runs made with the same playbook version. |
 | **Sealed set** | Tasks held out from all learning and tuning, scored once at the end. |
 | **Learned?** | The final version beats its own starting version on the Sealed set (preregistered test, p < 0.05). |

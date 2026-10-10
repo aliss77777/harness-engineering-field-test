@@ -1,0 +1,9 @@
+{
+  "variant": "V3 (variant 3: mean of 3 question sets averaged with a compliance set)",
+  "cutoff": 0.7563166666666667,
+  "escalate_share": 0.3,
+  "set_on": "the 120 fresh final-playbook test bench runs, the second attempt's one-time validation",
+  "n_runs": 120,
+  "score_definition": "0.5 * mean over 3 independent question sets of mean P(yes) + 0.5 * mean P(yes) on the compliance question set",
+  "note": "Frozen before the sealed exam, per the canonical design. The sealed stage is not yet wired to use it."
+}
