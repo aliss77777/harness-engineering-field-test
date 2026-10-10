@@ -22,7 +22,7 @@ agent_model: minimax
 run:
   take: 2                 # Take 1: p-value keep test (stopped after round 2, nothing kept); Take 2: margin keep test (Alexander, 2026-10-10)
   approved: true             # Alexander's go, 2026-10-09; paid stages (not sealed) may run. Sealed also needs SEALED_RELEASE.md
-  spend_cap_usd: 110.0       # safety stop, set by Alexander 2026-10-09; cost goals are directional
+  spend_cap_usd: 120.0       # safety stop, set by Alexander 2026-10-09 ($110) and raised to $120 on 2026-10-10 for the sealed exam; cost goals are directional
   agent_temperature: 0.0     # agents (MiniMax, Gemini); not fully repeatable, but steadier
   editor_temperature: 0.7    # MiniMax as editor (both loops)
   workers: 8
@@ -47,7 +47,7 @@ run:
     escalate_share: 0.30     # tau escalates 30% of test bench runs; frozen before sealed
   sealed:
     release_file: phase1/SEALED_RELEASE.md   # Alexander writes this to release the sealed set; nothing runs on sealed without it
-  cost_estimate_per_run: {minimax: 0.06, gemini: 0.32, jev_call: 0.0003}
+  cost_estimate_per_run: {minimax: 0.06, gemini: 0.32, jev_call: 0.002}   # jev_call: Jev redesign (4 Jev calls and 4 question-writer calls per run), measured at about $0.0016
 jev:
   model: typesafe/jev-1.13
   expected_model: typesafe/jev-1.13-20260917

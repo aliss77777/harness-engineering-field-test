@@ -67,6 +67,8 @@ def cluster_bootstrap(rows: list[dict[str, Any]], stat, *, n: int = 1000, seed: 
         v = stat(sample)
         if v == v:
             vals.append(v)
+    if not vals:  # e.g. every resample had only one class
+        return float("nan"), float("nan")
     vals.sort()
     return vals[int(0.025 * len(vals))], vals[min(len(vals) - 1, int(0.975 * len(vals)))]
 

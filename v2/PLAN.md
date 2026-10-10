@@ -114,6 +114,8 @@ Dated log of every decision, deviation and fix (same discipline as [`../v1/PLAN.
 
 - 2026-10-10 (17:15 UTC): **Did Jev learn in v2? Not shown (Alexander asked).** Jev became useful through redesign (richer input, per-task questions), not through learning from outcomes. A direct, outside-the-pipeline check (`scripts/jev_instructions_check.py`, $0.105; Alexander approved): the starting vs the learned question-writer instructions on the same 120 fresh test bench runs. **Starting AUC 0.615 [0.49, 0.75], learned 0.663 [0.54, 0.79]; difference +0.048, 95% interval −0.027 to +0.129; lowest-30% gap 0.185 vs 0.173.** Suggestive of a small learning effect, not distinguishable from zero. Output `phase1/run/take2/verifier_instructions_check.json`.
 
+- 2026-10-10 (17:40 UTC): **Sealed stage wired to the Jev redesign, second attempt, variant 3 (Alexander approved); spend cap raised to $120.** `stage_sealed` now scores the final playbook's sealed runs with variant 3 (3 question sets averaged with a compliance set; instructions `verifier_instructions_final.txt`) and escalates runs below the frozen cutoff 0.7563; it also reports Jev's same-playbook AUC and gap on the sealed runs (redesign and original rubric, against the 0.65 / 0.10 bar) and MiniMax final against Gemini alone with a paired interval. Router Jev cost estimate set to $0.002 per run. Tests: dry run of the sealed stage on fakes; `verifier_scores` reproduces the validated variant 3 scores exactly (max difference 0.000000 on 60 fresh test bench runs, $0). 93 tests pass. Sealed exam still held for Alexander's written release (`phase1/SEALED_RELEASE.md` and `--release-confirmed`).
+
 ## Open decisions (brief section 9)
 
 - [x] Repo: folder in this repo (2026-10-05).

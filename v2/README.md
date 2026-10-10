@@ -62,7 +62,7 @@ In v1 Jev learned from outcomes (the rubric changed, weights were fitted) becaus
 | 4 | **tau** | Set the cutoff (τ): lowest 30% of test bench runs would go to Gemini; then freeze it | 0 (60 Jev calls) | ≈ $0 | ✅ τ = 0.019 |
 | 5 | **sealed** | The final exam, once: starting playbook, final playbook (checkpoint on and off), Gemini alone, the router, 80 tasks | 240 MiniMax + 80 Gemini + ≈ 24 Gemini redos | ≈ $45 | 🔒 held until the release note |
 
-**Active now (16:50 UTC, 10 Oct): the Jev redesign, second attempt, met its bar. Nothing is running. Waiting on Alexander.** Tested once on 120 fresh test bench runs of the final playbook (variant 3, chosen on development): **AUC 0.666 [0.55, 0.78]** against a bar of 0.65, and the lowest 30% averaged **0.587 against 0.781** for the rest (bar: gap of 0.10). **Caveat:** variant 3 beat variant 1 (the first attempt) by only 0.003; on the final playbook's other runs the first attempt scored 0.48 and 0.61, so about 0.6 to 0.65 is the fair level. The cutoff is frozen at 0.756 (30th percentile of variant 3 scores on those runs). A rough router estimate, not a measurement: about **+3 points of credit** over MiniMax alone, at about $0.13 per task against $0.28 for Gemini. **The sealed stage is not yet wired to use variant 3 and the frozen cutoff,** and the sealed exam is held for Alexander's release. Gemini ceiling check ✅ (a perfect detector: +7 points per run, +3 against fresh MiniMax draws; re-running MiniMax on failures recovers +4.5 at $0.045). Spend: ≈ $74.5 of $110; the sealed exam needs ≈ $41, so the cap needs raising to about $120.
+**Active now (16:50 UTC, 10 Oct): the Jev redesign, second attempt, met its bar. Nothing is running. Waiting on Alexander.** Tested once on 120 fresh test bench runs of the final playbook (variant 3, chosen on development): **AUC 0.666 [0.55, 0.78]** against a bar of 0.65, and the lowest 30% averaged **0.587 against 0.781** for the rest (bar: gap of 0.10). **Caveat:** variant 3 beat variant 1 (the first attempt) by only 0.003; on the final playbook's other runs the first attempt scored 0.48 and 0.61, so about 0.6 to 0.65 is the fair level. The cutoff is frozen at 0.756 (30th percentile of variant 3 scores on those runs). A rough router estimate, not a measurement: about **+3 points of credit** over MiniMax alone, at about $0.13 per task against $0.28 for Gemini. **The sealed stage is now wired to use variant 3 and the frozen cutoff (2026-10-10), tested end to end on fakes and reproducing the validated scores exactly on 60 real runs; the spend cap is $120.** The sealed exam is held for Alexander's written release. Gemini ceiling check ✅ (a perfect detector: +7 points per run, +3 against fresh MiniMax draws; re-running MiniMax on failures recovers +4.5 at $0.045). Spend: ≈ $74.5 of $110; the sealed exam needs ≈ $41, so the cap needs raising to about $120.
 
 | Item | Status |
 |---|---|
@@ -70,8 +70,8 @@ In v1 Jev learned from outcomes (the rubric changed, weights were fitted) becaus
 | Fresh runs for the second attempt, 240 | ✅ $11.11 |
 | Second attempt: choose a variant (development) | ✅ variant 3, AUC 0.648 |
 | Second attempt: test once (fresh test bench runs) | ✅ bar met, AUC 0.666 |
-| Wire variant 3 and the cutoff into the sealed stage | ⬜ next, needs Alexander's go |
-| Raise the spend cap to cover the sealed exam | ⬜ Alexander |
+| Wire variant 3 and the cutoff into the sealed stage | ✅ done and tested (93 tests; matches validated scores exactly) |
+| Raise the spend cap to cover the sealed exam | ✅ $120 |
 | Sealed exam | 🔒 held for Alexander's written release |
 
 Code: `scripts/phase1_run.py` stages `ceiling` and `fresh`, `scripts/jev_verifier_d2.py` (the second attempt), `src/jevloop/verifier.py`. Full write-up: [`LEARNINGS_AND_IMPLICATIONS.md`](LEARNINGS_AND_IMPLICATIONS.md) Part B.

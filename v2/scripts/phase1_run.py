@@ -28,7 +28,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from scipy.stats import wilcoxon  # noqa: E402
 
-from jevloop import bench  # noqa: E402
+from jevloop import bench, evalstats  # noqa: E402
 from jevloop.cache import DiskCache  # noqa: E402
 from jevloop.cascade import route, set_tau, v2_3_verdict  # noqa: E402
 from jevloop.diagnostics import behaviour  # noqa: E402
@@ -45,6 +45,7 @@ from jevloop.runs import CandidateRun, run_candidate  # noqa: E402
 from jevloop.skill_loop import (Edit, SkillEditor, apply_edit, failure_profile, keep_rule, length_refused_edits,  # noqa: E402
                                 mistakes_report, skill_text, version_id)
 from jevloop.spend import SpendTracker  # noqa: E402
+from jevloop.verifier import (COMPLIANCE_WRITER, build_state, make_questions, policy_text, verifier_score)  # noqa: E402
 
 CFG1 = yaml.safe_load((ROOT / "phase1" / "config_phase1.yaml").read_text())
 CFG0 = yaml.safe_load((ROOT / "phase0" / "config_phase0.yaml").read_text())
@@ -205,6 +206,29 @@ def stage_skill(args) -> None:
             return
     save("skill_final", {"rules": list(rules), "version": version_id(rules), "checkpoint_during_learning": cp})
     print(f"final playbook {version_id(rules)}: {len(rules)} rules; spend ${p.spend.total_usd:.2f}", flush=True)
+
+
+def verifier_scores(p, runs: dict[str, CandidateRun], *, sets: int = 3) -> dict[str, float]:
+    """Jev redesign, second attempt, variant 3 (scripts/jev_verifier_d2.py, validated once, bar met): the mean over
+    `sets` independent question sets, averaged with a policy-compliance question set. Jev reads the request, the
+    policy emails, the source records read, the writes in full and the diff; never the grader's checks."""
+    instructions = (OUT / "verifier_instructions_final.txt").read_text().strip()
+    tasks = sorted(runs)
+
+    def questions(client, text, tag):
+        return {t: make_questions(client, text, t, p.tasks[t].public.trigger, policy_text(p.tasks[t].initial_state), tag=tag) for t in tasks}
+    sample_sets = [questions(p.editor_client, instructions, f"d2s{k}") for k in range(sets)]
+    compliance = questions(p.minimax, COMPLIANCE_WRITER, "d2compliance")
+    out = {}
+    for t in tasks:
+        task, r = p.tasks[t], runs[t]
+        state = build_state(task.public.trigger, task.initial_state, r.calls, r.summary)
+
+        def mean_p(qs, tag):
+            return verifier_score(p.jev.evaluate(state, qs, {"event": "sealed_verifier", "tag": tag, "task_id": t})["probabilities"])
+        v2 = sum(mean_p(sample_sets[k][t], f"s{k}") for k in range(sets)) / sets
+        out[t] = 0.5 * v2 + 0.5 * mean_p(compliance[t], "compliance")
+    return out
 
 
 def stage_replay_refused(_args) -> None:
@@ -386,7 +410,11 @@ def stage_sealed(args) -> None:
     p = Phase1()
     sealed = split("sealed")
     final = tuple(load_json("skill_final")["rules"])
-    rb, tau = load_json("rubric_final"), load_json("tau")["tau"]
+    rb, tau = load_json("rubric_final"), load_json("tau")["tau"]  # the original rubric and its cutoff (kept for the record)
+    cutoff_file, instr_file = OUT / "jev_cutoff_second_attempt.json", OUT / "verifier_instructions_final.txt"
+    if not cutoff_file.exists() or not instr_file.exists():
+        sys.exit("STOP: the frozen Jev redesign (instructions and cutoff) is missing; the router cannot be scored.")
+    cutoff = json.loads(cutoff_file.read_text())["cutoff"]
     q_final = tuple(Question(**q) for q in rb["questions"])
     q_v0 = tuple(Question(**q) for q in rb["v0"]["questions"])
     one = lambda d: {t: rs[0] for t, rs in d.items()}  # noqa: E731
@@ -417,14 +445,29 @@ def stage_sealed(args) -> None:
     g = keep_rubric_edit(c_v0, c_fin, p_threshold=0.05)
     results["V2-2b_did_jev_learn"] = {"accuracy_starting_rubric": sum(c_v0) / len(sealed), "accuracy_final_rubric": sum(c_fin) / len(sealed),
                                       "better": g.b, "worse": g.c, "p": g.p_value, "learned": g.keep}
-    # Question 1, the main comparison: router (checkpoint on) vs Gemini alone
-    sc = {t: score(probs_fin[t], q_final, rb["weights"]) + rb["intercept"] for t in sealed}
-    escalate = sorted(t for t in sealed if sc[t] < tau)
+    # Question 1, the main comparison: router (checkpoint on) vs Gemini alone. The router uses the Jev redesign,
+    # second attempt, variant 3, and the cutoff frozen on the fresh validation runs (canonical design, Takes).
+    sc = verifier_scores(p, fin_on)
+    sc_old = {t: score(probs_fin[t], q_final, rb["weights"]) + rb["intercept"] for t in sealed}
+    escalate = sorted(t for t in sealed if sc[t] < cutoff)
     fresh = one(p.run_set(model="gemini", rules=(), checkpoint=False, task_ids=escalate, label="sealed-redo", first_attempt=1)) if escalate else {}
-    routed = route(sealed, sc, tau, {t: as_rec(fin_on[t]) for t in sealed}, {t: as_rec(fresh[t]) for t in fresh},
+    routed = route(sealed, sc, cutoff, {t: as_rec(fin_on[t]) for t in sealed}, {t: as_rec(fresh[t]) for t in fresh},
                    {t: RUN["cost_estimate_per_run"]["jev_call"] for t in sealed})
     results["V2-3_main_comparison"] = v2_3_verdict(routed, {t: as_rec(gem[t]) for t in sealed})
     results["main_comparison"] = "V2-3: router (checkpoint on) vs Gemini alone, sealed exam"
+    results["router_jev"] = {"design": "Jev redesign, second attempt, variant 3", "cutoff": cutoff, "escalated": len(escalate),
+                             "escalated_share": len(escalate) / len(sealed), "original_rubric_cutoff_unused": tau}
+    # How well each Jev separates good from poor final-playbook runs on the sealed exam (same-playbook AUC; one playbook here)
+    def jev_quality(scores):
+        return evalstats.evaluate([{"task": t, "group": "final", "score": scores[t], "credit": fin_on[t].partial_credit} for t in sealed], boot=1000)
+    results["jev_on_sealed"] = {"redesign_second_attempt": jev_quality(sc), "original_rubric": jev_quality(sc_old),
+                                "bar": {"auc": 0.65, "auc_ci95_lower_above": 0.5, "gap": 0.10}}
+    # MiniMax final alone against Gemini alone, from the same runs (no extra cost)
+    dm = [fin_on[t].partial_credit - gem[t].partial_credit for t in sealed]
+    results["minimax_final_vs_gemini_alone"] = {"minimax_credit": mean(fin_on), "gemini_credit": mean(gem), "diff": sum(dm) / len(dm),
+                                                "interval_95": list(paired_bootstrap_interval(dm)),
+                                                "minimax_cost_per_task": sum(r.cost_usd for r in fin_on.values()) / len(sealed),
+                                                "gemini_cost_per_task": sum(r.cost_usd for r in gem.values()) / len(sealed)}
     # Question 4, what does the checkpoint add? Final playbook, checkpoint off vs on (an extra)
     read_first = [behaviour(p.tasks[t], fin_on[t].calls, fin_on[t].missed_checks)["read_policy_before_first_write"] for t in sealed]
     results["V2-5_checkpoint_extra"] = checkpoint_verdict(fin_off, fin_on, [x for x in read_first if x is not None])

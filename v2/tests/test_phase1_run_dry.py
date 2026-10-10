@@ -22,6 +22,11 @@ def fake_chat_transport(model_name: str):
         body = json.loads(request.content)
         if "tools" in body:  # an agent turn: finish immediately (a do-nothing run)
             msg = {"role": "assistant", "content": "done"}
+        elif "verification questions" in body["messages"][0]["content"] or "compliance questions" in body["messages"][0]["content"]:
+            msg = {"role": "assistant", "content": json.dumps({"questions": [
+                {"text": "Did the agent handle every required item named in the request?"},
+                {"text": "Did the agent avoid everything the policy emails forbid?"},
+                {"text": "Do the values written match the source data exactly?"}]})}
         elif "checklist" in body["messages"][0]["content"]:  # the rubric editor
             msg = {"role": "assistant", "content": json.dumps({"edits": [
                 {"op": "add", "question_id": "checked_totals", "text": "Did the agent re-check totals before sending?", "direction": "helps"}]})}
@@ -95,14 +100,19 @@ def test_all_stages_run_end_to_end_on_fakes(script, tmp_path):
 def test_sealed_stage_runs_with_release(script, tmp_path, monkeypatch):
     for stage in ("stage_skill", "stage_jevdata", "stage_rubric", "stage_tau"):
         getattr(script, stage)(types.SimpleNamespace())
+    (tmp_path / "out" / "verifier_instructions_final.txt").write_text("You write verification questions for a checker. " * 3)
+    (tmp_path / "out" / "jev_cutoff_second_attempt.json").write_text(json.dumps({"cutoff": 0.5}))
     release = tmp_path / "SEALED_RELEASE.md"
     release.write_text("released for the test")
     script.RUN["sealed"]["release_file"] = str(release)  # an absolute path; the real file stays absent
     script.stage_sealed(types.SimpleNamespace(release_confirmed=True))
     out = json.loads((tmp_path / "out" / "sealed_results.json").read_text())
     for key in ("V2-1_starting_line", "V2-2a_did_minimax_learn", "V2-2b_did_jev_learn", "V2-3_main_comparison",
-                "V2-5_checkpoint_extra", "extra_column_final_playbook_checkpoint_off", "main_comparison"):
+                "V2-5_checkpoint_extra", "extra_column_final_playbook_checkpoint_off", "main_comparison",
+                "router_jev", "jev_on_sealed", "minimax_final_vs_gemini_alone"):
         assert key in out
+    assert out["router_jev"]["cutoff"] == 0.5 and "Jev redesign" in out["router_jev"]["design"]
+    assert set(out["jev_on_sealed"]) == {"redesign_second_attempt", "original_rubric", "bar"}
 
 
 def test_unapproved_run_refuses(tmp_path):
