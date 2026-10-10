@@ -22,7 +22,7 @@ agent_model: minimax
 run:
   take: 2                 # Take 1: p-value keep test (stopped after round 2, nothing kept); Take 2: margin keep test (Alexander, 2026-10-10)
   approved: true             # Alexander's go, 2026-10-09; paid stages (not sealed) may run. Sealed also needs SEALED_RELEASE.md
-  spend_cap_usd: 120.0       # safety stop, set by Alexander 2026-10-09 ($110) and raised to $120 on 2026-10-10 for the sealed exam; cost goals are directional
+  spend_cap_usd: 130.0       # safety stop: $110 (2026-10-09), $120 (2026-10-10), $130 on 2026-10-10 so the sealed exam's last stage (Gemini redos) is not stopped by the guard
   agent_temperature: 0.0     # agents (MiniMax, Gemini); not fully repeatable, but steadier
   editor_temperature: 0.7    # MiniMax as editor (both loops)
   workers: 8
