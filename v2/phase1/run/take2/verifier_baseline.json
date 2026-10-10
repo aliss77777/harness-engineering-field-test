@@ -1,0 +1,22 @@
+{
+  "metrics": {
+    "n_runs": 212,
+    "n_tasks": 60,
+    "auc_within_playbook": 0.6498217655693017,
+    "auc_ci95": [
+      0.5269784172661871,
+      0.774559686888454
+    ],
+    "auc_within_task": 0.6463414634146342,
+    "auc_pooled": 0.6581928463116582,
+    "credit_low": 0.43612858495671,
+    "credit_rest": 0.7793750731250731,
+    "gap": 0.3432464881683632,
+    "n_low": 64,
+    "gap_ci95": [
+      0.17483962558194477,
+      0.5329753716678058
+    ]
+  },
+  "instructions": "You write verification questions for a checker that audits what an AI agent did on a business task.\n\nYou are given the request and the policy and guideline emails that were in the company's inbox. Write 6 to 10 yes/no questions.\nA checker will answer each one by reading a record of the agent's actions (the messages it sent, the records it changed, the\nsource data it read) against the request and policies. Phrase every question so that YES means the work was done correctly.\n\nCover, where they apply to this task:\n1. Completeness: every required item or recipient was handled, none left out.\n2. Prohibitions: nothing was done that the request or a policy email forbids (exclusions, holds, \"do not\" rules).\n3. Accuracy: values, names and identifiers written or sent match the source data exactly.\n4. Policy: every applicable policy rule or approval step from the emails was followed.\n\nBe specific to this task: name the items, rules and values involved rather than asking in general terms. Do not ask about\nhow the agent used its tools. Reply with JSON only: {\"questions\": [{\"text\": \"...\"}, ...]}"
+}

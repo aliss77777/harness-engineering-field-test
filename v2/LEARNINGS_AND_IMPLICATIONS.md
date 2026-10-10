@@ -92,3 +92,81 @@ A living write-up (Alexander asked for it, 2026-10-10). **Part A** covers the pl
 | C. Narrow the exam | Report MiniMax final vs starting vs Gemini, drop the router claim | about $45 | Cleaner, but gives up the router half of the question |
 
 My recommendation is B: it is cheap, the data already exists, and the exam can only be opened once.
+
+### Stage B1, the refit (2026-10-10, 14:50 UTC): the bar was not met
+
+Pre-registered in the canonical design before running: refit the weights of the final 8-question rubric on all 1,052 labelled runs (120 tasks), 5-fold cross-validation grouped by task, test on the final playbook's run on each held-out task (120 runs). Bar: AUC at least 0.65 with a 95% lower bound above 0.5, and the lowest 30% averaging at least 0.10 credit below the rest.
+
+| Variant (120 held-out final-playbook runs) | AUC [95% interval] | Credit of lowest 30% vs rest | Correlation with credit |
+|---|---|---|---|
+| **Primary: final rubric, weights refit (C = 1)** | **0.525** [0.42, 0.63] | 0.696 vs 0.777 (gap 0.081) | +0.23 |
+| Starting rubric, weights refit | 0.531 [0.43, 0.63] | gap 0.102 | +0.24 |
+| Final rubric, refit C = 0.1 / C = 10 | 0.524 / 0.523 | gap 0.109 / 0.066 | +0.23 / +0.21 |
+| As they were (partly in-sample) | 0.58 to 0.60 | gap 0.11 to 0.12 | +0.30 to +0.36 |
+
+**Bar met: no.** More data did not rescue the rubric: the honest, cross-validated AUC is about 0.52, and even the in-sample "as they were" figures are only 0.58 to 0.60. The refit also did not make the "lowest 30%" much worse than the rest (a gap of 0.08, against 0.10 needed).
+
+**Diagnostics (exploratory, not part of the bar):**
+- **Per failure kind, how well Jev's score predicts that a run has a miss of that kind:** rules broken 0.49, skipped actions 0.58, wrong content 0.54. It cannot see any of the three.
+- **Harness telemetry alone** (checkpoint holds, steps, tool calls, model calls, cost, seconds, summary length) predicts good vs bad at AUC 0.51. So this is not a case where a cheap run-level signal was ignored; there is none.
+- **Fully-passed label instead of credit at or above 0.8:** AUC 0.57, so the choice of label is not the explanation.
+
+### What this means
+
+- **The failures are hidden in details a generic checklist cannot see.** Whether a value is right, an exclusion was honoured, or the right recipient got the message depends on the task's own data. Eight generic questions read from a run summary cannot check that. More labelled runs for fitting the same questions will not change that.
+- **The honest reading of Jev as built:** it did not learn to tell good runs from bad on this task, even given 17 times more data. It remains a finding about this design, not about Jev in general: v1's task had a one-bit answer that a rubric could reflect.
+- **The router needs a different kind of checker:** one that checks outputs against the task's own request, source data and policy emails (a verifier), not a generic judge of a summary. That is the Jev analogue of the harness redesign we did for MiniMax.
+
+### Options (Alexander's call)
+
+| Option | What | Cost | Notes |
+|---|---|---|---|
+| A. Run the sealed exam now | As designed, with the frozen rubric and cutoff | about $45 | Router half will be close to random escalation; the MiniMax vs Gemini and learning questions are answered honestly |
+| B2. Question edits on the pooled data | MiniMax proposes new questions, scored by cross-validation | about $1 to $3 | Low odds: the problem is not the weights, and generic questions share the blind spot |
+| **C. Run the sealed exam narrowed** | Report MiniMax final vs starting vs Gemini, router reported as "Jev as built shows no skill; cutoff acts like random escalation" | about $45 | Cleanest honest result for this phase |
+| **D. Redesign Jev's input, then decide** | Give Jev what it needs to verify: the request, source data, policy emails and the run's writes; questions that check values against source; pre-registered AUC bar on held-out tasks; may need new MiniMax runs for labels | about $5 to $15 to try, plus design time | The real fix; a bigger design change needing the memo first. Sealed exam waits |
+
+My recommendation: C now or D first, depending on how you weigh the one-shot exam. C closes Phase 1 cleanly and keeps D as the headline of what comes next. D is the better use of the exam if you want the router half to be meaningful, at the cost of a delay.
+
+### A check on how much a better Jev could be worth (2026-10-10, 15:10 UTC; free, from logged runs)
+
+On the 20 practice and test bench tasks that have Gemini runs from Phase 0 and the temperature-0 re-checks (about 2 Gemini runs per task, averaged) and the final playbook's MiniMax run:
+
+| | Credit |
+|---|---|
+| MiniMax, final playbook | 0.713 |
+| Gemini alone | 0.669 |
+| Tasks where MiniMax scored under 0.8 (11): MiniMax / Gemini | 0.563 / 0.591 |
+| Tasks where MiniMax scored 0.8 or more (9): MiniMax / Gemini | 0.896 / 0.763 |
+| Router that escalates MiniMax's worst 30% to Gemini, with a perfect failure detector | 0.699 |
+| Random 30% escalation (expected) | 0.700 |
+
+So on this small sample, **MiniMax is already at or above Gemini, and where MiniMax fails Gemini does only about 3 points better**: the hard tasks are hard for both. Even a perfect failure detector would not lift the router above MiniMax alone (0.699 vs 0.713; n = 20, one MiniMax run each, so treat as indicative). If that holds on the sealed exam, a better Jev has little quality to buy by routing to Gemini, and a router costs more than MiniMax alone. Jev's value would then be as a **guardrail** (flag runs for human review) rather than a router. The sealed exam's head-to-head, MiniMax final vs Gemini alone on 80 tasks, will show which world we are in.
+
+### Stage D, the verifier (2026-10-10, 15:25 UTC): a real improvement, still short of the bar
+
+Built as pre-registered: Jev reads the request, the policy emails, the source records the run read, the writes in full and the diff; per-task yes/no questions are written by MiniMax from the request and policy emails; a run's score is the mean probability of yes; the question writer's instructions are learned on development tasks; validation (test bench runs) is opened once. Total spend under $0.50 for Jev and question writing.
+
+| On the 840 test bench runs of 14 playbook versions (validation, opened once) | Within-playbook AUC [95%] | Within-task AUC | Lowest 30% vs rest (gap) |
+|---|---|---|---|
+| Generic rubric, final (as fitted) | 0.511 [0.42, 0.61] | 0.53 | 0.058 |
+| Generic rubric, starting (as fitted) | 0.518 [0.42, 0.62] | 0.57 | 0.066 |
+| **Verifier, learned instructions (frozen)** | **0.612 [0.51, 0.72]** | **0.714** | **0.166** [0.08, 0.28] |
+| Bar (fixed in advance) | 0.65, lower bound above 0.5 | | 0.10 |
+
+**Bar met: no** (AUC 0.612 against 0.65; the gap clears 0.10 and the lower bound clears 0.5). Development went 0.650 (starting instructions) to 0.677 (one kept edit; two further rounds kept nothing), so most of the gain came from the design, not from learning the instructions.
+
+### Learnings from the verifier
+
+1. **Giving Jev what it needs to verify roughly doubled its useful signal.** The generic rubric sat at chance (0.51); the verifier, with no fitted weights, is at 0.61, and the runs it scores lowest are 17 points of credit worse than the rest (against 6). The diagnosis was right: the checker could not see the source.
+2. **It works best where the agent is weakest, and fades as the agent improves.** Within-playbook AUC by version runs from 0.70 (starting playbook) down through 0.65 (R1a) to 0.48 for the final playbook (n = 60, interval 0.33 to 0.64). The failures left in the best playbook are the subtle ones. That is exactly where a router would be used, so the deployment case is not yet met.
+3. **It detects some failure kinds and not others.** Across all runs, a low score flags skipped actions (AUC 0.67) and wrong content (0.66) but not broken rules (0.48). On the final playbook alone the figures are 0.58, 0.60 and 0.50. Broken rules need reasoning about what a policy forbids, which the questions do not elicit.
+4. **Within-task comparisons are strong (0.71), but partly because runs of the same task come from different playbooks.** A checker that can tell a run from a better playbook is useful for evaluation; it is not what a router needs.
+5. **The learned instructions added little.** The kept edit (do not invent procedures; ask about specific findings; ask prohibitions positively) is sensible, and it gained 0.027 on development; on validation the gap to the generic rubric is mostly the verifier design itself.
+
+### What this means
+
+- **Per the pre-registration, the router claim is not supported:** Jev as a verifier has not met the bar on validation, and on the final playbook it shows no discrimination (n = 60, wide interval). The sealed exam would report MiniMax against Gemini without a router claim.
+- **The direction is right and worth continuing,** which is your point that Jev needs a redesign as large as the harness got. The next gains likely come from: several independent question sets averaged (the questions are one sample from one model); a policy-compliance question set aimed at rules broken; checking each write separately and taking the worst; and more labelled runs of the final playbook, which are the ones that matter.
+- **The test bench validation is now used up.** More design work needs fresh labelled runs, for example two or three more draws of the final playbook on the practice and test bench tasks (about 240 runs, about $11), then a second pre-registered validation. The Gemini ceiling check (about $17) still decides how much a better Jev is worth.
+

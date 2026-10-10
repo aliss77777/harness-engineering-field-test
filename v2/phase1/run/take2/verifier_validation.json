@@ -1,0 +1,6753 @@
+{
+  "metrics": {
+    "n_runs": 840,
+    "n_tasks": 60,
+    "auc_within_playbook": 0.6121823678405098,
+    "auc_ci95": [
+      0.5139229792636479,
+      0.7188820279493012
+    ],
+    "auc_within_task": 0.7144006436041834,
+    "auc_pooled": 0.6187589300453689,
+    "credit_low": 0.5977906903502141,
+    "credit_rest": 0.7634434962241085,
+    "gap": 0.1656528058738943,
+    "n_low": 252,
+    "gap_ci95": [
+      0.0775495275070105,
+      0.2831586403014974
+    ]
+  },
+  "final_playbook_only": {
+    "n_final_playbook_runs": 60,
+    "auc": 0.48214285714285715,
+    "credit_low": 0.7352072310405644,
+    "credit_rest": 0.7963332302618017,
+    "gap": 0.06112599922123729,
+    "n_low": 18
+  },
+  "bar_met": false,
+  "instructions": "You write verification questions for a checker that audits what an AI agent did on a business task.\n\nYou are given the request and the policy/guideline emails that were in the company's inbox. Write 6 to 10 yes/no questions. A checker answers each one by reading a record of the agent's actions (messages sent, records changed, source data read) against the request and policies. Phrase every question so YES means the work was done correctly.\n\nCover, where they apply:\n1. Completeness: every required item or recipient was handled, none left out.\n2. Prohibitions: nothing was done that the request or a policy email forbids (exclusions, holds, 'do not' rules).\n3. Accuracy: values, names, identifiers written or sent match the source data exactly.\n4. Policy: every applicable policy rule or approval step from the emails was followed.\n\nImportant guidelines for writing questions:\n- Base questions only on requirements explicitly stated in the request or policy emails. Do NOT invent procedures, channels, email addresses, fees, thresholds, or phrasings that are not in the source material. If the request does not specify a particular email address, channel, or method, write the question around the requirement itself (e.g., 'Did the agent notify the relevant party' rather than naming an assumed address).\n- For substantive analysis tasks, ask whether the agent identified and reported specific findings (overcharges, gaps, errors, missing items) \u2014 not just whether it sent a summary. Vague questions like 'did the analysis include discrepancies' can be answered yes even when the agent missed major items.\n- For 'do not' or prohibition rules, ask positively: 'Did the agent exclude/refrain from X?' rather than negations that confuse checkers. If the policy forbids an action, ask whether the forbidden action was avoided.\n- Avoid nitpicky phrasing checks (singular vs plural, exact wording of minor phrases) unless the request explicitly mandates that exact wording.\n- Do not assume specific procedural details (e.g., that a 5% fee applies, that an escalation email goes to a specific role) unless the policy or request states it.\n- For policy compliance, ask whether the agent reviewed/checked the applicable policy before acting, and whether each specific rule in the policy was followed.\n- Do not ask about tool usage or internal mechanics.\n\nReply with JSON only: {\"questions\": [{\"text\": \"...\"}, ...]}",
+  "scores": [
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4008",
+      "task": "finance:4008",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8588888888888888
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4007",
+      "task": "finance:4007",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.9037499999999999
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4003",
+      "task": "finance:4003",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.931111111111111
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4002",
+      "task": "finance:4002",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.9512499999999999
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4001",
+      "task": "finance:4001",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.3975
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4016",
+      "task": "finance:4016",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.9490000000000001
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4010",
+      "task": "finance:4010",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.87
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4009",
+      "task": "finance:4009",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.6711111111111111
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4034",
+      "task": "finance:4034",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9549999999999998
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4037",
+      "task": "finance:4037",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9666666666666666
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4025",
+      "task": "finance:4025",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.83375
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4005",
+      "task": "finance:4005",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.715
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4036",
+      "task": "finance:4036",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.2857142857142857,
+      "score": 0.8019999999999999
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4042",
+      "task": "finance:4042",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.8588888888888888
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4039",
+      "task": "finance:4039",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9662499999999999
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4021",
+      "task": "finance:4021",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.747
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4063",
+      "task": "finance:4063",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.92625
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4070",
+      "task": "finance:4070",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.6025
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4069",
+      "task": "finance:4069",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.9090909090909091,
+      "score": 0.917
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4072",
+      "task": "finance:4072",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.953
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4054",
+      "task": "finance:4054",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.77
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4076",
+      "task": "finance:4076",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.9289999999999999
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4080",
+      "task": "finance:4080",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.866
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5007",
+      "task": "hr:5007",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.895
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4084",
+      "task": "finance:4084",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.86875
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4088",
+      "task": "finance:4088",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.79
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4090",
+      "task": "finance:4090",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.93375
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5028",
+      "task": "hr:5028",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8277777777777778
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5023",
+      "task": "hr:5023",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.9688888888888889
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5029",
+      "task": "hr:5029",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.975
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4087",
+      "task": "finance:4087",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.736
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5010",
+      "task": "hr:5010",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.87125
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5036",
+      "task": "hr:5036",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8257142857142857
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4061",
+      "task": "finance:4061",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.7155555555555555
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5048",
+      "task": "hr:5048",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.9349999999999999
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5043",
+      "task": "hr:5043",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9425
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5054",
+      "task": "hr:5054",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.8459999999999999
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4093",
+      "task": "finance:4093",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.398
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5049",
+      "task": "hr:5049",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.9377777777777777
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5039",
+      "task": "hr:5039",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.8733333333333333
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5031",
+      "task": "hr:5031",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.5714285714285714,
+      "score": 0.8119999999999999
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|finance:4032",
+      "task": "finance:4032",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.4444444444444444,
+      "score": 0.77
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5062",
+      "task": "hr:5062",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.6655555555555556
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5037",
+      "task": "hr:5037",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.87
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5079",
+      "task": "hr:5079",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8185714285714285
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5069",
+      "task": "hr:5069",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.74875
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5078",
+      "task": "hr:5078",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.7457142857142857
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5063",
+      "task": "hr:5063",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.8977777777777778
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5085",
+      "task": "hr:5085",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.76125
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5044",
+      "task": "hr:5044",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.613
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5066",
+      "task": "hr:5066",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.46153846153846156,
+      "score": 0.6980000000000001
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5103",
+      "task": "hr:5103",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.86125
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5117",
+      "task": "hr:5117",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8789999999999999
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5088",
+      "task": "hr:5088",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.8009999999999999
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5096",
+      "task": "hr:5096",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.7949999999999999
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5122",
+      "task": "hr:5122",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.865
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5104",
+      "task": "hr:5104",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.4
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5094",
+      "task": "hr:5094",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.66
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5131",
+      "task": "hr:5131",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.7275
+    },
+    {
+      "key": "minimax-p1-s3e9907ba-cp-bench.jsonl|hr:5093",
+      "task": "hr:5093",
+      "group": "s3e9907ba",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.67
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4007",
+      "task": "finance:4007",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.8475
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4008",
+      "task": "finance:4008",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.18000000000000002
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4009",
+      "task": "finance:4009",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.5714285714285714,
+      "score": 0.7188888888888889
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4002",
+      "task": "finance:4002",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.92
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4001",
+      "task": "finance:4001",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.51
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4025",
+      "task": "finance:4025",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.05625
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4003",
+      "task": "finance:4003",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.922222222222222
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4005",
+      "task": "finance:4005",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.125
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4034",
+      "task": "finance:4034",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.881
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4010",
+      "task": "finance:4010",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.8275
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4037",
+      "task": "finance:4037",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.7777777777777778,
+      "score": 0.9700000000000001
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4036",
+      "task": "finance:4036",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.2857142857142857,
+      "score": 0.8039999999999999
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4032",
+      "task": "finance:4032",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.8130000000000001
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4042",
+      "task": "finance:4042",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.86
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4054",
+      "task": "finance:4054",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.6825
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4016",
+      "task": "finance:4016",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.915
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4039",
+      "task": "finance:4039",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.925
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4069",
+      "task": "finance:4069",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.9090909090909091,
+      "score": 0.958
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4080",
+      "task": "finance:4080",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8629999999999999
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4072",
+      "task": "finance:4072",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.8939999999999999
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4021",
+      "task": "finance:4021",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.6910000000000001
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4063",
+      "task": "finance:4063",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.8425
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4087",
+      "task": "finance:4087",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.7939999999999999
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4061",
+      "task": "finance:4061",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.4,
+      "score": 0.6911111111111111
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4084",
+      "task": "finance:4084",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.845
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5007",
+      "task": "hr:5007",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.80625
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4090",
+      "task": "finance:4090",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.14500000000000002
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4070",
+      "task": "finance:4070",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.7275
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4088",
+      "task": "finance:4088",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.8166666666666668
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5029",
+      "task": "hr:5029",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.88125
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4076",
+      "task": "finance:4076",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8939999999999999
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5037",
+      "task": "hr:5037",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.4,
+      "score": 0.785
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5010",
+      "task": "hr:5010",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.8674999999999999
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5043",
+      "task": "hr:5043",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.96875
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5036",
+      "task": "hr:5036",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.8557142857142858
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5039",
+      "task": "hr:5039",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.2033333333333333
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5048",
+      "task": "hr:5048",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.885
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5028",
+      "task": "hr:5028",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.8355555555555555
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5023",
+      "task": "hr:5023",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.9555555555555555
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5031",
+      "task": "hr:5031",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.14285714285714285,
+      "score": 0.805
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5054",
+      "task": "hr:5054",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.577
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5062",
+      "task": "hr:5062",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.67
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5069",
+      "task": "hr:5069",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.80375
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5079",
+      "task": "hr:5079",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.7914285714285715
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5044",
+      "task": "hr:5044",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.1111111111111111,
+      "score": 0.7150000000000001
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5063",
+      "task": "hr:5063",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.2857142857142857,
+      "score": 0.7355555555555555
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5078",
+      "task": "hr:5078",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.6242857142857143
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5066",
+      "task": "hr:5066",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.46153846153846156,
+      "score": 0.734
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5093",
+      "task": "hr:5093",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.68875
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5085",
+      "task": "hr:5085",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.625
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5049",
+      "task": "hr:5049",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.3422222222222222
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|finance:4093",
+      "task": "finance:4093",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.354
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5094",
+      "task": "hr:5094",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.25,
+      "score": 0.32
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5096",
+      "task": "hr:5096",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.705
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5122",
+      "task": "hr:5122",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.3675
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5104",
+      "task": "hr:5104",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.44555555555555554
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5088",
+      "task": "hr:5088",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.625,
+      "score": 0.788
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5117",
+      "task": "hr:5117",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.7230000000000001
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5103",
+      "task": "hr:5103",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.89125
+    },
+    {
+      "key": "minimax-p1-s6812331e-cp-bench.jsonl|hr:5131",
+      "task": "hr:5131",
+      "group": "s6812331e",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.85
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4008",
+      "task": "finance:4008",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.7955555555555556
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4002",
+      "task": "finance:4002",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.94125
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4009",
+      "task": "finance:4009",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.7277777777777777
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4005",
+      "task": "finance:4005",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.6799999999999999
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4003",
+      "task": "finance:4003",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.9188888888888889
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4007",
+      "task": "finance:4007",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.87125
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4001",
+      "task": "finance:4001",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.16666666666666666,
+      "score": 0.43375
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4034",
+      "task": "finance:4034",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.943
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4010",
+      "task": "finance:4010",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.7725
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4037",
+      "task": "finance:4037",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9422222222222223
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4016",
+      "task": "finance:4016",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.9640000000000001
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4032",
+      "task": "finance:4032",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.724
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4042",
+      "task": "finance:4042",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.8777777777777778
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4039",
+      "task": "finance:4039",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.93375
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4063",
+      "task": "finance:4063",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.925
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4025",
+      "task": "finance:4025",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.4,
+      "score": 0.865
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4054",
+      "task": "finance:4054",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.705
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4069",
+      "task": "finance:4069",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.9090909090909091,
+      "score": 0.943
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4061",
+      "task": "finance:4061",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.7155555555555556
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4072",
+      "task": "finance:4072",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.909
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4080",
+      "task": "finance:4080",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.8629999999999999
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4021",
+      "task": "finance:4021",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.567
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4084",
+      "task": "finance:4084",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.75125
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4076",
+      "task": "finance:4076",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.9369999999999999
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4070",
+      "task": "finance:4070",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.68625
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4090",
+      "task": "finance:4090",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.4,
+      "score": 0.775
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5007",
+      "task": "hr:5007",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.7725
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4088",
+      "task": "finance:4088",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.25,
+      "score": 0.7366666666666667
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5023",
+      "task": "hr:5023",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.9777777777777779
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5029",
+      "task": "hr:5029",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.97125
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5010",
+      "task": "hr:5010",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.42857142857142855,
+      "score": 0.8724999999999999
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5036",
+      "task": "hr:5036",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.16857142857142857
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4087",
+      "task": "finance:4087",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.783
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5031",
+      "task": "hr:5031",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.5714285714285714,
+      "score": 0.806
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5028",
+      "task": "hr:5028",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8377777777777777
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5043",
+      "task": "hr:5043",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.94625
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4036",
+      "task": "finance:4036",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.2857142857142857,
+      "score": 0.8400000000000001
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|finance:4093",
+      "task": "finance:4093",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.21200000000000002
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5039",
+      "task": "hr:5039",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8611111111111112
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5048",
+      "task": "hr:5048",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8412499999999999
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5054",
+      "task": "hr:5054",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8099999999999999
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5078",
+      "task": "hr:5078",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.7414285714285713
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5069",
+      "task": "hr:5069",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.84
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5079",
+      "task": "hr:5079",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.7585714285714286
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5085",
+      "task": "hr:5085",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.7825
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5063",
+      "task": "hr:5063",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.3333333333333333,
+      "score": 0.7655555555555555
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5066",
+      "task": "hr:5066",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.7692307692307693,
+      "score": 0.6719999999999999
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5037",
+      "task": "hr:5037",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9299999999999999
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5093",
+      "task": "hr:5093",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.705
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5094",
+      "task": "hr:5094",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.6414285714285715
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5088",
+      "task": "hr:5088",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.89
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5096",
+      "task": "hr:5096",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.84625
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5062",
+      "task": "hr:5062",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.6555555555555556
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5104",
+      "task": "hr:5104",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.4211111111111111
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5049",
+      "task": "hr:5049",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.9333333333333333
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5122",
+      "task": "hr:5122",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8625
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5103",
+      "task": "hr:5103",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.89625
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5131",
+      "task": "hr:5131",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.6387499999999999
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5117",
+      "task": "hr:5117",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.688
+    },
+    {
+      "key": "minimax-p1-s6bf9536d-cp-bench.jsonl|hr:5044",
+      "task": "hr:5044",
+      "group": "s6bf9536d",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.541
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4010",
+      "task": "finance:4010",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.88375
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4009",
+      "task": "finance:4009",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8155555555555556
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4002",
+      "task": "finance:4002",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.92875
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4007",
+      "task": "finance:4007",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.8925
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4008",
+      "task": "finance:4008",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.7711111111111111
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4005",
+      "task": "finance:4005",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.8875
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4001",
+      "task": "finance:4001",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.16666666666666666,
+      "score": 0.435
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4034",
+      "task": "finance:4034",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.8939999999999999
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4003",
+      "task": "finance:4003",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.7555555555555555
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4036",
+      "task": "finance:4036",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.14285714285714285,
+      "score": 0.8370000000000001
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4016",
+      "task": "finance:4016",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.825
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4037",
+      "task": "finance:4037",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.7777777777777778,
+      "score": 0.9655555555555555
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4039",
+      "task": "finance:4039",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.95
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4025",
+      "task": "finance:4025",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.7025
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4063",
+      "task": "finance:4063",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.91125
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4042",
+      "task": "finance:4042",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.7744444444444444
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4032",
+      "task": "finance:4032",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.4444444444444444,
+      "score": 0.7889999999999999
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4080",
+      "task": "finance:4080",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.725
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4072",
+      "task": "finance:4072",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.96
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4069",
+      "task": "finance:4069",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.9090909090909091,
+      "score": 0.924
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4061",
+      "task": "finance:4061",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.6166666666666667
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4084",
+      "task": "finance:4084",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.1111111111111111,
+      "score": 0.67
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4054",
+      "task": "finance:4054",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.8099999999999999
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4087",
+      "task": "finance:4087",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.8150000000000001
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5007",
+      "task": "hr:5007",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.775
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4076",
+      "task": "finance:4076",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.9279999999999999
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4070",
+      "task": "finance:4070",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.605
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5029",
+      "task": "hr:5029",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9724999999999999
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4090",
+      "task": "finance:4090",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.83
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5010",
+      "task": "hr:5010",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.82875
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4093",
+      "task": "finance:4093",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.101
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4021",
+      "task": "finance:4021",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.617
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5023",
+      "task": "hr:5023",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.5714285714285714,
+      "score": 0.9444444444444444
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5043",
+      "task": "hr:5043",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.94375
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|finance:4088",
+      "task": "finance:4088",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.7266666666666667
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5037",
+      "task": "hr:5037",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.875
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5028",
+      "task": "hr:5028",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.7977777777777777
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5048",
+      "task": "hr:5048",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9312499999999999
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5054",
+      "task": "hr:5054",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.791
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5031",
+      "task": "hr:5031",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.4444444444444444,
+      "score": 0.671
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5049",
+      "task": "hr:5049",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.7811111111111111
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5036",
+      "task": "hr:5036",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.7757142857142857
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5066",
+      "task": "hr:5066",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.46153846153846156,
+      "score": 0.739
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5079",
+      "task": "hr:5079",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.7985714285714286
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5039",
+      "task": "hr:5039",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.831111111111111
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5078",
+      "task": "hr:5078",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.7214285714285714
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5069",
+      "task": "hr:5069",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.84
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5085",
+      "task": "hr:5085",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.5714285714285714,
+      "score": 0.68875
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5044",
+      "task": "hr:5044",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.125,
+      "score": 0.625
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5063",
+      "task": "hr:5063",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.7688888888888888
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5062",
+      "task": "hr:5062",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.69
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5088",
+      "task": "hr:5088",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.5714285714285714,
+      "score": 0.67
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5093",
+      "task": "hr:5093",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.3725
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5094",
+      "task": "hr:5094",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.39571428571428574
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5104",
+      "task": "hr:5104",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.5188888888888888
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5122",
+      "task": "hr:5122",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.85875
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5117",
+      "task": "hr:5117",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.808
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5131",
+      "task": "hr:5131",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.61
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5096",
+      "task": "hr:5096",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.76
+    },
+    {
+      "key": "minimax-p1-s73db66ce-cp-bench.jsonl|hr:5103",
+      "task": "hr:5103",
+      "group": "s73db66ce",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.6900000000000001
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4008",
+      "task": "finance:4008",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8744444444444445
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4005",
+      "task": "finance:4005",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.915
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4007",
+      "task": "finance:4007",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.83
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4009",
+      "task": "finance:4009",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.5911111111111111
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4002",
+      "task": "finance:4002",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.9325
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4010",
+      "task": "finance:4010",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.85125
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4003",
+      "task": "finance:4003",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8922222222222221
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4016",
+      "task": "finance:4016",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.5714285714285714,
+      "score": 0.96
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4025",
+      "task": "finance:4025",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.82125
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4034",
+      "task": "finance:4034",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9269999999999999
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4036",
+      "task": "finance:4036",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.3333333333333333,
+      "score": 0.843
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4039",
+      "task": "finance:4039",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.91125
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4001",
+      "task": "finance:4001",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.16666666666666666,
+      "score": 0.4325
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4054",
+      "task": "finance:4054",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.795
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4063",
+      "task": "finance:4063",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.9349999999999999
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4032",
+      "task": "finance:4032",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.4444444444444444,
+      "score": 0.74
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4037",
+      "task": "finance:4037",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.7,
+      "score": 0.8833333333333333
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4042",
+      "task": "finance:4042",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.8500000000000001
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4072",
+      "task": "finance:4072",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9550000000000001
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4069",
+      "task": "finance:4069",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.9090909090909091,
+      "score": 0.9550000000000001
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4061",
+      "task": "finance:4061",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.741111111111111
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4088",
+      "task": "finance:4088",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.8233333333333334
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4021",
+      "task": "finance:4021",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.795
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4087",
+      "task": "finance:4087",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.759
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4076",
+      "task": "finance:4076",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.375,
+      "score": 0.8699999999999999
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4084",
+      "task": "finance:4084",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.86875
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4090",
+      "task": "finance:4090",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.87125
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4080",
+      "task": "finance:4080",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.833
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5023",
+      "task": "hr:5023",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.9544444444444444
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5007",
+      "task": "hr:5007",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.82375
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4093",
+      "task": "finance:4093",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.398
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5029",
+      "task": "hr:5029",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.97625
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|finance:4070",
+      "task": "finance:4070",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.65375
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5043",
+      "task": "hr:5043",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9512499999999999
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5036",
+      "task": "hr:5036",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.7871428571428571
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5048",
+      "task": "hr:5048",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.9375
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5031",
+      "task": "hr:5031",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.845
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5010",
+      "task": "hr:5010",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.88375
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5037",
+      "task": "hr:5037",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.90625
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5028",
+      "task": "hr:5028",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.8611111111111112
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5054",
+      "task": "hr:5054",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8210000000000001
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5049",
+      "task": "hr:5049",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.8522222222222222
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5078",
+      "task": "hr:5078",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.65
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5069",
+      "task": "hr:5069",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.71
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5063",
+      "task": "hr:5063",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.8744444444444445
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5079",
+      "task": "hr:5079",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8300000000000001
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5085",
+      "task": "hr:5085",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.83375
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5093",
+      "task": "hr:5093",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.68875
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5094",
+      "task": "hr:5094",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.7471428571428571
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5066",
+      "task": "hr:5066",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.515
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5039",
+      "task": "hr:5039",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.7833333333333333
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5062",
+      "task": "hr:5062",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.6444444444444444
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5088",
+      "task": "hr:5088",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.8949999999999999
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5117",
+      "task": "hr:5117",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.866
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5103",
+      "task": "hr:5103",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.74875
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5044",
+      "task": "hr:5044",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.125,
+      "score": 0.628
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5096",
+      "task": "hr:5096",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.79
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5104",
+      "task": "hr:5104",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 0.9,
+      "score": 0.3855555555555556
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5122",
+      "task": "hr:5122",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.82125
+    },
+    {
+      "key": "minimax-p1-s78766c8a-cp-bench.jsonl|hr:5131",
+      "task": "hr:5131",
+      "group": "s78766c8a",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.63625
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4007",
+      "task": "finance:4007",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.8875
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4002",
+      "task": "finance:4002",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.95625
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4008",
+      "task": "finance:4008",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.8111111111111111
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4001",
+      "task": "finance:4001",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.16666666666666666,
+      "score": 0.41125
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4005",
+      "task": "finance:4005",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.91
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4010",
+      "task": "finance:4010",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.76875
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4003",
+      "task": "finance:4003",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.7288888888888888
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4009",
+      "task": "finance:4009",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8111111111111111
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4034",
+      "task": "finance:4034",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9359999999999999
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4037",
+      "task": "finance:4037",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.7777777777777778,
+      "score": 0.9700000000000001
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4016",
+      "task": "finance:4016",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.933
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4036",
+      "task": "finance:4036",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.42857142857142855,
+      "score": 0.732
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4025",
+      "task": "finance:4025",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.7975
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4063",
+      "task": "finance:4063",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.9225
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4039",
+      "task": "finance:4039",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.96375
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4042",
+      "task": "finance:4042",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.8366666666666666
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4032",
+      "task": "finance:4032",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.7969999999999999
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4072",
+      "task": "finance:4072",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9550000000000001
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4069",
+      "task": "finance:4069",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.9090909090909091,
+      "score": 0.961
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4070",
+      "task": "finance:4070",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.745
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4061",
+      "task": "finance:4061",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.6011111111111112
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4054",
+      "task": "finance:4054",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.89125
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4021",
+      "task": "finance:4021",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.7849999999999999
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4080",
+      "task": "finance:4080",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.8959999999999999
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4076",
+      "task": "finance:4076",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.9279999999999999
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4090",
+      "task": "finance:4090",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.82
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5007",
+      "task": "hr:5007",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.79375
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4087",
+      "task": "finance:4087",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.766
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5029",
+      "task": "hr:5029",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.97375
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5028",
+      "task": "hr:5028",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.8344444444444444
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4084",
+      "task": "finance:4084",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.8049999999999999
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4093",
+      "task": "finance:4093",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.159
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5010",
+      "task": "hr:5010",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.84625
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5043",
+      "task": "hr:5043",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.93875
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5037",
+      "task": "hr:5037",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.82875
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5023",
+      "task": "hr:5023",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.9655555555555555
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|finance:4088",
+      "task": "finance:4088",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.25,
+      "score": 0.6
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5031",
+      "task": "hr:5031",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.375,
+      "score": 0.7689999999999999
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5039",
+      "task": "hr:5039",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8955555555555557
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5048",
+      "task": "hr:5048",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9349999999999999
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5036",
+      "task": "hr:5036",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.7414285714285714
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5049",
+      "task": "hr:5049",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.9477777777777777
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5069",
+      "task": "hr:5069",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.875
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5054",
+      "task": "hr:5054",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.842
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5079",
+      "task": "hr:5079",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.78
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5085",
+      "task": "hr:5085",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.8225
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5066",
+      "task": "hr:5066",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.5714285714285714,
+      "score": 0.628
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5062",
+      "task": "hr:5062",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.5866666666666667
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5088",
+      "task": "hr:5088",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.713
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5096",
+      "task": "hr:5096",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8412499999999999
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5093",
+      "task": "hr:5093",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.63875
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5078",
+      "task": "hr:5078",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.6442857142857142
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5063",
+      "task": "hr:5063",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.2857142857142857,
+      "score": 0.7488888888888889
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5103",
+      "task": "hr:5103",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.925
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5104",
+      "task": "hr:5104",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.3933333333333333
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5094",
+      "task": "hr:5094",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.6114285714285714
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5122",
+      "task": "hr:5122",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.86875
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5131",
+      "task": "hr:5131",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.85375
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5044",
+      "task": "hr:5044",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.8888888888888888,
+      "score": 0.6479999999999999
+    },
+    {
+      "key": "minimax-p1-s80b74ef2-cp-bench.jsonl|hr:5117",
+      "task": "hr:5117",
+      "group": "s80b74ef2",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.726
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4007",
+      "task": "finance:4007",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.77
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4010",
+      "task": "finance:4010",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.9199999999999999
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4009",
+      "task": "finance:4009",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.6911111111111111
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4005",
+      "task": "finance:4005",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.87125
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4008",
+      "task": "finance:4008",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.8144444444444444
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4002",
+      "task": "finance:4002",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.92625
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4003",
+      "task": "finance:4003",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9411111111111112
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4034",
+      "task": "finance:4034",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.913
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4037",
+      "task": "finance:4037",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.7777777777777778,
+      "score": 0.9544444444444444
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4016",
+      "task": "finance:4016",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.946
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4025",
+      "task": "finance:4025",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.815
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4032",
+      "task": "finance:4032",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.833
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4036",
+      "task": "finance:4036",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.2857142857142857,
+      "score": 0.893
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4042",
+      "task": "finance:4042",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.8488888888888888
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4054",
+      "task": "finance:4054",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.71875
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4039",
+      "task": "finance:4039",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.95125
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4001",
+      "task": "finance:4001",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.55125
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4021",
+      "task": "finance:4021",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.728
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4080",
+      "task": "finance:4080",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.86
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4072",
+      "task": "finance:4072",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.97
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4076",
+      "task": "finance:4076",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.881
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4069",
+      "task": "finance:4069",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.9090909090909091,
+      "score": 0.881
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4084",
+      "task": "finance:4084",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.83375
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4061",
+      "task": "finance:4061",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.5633333333333334
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4063",
+      "task": "finance:4063",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.89
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4087",
+      "task": "finance:4087",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.755
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4088",
+      "task": "finance:4088",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.86
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5007",
+      "task": "hr:5007",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.84875
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4090",
+      "task": "finance:4090",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9325
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4070",
+      "task": "finance:4070",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.46125
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5029",
+      "task": "hr:5029",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.975
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|finance:4093",
+      "task": "finance:4093",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.418
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5043",
+      "task": "hr:5043",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9349999999999999
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5010",
+      "task": "hr:5010",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.8724999999999999
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5036",
+      "task": "hr:5036",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.75
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5037",
+      "task": "hr:5037",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.79125
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5048",
+      "task": "hr:5048",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.94
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5054",
+      "task": "hr:5054",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.813
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5023",
+      "task": "hr:5023",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.9655555555555555
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5049",
+      "task": "hr:5049",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.9199999999999999
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5031",
+      "task": "hr:5031",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.5714285714285714,
+      "score": 0.8150000000000001
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5069",
+      "task": "hr:5069",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.77625
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5039",
+      "task": "hr:5039",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8977777777777778
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5066",
+      "task": "hr:5066",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.7692307692307693,
+      "score": 0.635
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5079",
+      "task": "hr:5079",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8014285714285714
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5062",
+      "task": "hr:5062",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.6000000000000001
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5063",
+      "task": "hr:5063",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.7422222222222222
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5078",
+      "task": "hr:5078",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.625,
+      "score": 0.8157142857142857
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5044",
+      "task": "hr:5044",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.125,
+      "score": 0.67
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5028",
+      "task": "hr:5028",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.4911111111111111
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5088",
+      "task": "hr:5088",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.47000000000000003
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5093",
+      "task": "hr:5093",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.68375
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5104",
+      "task": "hr:5104",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.5533333333333333
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5085",
+      "task": "hr:5085",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.3333333333333333,
+      "score": 0.76375
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5096",
+      "task": "hr:5096",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.4825
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5103",
+      "task": "hr:5103",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.5425
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5122",
+      "task": "hr:5122",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.86625
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5117",
+      "task": "hr:5117",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.788
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5131",
+      "task": "hr:5131",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.665
+    },
+    {
+      "key": "minimax-p1-sa0786ff2-cp-bench.jsonl|hr:5094",
+      "task": "hr:5094",
+      "group": "sa0786ff2",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.7028571428571428
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4002",
+      "task": "finance:4002",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.955
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4010",
+      "task": "finance:4010",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.87375
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4008",
+      "task": "finance:4008",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8566666666666667
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4003",
+      "task": "finance:4003",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.7766666666666667
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4007",
+      "task": "finance:4007",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.8775
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4009",
+      "task": "finance:4009",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.7066666666666667
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4016",
+      "task": "finance:4016",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.9559999999999998
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4036",
+      "task": "finance:4036",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.3333333333333333,
+      "score": 0.76
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4037",
+      "task": "finance:4037",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.7777777777777778,
+      "score": 0.8188888888888889
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4005",
+      "task": "finance:4005",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.6825
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4001",
+      "task": "finance:4001",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.52125
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4025",
+      "task": "finance:4025",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.7775
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4034",
+      "task": "finance:4034",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.25,
+      "score": 0.866
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4032",
+      "task": "finance:4032",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.817
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4069",
+      "task": "finance:4069",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.9090909090909091,
+      "score": 0.962
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4054",
+      "task": "finance:4054",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.70625
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4042",
+      "task": "finance:4042",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.3333333333333333,
+      "score": 0.8544444444444443
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4021",
+      "task": "finance:4021",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.705
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4076",
+      "task": "finance:4076",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.884
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4061",
+      "task": "finance:4061",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.4,
+      "score": 0.5833333333333334
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4087",
+      "task": "finance:4087",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.85
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4084",
+      "task": "finance:4084",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.8025
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4072",
+      "task": "finance:4072",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.914
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5007",
+      "task": "hr:5007",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.79875
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4090",
+      "task": "finance:4090",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.845
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4080",
+      "task": "finance:4080",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.798
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4088",
+      "task": "finance:4088",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.7766666666666667
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4070",
+      "task": "finance:4070",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.5275
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5029",
+      "task": "hr:5029",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.96875
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5023",
+      "task": "hr:5023",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.9711111111111111
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4063",
+      "task": "finance:4063",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.91
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5031",
+      "task": "hr:5031",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.4444444444444444,
+      "score": 0.7969999999999999
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5036",
+      "task": "hr:5036",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.7742857142857142
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5043",
+      "task": "hr:5043",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8475
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5028",
+      "task": "hr:5028",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.668888888888889
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5010",
+      "task": "hr:5010",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.6525
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5048",
+      "task": "hr:5048",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.90125
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5039",
+      "task": "hr:5039",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8788888888888889
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5037",
+      "task": "hr:5037",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.87375
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5054",
+      "task": "hr:5054",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.833
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5049",
+      "task": "hr:5049",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.9266666666666666
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4039",
+      "task": "finance:4039",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.95375
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|finance:4093",
+      "task": "finance:4093",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.122
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5079",
+      "task": "hr:5079",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.807142857142857
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5078",
+      "task": "hr:5078",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.6957142857142857
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5069",
+      "task": "hr:5069",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.83625
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5062",
+      "task": "hr:5062",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.5644444444444444
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5063",
+      "task": "hr:5063",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.2857142857142857,
+      "score": 0.6577777777777778
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5085",
+      "task": "hr:5085",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.8
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5088",
+      "task": "hr:5088",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.484
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5093",
+      "task": "hr:5093",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.6975
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5103",
+      "task": "hr:5103",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.895
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5094",
+      "task": "hr:5094",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.6271428571428571
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5104",
+      "task": "hr:5104",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.46222222222222226
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5066",
+      "task": "hr:5066",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.7692307692307693,
+      "score": 0.587
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5122",
+      "task": "hr:5122",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8475
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5096",
+      "task": "hr:5096",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.82875
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5117",
+      "task": "hr:5117",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.6639999999999999
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5044",
+      "task": "hr:5044",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.3333333333333333,
+      "score": 0.526
+    },
+    {
+      "key": "minimax-p1-sb0620aa3-cp-bench.jsonl|hr:5131",
+      "task": "hr:5131",
+      "group": "sb0620aa3",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.5962500000000001
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4007",
+      "task": "finance:4007",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.86
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4008",
+      "task": "finance:4008",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.83
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4002",
+      "task": "finance:4002",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.9325
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4005",
+      "task": "finance:4005",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.92375
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4009",
+      "task": "finance:4009",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.5333333333333333
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4003",
+      "task": "finance:4003",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9266666666666666
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4010",
+      "task": "finance:4010",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.8875
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4001",
+      "task": "finance:4001",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.16666666666666666,
+      "score": 0.455
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4034",
+      "task": "finance:4034",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9179999999999999
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4039",
+      "task": "finance:4039",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.91625
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4025",
+      "task": "finance:4025",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.4,
+      "score": 0.74875
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4016",
+      "task": "finance:4016",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.933
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4042",
+      "task": "finance:4042",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.8500000000000001
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4032",
+      "task": "finance:4032",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.8379999999999999
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4037",
+      "task": "finance:4037",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.7777777777777778,
+      "score": 0.9333333333333333
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4061",
+      "task": "finance:4061",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.4,
+      "score": 0.6988888888888889
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4069",
+      "task": "finance:4069",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.9090909090909091,
+      "score": 0.961
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4021",
+      "task": "finance:4021",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.756
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4063",
+      "task": "finance:4063",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.91
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4036",
+      "task": "finance:4036",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.2857142857142857,
+      "score": 0.76
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4054",
+      "task": "finance:4054",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.8625
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4070",
+      "task": "finance:4070",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.65875
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4084",
+      "task": "finance:4084",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.81875
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4080",
+      "task": "finance:4080",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.8640000000000001
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5007",
+      "task": "hr:5007",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.825
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4076",
+      "task": "finance:4076",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.5714285714285714,
+      "score": 0.726
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4088",
+      "task": "finance:4088",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.7783333333333333
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4072",
+      "task": "finance:4072",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.967
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5029",
+      "task": "hr:5029",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9775
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4090",
+      "task": "finance:4090",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.6925
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4087",
+      "task": "finance:4087",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.748
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5023",
+      "task": "hr:5023",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.9644444444444444
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5010",
+      "task": "hr:5010",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.92125
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5043",
+      "task": "hr:5043",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.91
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5048",
+      "task": "hr:5048",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.94125
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5036",
+      "task": "hr:5036",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.6900000000000001
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5031",
+      "task": "hr:5031",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.845
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5044",
+      "task": "hr:5044",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.125,
+      "score": 0.7070000000000001
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5054",
+      "task": "hr:5054",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.7849999999999999
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5037",
+      "task": "hr:5037",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.16666666666666666,
+      "score": 0.81625
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5028",
+      "task": "hr:5028",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.4033333333333334
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|finance:4093",
+      "task": "finance:4093",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.46699999999999997
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5049",
+      "task": "hr:5049",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.8922222222222221
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5079",
+      "task": "hr:5079",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.8314285714285715
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5039",
+      "task": "hr:5039",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8777777777777778
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5078",
+      "task": "hr:5078",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.6571428571428571
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5088",
+      "task": "hr:5088",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.58
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5069",
+      "task": "hr:5069",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9025000000000001
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5093",
+      "task": "hr:5093",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.645
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5062",
+      "task": "hr:5062",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.5788888888888889
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5103",
+      "task": "hr:5103",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.245
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5104",
+      "task": "hr:5104",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.15444444444444444
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5085",
+      "task": "hr:5085",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.5714285714285714,
+      "score": 0.7687499999999999
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5122",
+      "task": "hr:5122",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.25,
+      "score": 0.51625
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5066",
+      "task": "hr:5066",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.46153846153846156,
+      "score": 0.693
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5117",
+      "task": "hr:5117",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8220000000000001
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5063",
+      "task": "hr:5063",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.8122222222222222
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5131",
+      "task": "hr:5131",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.69625
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5094",
+      "task": "hr:5094",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.6271428571428571
+    },
+    {
+      "key": "minimax-p1-sc0f54859-cp-bench.jsonl|hr:5096",
+      "task": "hr:5096",
+      "group": "sc0f54859",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.69625
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4008",
+      "task": "finance:4008",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.78
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4007",
+      "task": "finance:4007",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.865
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4009",
+      "task": "finance:4009",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.6811111111111111
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4002",
+      "task": "finance:4002",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.93625
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4003",
+      "task": "finance:4003",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.6711111111111111
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4005",
+      "task": "finance:4005",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.91875
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4001",
+      "task": "finance:4001",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.30625
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4032",
+      "task": "finance:4032",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.826
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4016",
+      "task": "finance:4016",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.924
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4010",
+      "task": "finance:4010",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.72
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4039",
+      "task": "finance:4039",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9662499999999999
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4034",
+      "task": "finance:4034",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.914
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4037",
+      "task": "finance:4037",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9711111111111111
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4036",
+      "task": "finance:4036",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.8571428571428571,
+      "score": 0.843
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4042",
+      "task": "finance:4042",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.831111111111111
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4054",
+      "task": "finance:4054",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.7775000000000001
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4069",
+      "task": "finance:4069",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.9090909090909091,
+      "score": 0.9349999999999999
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4063",
+      "task": "finance:4063",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.92875
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4080",
+      "task": "finance:4080",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8699999999999999
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4084",
+      "task": "finance:4084",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.74
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4061",
+      "task": "finance:4061",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.6722222222222222
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4076",
+      "task": "finance:4076",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.9029999999999999
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4072",
+      "task": "finance:4072",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9039999999999999
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4087",
+      "task": "finance:4087",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.768
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4070",
+      "task": "finance:4070",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.7325
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5007",
+      "task": "hr:5007",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.83
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4090",
+      "task": "finance:4090",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.78875
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5023",
+      "task": "hr:5023",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.9700000000000001
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5029",
+      "task": "hr:5029",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9724999999999999
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5010",
+      "task": "hr:5010",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.83
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5028",
+      "task": "hr:5028",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.7666666666666667
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4093",
+      "task": "finance:4093",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.132
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5043",
+      "task": "hr:5043",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.96
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5036",
+      "task": "hr:5036",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8242857142857142
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5048",
+      "task": "hr:5048",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.87
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4021",
+      "task": "finance:4021",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.646
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4025",
+      "task": "finance:4025",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.81875
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|finance:4088",
+      "task": "finance:4088",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.625
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5054",
+      "task": "hr:5054",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.835
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5049",
+      "task": "hr:5049",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.9355555555555556
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5037",
+      "task": "hr:5037",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.92125
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5069",
+      "task": "hr:5069",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.8575
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5078",
+      "task": "hr:5078",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.72
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5031",
+      "task": "hr:5031",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.6859999999999999
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5079",
+      "task": "hr:5079",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8099999999999999
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5063",
+      "task": "hr:5063",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.6411111111111111
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5062",
+      "task": "hr:5062",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.4833333333333333
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5088",
+      "task": "hr:5088",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.731
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5066",
+      "task": "hr:5066",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.7692307692307693,
+      "score": 0.661
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5085",
+      "task": "hr:5085",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.5714285714285714,
+      "score": 0.785
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5103",
+      "task": "hr:5103",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.93125
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5094",
+      "task": "hr:5094",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.6628571428571428
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5096",
+      "task": "hr:5096",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.6675
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5093",
+      "task": "hr:5093",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.65875
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5039",
+      "task": "hr:5039",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.8433333333333333
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5122",
+      "task": "hr:5122",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8225
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5131",
+      "task": "hr:5131",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.7525000000000001
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5044",
+      "task": "hr:5044",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 0.1111111111111111,
+      "score": 0.6950000000000001
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5104",
+      "task": "hr:5104",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.5422222222222222
+    },
+    {
+      "key": "minimax-p1-sc9516927-cp-bench.jsonl|hr:5117",
+      "task": "hr:5117",
+      "group": "sc9516927",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.834
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4008",
+      "task": "finance:4008",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.1811111111111111
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4005",
+      "task": "finance:4005",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.92
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4002",
+      "task": "finance:4002",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.9325
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4010",
+      "task": "finance:4010",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.8475
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4009",
+      "task": "finance:4009",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.6266666666666666
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4001",
+      "task": "finance:4001",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.4075
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4007",
+      "task": "finance:4007",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.845
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4025",
+      "task": "finance:4025",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8275
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4034",
+      "task": "finance:4034",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.961
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4037",
+      "task": "finance:4037",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.7777777777777778,
+      "score": 0.9500000000000001
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4039",
+      "task": "finance:4039",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9325
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4042",
+      "task": "finance:4042",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.8233333333333334
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4054",
+      "task": "finance:4054",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.73125
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4003",
+      "task": "finance:4003",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.5811111111111111
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4069",
+      "task": "finance:4069",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.8181818181818182,
+      "score": 0.9400000000000001
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4036",
+      "task": "finance:4036",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.2857142857142857,
+      "score": 0.825
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4061",
+      "task": "finance:4061",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.7322222222222222
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4021",
+      "task": "finance:4021",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.625
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4072",
+      "task": "finance:4072",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.952
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4063",
+      "task": "finance:4063",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.825
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4080",
+      "task": "finance:4080",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.861
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4076",
+      "task": "finance:4076",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.828
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4088",
+      "task": "finance:4088",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.8250000000000001
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4084",
+      "task": "finance:4084",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.79625
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4090",
+      "task": "finance:4090",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.14625
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5007",
+      "task": "hr:5007",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.7787499999999999
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4070",
+      "task": "finance:4070",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.6725
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5029",
+      "task": "hr:5029",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9775
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4016",
+      "task": "finance:4016",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.9369999999999999
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5028",
+      "task": "hr:5028",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.86
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4087",
+      "task": "finance:4087",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.736
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5036",
+      "task": "hr:5036",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.8857142857142858
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5023",
+      "task": "hr:5023",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.4444444444444444,
+      "score": 0.6233333333333334
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4093",
+      "task": "finance:4093",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.20800000000000002
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5039",
+      "task": "hr:5039",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.19666666666666666
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5048",
+      "task": "hr:5048",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.895
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5037",
+      "task": "hr:5037",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.90125
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5043",
+      "task": "hr:5043",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9512499999999999
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5010",
+      "task": "hr:5010",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.7212500000000001
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|finance:4032",
+      "task": "finance:4032",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.8310000000000001
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5031",
+      "task": "hr:5031",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.7777777777777778,
+      "score": 0.7849999999999999
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5049",
+      "task": "hr:5049",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.9522222222222223
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5062",
+      "task": "hr:5062",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.3333333333333333,
+      "score": 0.37777777777777777
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5078",
+      "task": "hr:5078",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.6714285714285715
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5079",
+      "task": "hr:5079",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.7542857142857143
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5063",
+      "task": "hr:5063",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.8222222222222223
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5066",
+      "task": "hr:5066",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.46153846153846156,
+      "score": 0.751
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5085",
+      "task": "hr:5085",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.75625
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5096",
+      "task": "hr:5096",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.865
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5088",
+      "task": "hr:5088",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.67
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5044",
+      "task": "hr:5044",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.7,
+      "score": 0.6839999999999999
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5103",
+      "task": "hr:5103",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.19625
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5054",
+      "task": "hr:5054",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.5780000000000001
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5069",
+      "task": "hr:5069",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.61
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5093",
+      "task": "hr:5093",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.645
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5094",
+      "task": "hr:5094",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.5357142857142857
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5131",
+      "task": "hr:5131",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.70875
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5122",
+      "task": "hr:5122",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.86375
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5104",
+      "task": "hr:5104",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.4444444444444444
+    },
+    {
+      "key": "minimax-p1-sc9e21881-cp-bench.jsonl|hr:5117",
+      "task": "hr:5117",
+      "group": "sc9e21881",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.322
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4007",
+      "task": "finance:4007",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.93875
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4008",
+      "task": "finance:4008",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.7177777777777777
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4002",
+      "task": "finance:4002",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.9375
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4025",
+      "task": "finance:4025",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8375
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4001",
+      "task": "finance:4001",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.16666666666666666,
+      "score": 0.31
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4009",
+      "task": "finance:4009",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.7799999999999999
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4005",
+      "task": "finance:4005",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.675
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4037",
+      "task": "finance:4037",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.7777777777777778,
+      "score": 0.9477777777777777
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4034",
+      "task": "finance:4034",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.932
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4016",
+      "task": "finance:4016",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.8571428571428571,
+      "score": 0.932
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4003",
+      "task": "finance:4003",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.7222222222222222
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4036",
+      "task": "finance:4036",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.2857142857142857,
+      "score": 0.875
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4010",
+      "task": "finance:4010",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.665
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4039",
+      "task": "finance:4039",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9525
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4042",
+      "task": "finance:4042",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.8633333333333333
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4021",
+      "task": "finance:4021",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.5740000000000001
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4069",
+      "task": "finance:4069",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.9090909090909091,
+      "score": 0.9490000000000001
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4054",
+      "task": "finance:4054",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.8325
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4080",
+      "task": "finance:4080",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.8619999999999999
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4072",
+      "task": "finance:4072",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9259999999999999
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4076",
+      "task": "finance:4076",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.85
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4063",
+      "task": "finance:4063",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.91125
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4087",
+      "task": "finance:4087",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.741
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4070",
+      "task": "finance:4070",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.645
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4032",
+      "task": "finance:4032",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.8039999999999999
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5007",
+      "task": "hr:5007",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.795
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4090",
+      "task": "finance:4090",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.1275
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4088",
+      "task": "finance:4088",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.8450000000000001
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4084",
+      "task": "finance:4084",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.7825
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5029",
+      "task": "hr:5029",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.97375
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5028",
+      "task": "hr:5028",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.7799999999999999
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4093",
+      "task": "finance:4093",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.213
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|finance:4061",
+      "task": "finance:4061",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.79
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5036",
+      "task": "hr:5036",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8685714285714285
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5037",
+      "task": "hr:5037",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.3325
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5048",
+      "task": "hr:5048",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.94375
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5043",
+      "task": "hr:5043",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.93875
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5010",
+      "task": "hr:5010",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.8475
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5023",
+      "task": "hr:5023",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.9444444444444444
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5054",
+      "task": "hr:5054",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.372
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5031",
+      "task": "hr:5031",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.4444444444444444,
+      "score": 0.857
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5063",
+      "task": "hr:5063",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.81
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5062",
+      "task": "hr:5062",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.7177777777777777
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5049",
+      "task": "hr:5049",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.30888888888888894
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5069",
+      "task": "hr:5069",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.89125
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5044",
+      "task": "hr:5044",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.125,
+      "score": 0.734
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5079",
+      "task": "hr:5079",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.7985714285714286
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5066",
+      "task": "hr:5066",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.46153846153846156,
+      "score": 0.736
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5078",
+      "task": "hr:5078",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.6771428571428572
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5094",
+      "task": "hr:5094",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.32142857142857145
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5085",
+      "task": "hr:5085",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.42857142857142855,
+      "score": 0.6437499999999999
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5093",
+      "task": "hr:5093",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.6625
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5104",
+      "task": "hr:5104",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.15444444444444444
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5122",
+      "task": "hr:5122",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.1575
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5039",
+      "task": "hr:5039",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.7911111111111111
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5103",
+      "task": "hr:5103",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.19125
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5096",
+      "task": "hr:5096",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.3333333333333333,
+      "score": 0.80125
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5131",
+      "task": "hr:5131",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.73125
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5088",
+      "task": "hr:5088",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 0.625,
+      "score": 0.844
+    },
+    {
+      "key": "minimax-p1-se0088851-cp-bench.jsonl|hr:5117",
+      "task": "hr:5117",
+      "group": "se0088851",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.819
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4007",
+      "task": "finance:4007",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.89125
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4002",
+      "task": "finance:4002",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.90875
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4009",
+      "task": "finance:4009",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.6366666666666667
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4005",
+      "task": "finance:4005",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.91
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4010",
+      "task": "finance:4010",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.905
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4008",
+      "task": "finance:4008",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.8622222222222222
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4003",
+      "task": "finance:4003",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9244444444444445
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4016",
+      "task": "finance:4016",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.9199999999999999
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4032",
+      "task": "finance:4032",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.8300000000000001
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4025",
+      "task": "finance:4025",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.7675
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4001",
+      "task": "finance:4001",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.38
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4034",
+      "task": "finance:4034",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.916
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4042",
+      "task": "finance:4042",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.8488888888888888
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4039",
+      "task": "finance:4039",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.91125
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4037",
+      "task": "finance:4037",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.831111111111111
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4069",
+      "task": "finance:4069",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.9090909090909091,
+      "score": 0.944
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4054",
+      "task": "finance:4054",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.85125
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4080",
+      "task": "finance:4080",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.9,
+      "score": 0.898
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4076",
+      "task": "finance:4076",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.874
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4036",
+      "task": "finance:4036",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.2857142857142857,
+      "score": 0.8480000000000001
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4084",
+      "task": "finance:4084",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.6625
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4070",
+      "task": "finance:4070",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.8275
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4072",
+      "task": "finance:4072",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.97
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4087",
+      "task": "finance:4087",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.787
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4090",
+      "task": "finance:4090",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.85
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5007",
+      "task": "hr:5007",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.77625
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4063",
+      "task": "finance:4063",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.9
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5023",
+      "task": "hr:5023",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.9666666666666666
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5029",
+      "task": "hr:5029",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.975
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4088",
+      "task": "finance:4088",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.785
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5010",
+      "task": "hr:5010",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.89375
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4021",
+      "task": "finance:4021",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.646
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5039",
+      "task": "hr:5039",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.3222222222222222
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5037",
+      "task": "hr:5037",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5043",
+      "task": "hr:5043",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9462499999999999
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4093",
+      "task": "finance:4093",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.136
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5036",
+      "task": "hr:5036",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.86
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|finance:4061",
+      "task": "finance:4061",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.6944444444444444
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5031",
+      "task": "hr:5031",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.5714285714285714,
+      "score": 0.795
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5048",
+      "task": "hr:5048",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.9075
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5054",
+      "task": "hr:5054",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.833
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5078",
+      "task": "hr:5078",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.7371428571428572
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5044",
+      "task": "hr:5044",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.662
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5066",
+      "task": "hr:5066",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.5384615384615384,
+      "score": 0.779
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5062",
+      "task": "hr:5062",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.7211111111111111
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5069",
+      "task": "hr:5069",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.85
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5049",
+      "task": "hr:5049",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.931111111111111
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5085",
+      "task": "hr:5085",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.82875
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5094",
+      "task": "hr:5094",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.6900000000000001
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5063",
+      "task": "hr:5063",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.7855555555555556
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5088",
+      "task": "hr:5088",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.683
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5093",
+      "task": "hr:5093",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.5125
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5096",
+      "task": "hr:5096",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.8925
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5122",
+      "task": "hr:5122",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.8525
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5028",
+      "task": "hr:5028",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.8355555555555555
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5079",
+      "task": "hr:5079",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.7942857142857143
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5104",
+      "task": "hr:5104",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.45999999999999996
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5131",
+      "task": "hr:5131",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.725
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5117",
+      "task": "hr:5117",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.7849999999999999
+    },
+    {
+      "key": "minimax-p1-sf667277c-cp-bench.jsonl|hr:5103",
+      "task": "hr:5103",
+      "group": "sf667277c",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.655
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4008",
+      "task": "finance:4008",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.19777777777777777
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4009",
+      "task": "finance:4009",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.3844444444444444
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4007",
+      "task": "finance:4007",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.8412499999999999
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4010",
+      "task": "finance:4010",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.865
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4005",
+      "task": "finance:4005",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.1475
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4034",
+      "task": "finance:4034",
+      "group": "v0",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.951
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4016",
+      "task": "finance:4016",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.944
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4002",
+      "task": "finance:4002",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.3333333333333333,
+      "score": 0.86875
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4025",
+      "task": "finance:4025",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.70125
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4003",
+      "task": "finance:4003",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.7677777777777778
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4039",
+      "task": "finance:4039",
+      "group": "v0",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.94875
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4037",
+      "task": "finance:4037",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.7777777777777778,
+      "score": 0.9600000000000001
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4042",
+      "task": "finance:4042",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.8411111111111111
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4036",
+      "task": "finance:4036",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.2857142857142857,
+      "score": 0.807
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4001",
+      "task": "finance:4001",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.4,
+      "score": 0.42
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4032",
+      "task": "finance:4032",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.876
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4021",
+      "task": "finance:4021",
+      "group": "v0",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.621
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4072",
+      "task": "finance:4072",
+      "group": "v0",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.901
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4063",
+      "task": "finance:4063",
+      "group": "v0",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.885
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4061",
+      "task": "finance:4061",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.4,
+      "score": 0.7033333333333334
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4080",
+      "task": "finance:4080",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.865
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4069",
+      "task": "finance:4069",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.874
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4087",
+      "task": "finance:4087",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.762
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4084",
+      "task": "finance:4084",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.69375
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4054",
+      "task": "finance:4054",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.6666666666666666,
+      "score": 0.81125
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5007",
+      "task": "hr:5007",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.78
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4076",
+      "task": "finance:4076",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.8699999999999999
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4090",
+      "task": "finance:4090",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.2,
+      "score": 0.22625
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5029",
+      "task": "hr:5029",
+      "group": "v0",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9724999999999999
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4088",
+      "task": "finance:4088",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.7333333333333334
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5023",
+      "task": "hr:5023",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.9722222222222222
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5039",
+      "task": "hr:5039",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.2088888888888889
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5043",
+      "task": "hr:5043",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.8987499999999999
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5036",
+      "task": "hr:5036",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.8842857142857142
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5048",
+      "task": "hr:5048",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.75,
+      "score": 0.9412499999999999
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4070",
+      "task": "finance:4070",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.7325
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5037",
+      "task": "hr:5037",
+      "group": "v0",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.915
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5044",
+      "task": "hr:5044",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.125,
+      "score": 0.5860000000000001
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5028",
+      "task": "hr:5028",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.8455555555555555
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|finance:4093",
+      "task": "finance:4093",
+      "group": "v0",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.512
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5031",
+      "task": "hr:5031",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.4444444444444444,
+      "score": 0.8140000000000001
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5049",
+      "task": "hr:5049",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.6,
+      "score": 0.7633333333333333
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5078",
+      "task": "hr:5078",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.6142857142857142
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5010",
+      "task": "hr:5010",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.8571428571428571,
+      "score": 0.74
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5054",
+      "task": "hr:5054",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.807
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5079",
+      "task": "hr:5079",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.2657142857142857
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5063",
+      "task": "hr:5063",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.7142857142857143,
+      "score": 0.8322222222222222
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5062",
+      "task": "hr:5062",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.8,
+      "score": 0.6522222222222223
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5094",
+      "task": "hr:5094",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.25,
+      "score": 0.33571428571428574
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5066",
+      "task": "hr:5066",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.46153846153846156,
+      "score": 0.737
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5088",
+      "task": "hr:5088",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.5,
+      "score": 0.744
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5104",
+      "task": "hr:5104",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.0,
+      "score": 0.15444444444444444
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5085",
+      "task": "hr:5085",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.5714285714285714,
+      "score": 0.6975
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5093",
+      "task": "hr:5093",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.2,
+      "score": 0.61375
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5103",
+      "task": "hr:5103",
+      "group": "v0",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.9175
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5131",
+      "task": "hr:5131",
+      "group": "v0",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.64625
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5122",
+      "task": "hr:5122",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.25,
+      "score": 0.86875
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5096",
+      "task": "hr:5096",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.625,
+      "score": 0.6775
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5069",
+      "task": "hr:5069",
+      "group": "v0",
+      "label": "bench",
+      "credit": 1.0,
+      "score": 0.79125
+    },
+    {
+      "key": "minimax-p1-v0-cp-bench.jsonl|hr:5117",
+      "task": "hr:5117",
+      "group": "v0",
+      "label": "bench",
+      "credit": 0.8333333333333334,
+      "score": 0.724
+    }
+  ]
+}

@@ -15,6 +15,7 @@ the p-value keep test, Take 2 the margin keep test); run logs are shared across 
 """
 import argparse
 import json
+import os
 import random
 import sys
 from concurrent.futures import ThreadPoolExecutor
@@ -91,7 +92,9 @@ class Phase1:
     def __init__(self, *, paid: bool = True):
         if paid and not RUN.get("approved"):
             sys.exit("STOP: v2 Phase 1 is not approved yet (phase1/config_phase1.yaml run.approved is false). Ask Alexander.")
-        self.spend = SpendTracker(ROOT / "results" / "phase1_run" / "spend.json", cap_usd=RUN["spend_cap_usd"], flush_seconds=0)
+        # PHASE1_SPEND_FILE lets two stages run side by side without overwriting each other's accounting
+        self.spend = SpendTracker(ROOT / "results" / "phase1_run" / os.environ.get("PHASE1_SPEND_FILE", "spend.json"),
+                                  cap_usd=RUN["spend_cap_usd"], flush_seconds=0)
         key = api_key()
         cache = DiskCache(ROOT / "cache" / "openrouter")
         calls = JsonlLogger(LOGS / "calls.jsonl")
@@ -239,6 +242,49 @@ def stage_replay_refused(_args) -> None:
                           "proposed_rules": list(apply_edit(final, Edit(**winner["edit"]))) if winner else list(final),
                           "spend_usd": p.spend.total_usd})
     print(f"replay done; spend ${p.spend.total_usd:.2f}; kept {len(kept)} of {len(results)}", flush=True)
+
+
+def _final_runs(p, cp: bool) -> dict[str, CandidateRun]:
+    """The final playbook's one run per practice and test bench task (reloaded from the logs)."""
+    final = tuple(load_json("skill_final")["rules"])
+    out = {}
+    for label, ids in (("practice-all", split("practice")), ("bench", split("gate"))):
+        out.update({t: rs[0] for t, rs in p.run_set(model="minimax", rules=final, checkpoint=cp, task_ids=ids, label=label).items()})
+    return out
+
+
+def stage_ceiling(_args) -> None:
+    """Gemini ceiling check (canonical design, follow-ups): Gemini, as it comes, on every practice and test bench task
+    where the final playbook's MiniMax run scored under 0.8. Reports what a perfect failure detector could gain."""
+    p = Phase1()
+    mm = _final_runs(p, RUN["checkpoint_during_learning"])
+    failed = sorted(t for t, r in mm.items() if r.partial_credit < 0.8)
+    print(f"CEILING: {len(failed)} of {len(mm)} practice and test bench tasks scored under 0.8 with the final playbook", flush=True)
+    gem = {t: rs[0] for t, rs in p.run_set(model="gemini", rules=(), checkpoint=False, task_ids=failed, label="ceiling").items()}
+    mean = lambda xs: sum(xs) / len(xs)  # noqa: E731
+    base = mean([r.partial_credit for r in mm.values()])
+    worst30 = sorted(failed, key=lambda t: mm[t].partial_credit)[: round(0.3 * len(mm))]
+
+    def routed(escalate: list[str]) -> float:
+        return mean([gem[t].partial_credit if t in escalate else mm[t].partial_credit for t in mm])
+    res = {"n_tasks": len(mm), "n_failed": len(failed), "minimax_alone": base,
+           "on_failed_tasks": {"minimax": mean([mm[t].partial_credit for t in failed]), "gemini": mean([gem[t].partial_credit for t in failed]),
+                               "gemini_passed": sum(gem[t].passed for t in failed)},
+           "perfect_router_escalating_all_failures": {"share": len(failed) / len(mm), "credit": routed(failed)},
+           "perfect_router_escalating_worst_30pct": {"share": len(worst30) / len(mm), "credit": routed(worst30)},
+           "gemini_cost_per_run": mean([gem[t].cost_usd for t in failed]), "spend_usd": p.spend.total_usd}
+    save("ceiling", res)
+    print(json.dumps(res, indent=2), flush=True)
+
+
+def stage_fresh(_args) -> None:
+    """Two fresh, independent runs of the final playbook on every practice and test bench task (Jev verifier D2's data)."""
+    p = Phase1()
+    final = tuple(load_json("skill_final")["rules"])
+    ids = split("practice") + split("gate")
+    p.run_set(model="minimax", rules=final, checkpoint=RUN["checkpoint_during_learning"], task_ids=ids, label="fresh",
+              runs_per_task=2, first_attempt=1)
+    print(f"fresh runs ready; spend ${p.spend.total_usd:.2f}", flush=True)
 
 
 # ---------------- stage 2: Jev's learning data ----------------
@@ -397,7 +443,7 @@ def main() -> None:
     sk = sub.add_parser("skill")
     sk.add_argument("--stop-after-round", type=int, default=None, help="stop once this round's decisions are saved (resumable)")
     sk.set_defaults(fn=stage_skill)
-    for name, fn in (("replay-refused", stage_replay_refused), ("jevdata", stage_jevdata), ("rubric", stage_rubric), ("tau", stage_tau)):
+    for name, fn in (("ceiling", stage_ceiling), ("fresh", stage_fresh), ("replay-refused", stage_replay_refused), ("jevdata", stage_jevdata), ("rubric", stage_rubric), ("tau", stage_tau)):
         sub.add_parser(name).set_defaults(fn=fn)
     s = sub.add_parser("sealed")
     s.add_argument("--release-confirmed", action="store_true")

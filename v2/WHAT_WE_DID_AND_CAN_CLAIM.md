@@ -59,6 +59,8 @@ Rounds 3 and 4: the same again.    Final playbook = all kept rules together.
 | "MiniMax learned the checkpoint's habit" | **Partly, as an observation.** R2x (read policy emails before any write) cut checkpoint holds from 0.75 to 0.15 per run on the test bench | Sealed exam, final playbook checkpoint off vs on |
 | "MiniMax learned" (question 2) | **No** | Sealed exam: final vs starting playbook, paired, checkpoint on |
 | "Jev learned" (question 3) | **No.** The rubric fits its practice runs (AUC 0.73) but showed no skill on test bench runs (AUC 0.475, n = 60) | A refit on more data with a held-out check, then the sealed exam |
+| "Jev can learn to tell good runs from bad ones from a run summary at this size" | **No, tested properly.** Refit on 1,052 runs, cross-validated by task, held-out AUC 0.525 [0.42, 0.63] vs a bar of 0.65 (fixed before the run); telemetry alone 0.51 | A different input and checker design |
+| "A verifier-style Jev (sees source, policy and writes; per-task questions) ranks runs much better than the generic rubric" | **Yes, as measured:** within-playbook AUC 0.612 [0.51, 0.72] vs 0.51 on 840 validation runs, validation opened once. But below the pre-registered 0.65 bar, and **not on the final playbook** (0.48, n = 60) | Fresh runs of the final playbook and a second pre-registered validation |
 | "The cutoff separates good runs from bad" | **No** on the test bench (below tau 0.783 credit, at or above 0.776) | Same |
 | "The router comes close to Gemini for about half the cost" (question 1) | **No** | Sealed exam; reported as directional numbers and how close they land |
 | "The checkpoint adds X" (question 4) | **No** (V2-5a's earlier result stands as a promising mechanism test only) | Sealed exam, final playbook checkpoint off vs on |
@@ -66,6 +68,8 @@ Rounds 3 and 4: the same again.    Final playbook = all kept rules together.
 
 ## 5. Change log
 
+- 2026-10-10 (15:25 UTC): Jev verifier (option D) built and validated once; bar missed (0.612 vs 0.65), clear improvement over the generic rubric, no discrimination on the final playbook; claim row added; test bench validation now used up.
+- 2026-10-10 (14:50 UTC): Jev refit stage B1 ran and missed its pre-registered bar (AUC 0.525 vs 0.65); claim table updated; see [`LEARNINGS_AND_IMPLICATIONS.md`](LEARNINGS_AND_IMPLICATIONS.md) Part B.
 - 2026-10-10 (06:55 UTC): Jev stage ran; Jev has not shown held-out skill. Claim rows for question 3 and the cutoff updated; see [`LEARNINGS_AND_IMPLICATIONS.md`](LEARNINGS_AND_IMPLICATIONS.md) Part B.
 - 2026-10-10 (06:25 UTC): replay finished, none kept; see section 6 and [`LEARNINGS_AND_IMPLICATIONS.md`](LEARNINGS_AND_IMPLICATIONS.md). Caveat 3 still applies; the replay's near-identical playbooks suggest the selection luck on the last step was about 1.4 points.
 - 2026-10-10 (04:32 UTC): caveat 9 corrected: only one idea was actually blocked, not three. Limit raised to 1,200 characters; replay of the length-refused rules added (section 6).

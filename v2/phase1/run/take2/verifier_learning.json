@@ -1,0 +1,117 @@
+[
+  {
+    "round": 0,
+    "instructions": "You write verification questions for a checker that audits what an AI agent did on a business task.\n\nYou are given the request and the policy and guideline emails that were in the company's inbox. Write 6 to 10 yes/no questions.\nA checker will answer each one by reading a record of the agent's actions (the messages it sent, the records it changed, the\nsource data it read) against the request and policies. Phrase every question so that YES means the work was done correctly.\n\nCover, where they apply to this task:\n1. Completeness: every required item or recipient was handled, none left out.\n2. Prohibitions: nothing was done that the request or a policy email forbids (exclusions, holds, \"do not\" rules).\n3. Accuracy: values, names and identifiers written or sent match the source data exactly.\n4. Policy: every applicable policy rule or approval step from the emails was followed.\n\nBe specific to this task: name the items, rules and values involved rather than asking in general terms. Do not ask about\nhow the agent used its tools. Reply with JSON only: {\"questions\": [{\"text\": \"...\"}, ...]}",
+    "metrics": {
+      "n_runs": 212,
+      "n_tasks": 60,
+      "auc_within_playbook": 0.6498217655693017,
+      "auc_ci95": [
+        0.5269784172661871,
+        0.774559686888454
+      ],
+      "auc_within_task": 0.6463414634146342,
+      "auc_pooled": 0.6581928463116582,
+      "credit_low": 0.43612858495671,
+      "credit_rest": 0.7793750731250731,
+      "gap": 0.3432464881683632,
+      "n_low": 64,
+      "gap_ci95": [
+        0.17483962558194477,
+        0.5329753716678058
+      ]
+    }
+  },
+  {
+    "round": 1,
+    "candidates": [
+      {
+        "gain": 0.02725938351855739,
+        "auc": 0.6770811490878591,
+        "text": "You write verification questions for a checker that audits what an AI agent did on a business task.\n\nYou are given the request and the policy/guideline emails that were in the company's inbox. Write 6 to 10 yes/no questions. A checker answers each one by reading a record of the agent's actions (messages sent, records changed, source data read) against the request and policies. Phrase every question so YES means the work was done correctly.\n\nCover, where they apply:\n1. Completeness: every required item or recipient was handled, none left out.\n2. Prohibitions: nothing was done that the request or a policy email forbids (exclusions, holds, 'do not' rules).\n3. Accuracy: values, names, identifiers written or sent match the source data exactly.\n4. Policy: every applicable policy rule or approval step from the emails was followed.\n\nImportant guidelines for writing questions:\n- Base questions only on requirements explicitly stated in the request or policy emails. Do NOT invent procedures, channels, email addresses, fees, thresholds, or phrasings that are not in the source material. If the request does not specify a particular email address, channel, or method, write the question around the requirement itself (e.g., 'Did the agent notify the relevant party' rather than naming an assumed address).\n- For substantive analysis tasks, ask whether the agent identified and reported specific findings (overcharges, gaps, errors, missing items) \u2014 not just whether it sent a summary. Vague questions like 'did the analysis include discrepancies' can be answered yes even when the agent missed major items.\n- For 'do not' or prohibition rules, ask positively: 'Did the agent exclude/refrain from X?' rather than negations that confuse checkers. If the policy forbids an action, ask whether the forbidden action was avoided.\n- Avoid nitpicky phrasing checks (singular vs plural, exact wording of minor phrases) unless the request explicitly mandates that exact wording.\n- Do not assume specific procedural details (e.g., that a 5% fee applies, that an escalation email goes to a specific role) unless the policy or request states it.\n- For policy compliance, ask whether the agent reviewed/checked the applicable policy before acting, and whether each specific rule in the policy was followed.\n- Do not ask about tool usage or internal mechanics.\n\nReply with JSON only: {\"questions\": [{\"text\": \"...\"}, ...]}"
+      },
+      {
+        "gain": -0.005451876703711389,
+        "auc": 0.6443698888655903,
+        "text": "You write verification questions for a checker that audits what an AI agent did on a business task.\n\nYou are given the request and the policy and guideline emails that were in the company's inbox. Write 6 to 10 yes/no questions.\nA checker will answer each one by reading a record of the agent's actions (the messages it sent, the records it changed, the\nsource data it read) against the request and policies. Phrase every question so that YES means the work was done correctly.\n\nCover, where they apply to this task:\n1. Completeness: every required item or recipient was handled, none left out.\n2. Prohibitions: nothing was done that the request or a policy email forbids (exclusions, holds, \"do not\" rules).\n3. Accuracy: values, names and identifiers written or sent match the source data exactly.\n4. Policy: every applicable policy rule or approval step from the emails was followed.\n\nBe specific to this task: name the items, rules and values involved rather than asking in general terms. Do not ask about\nhow the agent used its tools. Reply with JSON only: {\"questions\": [{\"text\": \"...\"}, ...]}\n\nCritical guidance to avoid false positives and false negatives:\n- Base every question only on what is EXPLICITLY stated in the request or in the policy/guideline emails. Do not invent or\n  assume rules, thresholds, fees, recipients, procedures, or channels that are not present in the source materials.\n- For any computed or arithmetic value, include a question that checks whether the result numerically matches the formula\n  given in the request (e.g., whether each Expected Inflow equals Amount x (Probability/100) to the cent).\n- Include at least one question confirming that exact values from the source data (amounts, names, identifiers, dates,\n  counts, phrases) were preserved verbatim in the agent's outputs, without rounding, reformatting, or paraphrasing.\n- Include at least one question confirming each recipient explicitly named in the request received the required\n  communication using the exact address or channel stated.\n- Include at least one question confirming that every explicitly excluded item, \"do not\" rule, or prohibited action from\n  the request or policy was NOT performed by the agent.\n- Keep each question a single, unambiguous yes/no check. Avoid compound questions joined by \"and\" where partial truth\n  could mislead the answer."
+      }
+    ],
+    "kept": true,
+    "instructions": "You write verification questions for a checker that audits what an AI agent did on a business task.\n\nYou are given the request and the policy/guideline emails that were in the company's inbox. Write 6 to 10 yes/no questions. A checker answers each one by reading a record of the agent's actions (messages sent, records changed, source data read) against the request and policies. Phrase every question so YES means the work was done correctly.\n\nCover, where they apply:\n1. Completeness: every required item or recipient was handled, none left out.\n2. Prohibitions: nothing was done that the request or a policy email forbids (exclusions, holds, 'do not' rules).\n3. Accuracy: values, names, identifiers written or sent match the source data exactly.\n4. Policy: every applicable policy rule or approval step from the emails was followed.\n\nImportant guidelines for writing questions:\n- Base questions only on requirements explicitly stated in the request or policy emails. Do NOT invent procedures, channels, email addresses, fees, thresholds, or phrasings that are not in the source material. If the request does not specify a particular email address, channel, or method, write the question around the requirement itself (e.g., 'Did the agent notify the relevant party' rather than naming an assumed address).\n- For substantive analysis tasks, ask whether the agent identified and reported specific findings (overcharges, gaps, errors, missing items) \u2014 not just whether it sent a summary. Vague questions like 'did the analysis include discrepancies' can be answered yes even when the agent missed major items.\n- For 'do not' or prohibition rules, ask positively: 'Did the agent exclude/refrain from X?' rather than negations that confuse checkers. If the policy forbids an action, ask whether the forbidden action was avoided.\n- Avoid nitpicky phrasing checks (singular vs plural, exact wording of minor phrases) unless the request explicitly mandates that exact wording.\n- Do not assume specific procedural details (e.g., that a 5% fee applies, that an escalation email goes to a specific role) unless the policy or request states it.\n- For policy compliance, ask whether the agent reviewed/checked the applicable policy before acting, and whether each specific rule in the policy was followed.\n- Do not ask about tool usage or internal mechanics.\n\nReply with JSON only: {\"questions\": [{\"text\": \"...\"}, ...]}",
+    "metrics": {
+      "n_runs": 212,
+      "n_tasks": 60,
+      "auc_within_playbook": 0.6770811490878591,
+      "auc_ci95": [
+        0.5595336359884441,
+        0.7898567738905846
+      ],
+      "auc_within_task": 0.6829268292682927,
+      "auc_pooled": 0.689099991080189,
+      "credit_low": 0.4156171085858586,
+      "credit_rest": 0.7882449007449007,
+      "gap": 0.3726277921590421,
+      "n_low": 64,
+      "gap_ci95": [
+        0.2001466303499796,
+        0.5405450395646474
+      ]
+    }
+  },
+  {
+    "round": 2,
+    "candidates": [
+      {
+        "gain": 0.004193751310547222,
+        "auc": 0.6812749003984063,
+        "text": "You write verification questions for a checker that audits an AI agent's business-task work. Output 6-10 yes/no questions per task; YES means the work was done correctly.\n\nCover four areas:\n1. Completeness \u2014 every required item, recipient, and artifact was handled; none skipped.\n2. Prohibitions \u2014 no forbidden actions were taken; exclusions and 'do not' rules were respected.\n3. Accuracy \u2014 names, identifiers, and values match source data exactly (verbatim when the request requires it).\n4. Policy \u2014 every applicable policy rule and approval step from the policy emails was followed.\n\nCritical writing rules \u2014 these are where most mis-scoring originated:\n\n- Reference ONLY requirements explicitly stated in the request or policy emails. Do NOT invent or assume file-naming formats, column headers, dollar amounts, percentage thresholds, status labels, exclusion time windows, channel names, email addresses, rule names, vendor/employee/payment IDs, or any other specifics the source does not state. When the request names a recipient/tool/value, use that exact name; when it doesn't, phrase around the requirement itself (e.g., 'Did the agent notify the appropriate party?' \u2014 not 'Did the agent email X@company.example.com?').\n- For analytical tasks (overcharges, gaps, fraud flags, compliance errors), ask whether the agent identified and reported SPECIFIC findings with concrete identifiers and the rule/value triggered \u2014 not whether 'issues were found' or 'discrepancies were identified.' Vague questions get answered yes by vague summaries.\n- Frame prohibitions positively: 'Did the agent exclude/refrain from X?' \u2014 not negation forms that confuse checkers.\n- For required actions (emails, summaries, updates), name recipients/artifacts only as the request states them; do not add extra recipients, CCs, formats, or status values the request didn't require.\n- When the request says 'preserve verbatim' or 'include relevant amounts,' ask whether specific values from the source appear unchanged \u2014 not whether 'values were included.'\n- Do not ask about tool usage, agent mechanics, or reasoning steps.\n- Skip nitpicky phrasing checks unless the request mandates that exact wording.\n- Each question must be independently checkable from the agent's action record.\n\nReply with JSON only: {\"questions\": [{\"text\": \"...\"}, ...]}"
+      }
+    ],
+    "kept": false,
+    "instructions": "You write verification questions for a checker that audits what an AI agent did on a business task.\n\nYou are given the request and the policy/guideline emails that were in the company's inbox. Write 6 to 10 yes/no questions. A checker answers each one by reading a record of the agent's actions (messages sent, records changed, source data read) against the request and policies. Phrase every question so YES means the work was done correctly.\n\nCover, where they apply:\n1. Completeness: every required item or recipient was handled, none left out.\n2. Prohibitions: nothing was done that the request or a policy email forbids (exclusions, holds, 'do not' rules).\n3. Accuracy: values, names, identifiers written or sent match the source data exactly.\n4. Policy: every applicable policy rule or approval step from the emails was followed.\n\nImportant guidelines for writing questions:\n- Base questions only on requirements explicitly stated in the request or policy emails. Do NOT invent procedures, channels, email addresses, fees, thresholds, or phrasings that are not in the source material. If the request does not specify a particular email address, channel, or method, write the question around the requirement itself (e.g., 'Did the agent notify the relevant party' rather than naming an assumed address).\n- For substantive analysis tasks, ask whether the agent identified and reported specific findings (overcharges, gaps, errors, missing items) \u2014 not just whether it sent a summary. Vague questions like 'did the analysis include discrepancies' can be answered yes even when the agent missed major items.\n- For 'do not' or prohibition rules, ask positively: 'Did the agent exclude/refrain from X?' rather than negations that confuse checkers. If the policy forbids an action, ask whether the forbidden action was avoided.\n- Avoid nitpicky phrasing checks (singular vs plural, exact wording of minor phrases) unless the request explicitly mandates that exact wording.\n- Do not assume specific procedural details (e.g., that a 5% fee applies, that an escalation email goes to a specific role) unless the policy or request states it.\n- For policy compliance, ask whether the agent reviewed/checked the applicable policy before acting, and whether each specific rule in the policy was followed.\n- Do not ask about tool usage or internal mechanics.\n\nReply with JSON only: {\"questions\": [{\"text\": \"...\"}, ...]}",
+    "metrics": {
+      "n_runs": 212,
+      "n_tasks": 60,
+      "auc_within_playbook": 0.6770811490878591,
+      "auc_ci95": [
+        0.5595336359884441,
+        0.7898567738905846
+      ],
+      "auc_within_task": 0.6829268292682927,
+      "auc_pooled": 0.689099991080189,
+      "credit_low": 0.4156171085858586,
+      "credit_rest": 0.7882449007449007,
+      "gap": 0.3726277921590421,
+      "n_low": 64,
+      "gap_ci95": [
+        0.2001466303499796,
+        0.5405450395646474
+      ]
+    }
+  },
+  {
+    "round": 3,
+    "candidates": [],
+    "kept": false,
+    "instructions": "You write verification questions for a checker that audits what an AI agent did on a business task.\n\nYou are given the request and the policy/guideline emails that were in the company's inbox. Write 6 to 10 yes/no questions. A checker answers each one by reading a record of the agent's actions (messages sent, records changed, source data read) against the request and policies. Phrase every question so YES means the work was done correctly.\n\nCover, where they apply:\n1. Completeness: every required item or recipient was handled, none left out.\n2. Prohibitions: nothing was done that the request or a policy email forbids (exclusions, holds, 'do not' rules).\n3. Accuracy: values, names, identifiers written or sent match the source data exactly.\n4. Policy: every applicable policy rule or approval step from the emails was followed.\n\nImportant guidelines for writing questions:\n- Base questions only on requirements explicitly stated in the request or policy emails. Do NOT invent procedures, channels, email addresses, fees, thresholds, or phrasings that are not in the source material. If the request does not specify a particular email address, channel, or method, write the question around the requirement itself (e.g., 'Did the agent notify the relevant party' rather than naming an assumed address).\n- For substantive analysis tasks, ask whether the agent identified and reported specific findings (overcharges, gaps, errors, missing items) \u2014 not just whether it sent a summary. Vague questions like 'did the analysis include discrepancies' can be answered yes even when the agent missed major items.\n- For 'do not' or prohibition rules, ask positively: 'Did the agent exclude/refrain from X?' rather than negations that confuse checkers. If the policy forbids an action, ask whether the forbidden action was avoided.\n- Avoid nitpicky phrasing checks (singular vs plural, exact wording of minor phrases) unless the request explicitly mandates that exact wording.\n- Do not assume specific procedural details (e.g., that a 5% fee applies, that an escalation email goes to a specific role) unless the policy or request states it.\n- For policy compliance, ask whether the agent reviewed/checked the applicable policy before acting, and whether each specific rule in the policy was followed.\n- Do not ask about tool usage or internal mechanics.\n\nReply with JSON only: {\"questions\": [{\"text\": \"...\"}, ...]}",
+    "metrics": {
+      "n_runs": 212,
+      "n_tasks": 60,
+      "auc_within_playbook": 0.6770811490878591,
+      "auc_ci95": [
+        0.5595336359884441,
+        0.7898567738905846
+      ],
+      "auc_within_task": 0.6829268292682927,
+      "auc_pooled": 0.689099991080189,
+      "credit_low": 0.4156171085858586,
+      "credit_rest": 0.7882449007449007,
+      "gap": 0.3726277921590421,
+      "n_low": 64,
+      "gap_ci95": [
+        0.2001466303499796,
+        0.5405450395646474
+      ]
+    }
+  }
+]
