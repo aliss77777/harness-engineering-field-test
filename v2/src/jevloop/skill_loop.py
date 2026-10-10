@@ -19,7 +19,7 @@ from scipy.stats import wilcoxon
 from jevloop.openrouter import ChatClient
 from jevloop.runs import CandidateRun
 
-MAX_RULE_CHARS = 600  # was 400; 4 of 5 pilot refusals were for length alone (redesign change 5)
+MAX_RULE_CHARS = 1200  # was 400 (pilot) then 600 (Take 1, Take 2 rounds 1-4); raised 2026-10-10: the editor wrote 627-1,073 character rules
 NEAR_COPY = 0.85  # difflib ratio at or above which a proposed rule counts as a copy
 TRIGGER_CHARS = 700
 SUMMARY_CHARS = 2500
@@ -48,6 +48,24 @@ class Edit:
 
     def record(self) -> dict[str, Any]:
         return asdict(self)
+
+
+def length_refused_edits(history: list[dict[str, Any]], *, from_round: int = 1) -> list[Edit]:
+    """Proposals the loop refused for length alone, as Edits, from a saved skill history. At most one per
+    (round, target kind): the longest, which is the editor's own first draft rather than a condensed retry."""
+    best: dict[tuple[int, str], Edit] = {}
+    for rnd in history:
+        if rnd["round"] < from_round:
+            continue
+        for ref in rnd.get("refused", []):
+            e = ref.get("edit")
+            if not isinstance(e, dict) or not str(ref.get("reason", "")).startswith("rule must be 1-"):
+                continue
+            edit = Edit(e["op"], e.get("index"), e["text"], e.get("why", ""), e.get("target", ""))
+            key = (rnd["round"], edit.target)
+            if key not in best or len(edit.text) > len(best[key].text):
+                best[key] = edit
+    return [best[k] for k in sorted(best)]
 
 
 def apply_edit(rules: tuple[str, ...], edit: Edit) -> tuple[str, ...]:
@@ -236,7 +254,7 @@ class SkillEditor:
 # keep rule scored at the check level, with tasks as clusters. Not yet used by a run script.
 
 CHECK_KINDS = ("rule_broken", "action_missed", "wrong_content")
-MAX_RULE_CHARS_V2 = 600
+MAX_RULE_CHARS_V2 = MAX_RULE_CHARS
 
 
 def failure_profile(runs: list[CandidateRun], behaviours: list[dict[str, Any]]) -> dict[str, Any]:

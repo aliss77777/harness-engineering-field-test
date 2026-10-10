@@ -35,7 +35,20 @@ v1 showed on public benchmarks that a learned Jev rubric learns from outcomes an
 | 4 | **tau** | Set the cutoff (τ): lowest 30% of test bench runs would go to Gemini; then freeze it | 0 (60 Jev calls) | ≈ $0 | ⬜ |
 | 5 | **sealed** | The final exam, once: starting playbook, final playbook (checkpoint on and off), Gemini alone, the router, 80 tasks | 240 MiniMax + 80 Gemini + ≈ 24 Gemini redos | ≈ $45 | 🔒 held until the release note |
 
-**Active now (04:25 UTC, 10 Oct): Take 2 skill stage is done; nothing is running.** Final playbook: **[R1a, R2x], 2 rules** (version `s78766c8a`). Round 4 kept nothing. Next is up to Alexander: jevdata → rubric → tau, then (on a written release) the sealed exam. Two optional checks are written up as proposals in [`WIP_NOTES.md`](WIP_NOTES.md), not approved.
+**Active now (05:45 UTC, 10 Oct): resumed.** The OpenRouter key limit was raised to $300 (Alexander) and the overnight driver restarted: the replay is running again from rule 3 (27 of 60 runs reloaded, 33 to go), then rule 4 (60 runs), then the driver applies the adoption rule and runs jevdata → rubric → tau. The driver now proceeds with a $1 working balance and retries a stage that stops on credit (account credit was $4.96; auto top-up fires at a $2 balance, as credit is used). The Take 2 skill stage is done: final playbook **[R1a, R2x]** (`s78766c8a`). Replay so far: rule 1 (927 characters, skipped action) 0.751, 20 passes, rejected; rule 2 (886 characters, wrong content) 0.748, 19 passes, rejected. ETA: replay ≈ 06:05 UTC; jevdata, rubric and tau ≈ 06:45 UTC.
+
+**Overnight plan (Alexander, 2026-10-10):** `scripts/overnight_phase1.py` waits for the replay, then adopts a replay winner **only if** it passed the margin keep test with test bench credit **+0.07 or more** and passes not lower (otherwise the playbook stays [R1a, R2x]), then runs **jevdata → rubric → tau** and stops. **It never runs the sealed exam;** that waits for Alexander's written release in the morning. It checks the OpenRouter balance before each stage and waits rather than failing halfway. Log: `logs/phase1_run/overnight.log`; the decision is saved as `phase1/run/take2/replay_decision.json`.
+
+✅ **The OpenRouter key limit was raised from $150 to $300** (Alexander, 05:42 UTC). Account credit was $4.96 of $155 and relies on auto top-up as it is used.
+
+| Overnight step | Status |
+|---|---|
+| Replay of length-refused rules (4 candidates) | ▶️ 2 of 4 decided; rule 3 resumed (27 of 60 reloaded) |
+| Adopt a winner only if +0.07 credit and passes not lower | ⬜ |
+| jevdata: final playbook on all 60 practice tasks | ⬜ |
+| rubric: Jev learns (3 rounds) | ⬜ |
+| tau: cutoff set and frozen | ⬜ |
+| Sealed exam | 🔒 held for Alexander's release |
 
 **Take 1 results (rounds 1 and 2, p-value keep test, none kept).** Every candidate was tested against the starting playbook (no rules, checkpoint on): **0.62** credit, 11 of 60 passes on the test bench.
 
@@ -61,7 +74,7 @@ Caveat: the same starting playbook and checkpoint scored 0.65 on these 60 tasks 
 | 3 | R3b: enumerate every deliverable before a batch of writes, check the count before stopping | skipped action | 0.791 | 26 | +1.3 vs [R1a, R2x], **+5 passes** | rejected: targeted +0.022 but credit +1.3 is under the +0.02 margin |
 | 4 | R4a: define deliverable scope only from sources that explicitly authorize each write; when ambiguous, do not write | rule broken | 0.746 | 22 | −3.2 vs [R1a, R2x], +1 pass | rejected: targeted +0.060 (p 0.25) but credit fell |
 
-Baselines: round 1 against the starting playbook, round 2 against R1a (0.675, 14 passes), round 3 against [R1a, R2x] (0.778, 21 passes). **Rounds 3 and 4 kept nothing:** the playbook stays at 2 rules. ⚠️ But 5 proposals in rounds 3 and 4 were refused for length (over 600 characters), 3 of them aimed at wrong content, the largest remaining miss; round 4 tested only 1 candidate. So "nothing more to learn" is not shown; see caveat 9 in [`WHAT_WE_DID_AND_CAN_CLAIM.md`](WHAT_WE_DID_AND_CAN_CLAIM.md). R3b is the near miss (+5 passes, +1.3 points, inside the noise). **Playbook after round 2: [R1a, R2x], 0.778 credit and 21 of 60 passes on the test bench, against 0.620 and 11 for the starting playbook (+15.8 points).** That number is optimistic: both rules were picked on the same 60 tasks, each as the better of two candidates; a rough allowance for luck is about 4 points, so about +10 is a fairer reading. Only the sealed exam settles it.
+Baselines: round 1 against the starting playbook, round 2 against R1a (0.675, 14 passes), round 3 against [R1a, R2x] (0.778, 21 passes). **Rounds 3 and 4 kept nothing:** the playbook stays at 2 rules. ⚠️ Five proposals in rounds 3 and 4 hit the 600-character limit. Three were long drafts of ideas that were then tested shortened; one idea (a verbatim checklist for wrong content) was never tested, so round 4 tried only 1 candidate. The limit is now 1,200 characters and the refused rules are being replayed as written (post hoc); see caveat 9 and section 6 in [`WHAT_WE_DID_AND_CAN_CLAIM.md`](WHAT_WE_DID_AND_CAN_CLAIM.md). R3b is the near miss (+5 passes, +1.3 points, inside the noise). **Playbook after round 2: [R1a, R2x], 0.778 credit and 21 of 60 passes on the test bench, against 0.620 and 11 for the starting playbook (+15.8 points).** That number is optimistic: both rules were picked on the same 60 tasks, each as the better of two candidates; a rough allowance for luck is about 4 points, so about +10 is a fairer reading. Only the sealed exam settles it.
 
 **Take 1 vs Take 2, rounds 1 and 2:**
 
@@ -213,6 +226,36 @@ Full design and preregistered verdicts: [`briefs/Phase 1 design.md`](briefs/Phas
 **Phase 2: Magic Patterns UI and tutorial**: not started. The minimum bar is [`v1/ui-demo-2`](../v1/ui-demo-2/README.md); the scaffold is ready ([`story/`](story/insights.yaml), [`tutorial/`](tutorial/)).
 
 ## Key results so far
+
+### Learning progress to date (Take 2, 2026-10-10 05:40 UTC)
+
+**In one line:** the harness learned. On the test bench MiniMax went from 0.62 to 0.78 credit and from 11 to 21 fully passed tasks of 60, learning only from its own graded mistakes (no Gemini). How much of that holds on unseen tasks is still open: it is optimistic by roughly 4 points, so a fair reading is closer to +10 than +16.
+
+| Step (60 test bench tasks, one run each, checkpoint on) | Playbook | Credit | Passes |
+|---|---|---|---|
+| Start | no rules | 0.620 | 11 |
+| Round 1 | + R1a (do every required write before declaring done) | 0.675 | 14 |
+| Round 2 | + R2x (read the latest policy and override emails before any write) | **0.778** | **21** |
+| Rounds 3 and 4 | nothing kept (best near miss R3b: 0.791, 26 passes, +1.3 points, under the +0.02 margin) | | |
+| Replay of length-refused rules (limit now 1,200 characters), 2 of 4 decided | rule 1: 0.751, 20 passes; rule 2: 0.748, 19 passes; both rejected. Rule 3 stopped partway (27 of 60 runs: 0.762 vs 0.735 for the baseline on the same tasks); rule 4 not run | | |
+
+**Evidence beyond the test bench.**
+- On the same 30 practice tasks, R1a (not selected on them) vs no rules: credit 0.58 to 0.66; missed checks 74 to 57 (wrong content 40 to 32, skipped actions 14 to 11, rules broken 20 to 14).
+- R2x cut checkpoint holds from 0.75 to 0.15 per run: MiniMax now reads the policies before writing on its own, the habit Phase 0 diagnosed.
+- Both rules match the failure habits found before any learning ran.
+
+**Not shown yet.**
+
+| Question | Status |
+|---|---|
+| Does it generalize to unseen tasks? | Sealed exam only |
+| Is it a cascade, or two good rules? | Unknown; WIP-1 would test it |
+| Does Jev learn? | Not started |
+| Does the router get close to Gemini for about half the cost? | Not started |
+
+**Caveats that apply to every number above:** the margin keep test was adopted after seeing Take 1's results; both rules were chosen on the same 60 tasks; one run moves about 3 points on its own. Full list and the claim table: [`WHAT_WE_DID_AND_CAN_CLAIM.md`](WHAT_WE_DID_AND_CAN_CLAIM.md).
+
+### Earlier results (Phase 0 and the pilot)
 
 **Phase 0: three models, one run on each of 20 Finance + HR tasks**
 

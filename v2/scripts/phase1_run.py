@@ -2,6 +2,7 @@
 
     .venv/bin/python scripts/phase1_run.py skill    # Agent skill loop: MiniMax edits its own playbook (checkpoint on)
     .venv/bin/python scripts/phase1_run.py skill --stop-after-round 2   # same, but stop (resumably) once round 2 is saved
+    .venv/bin/python scripts/phase1_run.py replay-refused  # test the rules refused for length in rounds 3-4 (limit now 1,200); changes nothing else
     .venv/bin/python scripts/phase1_run.py jevdata  # MiniMax's final playbook on practice + test bench (Jev's learning data)
     .venv/bin/python scripts/phase1_run.py rubric   # Jev rubric loop: MiniMax edits Jev's questions; v1's McNemar test
     .venv/bin/python scripts/phase1_run.py tau      # the Router's threshold, frozen on the test bench
@@ -40,8 +41,8 @@ from jevloop.openrouter import ChatClient  # noqa: E402
 from jevloop.rubric import (STARTING_RUBRIC, Question, RubricEdit, apply_rubric_edit, check_rubric_edit, classify,  # noqa: E402
                             fit_weights, is_good, keep_rubric_edit, parse_rubric_edits, rubric_editor_prompt, score)
 from jevloop.runs import CandidateRun, run_candidate  # noqa: E402
-from jevloop.skill_loop import (Edit, SkillEditor, apply_edit, failure_profile, keep_rule, mistakes_report,  # noqa: E402
-                                skill_text, version_id)
+from jevloop.skill_loop import (Edit, SkillEditor, apply_edit, failure_profile, keep_rule, length_refused_edits,  # noqa: E402
+                                mistakes_report, skill_text, version_id)
 from jevloop.spend import SpendTracker  # noqa: E402
 
 CFG1 = yaml.safe_load((ROOT / "phase1" / "config_phase1.yaml").read_text())
@@ -203,6 +204,43 @@ def stage_skill(args) -> None:
     print(f"final playbook {version_id(rules)}: {len(rules)} rules; spend ${p.spend.total_usd:.2f}", flush=True)
 
 
+def stage_replay_refused(_args) -> None:
+    """Test, as written, the rules the loop refused for length in Take 2's rounds 3-4 (the 600-character limit was
+    raised to 1,200 on 2026-10-10). Each is added to the final playbook and tried on the test bench against it,
+    one run per task, with the same margin keep test. Writes phase1/run/take<N>/skill_replay.json only; it does
+    not change skill_final.json (that waits for Alexander)."""
+    p = Phase1()
+    s = RUN["skill_loop"]
+    cp = RUN["checkpoint_during_learning"]
+    final = tuple(load_json("skill_final")["rules"])
+    history = load_json("skill_history")
+    refused = length_refused_edits(history, from_round=3)
+    bench_ids = split("gate")[: s["test_bench_tasks"]]
+    current = {t: merged(rs) for t, rs in p.run_set(model="minimax", rules=final, checkpoint=cp, task_ids=bench_ids,
+                                                     label="bench", runs_per_task=s["runs_per_task"]).items()}
+    mean = lambda d: sum(r.partial_credit for r in d.values()) / len(d)  # noqa: E731
+    passes = lambda d: sum(r.passed for r in d.values())  # noqa: E731
+    print(f"REPLAY: {len(refused)} length-refused rules against playbook {version_id(final)} "
+          f"({mean(current):.3f} credit, {passes(current)} passes)", flush=True)
+    results = []
+    for e in refused:
+        cand = {t: merged(rs) for t, rs in p.run_set(model="minimax", rules=apply_edit(final, e), checkpoint=cp, task_ids=bench_ids,
+                                                      label="bench", runs_per_task=s["runs_per_task"]).items()}
+        d = keep_rule(current, cand, kind=e.target, regression=[], p_threshold=s["p_threshold"], max_regression_drop=s["max_regression_drop"],
+                      test=s.get("keep_test", "p_value"), min_credit_gain=s.get("min_credit_gain", 0.02))
+        results.append({"edit": e.record(), "length": len(e.text), "credit": mean(cand), "passes": passes(cand), "decision": d.record(),
+                        "holds_per_run": sum(r.holds for r in cand.values()) / len(cand)})
+        print(f"    {e.target:13} {len(e.text)} chars: credit {mean(cand):.3f} ({d.net_diff:+.3f}) passes {passes(cand)} ({d.passes_diff:+d}) "
+              f"targeted {d.targeted_diff:+.3f} p {d.targeted_p:.3f} -> {'KEEP' if d.keep else 'reject'} ({s.get('keep_test', 'p_value')} test)", flush=True)
+    kept = [x for x in results if x["decision"]["keep"]]
+    winner = max(kept, key=lambda x: x["decision"]["targeted_diff"]) if kept else None
+    save("skill_replay", {"baseline_version": version_id(final), "baseline_credit": mean(current), "baseline_passes": passes(current),
+                          "max_rule_chars": 1200, "results": results, "winner": winner["edit"] if winner else None,
+                          "proposed_rules": list(apply_edit(final, Edit(**winner["edit"]))) if winner else list(final),
+                          "spend_usd": p.spend.total_usd})
+    print(f"replay done; spend ${p.spend.total_usd:.2f}; kept {len(kept)} of {len(results)}", flush=True)
+
+
 # ---------------- stage 2: Jev's learning data ----------------
 
 def stage_jevdata(_args) -> None:
@@ -359,7 +397,7 @@ def main() -> None:
     sk = sub.add_parser("skill")
     sk.add_argument("--stop-after-round", type=int, default=None, help="stop once this round's decisions are saved (resumable)")
     sk.set_defaults(fn=stage_skill)
-    for name, fn in (("jevdata", stage_jevdata), ("rubric", stage_rubric), ("tau", stage_tau)):
+    for name, fn in (("replay-refused", stage_replay_refused), ("jevdata", stage_jevdata), ("rubric", stage_rubric), ("tau", stage_tau)):
         sub.add_parser(name).set_defaults(fn=fn)
     s = sub.add_parser("sealed")
     s.add_argument("--release-confirmed", action="store_true")

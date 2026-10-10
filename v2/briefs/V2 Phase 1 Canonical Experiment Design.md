@@ -21,7 +21,7 @@ Every learner here runs the same loop: try, study the mistakes, propose a change
 **In v2** the unit is a whole workflow: many steps, scored hidden check by hidden check, and every task is different. So the loop changes in four ways.
 
 1. **Learn patterns across tasks, not one task repeated.** The playbook holds rules that carry from task to task, such as "read every policy email before changing a record." Each failure is labeled by kind: broke a "must not" rule, skipped a required action, or wrote the wrong content.
-2. **Aim each proposed rule at one kind of failure.** MiniMax studies its failure profile on the practice tasks and proposes a rule that names the kind it targets. Rules over 600 characters, or too specific, are refused.
+2. **Aim each proposed rule at one kind of failure.** MiniMax studies its failure profile on the practice tasks and proposes a rule that names the kind it targets. Rules over 1,200 characters, or too specific, are refused (the limit was 600 through Take 2 round 4; see Takes).
 3. **Keep a rule only if it helps what it claims, by a margin, at no cost.** On the 60 test-bench tasks, the targeted failure kind must improve, overall credit must rise by at least 0.02, and the rule must not lose fully passed tasks. This is the margin keep test (Take 2). Take 1 asked for a clear drop in the targeted failure kind (p < 0.10) and no fall in credit, and kept nothing in two rounds; 60 tasks at one run each could not show that.
 4. **Jev's rubric learns the same way,** from finished runs. A change to its yes/no questions is kept only if the rubric then separates good runs from bad ones better on the test bench.
 
@@ -72,6 +72,8 @@ Phase 1 is run in numbered takes so results are never mixed up. Always cite "Tak
 | Rubric keep test | McNemar, p < 0.10 | Unchanged |
 | Rounds 1 and 2 | Four candidate rules, none kept; starting playbook 0.62 credit on the test bench | Round 1 reuses Take 1's logged runs (same runs, new test); round 2 onward starts from the playbook Take 2 keeps |
 | Files | `phase1/run/take1/`, `logs/phase1_run/take1/` | `phase1/run/take2/` |
+
+**Rule length limit (2026-10-10, Alexander):** raised from 600 to 1,200 characters after Take 2's rounds 3 and 4. The editor's drafts ran 627 to 1,073 characters; most refused ideas came back shortened and were tested, but one (a verbatim checklist for wrong content) never was. The rules refused for length are replayed against the final playbook as written, post hoc, and nothing changes in the playbook without Alexander's OK.
 
 Why Take 2: the p-value keep test could not see 2 to 5 point gains at 60 tasks and one run each (one run moves about 3 points on its own). The change was adopted after seeing Take 1's rounds 1 and 2, with Alexander's OK, and is recorded that way in PLAN.md. The sealed exam is the judge either way: final vs starting playbook.
 

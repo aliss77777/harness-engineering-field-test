@@ -209,6 +209,23 @@ def test_margin_keep_test_needs_targeted_gain_credit_margin_and_no_lost_passes()
         keep_rule(cur, good, kind="action_missed", regression=[], test="nope")
 
 
+def test_length_refused_edits_keeps_the_longest_per_round_and_kind():
+    from jevloop.skill_loop import MAX_RULE_CHARS, length_refused_edits
+    long_reason = "rule must be 1-600 characters: shorten it and resubmit"
+    history = [
+        {"round": 2, "refused": [{"edit": {"op": "add", "index": None, "text": "x" * 700, "why": "", "target": "rule_broken"}, "reason": long_reason}]},
+        {"round": 3, "refused": [
+            {"edit": {"op": "add", "index": None, "text": "a" * 650, "why": "w", "target": "wrong_content"}, "reason": long_reason},
+            {"edit": {"op": "add", "index": None, "text": "b" * 900, "why": "w", "target": "wrong_content"}, "reason": long_reason},
+            {"edit": {"op": "add", "index": None, "text": "c", "why": "", "target": "action_missed"}, "reason": "near-copy of an existing or previously rejected rule"},
+            {"edit": "unparseable junk", "reason": "unparseable: x"}]},
+    ]
+    out = length_refused_edits(history, from_round=3)
+    assert [(e.target, len(e.text)) for e in out] == [("wrong_content", 900)]
+    assert len(length_refused_edits(history)) == 2
+    assert MAX_RULE_CHARS >= 1073  # the longest proposal the editor wrote in Take 2
+
+
 def test_failure_profile_counts_kinds_and_steps():
     from jevloop.skill_loop import failure_profile
     runs = [_checks_run("a", 0.5, [("rule_broken", False), ("wrong_content", False)]), _checks_run("b", 1.0, [("rule_broken", True)])]
