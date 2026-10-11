@@ -11,14 +11,14 @@ A living write-up (Alexander asked for it, 2026-10-10). **Part A** covers the pl
 | Starting playbook (no rules); a second draw in V2-5a scored 0.65 | 0.620 | 11 |
 | + R1a: do every required write before declaring done | 0.675 | 14 |
 | + R2x: read the latest policy and override emails before any write | **0.778** | **21** |
-| Eight more candidate rules on top of [R1a, R2x] (rounds 3 and 4, then the replay at up to 1,073 characters) | 0.746 to 0.792 | 19 to 26 |
-| Candidates kept after round 2 | **none of 8** | |
+| Seven more candidate rules on top of [R1a, R2x] (rounds 3 and 4, then the replay at up to 1,073 characters) | 0.746 to 0.792 | 19 to 26 |
+| Candidates kept after round 2 | **none of 7** | |
 
 ### Learnings
 
 1. **The harness learns, and the two rules that stuck are the Phase 0 diagnosis.** MiniMax, from its own graded mistakes and with no Gemini, wrote "finish every required write" and "read the policy emails before you write". Those are the habits we found before any learning ran. The loop found the right things to fix, unaided.
 
-2. **Two rules look like a plateau, and the replay says it is not the length limit.** All eight later candidates landed between 0.746 and 0.792 against a 0.778 baseline. Seven of them (each [R1a, R2x] plus one extra rule) average 0.764 with a spread of 0.020, which is about what pure run-to-run noise on a 60-task mean looks like. The longer versions we let through (886 to 1,073 characters) were no better than the shortened ones that had already been tested.
+2. **Two rules look like a plateau, and the replay says it is not the length limit.** All seven later candidates (each [R1a, R2x] plus one extra rule) landed between 0.746 and 0.792 against a 0.778 baseline; they average 0.764 with a spread of 0.020, which is about what pure run-to-run noise on a 60-task mean looks like. The longer versions we let through (886 to 1,073 characters) were no better than the shortened ones that had already been tested.
 
 3. **We now have a measured noise level, and it is smaller than we assumed.** Those seven near-identical playbooks scatter with a standard deviation of about 0.02 (at most; some of that is real difference between rules). We had been assuming 0.03 to 0.035. So the +0.02 margin is about one standard deviation, and a +0.07 gain is about 3.5.
 

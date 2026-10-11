@@ -132,6 +132,8 @@ Dated log of every decision, deviation and fix (same discipline as [`../v1/PLAN.
 
 - 2026-10-10 (23:35 UTC): **Results mirrored to `RESULTS.md` (Alexander).** Standalone page with the hypothesis, the story, an at-a-glance table, the sealed exam section, the limits and the sourced appendix, copied from the canonical design; the memo wins if they differ. Committed and pushed with `scripts/sealed_analysis.py` and its output.
 
+- 2026-10-10 (23:55 UTC): **README rewritten as a concise history (Alexander):** where we ended up, a chronological table (what we did, what happened, setback or course correction), what we learned, what the results do and do not support, open items, spend and decisions, documents, how to run. Previous long tracker kept in git history. Corrected a count: seven (not eight) candidates sit on top of the final playbook after round 2 (R3a, R3b, R4a and the four replay rules).
+
 ## Open decisions (brief section 9)
 
 - [x] Repo: folder in this repo (2026-10-05).

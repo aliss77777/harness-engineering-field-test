@@ -122,7 +122,7 @@ Open-weight models are not interchangeable (Nemotron 3 Super and DeepSeek V4 Pro
 
 **MiniMax and the playbook**
 - **The harness learns.** From its own graded mistakes, with no Gemini, MiniMax went from 0.62 to 0.78 credit and from 11 to 21 of 60 fully passed on the test bench; about +13 points is the fair reading, with +12 on practice tasks the rules were not chosen on. The two rules that stuck match the Phase 0 diagnosis: finish every required write, and read the policy emails before any write.
-- **Two rules look like a plateau.** Eight more candidates, including longer versions let through by the higher limit, landed between 0.746 and 0.792 against 0.778: noise. Prompt rules fix habits (order, finishing the job), not accuracy of values: wrong content stayed the largest failure.
+- **Two rules look like a plateau.** Seven more candidates, including longer versions let through by the higher limit, landed between 0.746 and 0.792 against 0.778: noise. Prompt rules fix habits (order, finishing the job), not accuracy of values: wrong content stayed the largest failure.
 - **Noise is about 0.02 on a 60-task mean** (SD of near-identical playbooks), smaller than the 0.03 we assumed. One run per task moves 3 points; the keep test has to be a margin, not a p-value, at this size.
 - **The checkpoint worked as a training scaffold.** Rule R2x cut checkpoint holds from 0.75 to 0.15 per run on the test bench, and unshielded the read-policies-first habit rose from 31% to 84%. At exam time the learned playbook did not need the shield (credit 0.755 on vs 0.775 off; fully passed 33 vs 30). Whether the checkpoint was *necessary* for the playbook to learn the habit was not tested.
 - **The gain costs nothing per run** (about $0.045 throughout), unlike extra samples.
@@ -229,7 +229,7 @@ Paths are relative to `v2/`. Derived numbers come from `scripts/sealed_analysis.
 | Starting playbook (checkpoint on) | 0.620 | 11 | `logs/phase1_run/minimax-p1-v0-cp-bench.jsonl`; `sealed_analysis.json` → `test_bench` |
 | + R1a ("do every required write") | 0.675 | 14 | `…-sc9e21881-cp-bench.jsonl` |
 | + R2x ("read policy emails before any write"), the final playbook | 0.778 | 21 | `…-s78766c8a-cp-bench.jsonl` |
-| Eight later candidates (rounds 3 and 4, replay) | 0.746 to 0.792; none kept | 19 to 26 | `phase1/run/take2/skill_history.json`, `skill_replay.json`, `replay_decision.json` |
+| Seven later candidates on top of the final playbook (rounds 3 and 4, replay) | 0.746 to 0.792; none kept | 19 to 26 | `phase1/run/take2/skill_history.json`, `skill_replay.json`, `replay_decision.json` |
 | Seven neighbouring playbooks | mean 0.764, SD 0.020 | — | `sealed_analysis.json` → `test_bench.seven_neighbour_playbooks` |
 | Practice cross-check, 45 shared tasks (final vs starting) | 0.633 → 0.756 (+0.123) | — (interval +0.008 to +0.240) | `sealed_analysis.json` → `practice_cross_check` |
 | Take 1 (p-value keep test) | 4 candidates, none kept in 2 rounds | — | `phase1/run/take1/skill_history.json` |

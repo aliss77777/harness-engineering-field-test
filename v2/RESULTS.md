@@ -91,7 +91,7 @@ Paths are relative to `v2/`. Derived numbers come from `scripts/sealed_analysis.
 | Starting playbook (checkpoint on) | 0.620 | 11 | `logs/phase1_run/minimax-p1-v0-cp-bench.jsonl`; `sealed_analysis.json` → `test_bench` |
 | + R1a ("do every required write") | 0.675 | 14 | `…-sc9e21881-cp-bench.jsonl` |
 | + R2x ("read policy emails before any write"), the final playbook | 0.778 | 21 | `…-s78766c8a-cp-bench.jsonl` |
-| Eight later candidates (rounds 3 and 4, replay) | 0.746 to 0.792; none kept | 19 to 26 | `phase1/run/take2/skill_history.json`, `skill_replay.json`, `replay_decision.json` |
+| Seven later candidates on top of the final playbook (rounds 3 and 4, replay) | 0.746 to 0.792; none kept | 19 to 26 | `phase1/run/take2/skill_history.json`, `skill_replay.json`, `replay_decision.json` |
 | Seven neighbouring playbooks | mean 0.764, SD 0.020 | — | `sealed_analysis.json` → `test_bench.seven_neighbour_playbooks` |
 | Practice cross-check, 45 shared tasks (final vs starting) | 0.633 → 0.756 (+0.123) | — (interval +0.008 to +0.240) | `sealed_analysis.json` → `practice_cross_check` |
 | Take 1 (p-value keep test) | 4 candidates, none kept in 2 rounds | — | `phase1/run/take1/skill_history.json` |
