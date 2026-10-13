@@ -35,11 +35,11 @@ cd v1 && python3 -m venv .venv && .venv/bin/python -m pip install -r requirement
 # v2 (Python 3.13, which AutomationBench requires)
 git clone https://github.com/zapier/AutomationBench && git -C AutomationBench checkout 4a8e1061254004d9dac807054eed33fad7d1ff14
 cd v2 && python3.13 -m venv .venv
-.venv/bin/python -m pip install -e ../AutomationBench -r requirements.txt
+.venv/bin/python -m pip install -e ../AutomationBench -r requirements.txt -c requirements-lock.txt
 .venv/bin/python -m pytest -q          # 93 pass
 ```
 
-The pinned AutomationBench commit is version 1.0.6, the version the experiments used.
+The pinned AutomationBench commit is version 1.0.6, the version the experiments used. `requirements-lock.txt` pins every package to the version the experiments ran against; without it, newer releases of AutomationBench's dependencies can drop `datasets`, which AutomationBench imports but does not declare.
 
 ## 3. Re-run
 

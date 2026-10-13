@@ -1,5 +1,8 @@
-# Python 3.13 (AutomationBench requires it). AutomationBench itself is installed from the
-# local download: .venv/bin/python -m pip install -e z-ignore/AutomationBench-main
+# Python 3.13 (AutomationBench requires it). AutomationBench is installed separately, pinned to its 1.0.6
+# commit (docs/REPRODUCE.md). Install with the lock as constraints so versions match the experiments:
+#   pip install -e ../AutomationBench -r requirements.txt -c requirements-lock.txt
+# `datasets` is imported by AutomationBench but not declared by it; newer `verifiers` no longer pulls it in.
+datasets
 httpx
 pyyaml
 scipy

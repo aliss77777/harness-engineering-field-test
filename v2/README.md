@@ -91,10 +91,10 @@ v1 showed on public benchmarks that a learned Jev rubric could route between its
 
 From inside `v2/`, with Python 3.13:
 
-1. Download AutomationBench into `z-ignore/AutomationBench-main` (git-ignored).
-2. `python3.13 -m venv .venv && .venv/bin/python -m pip install -e z-ignore/AutomationBench-main -r requirements.txt`
+1. Clone AutomationBench at the repo root, pinned to 1.0.6: `git clone https://github.com/zapier/AutomationBench ../AutomationBench && git -C ../AutomationBench checkout 4a8e1061254004d9dac807054eed33fad7d1ff14` (git-ignored).
+2. `python3.13 -m venv .venv && .venv/bin/python -m pip install -e ../AutomationBench -r requirements.txt -c requirements-lock.txt` (the lock pins every package to the version the experiments ran against)
 3. Tests (no model calls): `.venv/bin/python -m pytest -q`
 4. Phase 1 stages (paid, capped, resumable): `scripts/phase1_run.py skill | replay-refused | jevdata | rubric | tau | ceiling | fresh | sealed --release-confirmed`
-5. Jev work: `scripts/jev_refit.py`, `scripts/jev_verifier.py`, `scripts/jev_verifier_d2.py`, `scripts/jev_instructions_check.py`; derived numbers: `scripts/sealed_analysis.py` (free)
+5. Jev work: `scripts/jev_refit.py`, `scripts/jev_verifier.py`, `scripts/jev_verifier_d2.py`, `scripts/jev_instructions_check.py`; sealed-exam numbers re-derived from the committed per-run table: `python3 scripts/rederive_sealed.py` (free, standard library only; `scripts/sealed_analysis.py` needs the raw run logs, which are not published)
 
 Model calls need `OPENROUTER_KEY` in `v2/.env`. Harness code is in `src/jevloop/`; `bench.py` is the only module that touches AutomationBench.
