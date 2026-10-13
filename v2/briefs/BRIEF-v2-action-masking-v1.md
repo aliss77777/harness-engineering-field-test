@@ -149,7 +149,7 @@ Found in review of `a14d11e`. Each has a test.
 
 ## 10. Reporting contract and tracking
 
-After each work item, write: what changed; what was verified and how; what surprised us; open questions. Update `v2/README.md` (tracker) and `v2/PLAN.md` (dated log) when a step finishes, and add **action masking** (and **silent-wrong rate**) to `v2/GLOSSARY.md`. Do not edit `v2/RESULTS.md` or `v2/STORY.md` until a verdict exists. Commit messages in the repo's existing style.
+After each work item, write: what changed; what was verified and how; what surprised us; open questions. Update `v2/README.md` (tracker) and `v2/PLAN.md` (dated log) when a step finishes, and add **action masking** (and **silent-wrong rate**) to `v2/GLOSSARY.md`. Do not edit `v2/RESULTS.md` until a verdict exists. Commit messages in the repo's existing style.
 
 **Writing standard (applies to every doc you write in this work, and is the bar for the Substack post later).** Alexander approved the "In plain language" section at the top of this brief as the register to aim for. Concretely:
 

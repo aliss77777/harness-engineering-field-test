@@ -92,4 +92,4 @@ All three show up as accuracy gains or cost cuts on the sealed set.
 
 That is the claim a business actually cares about.
 
-*Terminology: in [Task Brief 7](briefs/Task%20Brief%207_V2_Business.md), **Phase 1** is the experiments on the new data and **Phase 2** is the Magic Patterns UI and tutorial.*
+*Terminology: in [Task Brief 7](briefs/Task%20Brief%207_V2_Business.md), **Phase 1** is the experiments on the new data and **Phase 2** was a planned UI and tutorial, not part of the experiments.*

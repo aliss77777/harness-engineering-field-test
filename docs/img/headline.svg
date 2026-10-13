@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 340" width="860" height="340" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">
+<rect width="860" height="340" rx="12" fill="#ffffff"/>
+<text x="24" y="34" font-size="17" font-weight="700" fill="#1b2230">Credit on 80 unseen back-office tasks (sealed exam, one run each)</text>
+<text x="658" y="50" font-size="12" fill="#5b6475">cost per task</text>
+<text x="24" y="86" font-size="14" fill="#1b2230">Open-weight model, before</text>
+<rect x="300" y="68" width="330" height="26" rx="5" fill="#eef1f6"/>
+<rect x="300" y="68" width="189.0" height="26" rx="5" fill="#8a94a6"/>
+<text x="479.0" y="86" font-size="14" font-weight="700" fill="#ffffff" text-anchor="end">0.573</text>
+<text x="658" y="87" font-size="15" font-weight="600" fill="#1b2230">$0.044</text>
+<text x="24" y="140" font-size="14" fill="#1b2230">Same model, after the harness</text>
+<rect x="300" y="122" width="330" height="26" rx="5" fill="#eef1f6"/>
+<rect x="300" y="122" width="249.1" height="26" rx="5" fill="#2f6fed"/>
+<text x="539.1" y="140" font-size="14" font-weight="700" fill="#ffffff" text-anchor="end">0.755</text>
+<text x="658" y="141" font-size="15" font-weight="600" fill="#1b2230">$0.042</text>
+<text x="24" y="194" font-size="14" fill="#1b2230">Router: that model, Gemini on 45% of tasks</text>
+<rect x="300" y="176" width="330" height="26" rx="5" fill="#eef1f6"/>
+<rect x="300" y="176" width="265.3" height="26" rx="5" fill="#12a594"/>
+<text x="555.3" y="194" font-size="14" font-weight="700" fill="#ffffff" text-anchor="end">0.804</text>
+<text x="658" y="195" font-size="15" font-weight="600" fill="#1b2230">$0.170</text>
+<text x="24" y="248" font-size="14" fill="#1b2230">Gemini 3.8 Flash alone</text>
+<rect x="300" y="230" width="330" height="26" rx="5" fill="#eef1f6"/>
+<rect x="300" y="230" width="267.5" height="26" rx="5" fill="#3b4252"/>
+<text x="557.5" y="248" font-size="14" font-weight="700" fill="#ffffff" text-anchor="end">0.811</text>
+<text x="658" y="249" font-size="15" font-weight="600" fill="#1b2230">$0.273</text>
+<text x="24" y="306" font-size="12" fill="#5b6475">Credit = the share of each task's record checks that end up right.</text>
+<text x="24" y="324" font-size="12" fill="#5b6475">Source: v2/phase1/run/take2/sealed_runs.csv  ·  re-derive: python3 v2/scripts/rederive_sealed.py</text>
+</svg>

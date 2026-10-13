@@ -120,26 +120,6 @@ def test_go_no_go_applies_the_brief_thresholds():
     assert not go_no_go(none_mixed, 1, 60).go
 
 
-def test_export_ui_data_reads_insights_and_front_matter(tmp_path):
-    import importlib.util
-    from pathlib import Path
-
-    spec = importlib.util.spec_from_file_location(
-        "export_ui_data", Path(__file__).resolve().parent.parent / "scripts" / "export_ui_data.py")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    (tmp_path / "story").mkdir()
-    (tmp_path / "story" / "insights.yaml").write_text("- id: I1\n  headline: H\n  experiments: [v2-1, v2-9]\n")
-    exp = tmp_path / "experiments" / "2026-10-20-v2-1"
-    exp.mkdir(parents=True)
-    (exp / "README.md").write_text("---\nid: v2-1\ninsights: [I1]\n---\n## Headline\n")
-    data = module.build(tmp_path)
-    assert data["experiments"] == [{"id": "v2-1", "insights": ["I1"], "folder": "2026-10-20-v2-1"}]
-    assert data["insights"][0]["experiments_found"] == ["v2-1"]
-    (exp / "README.md").write_text("---\nid: v2-1\ninsights: [I7]\n---\n")
-    with pytest.raises(ValueError):
-        module.build(tmp_path)
-
 
 def test_in_flight_402_is_retried_but_a_real_402_is_fatal(tmp_path):
     import json as _json

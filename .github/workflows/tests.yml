@@ -1,0 +1,51 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  rederive:
+    name: Sealed-exam numbers re-derive
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python3 v2/scripts/rederive_sealed.py
+      - name: Headline figure is up to date
+        run: |
+          python3 v2/scripts/make_headline_figure.py
+          git diff --exit-code docs/img/headline.svg
+
+  v1:
+    name: v1 tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: v1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -r requirements.txt
+      - run: python -m pytest -q
+
+  v2:
+    name: v2 tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: AutomationBench (pinned to the version the experiments used, 1.0.6)
+        run: |
+          git clone https://github.com/zapier/AutomationBench ../AutomationBench
+          git -C ../AutomationBench checkout 4a8e1061254004d9dac807054eed33fad7d1ff14
+          python -m pip install -e ../AutomationBench
+      - run: python -m pip install -r v2/requirements.txt
+      - run: python -m pytest -q
+        working-directory: v2

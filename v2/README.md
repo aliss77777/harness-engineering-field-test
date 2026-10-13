@@ -81,13 +81,11 @@ v1 showed on public benchmarks that a learned Jev rubric could route between its
 | [`LEARNINGS_AND_IMPLICATIONS.md`](LEARNINGS_AND_IMPLICATIONS.md) | What we learned and what follows from it, in three parts |
 | [`PLAN.md`](PLAN.md) | Dated log of every decision, deviation and fix |
 | [`GLOSSARY.md`](GLOSSARY.md) | One name per concept |
-| [`WIP_NOTES.md`](WIP_NOTES.md) | Ideas and scope notes; nothing approved or run |
 | [`JOURNEY.md`](JOURNEY.md), [`METHODOLOGY.md`](METHODOLOGY.md) | The early plan and setbacks; what changes from v1 |
 | [`phase0/FEASIBILITY.md`](phase0/FEASIBILITY.md), [`phase0/DOMAINS.md`](phase0/DOMAINS.md) | Phase 0 measurements; why Finance + HR |
 | [`briefs/`](briefs/) | The original and intermediate briefs (the canonical design outranks them) |
 | [`action_masking/`](action_masking/) | The checkpoint: replay and live-test reports |
 | [`phase1/run/`](phase1/run/) | Machine-readable outputs: `take1/`, `take2/` (skill history, Jev stages, sealed results) |
-| [`STORY.md`](STORY.md), [`story/insights.yaml`](story/insights.yaml), [`tutorial/`](tutorial/), [`ui-data/`](ui-data/) | Story page, tutorial chapters and UI data, still to fill |
 
 ## How to run
 

@@ -87,7 +87,7 @@ Rounds 3 and 4: the same again.    Final playbook = all kept rules together.
 - 2026-10-10 (06:25 UTC): replay finished, none kept; see section 6 and [`LEARNINGS_AND_IMPLICATIONS.md`](LEARNINGS_AND_IMPLICATIONS.md). Caveat 3 still applies; the replay's near-identical playbooks suggest the selection luck on the last step was about 1.4 points.
 - 2026-10-10 (04:32 UTC): caveat 9 corrected: only one idea was actually blocked, not three. Limit raised to 1,200 characters; replay of the length-refused rules added (section 6).
 - 2026-10-10 (04:30 UTC): Take 2 skill stage done; final playbook [R1a, R2x], rounds 3 and 4 kept nothing. Added caveat 9 (five proposals refused for length in rounds 3 and 4, three of them on wrong content).
-- 2026-10-10 (02:25 UTC): two optional checks (does R2x need R1a; how much of the test bench score is luck) written up as proposals in [`WIP_NOTES.md`](WIP_NOTES.md), not approved or run. Rounds 3 and 4 started.
+- 2026-10-10 (02:25 UTC): two optional checks (does R2x need R1a; how much of the test bench score is luck) written up as proposals in the working notes (not published), not approved or run. Rounds 3 and 4 started.
 - 2026-10-10 (02:12 UTC): Take 2 rounds 1 and 2 done: R1a and R2x kept; R1b passed but was the runner-up; R2y rejected. Added the claim rows for the 2-rule playbook and the checkpoint-habit observation. Caveat 3 now applies twice: two rules selected on the same test bench.
 - 2026-10-10: page created, after Take 2 round 1 kept R1a.
 

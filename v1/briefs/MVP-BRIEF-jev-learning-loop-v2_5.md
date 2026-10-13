@@ -1,6 +1,6 @@
 # MVP brief: does Jev make a self-learning loop better?
 
-[line omitted from the public copy]
+**Written:** 2026-09-25 · **Revised:** 2026-09-26 (v2: learning step made central and fully specified; fair starting versions; same-image data filter; statistical verdict rules; task as config. v2.1: Loop A gives a one-line reason per pick and learns from those reasons. v2.2: parked the contextual bandit idea in 11.1. v2.3: standalone repo; code baseline also scored on the sealed set and clarified as a warning, not a verdict. v2.4: Section 1 is now the executive summary: the claim, its limits, pre-registered headlines and the story arc. v2.5: Loop B scores by summing Jev probabilities to avoid ties; memorization risk called out in 7.4; how-to-build callout at the top of Section 9\) · **Owner:** Alexander **Replaces:** the v4 brief as the working plan. v4 is kept as the parking lot (`BRIEF-v4-parking-lot.md`). None of it is in scope today. **Time budget:** 4 hours to build and run, 4 hours to polish. One day. **Task shape for the coding agent:** build directly after a 15-minute preflight (Section 9.4), in a **new standalone repo**. No investigate-and-recommend phase.
 
 ---
 
@@ -21,7 +21,7 @@ Whether a decision model (Jev) helps an AI agent learn its own decision criteria
 - **"Jev" only after Loop C.** Without it, the honest claim is "rubric-based learning" (Section 6).  
 - **One dataset.** Generality comes later (story arc, act 4).
 
-[line omitted from the public copy]
+**Why it's more than task completion:** the loop learns *which criteria predict success*, and those criteria are readable. That answers a practical question: people can edit a rubric by hand, but how do you know an edit made things better?
 
 ### 1.3 Pre-registered headlines
 
@@ -46,7 +46,7 @@ Drafted before running, so the story is fixed along with the numbers. After the 
 | Act | Question | Where it lives | What it needs |
 | :---- | :---- | :---- | :---- |
 | **1** | Can a decision model help an agent learn its criteria cheaply? | This MVP | Nothing more |
-[line omitted from the public copy]
+| **2** | Do the learned criteria make generated output better than a naive LLM's? | Rung 4 (writer) | A scoring plan: new headlines have no click data. Either a calibrated judge, or real traffic ("the rubric screens candidates; the survivors go into a real A/B test") |
 | **3** | Can it learn when it only sees results for what it shipped? | 11.1 (contextual bandit) | Tests with 3+ variants. The value is **realism** (real businesses only see results for what they ship), not better generalization |
 | **4** | Does it hold on a different business task? | Rung 3 (second task) | A new `task.yaml`. This is where generalization is shown |
 
@@ -269,7 +269,7 @@ All numbers come from the sealed set. Each pair is right or wrong (ties already 
 | **Learning (Mitchell):** did the loop improve with experience? | Final vs version 0, paired test on the same pairs (McNemar), p \< 0.05 |
 | **Better:** does B beat A? | Final B vs final A, paired test (McNemar), p \< 0.05 |
 | **Same quality:** is B about as good as A? | 95% interval of (B − A) falls within ±3 points. The ±3 margin is a stated choice, not derived. |
-[line omitted from the public copy]
+| **Cheaper:** | B's cost per 1,000 decisions is at most one fifth of A's (anchored to a vendor-reported 7x to 20x cost advantage) |
 
 **Apply the first row that matches:**
 
@@ -301,7 +301,7 @@ Also report, not for the verdict: the code-feature baseline's sealed accuracy (a
 2. **Build-measure-learn** (Lean Startup): the smallest thing that answers the question.  
 3. **YAGNI** ("you aren't gonna need it"): nothing beyond this brief until the result says it's needed.  
 4. **Pre-registration:** Section 8 is fixed before the run. Don't change it after seeing numbers.  
-[line omitted from the public copy]
+5. **Clean seams** (ports and adapters): four separate pieces behind small interfaces: **decider** (fake, A, B, C), **editor**, **gate**, **logger**. Each can be swapped without a rewrite.
 
 ### 9.2 Code standards
 
@@ -358,11 +358,11 @@ jev-loop-mvp/        \# standalone repo root
 | Upworthy researchers' split script | Model for fixed seeds and saved IDs |
 | GEPA's prompt-rewriting loop | Reference for wording the editor prompt. **Read only, not a dependency.** |
 
-[line omitted from the public copy]
+**Why direct calls:** all calls go directly to the model APIs. Every API response already reports its tokens, so per-decision cost is a few lines of code.
 
 ### 9.4 Preflight (15 minutes)
 
-[line omitted from the public copy]
+- Create a **new standalone repo** (e.g. `jev-loop-mvp`). Everything lives there. Keep it clean enough to share.  
 - `.gitignore`: `.env`, the raw Upworthy archive, caches and logs. Commit only saved pair IDs, code, configs and results. (Check the archive's licence before committing any of its text.)  
 - API keys in `.env`. Never commit keys.  
 - Python virtual environment with pinned dependencies (`requirements.txt`).
@@ -410,12 +410,11 @@ If the verdict is "no signal" or "weakened," spend the polish block on a short, 
 One rung at a time, each only after the one below gives a clear result.
 
 1. **Power:** full archive (thousands of pairs per set), 3 seeds. Turns a smoke test into evidence.  
-[line omitted from the public copy]
+2. **Honest gate:** Stats Engine-style gate plus placebo edits (v4 Section 8).  
 3. **Second task:** a new `task.yaml` on a business decision with an outcome label. Tests whether the result generalizes beyond headlines.  
 4. **Writer agent:** uses the learned rubric to write headlines, plus the contamination test (v4 Sections 7.3 and 8.6).  
 5. **Cross-model transfer:** a rubric learned with one editing model, used with another.  
-[line omitted from the public copy]
-7. **Write-up:** blog post with the RL and Mitchell framing (v4 Section 13).
+6. **Write-up:** blog post with the RL and Mitchell framing (v4 Section 13).
 
 ### 11.1 Parked idea: turn it into a contextual bandit (true RL framing)
 
@@ -426,29 +425,24 @@ One rung at a time, each only after the one below gives a clear result.
 - **Pairs won't do it.** With two options, knowing whether your pick won tells you the other one lost, so the loop still sees the full answer.  
 - **Use tests with 3 or more variants.** The loop picks one variant and sees only that variant's click rate. The others stay hidden. Now it only learns from the outcome of the action it took, which is the defining feature of a contextual bandit (the context is the story and its variants).  
 - **Scoring:** replay-style offline evaluation on the archive, since every variant's real click rate is on record even though the loop is only shown one.  
-[line omitted from the public copy]
+- **Live version later:** the writer agent generates headlines and real traffic scores them.
 
 **Why it's parked:** it changes the task, not just the framing. Worth doing after the MVP result exists, and a strong section for the blog post either way.
 
 ---
 
-[line omitted from the public copy]
+## 12\. Outreach plan
 
-- **After today, if promising:** a five-sentence note plus one chart, e.g. "I tested whether Jev makes a self-learning loop better, on real A/B test data. Here's the result, what it cost, and the rubric it taught itself."  
-[line omitted from the public copy]
-- Don't send the full vision before there's a number behind it. Claims stay narrow: "on this task, on this data."
+*Omitted from the public copy: a plan for sharing the result with a third party. Section numbers are kept so references elsewhere still resolve.*
 
 ---
 
-## 13\. Decisions Alexander makes before starting (5 minutes)
+## 13\. Decisions before starting
 
-1. **LLM model** to pin (decider for A and C, editor for all). Default: the strongest model you have reliable access to.  
-2. **Reference price** for free-tier tokens.  
-3. **Jev access route:** OpenRouter or TypeSafe console.  
-4. **Repo name and where it lives** (personal GitHub, private by default).
+*Omitted from the public copy: a personal pre-run checklist (model pin, reference price, access route, repo name). Section numbers are kept so references elsewhere still resolve.*
 
 ---
 
 ## 14\. Out of scope today
 
-[line omitted from the public copy]
+Everything else in v4: the writer, the judge, findings reports, the HACA-style composite, early-warning metrics, time split, GA data, cross-model transfer, multi-tenant answers. All parked in `BRIEF-v4-parking-lot.md`.

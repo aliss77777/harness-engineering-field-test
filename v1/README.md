@@ -12,7 +12,7 @@ Experiments testing whether a decision model (Jev) helps an AI agent learn its o
 | 4 | Arena, one LLM + Jev hybrid (stacked vote) | Complete: *no meaningful gain* | [`experiments/2026-09-27-arena-hybrid-v1`](experiments/2026-09-27-arena-hybrid-v1/README.md) |
 | 5 | Arena, route between Jev and the LLM (cascade) | Complete: ***same quality, half the cost*** | [`experiments/2026-09-27-arena-router-v1`](experiments/2026-09-27-arena-router-v1/README.md) |
 | 6 | Upworthy, Jev + LLM router learning from partial feedback (contextual bandit) | Complete: *same quality, half the cost*; Jev learned without an answer key | [`experiments/2026-09-27-upworthy-bandit-v1`](experiments/2026-09-27-upworthy-bandit-v1/README.md) |
-| 7 | **v2:** the winning harness on real business tasks (AutomationBench) + a Magic Patterns observability UI | Designed, not scheduled | [`../v2/`](../v2/README.md); brief: [`Task Brief 7_V2_Business.md`](../v2/briefs/Task%20Brief%207_V2_Business.md) |
+| 7 | **v2:** the winning harness on real business tasks (AutomationBench) | Complete | [`../v2/`](../v2/README.md); brief: [`Task Brief 7_V2_Business.md`](../v2/briefs/Task%20Brief%207_V2_Business.md) |
 
 **One-page summary: [`RESULTS.md`](RESULTS.md).** Side-by-side detail and lessons: [`experiments/COMPARISON.md`](experiments/COMPARISON.md). The full, dated record of every decision, deviation and result is in [`PLAN.md`](PLAN.md) (formerly `MVP Project Plan.md`). Experiment briefs: [`briefs/`](briefs/).
 
@@ -22,8 +22,6 @@ Experiments testing whether a decision model (Jev) helps an AI agent learn its o
 - `data/splits/` — registered pair IDs shared by the Upworthy experiment.
 - Python files in `v1/` — reusable experiment harness (paths resolve from `v1/`).
 - `briefs/` — the MVP brief and Task Briefs 2–6.
-- `ui-demo/` — Magic Patterns React/Vite demo built from v1's results (`npm install && npm run dev`).
-- `ui-demo-2/` — revised Magic Patterns demo (2026-10-05): one scrolling story in chapters; the floor for v2's Phase 2 UI. Numbers are still hardcoded in `src/data/*.ts`.
 - `results/`, `logs/`, and `cache/` — ignored working directories for the next run.
 
 Completed experiments are named `YYYY-MM-DD-task-version`. Each package contains its report, machine-readable artifacts, configuration snapshot, split IDs, and compressed telemetry. Do not modify a completed package; create a new one for the next experiment.
