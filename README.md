@@ -73,13 +73,6 @@ Two sentences this repo will not say: "MiniMax matches Gemini" (it is 5.6 points
 
 ## Follow it and reproduce it
 
-This repo was built by directing a coding agent, and it is written to be read by one: dense, cross-linked, every number sourced. The quickest way in is to give it to an agent (Claude Code or similar) and ask:
-
-```text
-Read README.md and docs/HARNESS.md. Explain what the v2 harness does, then walk me through
-the sealed-exam results and how to re-derive them. Point me at the code for each stage.
-```
-
 ### v2: the field test (start here)
 
 - **What it does.** Teaches a cheap open-weight model (MiniMax M3) to do back-office work from AutomationBench (Finance and HR; 200 tasks split 60 practice, 60 test bench, 80 sealed), graded on whether the simulated company's records end up right. Result: 0.573 to 0.755 credit on the sealed tasks.
