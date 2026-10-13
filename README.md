@@ -71,7 +71,62 @@ Two sentences this repo will not say: "MiniMax matches Gemini" (it is 5.6 points
 
 [`v1/`](v1) is the proof of concept: six preregistered experiments on public data, one binary decision each (which headline gets more clicks, which chatbot answer people prefer). It showed that a learned yes/no rubric learns from outcomes when an LLM instruction loop does not, and that routing between the two matched the LLM's accuracy (76.2% vs 76.3%) at 43% of the cost. v2 asked whether that survives contact with real multi-step work. Summary: [`v1/RESULTS.md`](v1/RESULTS.md).
 
-## Map
+## Follow it and reproduce it
+
+This repo was built by directing a coding agent, and it is written to be read by one: dense, cross-linked, every number sourced. The quickest way in is to give it to an agent (Claude Code or similar) and ask:
+
+```text
+Read README.md and docs/HARNESS.md. Explain what the v2 harness does, then walk me through
+the sealed-exam results and how to re-derive them. Point me at the code for each stage.
+```
+
+### v2: the field test (start here)
+
+- **What it does.** Teaches a cheap open-weight model (MiniMax M3) to do back-office work from AutomationBench (Finance and HR; 200 tasks split 60 practice, 60 test bench, 80 sealed), graded on whether the simulated company's records end up right. Result: 0.573 to 0.755 credit on the sealed tasks.
+- **How it did it.** A five-stage pipeline (`skill`, `jevdata`, `rubric`, `tau`, `sealed`). The learning loop reads the model's graded mistakes, proposes rules, and keeps a rule only if it beats the current playbook on held-out tasks. A checkpoint holds writes until the policy emails are read. A checker scores runs and a router sends the doubtful ones to Gemini. The exam is opened once.
+- **Where the code is.** The harness library is [`v2/src/jevloop`](v2/src/jevloop); stages are run by [`v2/scripts/phase1_run.py`](v2/scripts/phase1_run.py) against [`v2/phase1/config_phase1.yaml`](v2/phase1/config_phase1.yaml); task splits are in [`v2/phase1/splits`](v2/phase1/splits).
+- **Where the evidence is.** Every number with its source: [`v2/RESULTS.md`](v2/RESULTS.md). Machine-readable outputs: [`v2/phase1/run/take2`](v2/phase1/run/take2) (`skill_final.json` is the learned playbook, `sealed_results.json` the exam, `sealed_runs.csv` the per-run table). The design memo written before the runs: [`v2/briefs/V2 Phase 1 Canonical Experiment Design.md`](v2/briefs/V2%20Phase%201%20Canonical%20Experiment%20Design.md). Every decision and deviation, dated: [`v2/PLAN.md`](v2/PLAN.md).
+- **Re-derive it (free, 10 seconds).** `python3 v2/scripts/rederive_sealed.py` recomputes the headline numbers from the committed table, with no API key, using only the standard library.
+- **Re-run it (paid, about $118 for all of Phase 1, $42 for the exam alone).** Pin AutomationBench 1.0.6, put `OPENROUTER_KEY` in `v2/.env`, set `run.approved: true` in the config, then run the stages in order. Exact commands: [`docs/REPRODUCE.md`](docs/REPRODUCE.md).
+
+### v1: the proof of concept
+
+- **What it does.** Six preregistered experiments on one binary decision each (which Upworthy headline wins more clicks; which Chatbot Arena answer people prefer), asking whether a learned yes/no rubric (the Jev checker) learns from outcomes when an LLM instruction loop does not. Headline: routing between them matched the LLM, 76.2% vs 76.3%, at 43% of the cost.
+- **How it did it.** Two learning loops, each edited one change at a time; an edit is kept only if it beats the current version on a gate set, and the final version is scored once on a sealed set. The verdict rules were written down before running, in [`v1/briefs`](v1/briefs).
+- **Where to find it.** Summary and scorecard: [`v1/RESULTS.md`](v1/RESULTS.md). Side-by-side detail: [`v1/experiments/COMPARISON.md`](v1/experiments/COMPARISON.md). Each experiment is an immutable package in [`v1/experiments`](v1/experiments) (report, artifacts, config snapshot, split ids, telemetry). Dated log: [`v1/PLAN.md`](v1/PLAN.md).
+- **How to reproduce it.** `cd v1`, install `requirements.txt`, run `pytest` (no API calls). A full re-run needs the raw datasets (not committed; links and licences in [`NOTICE.md`](NOTICE.md), registered split ids in [`v1/data`](v1/data)) and about $78 of API calls. Per-experiment command sequences: [`v1/README.md`](v1/README.md).
+
+## Repo layout
+
+```text
+.
+├── README.md                    this page
+├── NOTICE.md  LICENSE           data sources and licences; what this project is not; MIT
+├── docs/
+│   ├── HARNESS.md               how the v2 harness works
+│   ├── CLAIMS.md                what the results do and do not support
+│   ├── REPRODUCE.md             four levels of checking, from reading to re-running
+│   └── img/headline.svg         the figure above, generated from the per-run table
+├── v2/                          the field test (AutomationBench)
+│   ├── README.md  RESULTS.md  PLAN.md  GLOSSARY.md  WHAT_WE_DID_AND_CAN_CLAIM.md  ...
+│   ├── src/jevloop/             the harness library
+│   ├── scripts/                 stage runner (phase1_run.py), analyses, rederive_sealed.py
+│   ├── phase0/                  feasibility: model choice, why Finance and HR
+│   ├── phase1/                  config, task splits, pilot/, run/take1, run/take2 (outputs)
+│   ├── action_masking/          the checkpoint: replay and live-test reports
+│   ├── briefs/                  design briefs written before each stage
+│   └── tests/
+├── v1/                          the proof of concept (six experiments)
+│   ├── README.md  RESULTS.md  PLAN.md
+│   ├── *.py  config*.yaml  task*.yaml   the harness, flat: one prep_ / learn_ / sealed_ script per experiment
+│   ├── experiments/             six immutable experiment packages + COMPARISON.md
+│   ├── data/                    registered split ids only (raw data is not committed)
+│   ├── briefs/                  the preregistration briefs
+│   └── tests/
+└── .github/workflows/tests.yml  CI: re-derive the numbers, run both test suites
+```
+
+## Key documents
 
 | | |
 |---|---|
