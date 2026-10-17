@@ -4,6 +4,8 @@
 
 ![Credit and cost on the sealed exam: the open-weight model before and after the harness, the router, and Gemini alone](docs/img/headline.svg)
 
+Explore the agent's recorded actions and playbook changes in [The shape of learning: an interactive visual demo](docs/policy_visuals/demo.html).
+
 The work is [Zapier's AutomationBench](https://github.com/zapier/AutomationBench): multi-step tasks across simulated business systems (email, accounting, HR records), graded on whether the company's records end up right. Not a chat benchmark, not one decision: a task is dozens of tool calls, and one wrong write fails it.
 
 ## The result
