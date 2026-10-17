@@ -4,6 +4,8 @@ Exploratory figures comparing **MiniMax M3 with the starting playbook** to **the
 
 **Start here:** [Open the six-chapter interactive demo](demo.html). It runs from this folder without a build or network connection and gathers all six figures, the round-by-round story, the topology audit, and its limits in one guided view. Use the on-screen chapters or arrow keys to move through it.
 
+For the complete cohort, open [All 80 paired trajectories](trajectories.html). It groups Finance and HR, reports improved/declined/no-change counts for each, and lets you filter and sort every before/after ribbon. The companion [action-category dataset](trajectories-data.js) contains no prompts or tool contents.
+
 The follow-up analysis of **why improving ribbons grow or shrink** is in [TOPOLOGY_ANALYSIS.md](TOPOLOGY_ANALYSIS.md), with a new [action-mix figure](ribbon-mechanisms.svg) and a same-playbook repeatability check.
 
 ## The three concepts
@@ -12,9 +14,9 @@ The follow-up analysis of **why improving ribbons grow or shrink** is in [TOPOLO
 
 ![Paired action ribbons](action-ribbons.svg)
 
-Each mark is a tool call in order: search, read, write, or other (mostly encoding). Red rings identify tool errors. The two example tasks deliberately show a gain (`finance:4038`, 0.00 → 1.00 credit) and a regression (`hr:5123`, 1.00 → 0.55). This is the clearest way to show *what the agent actually did*. It can carry call-specific annotations in a later iteration, such as “read policy email” or “write invoice,” once those classifications have been validated. Checkpoint holds are shown as totals because the current run record gives their model step, not a precise position between executed tool calls.
+Each mark is a tool call in order: search, read, write, or other (mostly encoding). Red rings identify tool errors. The two opening examples are both improvements: `finance:4038` grows from 4 to 33 calls and 0.00 → 1.00 credit; `hr:5106` shortens from 51 to 45 calls and 0.67 → 1.00 credit. This is the clearest way to show *what the agent actually did*. It can carry call-specific annotations in a later iteration, such as “read policy email” or “write invoice,” once those classifications have been validated. Checkpoint holds are shown as totals because the current run record gives their model step, not a precise position between executed tool calls.
 
-The `hr:5123` regression is verified in both the raw logs and the published per-run table. The starting run met **7/7** scored checks. The final-playbook run met **6/11**: four “must not send” email checks were broken and one required-email check was missed. The denominator changes because a negative check that is satisfied initially is excluded until the run breaks it. Nine write calls versus two do not, by themselves, explain the result; the final-state checks do.
+The full atlas keeps the regressions visible. For example, `hr:5123` falls from 1.00 to 0.55 credit; it is no longer an opening example. Its starting run met **7/7** scored checks, while the final-playbook run met **6/11**. Four “must not send” email checks were broken and one required-email check was missed. The denominator changes because a negative check that is satisfied initially is excluded until the run breaks it.
 
 ## Extending ribbons through learning rounds
 
@@ -36,7 +38,7 @@ The retained line and unselected proposals make the trial-and-error structure vi
 
 ![Action-space portraits](action-space-portraits.svg)
 
-This borrows the visual grammar of navigation trajectories without pretending that AutomationBench has physical coordinates. A path moves right for every search or read call and up for every write call. Four matched tasks show different patterns, including a baseline that stayed in repeated reads (`hr:5091`) and a case where the final playbook wrote less and scored worse (`hr:5123`). The axes measure counts, not the quality of information or correctness of a write. Encoding calls do not move the path.
+This borrows the visual grammar of navigation trajectories without pretending that AutomationBench has physical coordinates. A path moves right for every search or read call and up for every write call. Four matched tasks show different patterns, including a baseline that stayed in repeated reads (`hr:5091`) and a shorter path to full credit (`hr:5106`). The axes measure counts, not the quality of information or correctness of a write. Encoding calls do not move the path.
 
 ### C. Cohort atlas
 
@@ -63,7 +65,7 @@ These are **call counts**, not successful state changes. In particular, a write 
 
 ## Recommendation for a paper figure
 
-For the learning story, combine **D** and **E**: the same tasks' ribbons across retained versions, plus the policy-search branches. Pair that with a compact sealed before/after result. For an outcomes-first paper figure, combine **A** and **C**: one gain and one regression as action ribbons, with the cohort atlas beside or below them. Use **B** as an exploratory or supplemental view; it has the most immediate resemblance to the supplied RL trajectory figure, but its count axes can overstate what we know about the agent's internal policy.
+For the learning story, combine **D** and **E**: the same tasks' ribbons across retained versions, plus the policy-search branches. Pair that with a compact sealed before/after result. For an outcomes-first paper figure, combine **A** and **C**: two contrasting improvements as action ribbons, with the cohort atlas beside or below them. Use **B** as an exploratory or supplemental view; it has the most immediate resemblance to the supplied RL trajectory figure, but its count axes can overstate what we know about the agent's internal policy.
 
 A promising next concept is a **world-state change tapestry**: objects and services on rows, tool-call order on columns, with each confirmed record mutation marked where it happened. That would reveal *which business state changed*, not just how many writes were attempted. It needs careful replay of each call against the pinned AutomationBench simulator; final-state grades alone cannot locate intermediate changes.
 
@@ -76,4 +78,4 @@ python3 v2/scripts/explore_policy_visuals.py \
   --logs /Users/alexanderliss/Documents/jev-test-poc/v2/logs/phase1_run
 ```
 
-The generator reads the local logs and writes only action categories, task IDs, and final scores to these SVGs. It does not copy prompts, tool arguments, tool results, summaries, or hidden assertions into the repo.
+The generator reads the local logs and writes only action categories, task IDs, final scores, pass status, and hold counts to the figures and atlas data. It does not copy prompts, tool arguments, tool results, summaries, or hidden assertions into the repo.

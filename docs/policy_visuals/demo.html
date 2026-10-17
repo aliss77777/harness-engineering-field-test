@@ -141,6 +141,7 @@
       </ol>
       <div class="rail-bottom">
         Use the arrow keys to move between chapters.
+        <a href="trajectories.html">All 80 trajectories ↗</a>
         <a href="README.md">Figure guide ↗</a>
         <a href="TOPOLOGY_ANALYSIS.md">Topology audit ↗</a>
       </div>
@@ -166,22 +167,23 @@
           <div class="strip-item"><small>Lens 2</small><strong>Across playbooks</strong><span>How retained rules changed the paths.</span></div>
           <div class="strip-item"><small>Lens 3</small><strong>Across tasks</strong><span>Which patterns repeat, and which are noise.</span></div>
         </div>
+        <p><a href="trajectories.html">Browse all 80 before/after trajectories by Finance and HR →</a></p>
         <p class="note"><strong>Reading rule:</strong> ribbon length is the number of tool calls, not a reward. The grade comes from the final world state. A longer or shorter path is meaningful only alongside its actions and outcome.</p>
       </section>
 
       <section class="panel" data-panel="1" aria-labelledby="heading-1">
         <div class="kicker">01 · Within a task</div>
-        <h2 id="heading-1">Same task. Different path.</h2>
-        <p class="lead">Each rectangle is one tool call. Color marks search, read, write, or other; red rings mark tool errors. The paired ribbons expose action order while keeping the task fixed.</p>
+        <h2 id="heading-1">Two improvements. Opposite shapes.</h2>
+        <p class="lead">Each rectangle is one tool call. Color marks search, read, write, or other; red rings mark tool errors. Both tasks reach full credit after the playbook change, although one path grows and the other shortens.</p>
         <figure class="figure-card">
-          <img src="action-ribbons.svg" alt="Paired action ribbons for two tasks: finance 4038 improves from zero to full credit, while HR 5123 falls from full credit to about 0.55.">
-          <figcaption><span class="figure-label">Paired action ribbons.</span> One gain and one regression from the sealed tasks. <a href="action-ribbons.svg">Open full figure</a>.</figcaption>
+          <img src="action-ribbons.svg" alt="Paired action ribbons for two improving tasks: Finance 4038 grows from 4 to 33 calls and reaches full credit; HR 5106 shortens from 51 to 45 calls and reaches full credit.">
+          <figcaption><span class="figure-label">Paired action ribbons.</span> One longer and one shorter successful path from the sealed tasks. <a href="action-ribbons.svg">Open full figure</a>.</figcaption>
         </figure>
         <div class="insight-row">
-          <div class="insight"><h3 class="tone-aqua">Finance 4038 · gain</h3><p>The final playbook reaches 1.00 credit where the starting run scored 0.00. The path changes in both length and action mix.</p></div>
-          <div class="insight"><h3 class="tone-rose">HR 5123 · regression</h3><p>The apparent reversal is real: starting 7/7 checks met, final 6/11. Four prohibited emails were sent and one required email was missed.</p></div>
+          <div class="insight"><h3 class="tone-aqua">Finance 4038 · expansion</h3><p>The run grows from 4 to 33 calls, adds the required writes, and moves from 0.00 to 1.00 credit.</p></div>
+          <div class="insight"><h3 class="tone-aqua">HR 5106 · compression</h3><p>The run drops from 51 to 45 calls while reaching all 6 checks: 0.67 to 1.00 credit.</p></div>
         </div>
-        <p class="method">The changing denominator reflects negative checks that enter the scored set if the agent violates them. Write-call count alone cannot establish whether a write was correct.</p>
+        <p class="method">These are two selected illustrations, not a claim that every shorter or longer path improved. <a href="trajectories.html">See all 80 paired paths and the declines.</a></p>
       </section>
 
       <section class="panel" data-panel="2" aria-labelledby="heading-2">
@@ -209,7 +211,7 @@
         </figure>
         <figure class="figure-card">
           <img src="cohort-atlas.svg" alt="Scatterplot of 80 sealed tasks, showing change in write calls against change in partial credit.">
-          <figcaption><span class="figure-label">Cohort atlas.</span> All 80 sealed tasks: 27 gained credit, 8 lost, 45 tied. <a href="cohort-atlas.svg">Open full figure</a>.</figcaption>
+          <figcaption><span class="figure-label">Cohort atlas.</span> All 80 sealed tasks: 27 gained credit, 8 lost, 45 tied. <a href="cohort-atlas.svg">Open full figure</a> · <a href="trajectories.html">inspect every paired ribbon</a>.</figcaption>
         </figure>
         <p class="method">The cohort association between added writes and credit gain is descriptive. The logged actions are samples of behavior, not a complete action-probability distribution.</p>
       </section>

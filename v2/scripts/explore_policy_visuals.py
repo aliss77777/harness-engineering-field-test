@@ -110,7 +110,7 @@ def unmet_checks(run: dict) -> str:
 
 
 def ribbons(before: dict, after: dict) -> str:
-    selected = ["finance:4038", "hr:5123"]
+    selected = ["finance:4038", "hr:5106"]
     width, height = 1280, 445
     body = [text(36, 37, "A  ·  Paired action ribbons", size=23, weight=500),
             text(36, 64, "One mark = one executed tool call; hollow red rings = tool errors. Checkpoint holds are listed separately.", size=13, color=MUTED)]
@@ -147,7 +147,7 @@ def ribbons(before: dict, after: dict) -> str:
 
 
 def portraits(before: dict, after: dict) -> str:
-    selected = ["finance:4038", "hr:5123", "finance:4030", "hr:5091"]
+    selected = ["finance:4038", "hr:5106", "finance:4030", "hr:5091"]
     width, height = 1160, 705
     body = [text(36, 38, "B  ·  Action-space portraits", size=23, weight=500),
             text(36, 65, "Each path begins at zero. Horizontal steps are search/read calls; vertical steps are write calls.", size=13, color=MUTED)]
@@ -194,7 +194,7 @@ def portraits(before: dict, after: dict) -> str:
 
 
 def atlas(before: dict, after: dict) -> str:
-    selected = ["finance:4038", "hr:5123", "finance:4030", "hr:5091"]
+    selected = ["finance:4038", "hr:5106", "finance:4030", "hr:5091"]
     rows = []
     for task_id in before.keys() & after.keys():
         first, last = before[task_id], after[task_id]
@@ -234,7 +234,7 @@ def atlas(before: dict, after: dict) -> str:
         if task_id not in selected:
             continue
         x, y = xp(dx), yp(dy)
-        offset = 12 if task_id != "hr:5123" else -12
+        offset = 12 if task_id != "hr:5106" else -12
         body += [text(x + 13, y + offset, task_id, size=12, color=INK)]
     body += [text((x0 + x1) / 2, 548, "Change in write calls (after − before) →", size=14,
                   anchor="middle"), text(36, 109, "Δ credit ↑", size=13, color=MUTED),
@@ -371,6 +371,25 @@ def policy_search(logs: Path, history: list[dict], retained: list[dict[str, dict
     return svg(width, height, "Policy search across four learning rounds", body)
 
 
+def trajectory_dataset(before: dict, after: dict) -> list[dict]:
+    """Export only categories and scores for the offline, all-task atlas."""
+    if set(before) != set(after):
+        raise ValueError("The sealed runs must contain identical task IDs")
+
+    def compact(run: dict) -> dict:
+        return {
+            "credit": round(run["partial_credit"], 8),
+            "passed": bool(run["passed"]),
+            "holds": run["holds"],
+            "actions": "".join(kind(call)[0].upper() if failed(call) else kind(call)[0]
+                             for call in run["calls"]),
+        }
+
+    return [{"id": task_id, "domain": task_id.split(":", 1)[0],
+             "before": compact(before[task_id]), "after": compact(after[task_id])}
+            for task_id in sorted(before)]
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--logs", type=Path, required=True, help="phase1_run log directory")
@@ -397,6 +416,10 @@ def main() -> None:
     ]:
         (args.output / filename).write_text(artwork, encoding="utf-8")
         print(args.output / filename)
+    data_path = args.output / "trajectories-data.js"
+    data_path.write_text("window.TRAJECTORIES = " + json.dumps(
+        trajectory_dataset(before, after), separators=(",", ":")) + ";\n", encoding="utf-8")
+    print(data_path)
 
 
 if __name__ == "__main__":
