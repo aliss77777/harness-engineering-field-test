@@ -2,6 +2,8 @@
 
 Exploratory figures comparing **MiniMax M3 with the starting playbook** to **the same model with the final learned playbook** on the same 80 sealed Finance and HR tasks. Both conditions used the pre-write checkpoint. These figures are prototypes, not paper-ready evidence of a mechanism.
 
+**For future work:** read the [visualization brief and first principles](BRIEF.md) before extending the figures or making claims from them. It defines the research question, data semantics, evidence boundaries, current findings, and continuation protocol.
+
 **Start here:** [Open the six-chapter interactive demo](demo.html). It runs from this folder without a build or network connection and gathers all six figures, the round-by-round story, the topology audit, and its limits in one guided view. Use the on-screen chapters or arrow keys to move through it.
 
 For the complete cohort, open [All 80 paired trajectories](trajectories.html). It groups Finance and HR, reports improved/declined/no-change counts for each, and lets you filter and sort every before/after ribbon. The companion [action-category dataset](trajectories-data.js) contains no prompts or tool contents.

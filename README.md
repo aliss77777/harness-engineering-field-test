@@ -6,6 +6,7 @@
 
 Explore the agent's recorded actions and playbook changes in [The shape of learning: an interactive visual demo](docs/policy_visuals/demo.html).
 Browse [all 80 paired Finance and HR trajectories](docs/policy_visuals/trajectories.html), including task-level gains, declines, and unchanged scores.
+The [visualization brief](docs/policy_visuals/BRIEF.md) records the first principles, data definitions, and research questions for future extensions.
 
 The work is [Zapier's AutomationBench](https://github.com/zapier/AutomationBench): multi-step tasks across simulated business systems (email, accounting, HR records), graded on whether the company's records end up right. Not a chat benchmark, not one decision: a task is dozens of tool calls, and one wrong write fails it.
 
