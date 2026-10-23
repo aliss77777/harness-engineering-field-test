@@ -10,6 +10,12 @@ For the complete cohort, open [All 80 paired trajectories](trajectories.html). I
 
 The follow-up analysis of **why improving ribbons grow or shrink** is in [TOPOLOGY_ANALYSIS.md](TOPOLOGY_ANALYSIS.md), with a new [action-mix figure](ribbon-mechanisms.svg) and a same-playbook repeatability check.
 
+## Animated summary
+
+![The shape of learning, animated](../img/shape-of-learning.gif)
+
+[`shape-of-learning.gif`](../img/shape-of-learning.gif) (22.8 s, no sound; also as [MP4](../img/shape-of-learning.mp4)) is a narrated summary of figures A, C, D and the checkpoint-stop counts. Scene by scene: the setup, the two opening ribbons from **A**, the two learned rules from **D**, the 27 / 8 / 45 split from **C**, and the drop in checkpoint stops from 35 jobs to 9. Every figure on screen, with its derivation and source, is in [`shape-of-learning.numbers.json`](../img/shape-of-learning.numbers.json). The generator is [`v2/scripts/make_shape_of_learning_gif.py`](../../v2/scripts/make_shape_of_learning_gif.py); the arithmetic it draws is in the standard-library [`shape_of_learning_figures.py`](../../v2/scripts/shape_of_learning_figures.py), which CI runs. The committed GIF is canonical: it needs Pillow, ffmpeg, and two fonts to re-render, and a re-render is not byte-identical.
+
 ## The three concepts
 
 ### A. Paired action ribbons
