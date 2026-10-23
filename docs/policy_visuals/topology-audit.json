@@ -1,0 +1,118 @@
+{
+  "gate": {
+    "grow": {
+      "tasks": 10,
+      "mean_length_change": 14.4,
+      "mean_credit_change": 0.715,
+      "mean_action_change": {
+        "search": 3.2,
+        "read": 4.9,
+        "write": 3.3,
+        "other": 3,
+        "error": 0.6
+      },
+      "mean_motif_change": {
+        "first_write_index": 12.2,
+        "write_to_write": 3,
+        "write_to_information": -0.1,
+        "error_reads": 0.3
+      }
+    },
+    "shrink": {
+      "tasks": 14,
+      "mean_length_change": -19.357142857142858,
+      "mean_credit_change": 0.2749668981811839,
+      "mean_action_change": {
+        "search": -6.714285714285714,
+        "read": -11.642857142857142,
+        "write": -0.7857142857142857,
+        "other": -0.21428571428571427,
+        "error": -5.928571428571429
+      },
+      "mean_motif_change": {
+        "first_write_index": -14.5,
+        "write_to_write": -0.07142857142857142,
+        "write_to_information": -1.2142857142857142,
+        "error_reads": -5.142857142857143
+      }
+    }
+  },
+  "sealed": {
+    "grow": {
+      "tasks": 20,
+      "mean_length_change": 25.2,
+      "mean_credit_change": 0.7407738095238096,
+      "mean_action_change": {
+        "search": 2.15,
+        "read": 9.5,
+        "write": 8.25,
+        "other": 5.3,
+        "error": 1.6
+      },
+      "mean_motif_change": {
+        "first_write_index": 11.15,
+        "write_to_write": 5.7,
+        "write_to_information": 0.75,
+        "error_reads": 0.25
+      }
+    },
+    "shrink": {
+      "tasks": 7,
+      "mean_length_change": -27.428571428571427,
+      "mean_credit_change": 0.32040816326530613,
+      "mean_action_change": {
+        "search": -1,
+        "read": -22.571428571428573,
+        "write": -4.142857142857143,
+        "other": 0.2857142857142857,
+        "error": -12.428571428571429
+      },
+      "mean_motif_change": {
+        "first_write_index": -14.285714285714286,
+        "write_to_write": -1.5714285714285714,
+        "write_to_information": -2.857142857142857,
+        "error_reads": -11.428571428571429
+      }
+    }
+  },
+  "growth_prediction_gate_to_sealed": {
+    "task_topology": {
+      "auc_on_sealed": 0.590439276485788,
+      "auc_interval_95_exploratory": [
+        0.4582798459563543,
+        0.7121010638297872
+      ],
+      "balanced_accuracy_on_sealed": 0.603359173126615
+    },
+    "starting_ribbon_length": {
+      "auc_on_sealed": 0.8649870801033591,
+      "auc_interval_95_exploratory": [
+        0.7703488372093024,
+        0.9442307692307692
+      ],
+      "balanced_accuracy_on_sealed": 0.7167312661498708
+    },
+    "topology_plus_start_length": {
+      "auc_on_sealed": 0.8301033591731266,
+      "auc_interval_95_exploratory": [
+        0.7241830065359477,
+        0.9166666666666667
+      ],
+      "balanced_accuracy_on_sealed": 0.7167312661498708
+    },
+    "prompt_tfidf": {
+      "auc_on_sealed": 0.5671834625322997,
+      "auc_interval_95_exploratory": [
+        0.4435483870967742,
+        0.6892764857881137
+      ],
+      "balanced_accuracy_on_sealed": 0.582687338501292
+    }
+  },
+  "same_policy_repeatability_on_gate": {
+    "tasks": 60,
+    "median_abs_change_start_to_final": 11.0,
+    "median_abs_change_same_final_policy_repeats": 7.0,
+    "growth_direction_stable_across_three_final_runs": 39
+  }
+}

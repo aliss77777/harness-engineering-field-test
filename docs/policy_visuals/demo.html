@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101923">
+  <title>The shape of learning · AutomationBench policy visuals</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #101923;
+      --surface: #172431;
+      --surface-2: #1d2e3c;
+      --line: #324554;
+      --text: #f3f1e9;
+      --muted: #b8c3c8;
+      --aqua: #80d3d0;
+      --orange: #f6b66e;
+      --rose: #f59a9d;
+      --blue: #a9c1e7;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.52 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { font: inherit; }
+    a { color: var(--aqua); text-underline-offset: 3px; }
+    a:hover { color: #c5f3ef; }
+    :focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
+    .shell { display: grid; grid-template-columns: 270px minmax(0, 1fr); min-height: 100vh; }
+    .rail { position: sticky; top: 0; align-self: start; height: 100vh; padding: 32px 19px 20px; border-right: 1px solid var(--line); display: flex; flex-direction: column; background: #111d27; }
+    .brand { padding: 0 12px; }
+    .eyebrow { color: var(--aqua); font-size: 11px; letter-spacing: .17em; font-weight: 800; text-transform: uppercase; }
+    .brand-name { margin: 9px 0 0; font: 600 23px/1.12 Georgia, "Times New Roman", serif; letter-spacing: -.025em; }
+    .brand-note { margin: 10px 0 0; color: var(--muted); font-size: 12px; line-height: 1.45; }
+    .step-list { list-style: none; padding: 0; margin: 42px 0 0; display: grid; gap: 6px; }
+    .step-button { width: 100%; min-height: 48px; display: flex; align-items: center; gap: 12px; padding: 9px 11px; border: 1px solid transparent; border-radius: 9px; background: transparent; color: var(--muted); text-align: left; cursor: pointer; }
+    .step-button:hover { background: var(--surface-2); color: var(--text); }
+    .step-button[aria-current="step"] { background: #243a46; color: var(--text); border-color: #42616a; }
+    .step-number { display: inline-grid; place-items: center; flex: 0 0 26px; width: 26px; height: 26px; border: 1px solid #5c707a; border-radius: 50%; font-size: 11px; font-weight: 800; }
+    .step-button[aria-current="step"] .step-number { color: #102229; background: var(--aqua); border-color: var(--aqua); }
+    .rail-bottom { margin-top: auto; padding: 18px 12px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+    .rail-bottom a { display: block; margin-top: 10px; }
+    .main { min-width: 0; padding: 34px clamp(24px, 4vw, 72px) 28px; }
+    .topbar { max-width: 1250px; margin: 0 auto 28px; display: flex; justify-content: space-between; gap: 20px; align-items: center; color: var(--muted); font-size: 12px; }
+    .topbar strong { color: var(--text); font-weight: 650; }
+    .progress { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+    .progress-track { width: 104px; height: 4px; background: #34434e; border-radius: 9px; overflow: hidden; }
+    .progress-fill { display: block; height: 100%; width: 16.67%; background: var(--aqua); border-radius: inherit; transition: width .2s ease; }
+    .panel { display: none; max-width: 1250px; margin: 0 auto; }
+    .panel.active { display: block; animation: appear .25s ease both; }
+    @keyframes appear { from { opacity: .4; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) { .panel.active { animation: none; } .progress-fill { transition: none; } }
+    .kicker { color: var(--orange); font-size: 12px; letter-spacing: .13em; text-transform: uppercase; font-weight: 750; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin: 13px 0 19px; font: 600 clamp(42px, 5vw, 77px)/.99 Georgia, "Times New Roman", serif; letter-spacing: -.045em; max-width: 950px; }
+    h2 { margin: 11px 0 18px; font: 600 clamp(35px, 4vw, 58px)/1.03 Georgia, "Times New Roman", serif; letter-spacing: -.035em; }
+    h3 { font-size: 18px; line-height: 1.25; }
+    .lead { color: #d1d9da; font-size: clamp(17px, 1.6vw, 20px); max-width: 820px; line-height: 1.55; }
+    .narrow { max-width: 780px; }
+    .metric-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 31px 0 28px; }
+    .metric { min-height: 110px; padding: 18px 20px; border: 1px solid var(--line); background: var(--surface); border-radius: 12px; }
+    .metric-value { display: block; color: var(--aqua); font: 600 30px/1.1 Georgia, serif; letter-spacing: -.02em; }
+    .metric-label { display: block; margin-top: 8px; color: var(--muted); font-size: 12px; line-height: 1.4; }
+    .figure-card { margin: 28px 0 18px; padding: 15px; border: 1px solid #405360; background: #ecf0f0; border-radius: 12px; color: #1b2a34; overflow: hidden; }
+    .figure-card img { display: block; width: 100%; height: auto; }
+    .figure-card figcaption { padding: 13px 6px 1px; color: #3e515e; font-size: 13px; line-height: 1.45; }
+    .figure-label { font-weight: 750; color: #213745; }
+    .two-up { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
+    .two-up .figure-card { margin-top: 12px; }
+    .insight-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 26px 0; }
+    .insight { background: var(--surface); border: 1px solid var(--line); border-radius: 11px; padding: 19px 21px; }
+    .insight h3 { margin-bottom: 9px; }
+    .insight p { color: var(--muted); font-size: 14px; margin-bottom: 0; }
+    .insight .tone-aqua { color: var(--aqua); }
+    .insight .tone-rose { color: var(--rose); }
+    .note { margin: 20px 0 0; border-left: 3px solid var(--orange); padding: 12px 0 12px 17px; color: #d6dcdd; font-size: 14px; max-width: 850px; }
+    .note strong { color: var(--text); }
+    .strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 30px 0 10px; }
+    .strip-item { background: var(--surface); padding: 18px; border: 1px solid var(--line); border-top: 3px solid var(--aqua); border-radius: 8px; }
+    .strip-item:nth-child(2) { border-top-color: var(--orange); }
+    .strip-item:nth-child(3) { border-top-color: var(--rose); }
+    .strip-item small { display: block; color: var(--muted); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; }
+    .strip-item strong { display: block; margin: 7px 0; font-size: 16px; }
+    .strip-item span { display: block; color: var(--muted); font-size: 13px; }
+    .table-wrap { overflow-x: auto; margin: 24px 0; border: 1px solid var(--line); border-radius: 10px; }
+    table { width: 100%; border-collapse: collapse; min-width: 650px; }
+    th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--line); }
+    tr:last-child td { border-bottom: 0; }
+    th { color: var(--muted); background: #1c2b38; font-size: 12px; font-weight: 700; }
+    td { font-size: 14px; }
+    td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+    .signal { color: var(--aqua); font-weight: 700; }
+    .method { color: var(--muted); font-size: 13px; max-width: 900px; }
+    .next-box { margin: 32px 0; padding: 25px 27px; border: 1px solid #5e746e; border-radius: 12px; background: linear-gradient(125deg, #1b3740, #192730 66%); }
+    .next-box h3 { margin-bottom: 8px; color: var(--aqua); }
+    .next-box p { margin-bottom: 0; max-width: 800px; }
+    .footer-controls { max-width: 1250px; display: flex; justify-content: space-between; align-items: center; gap: 15px; margin: 46px auto 0; padding-top: 20px; border-top: 1px solid var(--line); }
+    .nav-button { min-width: 118px; padding: 10px 16px; border: 1px solid #68818a; border-radius: 8px; background: transparent; color: var(--text); cursor: pointer; }
+    .nav-button:hover:not(:disabled) { background: #2b424a; }
+    .nav-button.primary { background: var(--aqua); border-color: var(--aqua); color: #11252b; font-weight: 750; }
+    .nav-button.primary:hover:not(:disabled) { background: #b2e8e3; }
+    .nav-button:disabled { visibility: hidden; }
+    .chapter-count { color: var(--muted); font-size: 12px; }
+    @media (max-width: 950px) {
+      .shell { display: block; }
+      .rail { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--line); padding: 18px 18px 11px; }
+      .brand-name { font-size: 20px; }
+      .brand-note, .rail-bottom { display: none; }
+      .step-list { display: flex; overflow-x: auto; gap: 5px; margin: 17px -2px 0; padding-bottom: 5px; }
+      .step-button { width: auto; white-space: nowrap; min-height: 40px; padding: 5px 9px; font-size: 12px; }
+      .step-number { flex-basis: 22px; width: 22px; height: 22px; }
+      .main { padding-top: 20px; }
+    }
+    @media (max-width: 650px) {
+      .main { padding: 20px 16px; }
+      .metric-grid, .strip { grid-template-columns: 1fr; }
+      .metric { min-height: 0; }
+      .two-up, .insight-row { grid-template-columns: 1fr; }
+      .topbar { margin-bottom: 23px; }
+      .topbar .long-label { display: none; }
+      .figure-card { padding: 8px; }
+      .figure-card figcaption { padding: 10px 5px 3px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="rail" aria-label="Demo navigation">
+      <div class="brand">
+        <div class="eyebrow">AutomationBench · visual field notes</div>
+        <div class="brand-name">The shape of learning</div>
+        <p class="brand-note">One model. Revised playbooks. Paired trajectories through business actions.</p>
+      </div>
+      <ol class="step-list">
+        <li><button class="step-button" data-step="0" type="button"><span class="step-number">01</span> The question</button></li>
+        <li><button class="step-button" data-step="1" type="button"><span class="step-number">02</span> Paired actions</button></li>
+        <li><button class="step-button" data-step="2" type="button"><span class="step-number">03</span> Learning rounds</button></li>
+        <li><button class="step-button" data-step="3" type="button"><span class="step-number">04</span> Action space</button></li>
+        <li><button class="step-button" data-step="4" type="button"><span class="step-number">05</span> Path mechanisms</button></li>
+        <li><button class="step-button" data-step="5" type="button"><span class="step-number">06</span> What predicts shape?</button></li>
+      </ol>
+      <div class="rail-bottom">
+        Use the arrow keys to move between chapters.
+        <a href="trajectories.html">All 80 trajectories ↗</a>
+        <a href="BRIEF.md">Brief & principles ↗</a>
+        <a href="README.md">Figure guide ↗</a>
+        <a href="TOPOLOGY_ANALYSIS.md">Topology audit ↗</a>
+      </div>
+    </aside>
+
+    <main class="main" id="main-content">
+      <div class="topbar">
+        <span><strong>VISUAL EXPLORATION</strong><span class="long-label"> · Based on recorded tool calls and task grades</span></span>
+        <span class="progress"><span id="progress-label">1 / 6</span><span class="progress-track" aria-hidden="true"><span class="progress-fill" id="progress-fill"></span></span></span>
+      </div>
+
+      <section class="panel" data-panel="0" aria-labelledby="heading-0">
+        <div class="kicker">The central question</div>
+        <h1 id="heading-0">What shape does learning take?</h1>
+        <p class="lead">A better agent can take a longer path to complete missing work—or a shorter path by escaping a loop. These views follow the same MiniMax M3 agent as its <em>text playbook</em> changes. The model weights do not change.</p>
+        <div class="metric-grid" aria-label="Experiment summary">
+          <div class="metric"><span class="metric-value">+0.182</span><span class="metric-label">Mean partial-credit gain on 80 sealed tasks</span></div>
+          <div class="metric"><span class="metric-value">3</span><span class="metric-label">Distinct retained playbooks across four search rounds</span></div>
+          <div class="metric"><span class="metric-value">37 → 38</span><span class="metric-label">Mean tool calls per sealed task, roughly unchanged</span></div>
+        </div>
+        <div class="strip" aria-label="The three lenses in this demo">
+          <div class="strip-item"><small>Lens 1</small><strong>Within a task</strong><span>What the agent actually did before and after.</span></div>
+          <div class="strip-item"><small>Lens 2</small><strong>Across playbooks</strong><span>How retained rules changed the paths.</span></div>
+          <div class="strip-item"><small>Lens 3</small><strong>Across tasks</strong><span>Which patterns repeat, and which are noise.</span></div>
+        </div>
+        <p><a href="trajectories.html">Browse all 80 before/after trajectories by Finance and HR →</a></p>
+        <p class="note"><strong>Reading rule:</strong> ribbon length is the number of tool calls, not a reward. The grade comes from the final world state. A longer or shorter path is meaningful only alongside its actions and outcome.</p>
+      </section>
+
+      <section class="panel" data-panel="1" aria-labelledby="heading-1">
+        <div class="kicker">01 · Within a task</div>
+        <h2 id="heading-1">Two improvements. Opposite shapes.</h2>
+        <p class="lead">Each rectangle is one tool call. Color marks search, read, write, or other; red rings mark tool errors. Both tasks reach full credit after the playbook change, although one path grows and the other shortens.</p>
+        <figure class="figure-card">
+          <img src="action-ribbons.svg" alt="Paired action ribbons for two improving tasks: Finance 4038 grows from 4 to 33 calls and reaches full credit; HR 5106 shortens from 51 to 45 calls and reaches full credit.">
+          <figcaption><span class="figure-label">Paired action ribbons.</span> One longer and one shorter successful path from the sealed tasks. <a href="action-ribbons.svg">Open full figure</a>.</figcaption>
+        </figure>
+        <div class="insight-row">
+          <div class="insight"><h3 class="tone-aqua">Finance 4038 · expansion</h3><p>The run grows from 4 to 33 calls, adds the required writes, and moves from 0.00 to 1.00 credit.</p></div>
+          <div class="insight"><h3 class="tone-aqua">HR 5106 · compression</h3><p>The run drops from 51 to 45 calls while reaching all 6 checks: 0.67 to 1.00 credit.</p></div>
+        </div>
+        <p class="method">These are two selected illustrations, not a claim that every shorter or longer path improved. <a href="trajectories.html">See all 80 paired paths and the declines.</a></p>
+      </section>
+
+      <section class="panel" data-panel="2" aria-labelledby="heading-2">
+        <div class="kicker">02 · Across playbooks</div>
+        <h2 id="heading-2">Learning has branches, not a smooth curve.</h2>
+        <p class="lead">Four rounds produced three retained playbooks: the starting rules, a rule to complete required writes, then a rule to read policy emails before writing. Later proposals did not clear the keep threshold.</p>
+        <figure class="figure-card">
+          <img src="learning-ribbons.svg" alt="Matched task ribbons under three retained playbooks, showing expansion, compression, and a task that improves then regresses.">
+          <figcaption><span class="figure-label">Retained-playbook flipbook.</span> Three same-task paths across actual policy revisions on the 60-task gate. <a href="learning-ribbons.svg">Open full figure</a>.</figcaption>
+        </figure>
+        <figure class="figure-card">
+          <img src="policy-search.svg" alt="Policy-search tree with retained and rejected branches over four rounds.">
+          <figcaption><span class="figure-label">Policy-search branches.</span> Candidate rules were tested, kept, or rejected; the retained line is one selected route. <a href="policy-search.svg">Open full figure</a>.</figcaption>
+        </figure>
+        <p class="note"><strong>Interpretation:</strong> the gate set selected the rules, so this progression is a selection trace. The 80 sealed tasks provide the independent before/after bookend. The keep margin was introduced after the first attempt and is disclosed as post hoc.</p>
+      </section>
+
+      <section class="panel" data-panel="3" aria-labelledby="heading-3">
+        <div class="kicker">03 · Across the action space</div>
+        <h2 id="heading-3">A trajectory without physical coordinates.</h2>
+        <p class="lead">AutomationBench actions move through APIs, not space. A count-space portrait lets a path advance right for information gathering and up for writes. The cohort view then checks whether striking examples are typical.</p>
+        <figure class="figure-card">
+          <img src="action-space-portraits.svg" alt="Four action-space portraits tracing cumulative information calls against write calls for paired task runs.">
+          <figcaption><span class="figure-label">Action-space portraits.</span> The axes count calls; they do not measure correctness or internal policy probabilities. <a href="action-space-portraits.svg">Open full figure</a>.</figcaption>
+        </figure>
+        <figure class="figure-card">
+          <img src="cohort-atlas.svg" alt="Scatterplot of 80 sealed tasks, showing change in write calls against change in partial credit.">
+          <figcaption><span class="figure-label">Cohort atlas.</span> All 80 sealed tasks: 27 gained credit, 8 lost, 45 tied. <a href="cohort-atlas.svg">Open full figure</a> · <a href="trajectories.html">inspect every paired ribbon</a>.</figcaption>
+        </figure>
+        <p class="method">The cohort association between added writes and credit gain is descriptive. The logged actions are samples of behavior, not a complete action-probability distribution.</p>
+      </section>
+
+      <section class="panel" data-panel="4" aria-labelledby="heading-4">
+        <div class="kicker">04 · The path mechanisms</div>
+        <h2 id="heading-4">Two ways an improved run changes.</h2>
+        <p class="lead">Among tasks that gained credit, growing ribbons tend to add write sequences. Shortening ribbons tend to lose repeated reads and errors. The pattern appears in both the gate and sealed sets.</p>
+        <figure class="figure-card">
+          <img src="ribbon-mechanisms.svg" alt="Stacked diverging bars showing mean changes in search, read, write, and other calls for improving tasks whose paths grew or shortened on gate and sealed sets.">
+          <figcaption><span class="figure-label">Action-mix changes.</span> Means within groups selected by credit improvement and path direction. <a href="ribbon-mechanisms.svg">Open full figure</a>.</figcaption>
+        </figure>
+        <div class="insight-row">
+          <div class="insight"><h3 class="tone-aqua">Growth · completing work</h3><p>On the sealed set, improving long paths added 25.2 calls on average, including 8.2 writes and 5.7 consecutive write transitions.</p></div>
+          <div class="insight"><h3 class="tone-rose">Compression · escaping loops</h3><p>Improving short paths lost 27.4 calls on average, including 22.6 reads and 12.4 tool errors.</p></div>
+        </div>
+        <p class="note"><strong>Descriptive, not causal:</strong> these groups were chosen after looking at both grade and path direction. The chart identifies motifs to test; it does not prove why credit changed.</p>
+      </section>
+
+      <section class="panel" data-panel="5" aria-labelledby="heading-5">
+        <div class="kicker">05 · The next question</div>
+        <h2 id="heading-5">Task topology, playbook, or both?</h2>
+        <p class="lead">I tested whether coarse task structure or prompt language could predict whether a final path would grow. Models trained on the gate set were evaluated on sealed tasks. Neither carried a strong direction signal.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th scope="col">Available before the final run</th><th scope="col" class="num">Sealed AUC</th><th scope="col">What to take from it</th></tr></thead>
+            <tbody>
+              <tr><td>Required/prohibited checks, services, policy emails, domain</td><td class="num">0.59</td><td>Weak discrimination</td></tr>
+              <tr><td>Prompt words and two-word phrases</td><td class="num">0.57</td><td>Weak discrimination</td></tr>
+              <tr><td>Starting ribbon length</td><td class="num signal">0.86</td><td>Predictive, but mechanically tied to length change</td></tr>
+              <tr><td>Structure plus starting length</td><td class="num">0.83</td><td>Added structure did not improve this baseline</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="insight-row">
+          <div class="insight"><h3>Run noise is material</h3><p>Two runs under the same final playbook differed by a median of 7 calls on the 60 gate tasks. Only 39 of 60 kept the same grow/shorten/tie direction across three final-playbook runs against one starting run.</p></div>
+          <div class="insight"><h3>Graph idea worth testing</h3><p>Borrow the NLP graph repo’s bipartite structure, but connect tasks to required actions, prohibitions, services, objects, and policy dependencies. Pair that with directed action-transition graphs.</p></div>
+        </div>
+        <div class="next-box"><h3>The discriminating experiment</h3><p>Run the same tasks several times under <em>every</em> retained playbook, using tasks outside policy selection. Model credit and path shape together, with task effects, playbook effects, and their interaction. That can separate a stable task property from a playbook response and ordinary run variation.</p></div>
+        <p class="method">Here “learning” means a revised text playbook selected from trial runs, not updated model weights or an inferred RL policy distribution. Full methods, caveats, and reproducible aggregates: <a href="TOPOLOGY_ANALYSIS.md">topology analysis</a> · <a href="README.md">figure guide</a>.</p>
+      </section>
+
+      <nav class="footer-controls" aria-label="Chapter controls">
+        <button id="previous" class="nav-button" type="button">← Previous</button>
+        <span class="chapter-count" id="chapter-count" aria-live="polite">Chapter 1 of 6</span>
+        <button id="next" class="nav-button primary" type="button">Next →</button>
+      </nav>
+    </main>
+  </div>
+  <script>
+    (() => {
+      const panels = Array.from(document.querySelectorAll('[data-panel]'));
+      const buttons = Array.from(document.querySelectorAll('[data-step]'));
+      const previous = document.getElementById('previous');
+      const next = document.getElementById('next');
+      const progressLabel = document.getElementById('progress-label');
+      const progressFill = document.getElementById('progress-fill');
+      const chapterCount = document.getElementById('chapter-count');
+      let current = 0;
+
+      function show(index, updateHash = true) {
+        current = Math.max(0, Math.min(panels.length - 1, index));
+        panels.forEach((panel, i) => {
+          panel.classList.toggle('active', i === current);
+          panel.hidden = i !== current;
+        });
+        buttons.forEach((button, i) => {
+          if (i === current) button.setAttribute('aria-current', 'step');
+          else button.removeAttribute('aria-current');
+        });
+        previous.disabled = current === 0;
+        next.disabled = current === panels.length - 1;
+        progressLabel.textContent = `${current + 1} / ${panels.length}`;
+        progressFill.style.width = `${((current + 1) / panels.length) * 100}%`;
+        chapterCount.textContent = `Chapter ${current + 1} of ${panels.length}`;
+        if (updateHash) history.replaceState(null, '', `#chapter-${current + 1}`);
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      }
+
+      buttons.forEach(button => button.addEventListener('click', () => show(Number(button.dataset.step))));
+      previous.addEventListener('click', () => show(current - 1));
+      next.addEventListener('click', () => show(current + 1));
+      document.addEventListener('keydown', event => {
+        if (event.altKey || event.ctrlKey || event.metaKey || event.target.closest('button, a, input, textarea, select')) return;
+        if (event.key === 'ArrowRight') show(current + 1);
+        if (event.key === 'ArrowLeft') show(current - 1);
+      });
+      window.addEventListener('hashchange', () => {
+        const match = location.hash.match(/^#chapter-(\d+)$/);
+        if (match) show(Number(match[1]) - 1, false);
+      });
+      const match = location.hash.match(/^#chapter-(\d+)$/);
+      show(match ? Number(match[1]) - 1 : 0, false);
+    })();
+  </script>
+</body>
+</html>

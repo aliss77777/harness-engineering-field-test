@@ -19,6 +19,16 @@ jobs:
           python3 v2/scripts/make_headline_figure.py
           git diff --exit-code docs/img/headline.svg
 
+  explainer-figures:
+    name: Explainer figures match the data
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python3 v2/scripts/shape_of_learning_figures.py
+
   v1:
     name: v1 tests
     runs-on: ubuntu-latest

@@ -1,0 +1,129 @@
+{
+  "generated_from": "docs/policy_visuals/trajectories-data.js",
+  "duration_s": 22.8,
+  "figures": [
+    {
+      "scene": "1 setup",
+      "on_screen": "I gave an AI agent 80 back-office jobs it had never seen (Finance and HR)",
+      "value": "40 finance + 40 hr",
+      "derivation": "count by domain; the 80 sealed tasks were not used to select rules",
+      "source": "docs/policy_visuals/trajectories-data.js (80 sealed tasks, MiniMax M3, starting vs final playbook, checkpoint on); docs/policy_visuals/BRIEF.md"
+    },
+    {
+      "scene": "1 setup",
+      "on_screen": "Then I built a harness that taught it to rewrite its own playbook, and I ran the same jobs again",
+      "value": "text",
+      "derivation": "the harness is the learning loop: reads graded mistakes, proposes rules, keeps a rule only if it beats the current playbook on held-out tasks; model weights unchanged",
+      "source": "README.md (How it did it)"
+    },
+    {
+      "scene": "2 cards",
+      "on_screen": "finance:4038  4 calls -> 33, credit 0.00 -> 1.00, 7 error rings in final run",
+      "value": {
+        "before_calls": 4,
+        "after_calls": 33,
+        "credit": [
+          0.0,
+          1.0
+        ],
+        "after_errors": 7
+      },
+      "derivation": "len(actions); upper-case action letters = tool errors",
+      "source": "docs/policy_visuals/trajectories-data.js (80 sealed tasks, MiniMax M3, starting vs final playbook, checkpoint on)"
+    },
+    {
+      "scene": "2 cards",
+      "on_screen": "hr:5106  51 calls -> 45, credit 0.67 -> 1.00, 2 -> 1 errors",
+      "value": {
+        "before_calls": 51,
+        "after_calls": 45,
+        "credit": [
+          0.66666667,
+          1.0
+        ],
+        "errors": [
+          2,
+          1
+        ]
+      },
+      "derivation": "len(actions); upper-case letters = tool errors",
+      "source": "docs/policy_visuals/trajectories-data.js (80 sealed tasks, MiniMax M3, starting vs final playbook, checkpoint on)"
+    },
+    {
+      "scene": "3 learned",
+      "on_screen": "Own the outcome (GOALS) / Act on company policy (VALUES)",
+      "value": "text",
+      "derivation": "round-1 rule: complete every required write; round-2 rule: read policy emails before writing. GOALS/VALUES tags are an analogy only.",
+      "source": "docs/policy_visuals/README.md (learning rounds)"
+    },
+    {
+      "scene": "3 learned",
+      "on_screen": "Average credit 0.573 -> 0.755 (80 jobs)",
+      "value": [
+        0.572857,
+        0.754923
+      ],
+      "derivation": "mean of credit over 80 tasks",
+      "source": "docs/policy_visuals/trajectories-data.js (80 sealed tasks, MiniMax M3, starting vs final playbook, checkpoint on); docs/CLAIMS.md"
+    },
+    {
+      "scene": "3 learned",
+      "on_screen": "27 better \u00b7 8 worse \u00b7 45 tied",
+      "value": [
+        27,
+        8,
+        45
+      ],
+      "derivation": "sign of (after.credit - before.credit), tolerance 1e-7",
+      "source": "docs/policy_visuals/trajectories-data.js (80 sealed tasks, MiniMax M3, starting vs final playbook, checkpoint on)"
+    },
+    {
+      "scene": "3 learned",
+      "on_screen": "Written by the agent from its graded mistakes. Tested before it was kept.",
+      "value": "text",
+      "derivation": "learning loop reads graded mistakes, proposes rules, keeps a rule only if it beats the current playbook on held-out tasks",
+      "source": "README.md (How it did it); docs/CLAIMS.md"
+    },
+    {
+      "scene": "4 course",
+      "on_screen": "35 -> 9 jobs with at least one stop (red dots; green = no stop)",
+      "value": [
+        35,
+        9
+      ],
+      "derivation": "count(holds > 0); 28 dots flip red->green, 2 flip green->red",
+      "source": "docs/policy_visuals/trajectories-data.js (80 sealed tasks, MiniMax M3, starting vs final playbook, checkpoint on)"
+    },
+    {
+      "scene": "4 course",
+      "on_screen": "0.83 -> 0.19 checkpoint stops per job",
+      "value": [
+        0.825,
+        0.1875
+      ],
+      "derivation": "mean of holds over 80 tasks (0.825 -> 0.1875, rounded half-up); both conditions had the checkpoint on; stops cap at 3",
+      "source": "docs/policy_visuals/trajectories-data.js (80 sealed tasks, MiniMax M3, starting vs final playbook, checkpoint on)"
+    },
+    {
+      "scene": "4 course",
+      "on_screen": "checkpoint held any change until the agent had read the policy emails",
+      "value": "text",
+      "derivation": "definition of the pre-write checkpoint",
+      "source": "README.md (A checkpoint before every record-changing action)"
+    },
+    {
+      "scene": "5 closing",
+      "on_screen": "Teams get better when humans and agents work together. It compounds when the agent\u2019s side learns too. / Full write-up in comments.",
+      "value": "text",
+      "derivation": "framing line from the brief; no figures",
+      "source": "docs/policy_visuals/BRIEF.md (section 10 copy)"
+    },
+    {
+      "scene": "footer",
+      "on_screen": "MiniMax M3 \u00b7 text playbook only, model weights unchanged / 80 sealed tasks, one run each \u00b7 Benchmark: AutomationBench (Zapier) / Alex Liss \u00b7 AI systems builder \u00b7 Independent research",
+      "value": "text",
+      "derivation": "model weights were not updated; one run per task per condition",
+      "source": "README.md; docs/policy_visuals/BRIEF.md"
+    }
+  ]
+}
