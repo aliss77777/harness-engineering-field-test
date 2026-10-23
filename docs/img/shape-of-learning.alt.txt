@@ -1,0 +1,1 @@
+Animated infographic, "The shape of learning." I gave an AI agent 80 back-office finance and HR jobs it had never seen, then built a harness that taught it to rewrite its own playbook. One job's path grew from 4 steps to 33, another shrank from 51 to 45; both improved. Across all 80 jobs, average credit rose from 0.573 to 0.755: 27 better, 8 worse, 45 tied.
